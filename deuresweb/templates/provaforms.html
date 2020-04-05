@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="#" target="_blank" method="post" id="formulari">
+    <div class="form-group">
+        <label for="formGroupExampleInput">Estic aquí provant coses de formularis intentant que no es noti jeje</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="curs" id="eso1" value="1r d'ESO" autocomplete="off" checked> 1ESO
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="curs" id="eso2" value="2n d'ESO" autocomplete="off"> 2ESO
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="curs" id="eso3" value="3r d'ESO" autocomplete="off"> 3ESO
+          </label>
+          <label class="btn btn-secondary disabled">
+            <input type="radio" name="curs" id="eso4" value="4t d'ESO" autocomplete="off" disabled> 4ESO
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off"> BAT-C
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off"> BAT-S
+          </label>
+          <label class="btn btn-secondary disabled">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" disabled> Personalitza
+          </label>
+        </div>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" onclick="pdfgenerat()">Submit</button>
+</form>
+<br>
+<div id="triat"></div>
+{% endblock %}
+{% block js %}
+    {% if post %} <!-- Aquí no porta cometes ni res, perquè ja és (pseudo)python -->
+        <script>
+            document.getElementById('triat').innerHTML = "S'ha generat un pdf de " + "{{form['curs']}}"; //aquí porta les claus (i aparentment cometes)
+            document.getElementById('triat').className = "alert alert-success w-25";
+            document.getElementById("{{form['curs']}}").click(); //en aquests comentaris no hi puc posar claus, que s'enfada
+        </script>
+    {% endif %}
+        <script>
+            function pdfgenerat(){
+                curs = document.getElementById('formulari').elements['curs'].value;
+
+                document.getElementById('triat').innerHTML = "S'han generat exercicis de " + curs; //aquí porta les claus (i aparentment cometes)
+                document.getElementById('triat').className = "alert alert-success w-50";
+            }
+        </script>
+{% endblock %}

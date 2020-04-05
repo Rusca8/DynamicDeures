@@ -1,0 +1,1096 @@
+import random
+
+from pylatex import Document, Section
+from pylatex import Command, NoEscape, Math, Tabular, Package
+
+import generator as gen
+
+def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - - - - COMBINADES
+    tema = "comb"
+
+    # getting opcions
+    curs = opcions["curs"]
+
+    if "sumes" in opcions:
+        sumes = True
+        qsumes = quantesson(opcions["qsumes"], "sumes")
+        qpsumes = quantesson(opcions["qpsumes"], "psumes")
+    else:
+        sumes = False
+        qsumes = 0
+        qpsumes = 0
+    print(f"A+B = {qsumes}, A+(+B) = {qpsumes}")
+
+    if "multiplicacions" in opcions:
+        multis = True
+        qmultis = quantesson(opcions["qmultis"], "multis")
+        qsmultis = quantesson(opcions["qsmultis"], "smultis")
+    else:
+        multis = False
+        qmultis = 0
+        qsmultis = 0
+    print(f"A*B = {qmultis}, A*(-B) = {qsmultis}")
+
+    if "divisions" in opcions:
+        divis = True
+        qdivis = quantesson(opcions["qdivis"], "divis")
+        qsdivis = quantesson(opcions["qsdivis"], "sdivis")
+    else:
+        divis = False
+        qdivis = 0
+        qsdivis = 0
+    print(f"A/B = {qdivis}, A/(-B) = {qsmultis}")
+
+    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+
+    #PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('alphalph'))  # per permetre aa bb cc
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc,solucions)
+
+    # doc.append(NoEscape(r'\renewcommand{\partlabel}{\thepartno)}')) # canvia l'embolcall del número d'apartat
+    doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    #preguntes
+
+    if sumes or multis or divis:
+        if any([qsumes, qpsumes, qmultis, qsmultis, qdivis, qsdivis]):
+            begin(doc,'questions')
+
+            if sumes:
+
+                bloctitle(doc, "Sumes i restes amb enters")
+
+                if qsumes != 0:
+                    n=qsumes
+                    question(doc,f"{n//4}")
+                    doc.append("Calcula les següents sumes i restes sense parèntesis.")
+                    begin(doc,'parts')
+                    begin(doc,"multicols","4")
+                    for x in range(0,n//4):
+                        uncalcul(doc, [1,1], "0.2cm") # resultat positiu
+                    for x in range(0,n//4):
+                        uncalcul(doc, [1,2], "0.2cm") # a positiva
+                    for x in range(0,n//2):
+                        uncalcul(doc, [1,3], "0.2cm") # normal
+                    end(doc,"multicols")
+                    end(doc,'parts')
+
+                pagebreak(doc, 3)
+
+                if qpsumes != 0:
+                    n=qpsumes
+                    question(doc,f"{n//2}")
+                    doc.append("Calcula les següents sumes i restes amb parèntesis.")
+                    begin(doc,'parts')
+                    begin(doc,"multicols","3")
+                    for x in range(0,n//3):
+                        uncalcul(doc,[2,1], "0.2cm")  # a positiva
+                    for x in range(0,n//3):
+                        uncalcul(doc,[2,2], "0.2cm")  # no doble neg
+                    for x in range(0,n//3):
+                        uncalcul(doc,[2,3], "0.2cm")  # normal
+                    end(doc,"multicols")
+                    end(doc,'parts')
+
+                if qsumes == 0 and qpsumes == 0:
+                    doc.append("Que diu que en vol, però no en vol.")
+
+            pagebreak(doc, 2)
+
+            if multis or divis:
+                if multis and divis:
+                    bTitle = "Multiplicacions i divisions amb enters"
+                elif multis:
+                    bTitle = "Multiplicacions amb enters"
+                else:
+                    bTitle = "Divisions amb enters"
+                bloctitle(doc, bTitle)
+
+                if qmultis!=0 or qdivis!=0:
+                    if qmultis != 0:
+                        if qdivis != 0:
+                            question(doc,f"{qmultis//2}")
+                            doc.append("Calcula les següents multiplicacions i divisions sense signes")
+                        else:
+                            question(doc,f"{qmultis//2}")
+                            doc.append("Calcula les següents multiplicacions sense signes")
+                    else:
+                        question(doc,f"{qdivis//2}")
+                        doc.append("Calcula les següents divisions sense signes")
+
+                    begin(doc,'parts')
+                    begin(doc,"multicols","4")
+
+                    if qmultis!=0 and qdivis!=0:
+                        n = qmultis//2
+                    elif qmultis!=0:
+                        n = qmultis
+                    else:
+                        n = qdivis
+
+                    if qmultis!=0:
+                        for x in range(0,n):
+                            uncalcul(doc,[3,1], "0,2cm") # mult
+                    if qdivis!=0:
+                        for x in range(0,n):
+                            uncalcul(doc,[3,4], "0,2cm") # div
+                    end(doc,"multicols")
+                    end(doc,'parts')
+
+                pagebreak(doc, 1)
+
+                if qsmultis!=0 or qsdivis!=0:
+                    if qsmultis != 0:
+                        if qsdivis != 0:
+                            question(doc,f"{qsmultis}")
+                            doc.append("Calcula les següents multiplicacions i divisions amb signes") # TODO afegir suport per nums grans
+                        else:
+                            question(doc,f"{qsmultis}")
+                            doc.append("Calcula les següents multiplicacions amb signes")
+                    else:
+                        question(doc,f"{qsdivis}")
+                        doc.append("Calcula les següents divisions amb signes")
+
+                    if qsmultis!=0 or qsdivis!=0:
+                        begin(doc,'parts')
+                        begin(doc,"multicols","3")
+
+                        if qsmultis!=0:
+                            n = qsmultis
+                        else:
+                            n = qsdivis
+
+                        for x in range(0,n//2):  # meitat sense doble negatiu
+                            if qsmultis!=0 and not qsdivis!=0:
+                                uncalcul(doc,[3,2], "0,2cm")  # mult
+                            elif qsdivis!=0 and not qsmultis!=0:
+                                uncalcul(doc,[3,5], "0,2cm")  # div
+                            else:
+                                uncalcul(doc,[3,random.choice([2,5])], "0,2cm")  # mult i div
+
+                        for x in range(0,n//2):
+                            if qsmultis!=0 and not qsdivis!=0:
+                                uncalcul(doc,[3,3], "0,2cm")  # mult
+                            elif qsdivis!=0 and not qsmultis!=0:
+                                uncalcul(doc,[3,6], "0,2cm")  # div
+                            else:
+                                uncalcul(doc,[3,random.choice([3,6])], "0,2cm")  # mult i div
+
+                        end(doc,"multicols")
+                        end(doc,'parts')
+
+                if qmultis==0 and qdivis==0 and qsmultis==0 and qsdivis==0:
+                    doc.append("Potser que triïs alguna cosa... (o no diguis que vols multiplicar i dividir)")
+
+            end(doc,'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
+
+
+def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - - - - APILADES
+    tema = "api"
+
+    #getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+
+    if "sumes" in opcions:
+        sumes = True
+        qsumes = quantesson(opcions["qsumes"], "v_sumes")
+        qdsumes = quantesson(opcions["qdsumes"], "v_dsumes")
+
+        # sense decimals
+        sdalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"sdalt{n}" in opcions:
+                sdalt.append(n)
+        if not sdalt:
+            sdalt = [5,4,3,2]  # si no hay arqueólogos me lo invento
+
+        sbaix = []
+        for n in range(5, 1, -1):  # l'últim no el fa
+            if f"sbaix{n}" in opcions:
+                sbaix.append(n)
+        if not sbaix:
+            sbaix = [4,3,2]
+
+        # amb decimals
+        sddalt = []
+        for n in range(6, 0, -1):  # l'últim no el fa
+            if f"sddalt{n}" in opcions:
+                sddalt.append(n)
+        if not sddalt:
+            sddalt = [3,2,1]
+
+        sdecidalt = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"sdecidalt{n}" in opcions:
+                sdecidalt.append(n)
+        if not sdecidalt:
+            sdecidalt = [1,2]
+
+        sdbaix = []
+        for n in range(5, 0, -1):  # l'últim no el fa
+            if f"sdbaix{n}" in opcions:
+                sdbaix.append(n)
+        if not sdbaix:
+            sdbaix = [2,1]
+
+        sdecibaix = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"sdecibaix{n}" in opcions:
+                sdecibaix.append(n)
+        if not sdecibaix:
+            sdecibaix = [1,2]
+
+    else:
+        sumes = False
+        qsumes = 0
+        qdsumes = 0
+    print(f"42+42 {qsumes}, 4.2+4.2 {qdsumes}")
+
+    if "restes" in opcions:
+        restes = True
+        qrestes = quantesson(opcions["qrestes"], "v_restes")
+        qdrestes = quantesson(opcions["qdrestes"], "v_drestes")
+
+        # sense decimals
+        rdalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"rdalt{n}" in opcions:
+                rdalt.append(n)
+        if not rdalt:
+            rdalt = [5,4,3,2]  # si no hay arqueólogos me lo invento
+
+        rbaix = []
+        for n in range(5, 1, -1):  # l'últim no el fa
+            if f"rbaix{n}" in opcions:
+                rbaix.append(n)
+        if not rbaix:
+            rbaix = [4,3,2]
+
+        # amb decimals
+        rddalt = []
+        for n in range(6, 0, -1):  # l'últim no el fa
+            if f"rddalt{n}" in opcions:
+                rddalt.append(n)
+        if not rddalt:
+            rddalt = [3,2,1]
+
+        rdecidalt = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"rdecidalt{n}" in opcions:
+                rdecidalt.append(n)
+        if not rdecidalt:
+            rdecidalt = [1,2]
+
+        rdbaix = []
+        for n in range(5, 0, -1):  # l'últim no el fa
+            if f"rdbaix{n}" in opcions:
+                rdbaix.append(n)
+        if not rdbaix:
+            rdbaix = [2,1]
+
+        rdecibaix = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"rdecibaix{n}" in opcions:
+                rdecibaix.append(n)
+        if not rdecibaix:
+            rdecibaix = [1,2]
+
+    else:
+        restes = False
+        qrestes = 0
+        qdrestes = 0
+    print(f"42-42 {qrestes}, 4.2-4.2 {qdrestes}")
+
+    if "multiplicacions" in opcions:
+        multis = True
+        qmultis = quantesson(opcions["qmultis"], "v_multis")
+        qdmultis = quantesson(opcions["qdmultis"], "v_dmultis")
+
+        # sense decimals
+        mdalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"mdalt{n}" in opcions:
+                mdalt.append(n)
+        if not mdalt:
+            mdalt = [5,4,3,2]  # si no hay arqueólogos me lo invento
+
+        mbaix = []
+        for n in range(4, 0, -1):  # l'últim no el fa
+            if f"mbaix{n}" in opcions:
+                mbaix.append(n)
+        if not mbaix:
+            mbaix = [2,1]
+
+        # amb decimals
+        mddalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"mddalt{n}" in opcions:
+                mddalt.append(n)
+        if not mddalt:
+            mddalt = [4,3,2]
+
+        mdecidalt = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"mdecidalt{n}" in opcions:
+                mdecidalt.append(n)
+        if not mdecidalt:
+            mdecidalt = [1,2]
+
+        mdbaix = []
+        for n in range(4, 0, -1):  # l'últim no el fa
+            if f"mdbaix{n}" in opcions:
+                mdbaix.append(n)
+        if not mdbaix:
+            mdbaix = [1]
+
+        mdecibaix = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"mdecibaix{n}" in opcions:
+                mdecibaix.append(n)
+        if not mdecibaix:
+            mdecibaix = [1]
+
+        print(mdecidalt, mdecibaix)
+
+    else:
+        multis = False
+        qmultis = 0
+        qdmultis = 0
+    print(f"42*42 {qmultis} 4.2*4.2 {qdmultis}")
+
+    divis = False
+    """
+    if "divis" in opcions:
+        sistemes3 = True
+        qsist3 = quantesson(opcions["qsist3"], "sistemes3")
+    else:
+        sistemes3 = False
+        qsist3 = 0
+    print(f"Ax+By+Cz=D ... etc que em fa mandra copiar {qsist}")
+    """
+
+    #PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc,solucions)
+
+    doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    #preguntes
+    if sumes or restes or multis or divis:  # aquí van totes les grans
+        if any([qsumes, qdsumes, qrestes, qdrestes, qmultis, qdmultis]):  # aquí van totes les petites
+            begin(doc,'questions')
+
+            if sumes:
+                bloctitle(doc, "Sumes")
+
+            if qsumes:
+                n = qsumes
+                question(doc, f"{n}")
+                doc.append("Resol les següents sumes apilades (sense decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0,n):
+                    part(doc)
+                    a = random.choice(sdalt)
+                    b = random.choice(sbaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(1, 1, [a, b])))
+                    space(doc,"1cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1cm")
+
+            if qdsumes:
+                n = qdsumes
+                question(doc,f"{2*n}")
+                doc.append("Resol les següents sumes apilades (amb decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0, n):
+                    part(doc)
+                    a = random.choice(sddalt)
+                    b = random.choice(sdbaix)
+                    c = random.choice(sdecidalt)
+                    d = random.choice(sdecibaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(1, 2, [a, b], [c, d])))
+                    space(doc,"1cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1cm")
+
+            if restes:
+                bloctitle(doc, "Restes")
+
+            if qrestes:
+                n = qrestes
+                question(doc,f"{n}")
+                doc.append("Resol les següents restes apilades (sense decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0,n):
+                    part(doc)
+                    a = random.choice(rdalt)
+                    b = random.choice(rbaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(2, x//n+1, [a, b])))
+                    space(doc,"1cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1cm")
+
+            if qdrestes:
+                n = qdrestes
+                question(doc,f"{2*n}")
+                doc.append("Resol les següents restes apilades (amb decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0, n):
+                    part(doc)
+                    a = random.choice(rddalt)
+                    b = random.choice(rdbaix)
+                    c = random.choice(rdecidalt)
+                    d = random.choice(rdecibaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(2, 3, [a, b], [c, d])))
+                    space(doc,"1cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1cm")
+
+            if multis:
+                bloctitle(doc, "Multiplicacions")
+
+            if qmultis:
+                n = qmultis
+                question(doc,f"{n}")
+                doc.append("Resol les següents multiplicacions apilades (sense decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0,n):
+                    part(doc)
+                    a = random.choice(mdalt)
+                    b = random.choice(mbaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(3, 1, [a, b])))
+                    space(doc,"1.6cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1.6cm")
+
+            if qdmultis:
+                n = qdmultis
+                question(doc,f"{2*n}")
+                doc.append("Resol les següents multiplicacions apilades (amb decimals).")
+                begin(doc,'parts')
+                begin(doc,"multicols","4")
+                for x in range(0, n):
+                    part(doc)
+                    a = random.choice(mddalt)
+                    b = random.choice(mbaix)
+                    c = random.choice(mdecidalt)
+                    d = random.choice(mdecibaix)
+                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(3, 2, [a, b], [c, d])))
+                    space(doc,"2.1cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"2.1cm")
+
+            end(doc,'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - - - - EQUACIONS
+    tema = "eq"
+
+    #getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+
+    if "primer" in opcions:
+        primer = True
+        qsimples = quantesson(opcions["qsimples"], "simples")
+        qdsimples = quantesson(opcions["qdsimples"], "dsimples")
+    else:
+        primer = False
+        qsimples = 0
+        qdsimples = 0
+    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}")
+
+    segon = False
+
+    if "sistemes" in opcions:
+        sistemes = True
+        qsist = quantesson(opcions["qsist"], "sistemes")
+    else:
+        sistemes = False
+        qsist = 0
+    print(f"Ax+By=C i Dx+Ey=F {qsist}")
+
+    if "sistemes3" in opcions:
+        sistemes3 = True
+        qsist3 = quantesson(opcions["qsist3"], "sistemes3")
+    else:
+        sistemes3 = False
+        qsist3 = 0
+    print(f"Ax+By+Cz=D ... etc que em fa mandra copiar {qsist}")
+
+    #PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc,solucions)
+
+    doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    #preguntes
+    if primer or segon or sistemes or sistemes3:
+        if any([qsimples, qdsimples, qsist, qsist3]):
+            begin(doc,'questions')
+
+            if primer:
+                bloctitle(doc, "Equacions de primer grau")
+
+            if qsimples!=0:
+                n = qsimples
+                question(doc, f"{n//2}")
+                doc.append("Resol les següents equacions de primer grau (sense coeficient a la x).")
+                begin(doc,'parts')
+                begin(doc,"multicols","3")
+                for x in range(0,n//2):
+                    part(doc)
+                    doc.append(NoEscape(r'$%s$' % gen.eq(1,1)))  # faig meitat de cada
+                    space(doc,"0.7cm")
+                for x in range(0,n//2):
+                    part(doc)
+                    doc.append(NoEscape(r'$%s$' % gen.eq(1,2)))  # faig meitat de cada
+                    space(doc,"0.7cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+
+            if qdsimples!=0:
+                n = qdsimples
+                question(doc,f"{qdsimples}")
+                doc.append("Resol les següents equacions de primer grau (amb coeficient).")
+                begin(doc,'parts')
+                begin(doc,"multicols","3")
+                for x in range(0,n):
+                    part(doc)
+                    if x < n//2:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(2,2)))  # positiu
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(2,3)))  # enter
+                    space(doc,"1.4cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1cm")
+
+            if sistemes:
+                bloctitle(doc, "Sistemes d'equacions de dues incògnites")
+
+            if qsist!=0:
+                n = qsist
+                question(doc,f"{n*2}")
+                doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
+                begin(doc,'parts')
+                begin(doc,"multicols","3")
+                for x in range(0,n):
+                    part(doc)
+                    if x<n//3:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(1,1))) # pels sistemes (per la clau de l'esquerra) cal msmath
+                    elif x<2*n//3:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(1,2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(1,3)))
+                    space(doc,"1.6cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+                space(doc,"1.6cm")
+
+            if sistemes3:
+                bloctitle(doc, "Sistemes d'equacions de tres incògnites")
+
+            if qsist3!=0:
+                n = qsist3
+                question(doc,f"{n*5}")
+                doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
+                begin(doc,'parts')
+                begin(doc,"multicols","3")
+                for x in range(0,n):
+                    part(doc)
+                    if x<n//4 or n==0:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101,1)))  # escalonat, x a dalt
+                    elif x<n//3:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101,2)))  # escalonat, x on sigui
+                    elif x<2*n//3:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101,3)))  # un coeficient 1
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101,4)))  # com sigui
+                    space(doc,"0.5cm")
+                end(doc,"multicols")
+                end(doc,'parts')
+
+            end(doc,'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+def proporcionalitat(opcions, solucions=False):
+    tema = "prop"
+
+    #getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+
+    if "simple" in opcions:
+        simple = True
+        qdirectes = quantesson(opcions["qdirectes"], "directes")
+        qinverses = quantesson(opcions["qinverses"], "inverses")
+        qbarrejades = quantesson(opcions["qbarrejades"], "barrejades")
+    else:
+        simple = False
+        qdirectes = 0
+        qinverses = 0
+        qbarrejades = 0
+    print(f"S.Directa {qdirectes}, S.Inversa {qinverses}, S. Barrejades {qbarrejades}")
+
+    composta = False
+
+    #PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc,solucions)
+
+    doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    #preguntes
+    if simple or composta:
+        if any([qdirectes, qinverses, qbarrejades]):
+            begin(doc,'questions')
+
+            if simple:
+                bloctitle(doc, "Proporcionalitat simple")
+
+            if qdirectes:
+                n = qdirectes
+                question(doc, f"{2*n}")
+                doc.append("Resol els següents problemes de proporcionalitat directa.")
+                begin(doc,'parts')
+                for x in range(0,n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.prop(1,1)))
+                    space(doc,"1cm")
+                end(doc,'parts')
+
+            if qinverses!=0:
+                n = qinverses
+                question(doc,f"{n}")
+                doc.append("Resol els següents problemes de proporcionalitat inversa.")
+                begin(doc,'parts')
+                for x in range(0,n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.prop(1,2)))
+                    space(doc,"1cm")
+                end(doc,'parts')
+
+            if qbarrejades!=0:
+                n = qbarrejades
+                question(doc,f"{n}")
+                doc.append("Resol els següents problemes de proporcionalitat simple (directa i inversa).")
+                begin(doc,'parts')
+                for x in range(0,n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.prop(1,3)))
+                    space(doc,"1cm")
+                end(doc,'parts')
+
+            end(doc,'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+# - - - - - - - - - - - - - - - - - - - - - - - - Playground - - - - - - - - - - - - - - - - - - - - - - - - #
+
+def playground(opcions, solucions=False):
+    curs = opcions["curs"]
+    print(f"Generant pdf d'equacions ({curs})")
+
+    #PyTeX code
+    geometry = {"tmargin": "40mm", "lmargin": "15mm", "bmargin": "20mm", "rmargin": "15mm"}
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+
+    #header and footer
+    doc.preamble.append(Command('pagestyle',"headandfoot"))
+    doc.preamble.append(Command('runningheadrule'))
+    doc.preamble.append(Command('footrule'))
+    doc.preamble.append(Command('firstpageheadrule'))
+    doc.preamble.append(NoEscape(r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa d'Equacions\\ \large Matemàtiques - %s \scriptsize \\ \hrulefill \\  \small\mdseries fitxa generada automàticament amb Dynamic Deures (quan tinguin codi anirà aquí)}{}" % (curs,)))
+    doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa d'Equacions}{Dynamic Deures}" % (curs,)))
+    doc.preamble.append(NoEscape(r"\footer{Total: \numpoints punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
+
+    #titles
+    '''
+    doc.preamble.append(Command('title', NoEscape(r'\vspace{-1cm}' + f"Exercicis d'Equacions ({curs})" + r'\vspace{-2ex}')))
+    doc.preamble.append(Command('author', "Cortesia de Dynamic Deures"))
+    doc.preamble.append(Command('date', NoEscape(r'\vspace{-5ex}')))
+    doc.append(NoEscape(r'\maketitle'))
+    '''
+
+    #doc.append(Command("hrulefill"))
+
+    #myconfig
+    doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
+    doc.append(NoEscape(r'\bracketedpoints'))
+    doc.append(NoEscape(r'\addpoints'))
+    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solució:}\par\noindent}'))
+    if solucions:
+        doc.append(NoEscape(r'\printanswers')) #Marca les respostes correctes dels multiopció (i m'imagino que altres coses si vull)
+
+    #preguntes
+    begin(doc,'questions')
+    question(doc,"10") #Pregunta que val 10 punts
+    doc.append("Quina és la resposta a la vida, a l'univers i a tot?")
+    br(doc)
+    begin(doc, 'oneparcheckboxes')
+    choice(doc, '15')
+    choice(doc, '35')
+    choice(doc, '42', True)
+    choice(doc, '1953405938275821')
+    end(doc, 'oneparcheckboxes')
+
+    question(doc) #Pregunta sense punts
+    doc.append("Creus que està bé això que has fet?")
+    begin(doc,'parts')
+
+    part(doc,'3') #Part de pregunta que val 5
+    doc.append("Aquesta cosa és una part de la pregunta.")
+    space(doc,'1cm')
+
+    part(doc,'7')
+    doc.append("Aquesta cosa és una altra part de la pregunta.")
+    begin(doc,'choices') # choices per ABC vertical, oneparchoices per ABC paral·lel, checkboxes per radio
+    choice(doc, "Pernil i coses variades")
+    choice(doc, "No tinc gaire gana ara")
+    choice(doc, "Però què t'empatolles penjat de la vida")
+    choice(doc, "Potser que posis cometes en lloc d'apòstrofs si vols sobreviure")
+    end(doc, 'choices')
+    space(doc,'1cm')
+
+    part(doc)
+    doc.append("Aquesta no puntua.")
+    space(doc,'1cm')
+    begin(doc,'solution', '2cm')
+    doc.append("Perquè evidentment, si te la dono solucionada no et donaré punts per fer-la.")
+    end(doc,'solution')
+
+    part(doc)
+    doc.append(NoEscape(r"A viam si deixa espai... Ah mira, \fillin[Sí] que n'ha deixat"))
+    end(doc,'parts')
+
+    question(doc,NoEscape(r"12034\half"))
+    doc.append("Sí que val punts aquesta cosa maremeva. Explica'm per què")
+    lines(doc,'2cm')
+
+    question(doc,"20")
+    doc.append("Resol les següents equacions de primer grau.")
+    begin(doc,'parts')
+    begin(doc,"multicols","2")
+    for x in range(0,8):
+        part(doc)
+        doc.append(NoEscape(r'%s' % gen.eq(2,1)))
+        space(doc,"1cm")
+    end(doc,"multicols")
+    end(doc,'parts')
+
+    question(doc,"20")  # pels sistemes (per la clau de l'esquerra) cal msmath
+    doc.append("Resol aquests sistemes d'equacions de dues incògnites.")
+    begin(doc,'parts')
+    begin(doc,"multicols","3")
+    for x in range(0,9):
+        part(doc)
+        doc.append(NoEscape(r'$%s$' % gen.sisteq(1,(x//3)+1)))
+        space(doc,"1cm")
+    end(doc,"multicols")
+    end(doc,'parts')
+
+    question(doc,"42")  # pels sistemes (per la clau de l'esquerra) cal msmath
+    doc.append("Mira quines operacions apilades més maques.")
+    begin(doc,'parts')
+    begin(doc,"multicols","4")
+
+    text = NoEscape(r'\begin{array}{c}\phantom{\times99}384\\ \underline{\times\phantom{999}56}\\ \phantom{\times9}2304\\ \underline{\phantom\times1920\phantom9}\\ \phantom\times21504 \end{array}')
+    part(doc)
+    doc.append(NoEscape(fr'${text}$'))
+    space(doc,"1cm")
+
+    part(doc)
+    doc.append(NoEscape(fr'Si vols demostrat com la a, \\ hi ha el paq xlop que ho fa sol'))
+    space(doc,"1cm")
+    for x in range(0,12):
+        part(doc)
+        doc.append(NoEscape(r'${%s}$' % (gen.apilades(3, [(x//3)+1, (x % 3) +1]))))
+        space(doc,"1cm")
+
+    end(doc,"multicols")
+    end(doc,'parts')
+
+    end(doc,'questions')
+
+    for x in range(0, 10):
+        doc.append("Bon dia catalunya són les 16:30")
+        space(doc,"5cm")
+
+    doc.generate_pdf("deuresweb/pdfs/proves")
+    print("PDF generat.")
+
+    return
+
+# - - - - - - - - - - - - - - - - - - - - - - - - Old Test #1 - - - - - - - - - - - - - - - - - - - - - - - - #
+
+def old_equacions(opcions):
+    curs = opcions["curs"]
+    print(f"Generant pdf d'equacions ({curs})")
+
+    #PyTeX code
+    geometry = {"tmargin": "10mm", "lmargin": "25mm", "bmargin": "20mm", "rmargin": "25mm"}
+    doc = Document(geometry_options=geometry)
+
+    #titles
+    doc.preamble.append(Command('title', NoEscape(r'\vspace{-1cm}' + f"Exercicis d'Equacions ({curs})" + r'\vspace{-2ex}')))
+    doc.preamble.append(Command('author', "Cortesia de Dynamic Deures"))
+    doc.preamble.append(Command('date', NoEscape(r'\vspace{-5ex}')))
+    doc.append(NoEscape(r'\maketitle'))
+
+    doc.append(Command("hrulefill"))
+
+    title = "Equacions de primer grau"
+    text = "Aquí aniran les equacions "
+    with doc.create(Section(title)):
+        doc.append(text)
+        doc.append(curs)
+        doc.append(Math(data=['2*3', '=', '6x']))
+
+
+
+        with doc.create(Tabular('l|l')) as table: # l = left, c = centered, r = right, | = barra
+            table.add_row((1, 2))
+            table.add_empty_row()
+            table.add_row((3, 4))
+
+
+    doc.generate_pdf("deuresweb/pdfs/equacions")
+    print("PDF generat.")
+
+    return
+
+
+
+#*********************** Functions *************************#
+
+def temallarg(tema="no"):
+    if tema == "eq":
+        return "equacions"
+    elif tema == "comb":
+        return "combinades"
+    elif tema == "api":
+        return "apilades"
+    elif tema == "prop":
+        return "proporcionalitat"
+    else:
+        return tema
+
+def tematitol(tema="no"):
+    if tema == "eq":
+        return "d'Equacions"
+    elif tema == "comb":
+        return "d'Operacions amb Enters"
+    elif tema == "api":
+        return "Operacions amb Més Xifres"
+    elif tema == "prop":
+        return "Proporcionalitat"
+    elif tema == "no":
+        tema = "de Qui sap què"
+    else:
+        return "de " + tema
+
+def quantesson(value,op):
+    n = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"].index(value)
+    print(op, value)
+    # enters
+    if op == "sumes":
+        quantitats = [0, 8, 20, 32, 48, 112, 200]
+    elif op == "psumes":
+        quantitats = [0, 9, 18, 27, 42, 87, 174]
+    elif op in ["multis", "divis"]:
+        quantitats = [0, 8, 20, 32, 48, 104, 200]
+    elif op in ["smultis", "sdivis"]:
+        quantitats = [0, 8, 15, 27, 42, 87, 174]
+    # més xifres
+    elif op == "v_sumes":
+        quantitats = [0, 4, 8, 12, 16, 35, 64]
+    elif op == "v_dsumes":
+        quantitats = [0, 4, 8, 12, 16, 35, 64]
+    elif op == "v_restes":
+        quantitats = [0, 4, 8, 12, 16, 35, 64]
+    elif op == "v_drestes":
+        quantitats = [0, 4, 8, 12, 16, 35, 64]
+    elif op == "v_multis":
+        quantitats = [0, 3, 6, 9, 12, 28, 64]
+    elif op == "v_dmultis":
+        quantitats = [0, 3, 6, 9, 12, 24, 64]
+    # equacions
+    elif op in ["simples", "dsimples"]:
+        quantitats = [0, 8, 12, 26, 42, 86, 174] # arrodonit avall per evitar migpunts
+    elif op == "sistemes":
+        quantitats = [0, 3, 6, 9, 12, 21, 45]
+    elif op == "sistemes3":
+        quantitats = [0, 3, 6, 9, 12, 27, 56]
+    elif op == "directes":
+        quantitats = [0, 3, 4, 5, 6, 12, 25]
+    elif op == "inverses":
+        quantitats = [0, 3, 4, 5, 6, 11, 22]
+    elif op == "barrejades":
+        quantitats = [0, 3, 4, 5, 6, 11, 23]
+    else:
+        quantitats = [0, 8, 20, 32, 48, 112, 200]
+        print("no he trobat el codi")
+    return quantitats[n]
+
+#*************************** Common Blocks *******************************#
+
+def margins():
+    return {"tmargin": "40mm", "lmargin": "15mm", "bmargin": "20mm", "rmargin": "15mm"}
+
+def headfoot(doc, opcions, tema="no"):
+    tema = tematitol(tema)
+    #header and footer
+    doc.preamble.append(Command('pagestyle',"headandfoot"))
+    doc.preamble.append(Command('runningheadrule'))
+    doc.preamble.append(Command('footrule'))
+    doc.preamble.append(Command('firstpageheadrule'))
+    doc.preamble.append(NoEscape(r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa %s\\ \large Matemàtiques - %s \scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}" % (tema, opcions["curs"],)))
+    doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
+    doc.preamble.append(NoEscape(r"\footer{Total: \numpoints punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
+
+    return
+
+def myconfig(doc, solucions=False):
+    doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
+    doc.append(NoEscape(r'\bracketedpoints'))
+    doc.append(NoEscape(r'\addpoints'))
+    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solució:}\par\noindent}'))
+    if solucions:
+        doc.append(NoEscape(r'\printanswers')) #Marca les respostes correctes dels multiopció i mostra les respostes definides
+    return
+
+
+#********************* Aliases PyLaTeX **********************#
+
+def begin(doc, tag, extra=""): #TODO canviar per Command, boig
+    if tag == "solution" and not extra == "":
+        doc.append(NoEscape(r'\begin{%s}[%s]' % (tag,extra)))
+    elif tag == "multicols":
+        doc.append(NoEscape(r'\begin{%s}{%s}' % (tag,extra)))
+    else:
+        doc.append(NoEscape(r'\begin{%s}' % (tag,)))
+    return
+
+def end(doc, tag):
+    doc.append(NoEscape(r'\end{%s}' % (tag,)))
+    return
+
+def space(doc, size):
+    doc.append(NoEscape(r'\vspace{%s}' % (size,)))
+    return
+
+def stretch(doc, relsize):
+    doc.append(NoEscape(r'\vspace{\stretch{%s}}' % (relsize,)))
+
+def lines(doc, size):
+    doc.append(NoEscape(r'\fillwithlines{%s}' % (size,)))
+    return
+
+def br(doc):
+    doc.append(NoEscape(r'\newline'))
+
+def pagebreak(doc, priority="4"):
+    doc.append(NoEscape(r'\pagebreak[%s]' % (priority)))
+
+def bloctitle(doc, text):
+    doc.append(Command("fullwidth",NoEscape(r"\bfseries \large %s" % (text,))))
+
+def part(doc, punts=""):
+    if punts == "":
+        doc.append(NoEscape(r'\part'))
+    else:
+        doc.append(NoEscape(r'\part[%s]' % (punts,)))
+    return
+
+def question(doc, punts=""):
+    if punts == "":
+        doc.append(NoEscape(r'\question'))
+    else:
+        doc.append(NoEscape(r'\question[%s]' % (punts,)))
+    return
+
+def choice(doc, text, corregir=False):
+    if corregir:
+        doc.append(NoEscape(r'\CorrectChoice %s' % (text,)))
+    else:
+        doc.append(NoEscape(r'\choice %s' % (text,)))
+    return
+
+def uncalcul(doc, quin=[1,1], sp="0.7cm"):  # op és llista d'opcions del generador
+    part(doc)
+    doc.append(NoEscape(r'$%s$' % gen.comb(*quin)))  # asterisc separa la llista i els envia individualment
+    space(doc, sp)
+
+    return

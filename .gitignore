@@ -1,0 +1,21 @@
+# coses de caché del pythonAnywhere (deixo la carpeta però buido)
+*.pyc
+
+
+#fitxers ocults (.coses)
+.*
+!.gitignore
+
+# carpetes sense codi rellevant
+**/pdfs
+/dynamicdeures
+
+# token del bot de Telegram
+teletoken.py
+
+# docs antics que substituien el control de versions pffajjaj
+equacions2
+combinades2
+provaforms
+formulari
+ddzip.zip

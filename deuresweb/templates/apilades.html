@@ -1,0 +1,619 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+<div class="alert alert-info alert-sm" role="alert">Va tot, però falta ajustar les quantitats a la mida.</div>
+{% endblock %}
+{% block principals %}
+<h4 id="titolTema">Fitxa d'Operacions amb Més Xifres...</h4>
+<div class="form-group">
+    <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep1" value="1r de Primària" autocomplete="off" disabled> 1EP
+      </label>
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep2" value="2n de Primària" autocomplete="off" disabled> 2EP
+      </label>
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep3" value="3r de Primària" autocomplete="off" disabled> 3EP
+      </label>
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep4" value="4t de Primària" autocomplete="off" disabled> 4EP
+      </label>
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep5" value="5r de Primària" autocomplete="off" disabled> 5EP
+      </label>
+      <label class="btn btn-outline-secondary disabled">
+        <input type="radio" name="curs" id="ep6" value="6è de Primària" autocomplete="off" disabled> 6EP
+      </label>
+      <label class="btn btn-outline-secondary active">
+        <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+      </label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSuma" aria-expanded="true" aria-controls="opSuma">
+          <input type="checkbox" name="sumes" autocomplete="off" id="sumes" value="Sumes" checked> Sumes
+        </label>
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opResta" aria-expanded="true" aria-controls="opResta">
+          <input type="checkbox" name="restes" autocomplete="off" id="restes" value="Restes" checked> Restes
+        </label>
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opMulti" aria-expanded="true" aria-controls="opMulti">
+          <input type="checkbox" name="multiplicacions" autocomplete="off" id="multis" value="Multiplicacions" checked> Multiplicacions
+        </label>
+        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opDivi" aria-expanded="false" aria-controls="opDivi">
+          <input type="checkbox" name="divisions" autocomplete="off" id="divis" value="Divisions" disabled> Divisions
+        </label>
+    </div>
+</div>
+{% endblock %}
+
+{% block extres %}
+<div class="collapse show mb-1" id="opSuma">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Sumes apilades</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupSumesQuantes"><b>Sense Decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qsumes" id="qs2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsumes" id="qs6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qsumes" id="qs9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigitsSuma"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,5,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="sdalt{{n}}" autocomplete="off" id="sdalt{{n}}" value="sdalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(5,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdalt{{n}}" autocomplete="off" id="sdalt{{n}}" value="sdalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="mess" autocomplete="off" id="mess" value="mess" disabled> <b>+</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="sbaix5" autocomplete="off" id="sbaix5" value="sbaix5"> 5
+                        </label>
+                        {% for n in range(4,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sbaix{{n}}" autocomplete="off" id="sbaix{{n}}" value="sbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!--
+        <div class="form-group mb-1 ml-4">
+            <label for="formDivNegativa"><i>Evitar emportar?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                <input type="radio" name="noport" id="noport0" value="no" autocomplete="off" checked> no
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noport" id="noport1" value="poques" autocomplete="off"> les primeres
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noport" id="noport2" value="meitat" autocomplete="off"> la meitat
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noport" id="noport3" value="moltes" autocomplete="off"> la majoria
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noport" id="noport" value="totes" autocomplete="off"> totes
+              </label>
+            </div>
+        </div>
+        -->
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupSumesDecimalsQuantes"><b>Amb decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qdsumes" id="qds2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdsumes" id="qds6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qdsumes" id="qps9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigiDeciSuma"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,3,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="sddalt{{n}}" autocomplete="off" id="sddalt{{n}}" value="sddalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(3,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sddalt{{n}}" autocomplete="off" id="sddalt{{n}}" value="sddalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini">
+                              <input type="checkbox" name="sdecidalt0" autocomplete="off" id="sdecidalt0" value="sdecidalt0"> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdecidalt1" autocomplete="off" id="sdecidalt1" value="sdecidalt1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdecidalt2" autocomplete="off" id="sdecidalt2" value="sdecidalt2" checked> 2
+                        </label>
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="mesds" autocomplete="off" id="mesds" value="mesds" disabled> <b>+</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="sdbaix5" autocomplete="off" id="sdbaix5" value="sdbaix5"> 5
+                        </label>
+                        {% for n in range(4,2,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="sdbaix{{n}}" autocomplete="off" id="sdbaix{{n}}" value="sdbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(2,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdbaix{{n}}" autocomplete="off" id="sdbaix{{n}}" value="sdbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini">
+                              <input type="checkbox" name="sdecibaix0" autocomplete="off" id="sdecibaix0" value="sdecibaix0"> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdecibaix1" autocomplete="off" id="sdecibaix1" value="sdecibaix1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="sdecibaix2" autocomplete="off" id="sdecibaix2" value="sdecibaix2" checked> 2
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <!--
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupSumesGrosses"><b>Amb més termes</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs0" value="no" autocomplete="off" disabled> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs1" value="poques" autocomplete="off" disabled> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs2" value="normal" autocomplete="off" disabled> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs3" value="moltes" autocomplete="off" disabled> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs4" value="mitja" autocomplete="off" disabled> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs5" value="plana" autocomplete="off" disabled> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs6" value="doble" autocomplete="off" disabled> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgsumes" id="qgs9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+        -->
+
+      </div>
+    </div>
+</div>
+
+<div class="collapse show mb-1" id="opResta">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Restes apilades</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupRestesQuantes"><b>Sense Decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qrestes" id="qr2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qrestes" id="qr6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qrestes" id="qr9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigitsResta"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,5,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="rdalt{{n}}" autocomplete="off" id="rdalt{{n}}" value="rdalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(5,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdalt{{n}}" autocomplete="off" id="rdalt{{n}}" value="rdalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="menysr" autocomplete="off" id="menysr" value="menysr" disabled> <b>-</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="rbaix5" autocomplete="off" id="rbaix5" value="rbaix5"> 5
+                        </label>
+                        {% for n in range(4,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rbaix{{n}}" autocomplete="off" id="rbaix{{n}}" value="rbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupRestesDecimalsQuantes"><b>Amb decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qdrestes" id="qdr2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdrestes" id="qdr6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qdrestes" id="qpr9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigiDeciResta"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,3,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="rddalt{{n}}" autocomplete="off" id="rddalt{{n}}" value="rddalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(3,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rddalt{{n}}" autocomplete="off" id="rddalt{{n}}" value="rddalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini">
+                              <input type="checkbox" name="rdecidalt0" autocomplete="off" id="rdecidalt0" value="rdecidalt0"> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdecidalt1" autocomplete="off" id="rdecidalt1" value="rdecidalt1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdecidalt2" autocomplete="off" id="rdecidalt2" value="rdecidalt2" checked> 2
+                        </label>
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="menysdr" autocomplete="off" id="menysdr" value="menysdr" disabled> <b>-</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="rdbaix5" autocomplete="off" id="rdbaix5" value="rdbaix5"> 5
+                        </label>
+                        {% for n in range(4,2,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="rdbaix{{n}}" autocomplete="off" id="rdbaix{{n}}" value="rdbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(2,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdbaix{{n}}" autocomplete="off" id="rdbaix{{n}}" value="rdbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini">
+                              <input type="checkbox" name="rdecibaix0" autocomplete="off" id="rdecibaix0" value="rdecibaix0"> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdecibaix1" autocomplete="off" id="rdecibaix1" value="rdecibaix1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="rdecibaix2" autocomplete="off" id="rdecibaix2" value="rdecibaix2" checked> 2
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<div class="collapse show mb-1" id="opMulti">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Multiplicacions apilades</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupMultisQuantes"><b>Sense Decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qr0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qm1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qmultis" id="qm2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qm3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qm4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qm5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmultis" id="qm6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qmultis" id="qm9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigitsMulti"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6, 5, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mdalt{{n}}" autocomplete="off" id="mdalt{{n}}" value="mdalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(5, 1, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mdalt{{n}}" autocomplete="off" id="mdalt{{n}}" value="mdalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="per" autocomplete="off" id="per" value="per" disabled> <b>x</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mbaix4" autocomplete="off" id="mbaix4" value="mbaix4"> 4
+                        </label>
+                        {% for n in range(3, 2, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mbaix{{n}}" autocomplete="off" id="mbaix{{n}}" value="mbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(2, 0, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mbaix{{n}}" autocomplete="off" id="mbaix{{n}}" value="mbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupMultisDecimalsQuantes"><b>Amb decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qdmultis" id="qdm2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdmultis" id="qdm6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qdmultis" id="qpm9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigiDeciMulti"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,4,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mddalt{{n}}" autocomplete="off" id="mddalt{{n}}" value="mddalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(4,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mddalt{{n}}" autocomplete="off" id="mddalt{{n}}" value="mddalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini disabled">
+                              <input type="checkbox" name="mdecidalt0" autocomplete="off" id="mdecidalt0" value="mdecidalt0" disabled> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mdecidalt1" autocomplete="off" id="mdecidalt1" value="mdecidalt1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mdecidalt2" autocomplete="off" id="mdecidalt2" value="mdecidalt2" checked> 2
+                        </label>
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="perd" autocomplete="off" id="perd" value="perd" disabled> <b>x</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mdbaix4" autocomplete="off" id="mdbaix4" value="mdbaix4"> 4
+                        </label>
+                        {% for n in range(3,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mdbaix{{n}}" autocomplete="off" id="mdbaix{{n}}" value="mdbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(1,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mdbaix{{n}}" autocomplete="off" id="mdbaix{{n}}" value="mdbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini disabled">
+                              <input type="checkbox" name="mdecibaix0" autocomplete="off" id="mdecibaix0" value="mdecibaix0" disabled> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="mdecibaix1" autocomplete="off" id="mdecibaix1" value="mdecibaix1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="mdecibaix2" autocomplete="off" id="mdecibaix2" value="mdecibaix2"> 2
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

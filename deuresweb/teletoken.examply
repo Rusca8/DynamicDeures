@@ -1,0 +1,4 @@
+#  aparentment aquest fitxer no es pot dir "token" perquè ja hi deu haver
+# alguna cosa amb aquest nom y es fot de lloros
+def gettoken():
+    return "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" # això és l'exemple de https://core.telegram.org/bots/api

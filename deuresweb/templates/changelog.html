@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6"> <!-- primera columna -->
+            <div class="card">
+                <div class="card-body">
+                    <h4>Historial de canvis</h4>
+                    <ul>
+                      <li>2 Abril 2020</li>
+                      <ul>
+                        <li>Afegida inversa (simple) a la pàgina de proporcionalitat.</li>
+                      </ul>
+                      <li>29 Març 2020</li>
+                      <ul>
+                        <li>Primeres proves amb proporcionalitat inversa.</li>
+                      </ul>
+                      <li>26 Març 2020</li>
+                      <ul>
+                        <li>Afegida la pàgina de proporcionalitat (només simple directa).</li>
+                        <li>Incorporació de la proporcionalitat al generador LaTeX.</li>
+                        <li>Primeres proves generant de problemes de proporcionalitat.</li>
+                        <li>Recopilació de tipus d'enunciat de problemes de proporcionalitat.</li>
+                      </ul>
+                      <li>21 Març 2020</li>
+                      <ul>
+                        <li>Afegida la pàgina d'operacions amb més xifres.</li>
+                        <li>Botons de quantitat de dígits per operacions amb més xifres.</li>
+                      </ul>
+                      <li>20 Març 2020</li>
+                      <ul>
+                        <li>Primera versió utilitzable de la pàgina d'operacions amb més xifres.</li>
+                        <li>Incorporació de les operacions apilades al generador.</li>
+                        <li>Primer esbós de la pàgina d'operacions apilades.</li>
+                        <li>Primeres proves amb operacions apilades.</li>
+                        <li>Recerca d'alternatives a xlop que no portin solució.</li>
+                        <li>Recerca del paquet xlop per operacions apilades.</li>
+                      </ul>
+                      <li>19 Març 2020</li>
+                      <ul>
+                        <li>Afegit sistemes lineals 3D a la pàgina d'equacions.</li>
+                        <li>Afegit sistemes lineals a la pàgina d'equacions.</li>
+                        <li>Aquesta pàgina, amb canvis i coses per fer.</li>
+                        <li>Feedback d'ús a través de Telegram (m'avisa quan es genera un pdf).</li>
+                        <li>Investigació de les sessions Flask i els uuid.</li>
+                      </ul>
+                      <li>18 Març 2020</li>
+                      <ul>
+                        <li>Primeres proves generant sistemes d'equacions.</li>
+                        <li>Recull de sugerències de tipus de problema per instagram.</li>
+                        <li>Pàgina explicant com està fet</li>
+                        <li>Incorporació de la barra de navegació en Bootstrap</li>
+                        <li>Implementació de la personalització a PyLaTeX (només quantitats).</li>
+                        <li>Últimes correccions dels elements dinàmics del formulari.</li>
+                        <li>Investigació de les funcions onclick i onchange de javascript.</li>
+                      </ul>
+                      <li>17 Març 2020</li>
+                      <ul>
+                        <li>Formulari avançat per personalitzar els exercicis d'enters.</li>
+                        <li>Primeres proves amb el sistema collapse de Bootstrap.</li>
+                      </ul>
+                      <li>16 Març 2020</li>
+                      <ul>
+                        <li>Primera versió del pdf d'operacions amb enters</li>
+                        <li>Pàgina bàsica per crear operacions amb enters.</li>
+                        <li>Funció per generar operacions amb enters a l'script python.</li>
+                        <li>Pàgina d'inici separada de la d'equacions.</li>
+                      </ul>
+                      <li>15 Març 2020</li>
+                      <ul>
+                        <li>Primer pdf utilitzable (equacions senzilles).</li>
+                        <li>Execució del generador d'equacions des de PyLaTeX.</li>
+                        <li>Script python per generar equacions de primer grau per nivells.</li>
+                        <li>Plantilla bàsica pel pdf (marges, capçaleres, peu de pàgina...).</li>
+                        <li>Investigació de com adaptar a PyLaTeX les comandes LaTeX no incloses.</li>
+                        <li>Exploració a fons dels elements de l'estructura "examen" de LaTeX.</li>
+                      </ul>
+                      <li>14 Març 2020</li>
+                      <ul>
+                        <li>Primeres proves de passar informació de Flask a PyLaTeX.</li>
+                        <li>Accés a la informació dels formularis des de Flask.</li>
+                        <li>Primeres proves amb l'estil, botons i formularis de Bootstrap.</li>
+                        <li>Primeres proves amb la inheritància d'html a Flask: capçalera comú a la web.</li>
+                        <li>Configuració dels documents estàtics de Flask per poder mostrar a la web el pdf generat.</li>
+                        <li>Execució de l'script de PyLaTeX des de Flask.</li>
+                        <li>Estructura bàsica de la web app en Flask.</li>
+                        <li>Primeres proves de PyLaTeX des de scripts.</li>
+                        <li>Investigacions prèvies (exploració de les opcions de com fer-ho).</li>
+                      </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6"> <!-- segona columna -->
+            <div class="card bg-light mb-4">
+                <div class="card-body">
+                    <h4>Temes pendents</h4>
+                    <ul>
+                        <li>Divisions amb més xifres</li>
+                        <li>Operacions combinades</li>
+                        <ul>
+                            <li>Operacions combinades en sí (barreja d'operacions)</li>
+                        </ul>
+                        <li>Sistemes d'equacions</li>
+                        <ul>
+                            <li>Lineals</li>
+                                <li>Matrius 3D</li>
+                            <li>No lineals</li>
+                        </ul>
+                        <li>Equacions</li>
+                        <ul>
+                            <li>De segon grau</li>
+                            <li>Biquadrades</li>
+                            <li>Irracionals</li>
+                            <li>Exponencials</li>
+                            <li>Logarítmiques</li>
+                            <li>Problemes?</li>
+                        </ul>
+                        <li>Geometria 2D</li>
+                        <li>Límits</li>
+                        <li>Operacions amb radicals i potències</li>
+                        <ul>
+                            <li>Radicals/potències semblants</li>
+                            <li>Introduir i extreure factors</li>
+                            <li>Arrels d'arrels</li>
+                        </ul>
+                        <li>Proporcionalitat i %</li>
+                        <ul>
+                            <li>Fracció generatriu</li>
+                            <li>Problemes</li>
+                            <ul>
+                                <li>Indirecta i composta</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h4>Coses pendents</h4>
+                    <ul>
+                        <li>Que el Navbar marqui al pestanya actual</li>
+                        <li>Opció de no mostrar els punts de les preguntes</li>
+                        <li>Triar si vols espai per resoldre (amb les que en gasten molt, com sist3D)</li>
+                        <li>Pàgina per enviar suggerències</li>
+                        <li>Opció per veure les solucions dels més difícils (com sistemes)</li>
+                        <li>Sessions de Flask per evitar col·lisions entre usuaris.</li>
+                        <li>Càlcul de la mida de les coses per evitar salts de pàgina estranys.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
