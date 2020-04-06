@@ -5,6 +5,7 @@
 Dynamic Deures és una web app fet amb Flask (python) que genera fitxes personalitzades de deures de matemàtiques (amb números diferents cada vegada).
 Les fitxes es generen mitjançant PyLaTeX (LaTeX sobre python), i el resultat és un pdf que es mostra a l'usuari per què el pugui imprimir al moment.
 
+_Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](README.es.md), , [English (EN)](README.en.md)_ 
 ## Índex
 - [Temes implementats](#temes-implementats)
 - [Notes per desenvolupadors](#notes-per-desenvolupadors)
