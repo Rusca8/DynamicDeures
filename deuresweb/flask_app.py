@@ -91,7 +91,7 @@ def provaforms():
 def pdfviewer(tema):
     print(f"Visualitzant pdf: {tema}.")
     if tema == "eq":
-        return redirect("static/pdfs/equacions.pdf")
+        return redirect("/static/pdfs/equacions.pdf")
     elif tema == "comb":
         return redirect("/static/pdfs/combinades.pdf")
     elif tema == "proves":
