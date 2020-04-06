@@ -5,7 +5,7 @@
 Dynamic Deures és una web app fet amb Flask (python) que genera fitxes personalitzades de deures de matemàtiques (amb números diferents cada vegada).
 Les fitxes es generen mitjançant PyLaTeX (LaTeX sobre python), i el resultat és un pdf que es mostra a l'usuari per què el pugui imprimir al moment.
 
-_Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](README.es.md), [English (EN)](README.en.md)_ 
+_Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](README.es.md), [English (EN)](README.en.md)_
 ## Índex
 - [Temes implementats](#temes-implementats)
 - [Notes per desenvolupadors](#notes-per-desenvolupadors)
@@ -31,11 +31,8 @@ _Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](
   - Multiplicacions
 
 ## Notes per desenvolupadors
-La posada a punt de PyLaTeX en local a l'ordinador no és especialment trivial (aparentment necessita instal·lar MacTeX o similar, que d'altra banda ocupen més de 6Gb). La bona notícia, però, és que és fàcil fer-lo córrer (de manera gratuïta) a pythonAnywhere.com, ja que aquest porta instal·lat LaTeX per defecte.
-
-Jo per evitar maldecaps tota la part de PyLaTeX la vaig arrancar online d'aquesta manera (i tot just he tornat ara a encarar-me amb la instal·lació local, per veure si puc aprofitar el control de versions per no haver d'aturar el web quan provo coses noves).
-
-_Seguirem informant..._
+Per fer córrer PyLaTeX en local a l'ordinador necessitareu MacTeX o alguna cosa per l'estil (jo he aconseguit que funcioni amb MacTeX, que ocupa 6Gb, i no he sabut trobar res més petit que funcionés).
+Si no, és bastant fàcil fer-lo anar (gratis) a pythonAnywhere.com, ja que ells tenen ja LaTeX instal·lat per defecte (aquest és el camí que vaig seguir jo per fer això abans d'implementar-ne el control de versions).
 
 ## Prova-ho!
 Pots accedir a la web per generar les teves fitxes personalitzades aquí: [Dynamic Deures](http://bit.ly/DynamicDeures)

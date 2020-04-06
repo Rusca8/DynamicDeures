@@ -5,7 +5,7 @@
 Dynamic Deures is a Flask (python) web app that generates personalized math worksheets (with different numbers each time).
 The worksheets are generated via PyLaTeX (LaTeX running in python), and the result is a pdf that is shown to the user so that she/he can print it on the go.
 
-_Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](README.es.md), [English (EN)](README.en.md)_ 
+_Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](README.es.md), [English (EN)](README.en.md)_
 ## Index
 - [Implemented subjects](#implemented-subjects)
 - [Notes for developers](#notes-for-developers)
@@ -31,11 +31,8 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
   - Multiplicacions
 
 ## Notes for developers
-Getting PyLaTeX to work on a local computer it's not trivial (since apparently it needs MacTeX or similar installed, which by the way weigh more than 6Gb). The good news, though, is that it's quite easy to make it run (for free) in pythonAnywhere.com, since they already have LaTeX installed by default.
-
-To avoid unnecessary pain I started all the PyLaTeX stuff directly online in this way (and I've just come back now to fight for the local install in order to see if I can use this new version control to work on stuff locally, so that I don't need to stop the website when I try stuff).
-
-_I'll keep you updated..._
+For PyLaTeX to run in your local machine you'll need MacTeX or something along the way (I got it to work with MacTeX, which is 6Gb, and couldn't make it work with anything smaller than that).
+Otherwise, it's quite easy to make it run (for free) in pythonAnywhere.com, since they already have LaTeX installed by default (which is exactly how I made this before version control).
 
 ## Try it!
 You can access the website to generate your own personalized math worksheets here: [Dynamic Deures](http://bit.ly/DynamicDeures)
