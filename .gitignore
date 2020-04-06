@@ -8,6 +8,7 @@
 
 # carpetes i coses irrellevants
 *.pdf
+!exemple.pdf
 /dynamicdeures
 
 # token del bot de Telegram
