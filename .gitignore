@@ -6,8 +6,8 @@
 .*
 !.gitignore
 
-# carpetes sense codi rellevant
-**/pdfs
+# carpetes i coses irrellevants
+*.pdf
 /dynamicdeures
 
 # token del bot de Telegram
