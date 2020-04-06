@@ -32,6 +32,7 @@ _Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](
 
 ## Notes per desenvolupadors
 Per fer córrer PyLaTeX en local a l'ordinador necessitareu MacTeX o alguna cosa per l'estil (jo he aconseguit que funcioni amb MacTeX, que ocupa 6Gb, i no he sabut trobar res més petit que funcionés).
+
 Si no, és bastant fàcil fer-lo anar (gratis) a pythonAnywhere.com, ja que ells tenen ja LaTeX instal·lat per defecte (aquest és el camí que vaig seguir jo per fer això abans d'implementar-ne el control de versions).
 
 ## Prova-ho!

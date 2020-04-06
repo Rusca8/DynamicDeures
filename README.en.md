@@ -32,6 +32,7 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
 
 ## Notes for developers
 For PyLaTeX to run in your local machine you'll need MacTeX or something along the way (I got it to work with MacTeX, which is 6Gb, and couldn't make it work with anything smaller than that).
+
 Otherwise, it's quite easy to make it run (for free) in pythonAnywhere.com, since they already have LaTeX installed by default (which is exactly how I made this before version control).
 
 ## Try it!

@@ -32,6 +32,7 @@ _Lee esto en otros idiomas: [Catalán (CA)](README.md), [Castellano (ES)](README
 
 ## Notas para desarrolladores
 Para que funcione PyLaTeX en local en el ordenador os hará falta MacTeX o alguna cosa por el estilo (yo he conseguido que funcione con MacTeX, que ocupa 6Gb, y no he sabido encontrar nada más pequeño que funcionara).
+
 Si no, es bastante fácil usarlo (gratis) en pythonAnywhere.com, ya que ellos tienen ya el LaTeX instalado por defecto (así es como hice yo esto antes de implementar el control de versiones).
 
 ## Pruébalo!
