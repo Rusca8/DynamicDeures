@@ -91,15 +91,15 @@ def provaforms():
 def pdfviewer(tema):
     print(f"Visualitzant pdf: {tema}.")
     if tema == "eq":
-        return redirect("/fitxes/equacions.pdf")
+        return redirect("static/pdfs/equacions.pdf")
     elif tema == "comb":
-        return redirect("/fitxes/combinades.pdf")
+        return redirect("/static/pdfs/combinades.pdf")
     elif tema == "proves":
-        return redirect("/fitxes/proves.pdf")
+        return redirect("/static/pdfs/proves.pdf")
     elif tema == "apilades":
-        return redirect("/fitxes/apilades.pdf")
+        return redirect("/static/pdfs/apilades.pdf")
     elif tema == "proporcionalitat":
-        return redirect("/fitxes/proporcionalitat.pdf")
+        return redirect("/static/pdfs/proporcionalitat.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

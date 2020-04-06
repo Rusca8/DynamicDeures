@@ -193,7 +193,7 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
     else:
         doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
 
-    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
 
     return
@@ -520,7 +520,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
     else:
         doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
 
-    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
 
     return
@@ -665,7 +665,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
     else:
         doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
 
-    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
 
     return
@@ -750,7 +750,7 @@ def proporcionalitat(opcions, solucions=False):
     else:
         doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
 
-    doc.generate_pdf("deuresweb/pdfs/" + temallarg(tema))
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
 
     return
@@ -888,7 +888,7 @@ def playground(opcions, solucions=False):
         doc.append("Bon dia catalunya són les 16:30")
         space(doc,"5cm")
 
-    doc.generate_pdf("deuresweb/pdfs/proves")
+    doc.generate_pdf("deuresweb/static/pdfs/proves")
     print("PDF generat.")
 
     return
