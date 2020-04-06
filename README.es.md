@@ -9,6 +9,7 @@ _Lee esto en otros idiomas: [Catalán (CA)](README.md), [Castellano (ES)](README
 ## Índice
 - [Temas implementados](#temas-implementados)
 - [Notas para desarrolladores](#notas-para-desarrolladores)
+  - [Clonando el repositorio](#clonando-el-repositorio)
 - [Pruébalo!](#pruébalo)
 
 ## Temas implementados
@@ -34,6 +35,11 @@ _Lee esto en otros idiomas: [Catalán (CA)](README.md), [Castellano (ES)](README
 Para que funcione PyLaTeX en local en el ordenador os hará falta MacTeX o alguna cosa por el estilo (yo he conseguido que funcione con MacTeX, que ocupa 6Gb, y no he sabido encontrar nada más pequeño que funcionara).
 
 Si no, es bastante fácil usarlo (gratis) en pythonAnywhere.com, ya que ellos tienen ya el LaTeX instalado por defecto (así es como hice yo esto antes de implementar el control de versiones).
+
+### Clonando el repositorio
+Debido al sistema de feedback por Telegram que tengo montado en la web (el bot me avisa cuando se generan documentos, diciéndome de qué tipo), si clonáis el repositorio (para curiosear o contribuir) tendréis que hacer un pequeño ajuste: el archivo que dice `teletoken.examply` se tiene que duplicar bajo el nombre `teletoken.py`, tal como se explica en el propio archivo.
+
+En caso de no hacer esto la web dará un error en el momento de generar el pdf (porque no podrá importar la clave secreta del bot, que no he incluído por motivos evidentes).
 
 ## Pruébalo!
 Puedes acceder a la web para hacer tus fichas personalizadas aquí: [Dynamic Deures](http://bit.ly/DynamicDeures)

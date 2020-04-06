@@ -9,6 +9,7 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
 ## Index
 - [Implemented subjects](#implemented-subjects)
 - [Notes for developers](#notes-for-developers)
+  - [Cloning the repo](#cloning-the-repo)
 - [Try it!](#try-it)
 
 ## Implemented subjects
@@ -34,6 +35,11 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
 For PyLaTeX to run in your local machine you'll need MacTeX or something along the way (I got it to work with MacTeX, which is 6Gb, and couldn't make it work with anything smaller than that).
 
 Otherwise, it's quite easy to make it run (for free) in pythonAnywhere.com, since they already have LaTeX installed by default (which is exactly how I made this before version control).
+
+### Cloning the repo
+Because of the feedback system I made with Telegram (a bot tells me when a pdf is generated and also its kind), if you clone the repo (to gossip or contribute) you'll need to make a little adjustment: the file named `telegramor.examply` needs to be copied under the name `telegramor.py`, as it's explained inside the file itself.
+
+Not doing so will throw an error in the moment of building the pdf (since it won't be able to import the bot's secret key, which I haven't included for obvious reasons).
 
 ## Try it!
 You can access the website to generate your own personalized math worksheets here: [Dynamic Deures](http://bit.ly/DynamicDeures)

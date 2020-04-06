@@ -1,4 +1,22 @@
 #  aparentment aquest fitxer no es pot dir "token" perquè ja hi deu haver
-# alguna cosa amb aquest nom y es fot de lloros
+# alguna cosa amb aquest nom i es fot de lloros
+
+# *************************************************** INSTRUCCIONS **************************************************** #
+#
+# CA:
+#  la primera vegada que clonis el repositori has de duplicar aquest fitxer i canviar l'extensió de la còpia a .py
+#  (deixes telegramor.examply com està però afegeixes una còpia que es digui telegramor.py)
+#
+# ES:
+#  la primera vez que clones este repositorio tendrás que duplicar este archivo y cambiar la extensión de la copia por .py
+#  (mantienes telegramor.examply como está pero añades una copia que se llame telegramor.py)
+#
+# EN:
+#  the first time you clone this repo you'll need to duplicate this file and change the copy's extension to .py
+#  (you'll keep telegramor.examply as it is, but you'll add a copy called telegramor.py
+#
+# ********************************************************************************************************************* #
+
+
 def gettoken():
     return "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" # això és l'exemple de https://core.telegram.org/bots/api
