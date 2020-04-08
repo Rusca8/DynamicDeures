@@ -12,6 +12,7 @@ def comb(tipus, nivell=1, nums=1):
             a = random.randint(1, 9*nums)
             b = random.randint(-a, 10*nums)
             if b >= 0:
+
                 b = f'+{b}'
             text = f'{a}{b}='
         elif nivell == 2:  # A positiva
@@ -539,7 +540,7 @@ print(sisteq(101, 3))
 print(sisteq(101, 4)+"\n")
 
 print(apilades(3, 1, [3, 2]))
-print(apilades(3, 2, [3, 2], [2, 3]))
+print(apilades(3, 2, [2, 1], [2, 2]))
 print(apilades(2, 1, [2, 2]))
 print(apilades(2, 2, [3, 2]))
 print(apilades(2, 3, [3, 2], [2, 3]))
@@ -547,7 +548,7 @@ print(apilades(1, 1, [3, 2]))
 print(apilades(1, 2, [3, 2], [2, 3]))
 print(apilades(1, 2, [3, 2], [0, 0]) + "\n")
 
-
+"""
 
 for x in range(1, 6):
     print(f"Exercici {x}:", prop(1, 1))
@@ -558,4 +559,5 @@ print("")
 for x in range(1, 10):
     print(f"Exercici {x}:", prop(1, 3))
 print("")
+"""
 """
