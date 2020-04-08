@@ -29,15 +29,14 @@
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/com">Codi</a>
+                <a class="nav-link {% block navbarcodi %}{% endblock %}" href="/com">Codi</a>
+                  <!-- probablement seria millor js per marcar l'activa, però de moment això funciona -->
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/canvis">Canvis</a>
+                <a class="nav-link {% block navbarcanvis %}{% endblock %}" href="/canvis">Canvis</a>
               </li>
             </ul>
-            <span class="navbar-text">
-              Rusca 2020
-            </span>
+            <a class="navbar-text nav-link pr-1" href="https://github.com/Rusca8">Rusca 2020</a>
           </div>
         </nav>
         <div class="pt-3">
