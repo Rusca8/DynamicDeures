@@ -5,13 +5,19 @@ from flask import Flask
 from flask import redirect, render_template, request
 import latexator as g
 import telegramor as tele
+import exemplesindex as e
 
 app = Flask(__name__, template_folder="templates/")
 
 
 @app.route('/')
-def hello_world():
-    return render_template("index.html")
+def index():
+    return render_template("index.html", ex=e.genera())
+
+
+@app.route('/ex')
+def indexvar():
+    return render_template("index.html", ex=e.genera(True))
 
 
 @app.route("/equacions/", methods=["GET", "POST"])
@@ -20,7 +26,7 @@ def equacions():
 
         g.equacions(request.form, solucions=False)  # genera el pdf amb latex
 
-        tele.feedback("eq",request.form)
+        tele.feedback("eq", request.form)
         return redirect("/pdf/eq")
     else:
         return render_template("equacions.html",textbotgen="Generar fitxa!")

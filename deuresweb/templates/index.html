@@ -1,31 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
 <h5>Benvinguda al generador automàtic de fitxes de matemàtiques que se m'ha acudit intentar fer!</h5>
-<p class="mb-3">Escull un tema i ens inventarem la fitxa... <i>(o pots xafardejar aquí a sota quins tipus d'exercicis hi ha)</i></p>
+<p class="mb-3" id="debugscreen">Escull un tema i ens inventarem la fitxa... <i>(o pots xafardejar aquí a sota quins tipus d'exercicis hi ha)</i></p>
 <p class="mb-4">
     <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/enters/" role="button">Operacions amb Enters</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
 </p>
-
-<div class="card-columns">
+<div class="heighter">
+<div class="card-columns fantasma collapse">
 
     <div class="card text-center"> <!-- TODO corregir $$ per $ (MJ en display trepitja els botons) -->
-    <h5 class="card-header">Equacions</h5>
+    <h5 class="card-header" id="eq">Equacions</h5>
         <div class="card-body">
             <p class="card-text">
-                Equacions de primer grau senzilles $$2x+5 = 7$$
-                Sistemes lineals de 2 variables $$\begin{cases} x+3y=-14 \\ 5x-3y=-16 \end{cases}$$
-                Sistemes lineals de 3 variables $$\begin{cases} x+5y-3z=39 \\ -2x+3y+5z=13 \\ 3x+16y+2z=124 \end{cases}$$
+                Equacions de primer grau senzilles $${{ex["eq"]["simple"]}}$$
+                Sistemes lineals de 2 variables $${{ex["eq"]["sis2d"]}}$$
+                Sistemes lineals de 3 variables $${{ex["eq"]["sis3d"]}}$$
             </p>
             <br>
             <a class="btn btn-sm btn-outline-primary btn-block" href="/equacions/" role="button">Crea una fitxa d'Equacions</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('eq');">Canvia els exemples</button>
         </div>
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header">Operacions amb enters</h5>
+    <h5 class="card-header" id="en">Operacions amb enters</h5>
         <div class="card-body">
             <p class="card-text mb-3">
                 Sumes i restes
@@ -33,13 +34,13 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm">
-                  $3+7=$
+                  ${{ex["en"]["suma1"]}}$
                 </div>
                 <div class="col-sm">
-                  $6-8=$
+                  ${{ex["en"]["suma2"]}}$
                 </div>
                 <div class="col-sm">
-                  $9-(+5)=$
+                  ${{ex["en"]["suma3"]}}$
                 </div>
               </div>
             </div>
@@ -49,13 +50,13 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm">
-                  $3\times 5 =$
+                  ${{ex["en"]["multi1"]}}$
                 </div>
                 <div class="col-sm">
-                  $2\times (-4) =$
+                  ${{ex["en"]["multi2"]}}$
                 </div>
                 <div class="col-sm">
-                  $-6\times (-7)=$
+                  ${{ex["en"]["multi3"]}}$
                 </div>
               </div>
             </div>
@@ -65,23 +66,24 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm">
-                  $20\div 4=$
+                  ${{ex["en"]["divi1"]}}$
                 </div>
                 <div class="col-sm">
-                  $-36\div 9=$
+                  ${{ex["en"]["divi2"]}}$
                 </div>
                 <div class="col-sm">
-                  $-42\div (-7)=$
+                  ${{ex["en"]["divi3"]}}$
                 </div>
               </div>
             </div>
             <br>
             <a class="btn btn-sm btn-outline-primary btn-block" href="/enters/" role="button">Crea una fitxa d'Operacions amb Enters</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('en');">Canvia els exemples</button>
         </div>
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header">Operacions amb Més Xifres</h5>
+    <h5 class="card-header" id="omx">Operacions amb Més Xifres</h5>
         <div class="card-body">
             <p class="card-text mb-3">
                 Sumes (enteres i amb decimals)
@@ -89,10 +91,10 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
-                      $\begin{array}{c}\phantom{+}565\\ \underline{+\phantom{9}64}\\ \end{array}$
+                      ${{ex["omx"]["suma"]}}$
                     </div>
                     <div class="col-sm">
-                      $\begin{array}{c}\phantom{+}115.19\phantom{9}\\ \underline{+\phantom{9}43.658\phantom{}}\\ \end{array}$
+                      ${{ex["omx"]["sumad"]}}$
                     </div>
                   </div>
                 </div>
@@ -102,10 +104,10 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm">
-                  $\begin{array}{c}\phantom{-}93\\ \underline{-\phantom{}11}\\ \end{array}$
+                  ${{ex["omx"]["resta"]}}$
                 </div>
                 <div class="col-sm">
-                  $\begin{array}{c}\phantom{-}210.16\phantom{9}\\ \underline{-\phantom{9}83.42\phantom{}}\\ \end{array}$
+                  ${{ex["omx"]["restad"]}}$
                 </div>
               </div>
             </div>
@@ -115,38 +117,56 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm">
-                  $\begin{array}{c}\phantom{\times99}391\\ \underline{\times\phantom{999}58}\\ \end{array}$
+                  ${{ex["omx"]["multi"]}}$
                 </div>
                 <div class="col-sm">
-                  $\begin{array}{c}\phantom{\times999}73.71\\ \underline{\times\phantom{9999}1.61}\\ \end{array}$
+                  ${{ex["omx"]["multid"]}}$
                 </div>
               </div>
             </div>
             <br>
             <a class="btn btn-sm btn-outline-primary btn-block" href="/apilades/" role="button">Crea una fitxa d'Operacions amb Més Xifres</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('omx');">Canvia els exemples</button>
         </div>
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header">Proporcionalitat</h5>
+    <h5 class="card-header" id="pp">Proporcionalitat</h5>
         <div class="card-body">
             <p class="card-text">
                 Problemes de proporcionalitat simple directa
             </p>
-            <div class="font-weight-light mt-3 mb-4"><i>Aquell senyor que passa per allà pot fer 70 dibuixos en 5 minuts. Quants dibuixos podrà fer en 6 minuts?</i></div>
+            <div class="font-weight-light mt-3 mb-4"><i>{{ex["pp"]["directa"]}}</i></div>
             <p class="card-text">
                 Problemes de proporcionalitat simple inversa
             </p>
-            <div class="font-weight-light mt-3 mb-2"><i>22 equilibristes s'han trobat un ramat de spaghetti, i n'han repartit 14 per cada una. Quants se'n podrien quedar si fossin 77?</i></div>
+            <div class="font-weight-light mt-3 mb-2"><i>{{ex["pp"]["inversa"]}}</i></div>
             <br>
             <a class="btn btn-sm btn-outline-primary btn-block" href="/proporcionalitat/" role="button">Crea una fitxa de Proporcionalitat</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pp');">Canvia els exemples</button>
         </div>
     </div>
-
-
-
-
-
-
 </div>
+</div>
+{% endblock %}
+{% block js %}
+    <script>
+        function refresca(anchor){
+            p = location.href.split("/")
+            if (p[p.length-1] == ""){
+                window.location = "/ex#" + anchor;
+            } else {
+                location.reload();
+            }
+        };
+        setTimeout(mostra, 150);
+        function mostra(){
+            var elems = document.querySelectorAll(".fantasma");
+
+            [].forEach.call(elems, function(el) {
+                el.classList.remove("fantasma");
+                el.classList.add("show");
+            });
+        };
+    </script>
 {% endblock %}

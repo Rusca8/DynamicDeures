@@ -16,5 +16,6 @@
     font-size: 0.7em;
 }
 
-
-
+.heighter {
+    min-height: 1000px;
+}

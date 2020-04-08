@@ -548,7 +548,7 @@ print(apilades(1, 1, [3, 2]))
 print(apilades(1, 2, [3, 2], [2, 3]))
 print(apilades(1, 2, [3, 2], [0, 0]) + "\n")
 
-"""
+
 
 for x in range(1, 6):
     print(f"Exercici {x}:", prop(1, 1))
@@ -559,5 +559,5 @@ print("")
 for x in range(1, 10):
     print(f"Exercici {x}:", prop(1, 3))
 print("")
-"""
+
 """

@@ -2,28 +2,30 @@
 {% block content %}
 
 <!-- formulari -->
-<form action="#" target="_blank" method="post" id="formulari">
+<div class="heighter">
+    <form action="#" target="_blank" method="post" id="formulari">
 
-    <div class="container-fluid"> <!-- columnes -->
-      <div id="generat"></div>
-      {% block alertatop %}{% endblock %}
-      <div class="row">
-        <div class="col-sm-auto">
-            <div class="card">
-              <div class="card-body">
-                {% block principals %}{% endblock %}
-                <br>
-                <button type="submit" class="btn btn-primary" onclick="pdfgenerat();">Genera!</button>
-              </div>
+        <div class="container-fluid"> <!-- columnes -->
+          <div id="generat"></div>
+          {% block alertatop %}{% endblock %}
+          <div class="row">
+            <div class="col-sm-auto">
+                <div class="card">
+                  <div class="card-body">
+                    {% block principals %}{% endblock %}
+                    <br>
+                    <button type="submit" class="btn btn-primary" onclick="pdfgenerat();">Genera!</button>
+                  </div>
+                </div>
             </div>
+            <div class="col">
+                {% block extres %}{% endblock %}
+            </div>
+          </div>
         </div>
-        <div class="col">
-            {% block extres %}{% endblock %}
-        </div>
-      </div>
-    </div>
 
-</form>
+    </form>
+</div>
 {% endblock %}
 {% block js %}
     <script>
