@@ -15,7 +15,7 @@ def index():
     return render_template("index.html", ex=e.genera())
 
 
-@app.route('/ex')
+@app.route('/ex/')
 def indexvar():
     return render_template("index.html", ex=e.genera(True))
 
