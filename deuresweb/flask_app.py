@@ -12,12 +12,19 @@ app = Flask(__name__, template_folder="templates/")
 
 @app.route('/')
 def index():
-    return render_template("index.html", ex=e.genera())
+    try:
+        return render_template("index.html", ex=e.genera())
+    except:
+        return f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2><p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>"
 
 
 @app.route('/ex/')
 def indexvar():
-    return render_template("index.html", ex=e.genera(True))
+    try:
+        return render_template("index.html", ex=e.genera(True))
+    except:
+        return f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2><p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>"
+
 
 
 @app.route("/equacions/", methods=["GET", "POST"])
