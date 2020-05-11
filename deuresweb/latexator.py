@@ -604,6 +604,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                     space(doc,"0.7cm")
                 end(doc,"multicols")
                 end(doc,'parts')
+                space(doc, "0.7cm")
 
             if qdsimples!=0:
                 n = qdsimples
@@ -645,6 +646,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                     space(doc, "0.7cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
+                space(doc, "0.7cm")
 
             if qcompletes:
                 n = qcompletes
@@ -663,6 +665,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
+                space(doc, "1.4cm")
 
             if sistemes:
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
@@ -684,7 +687,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                     space(doc,"1.6cm")
                 end(doc,"multicols")
                 end(doc,'parts')
-                space(doc,"1.6cm")
+                space(doc, "1.6cm")
 
             if sistemes3:
                 bloctitle(doc, "Sistemes d'equacions de tres incògnites")
@@ -1040,9 +1043,9 @@ def quantesson(value,op):
     elif op in ["simples", "dsimples"]:
         quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
     elif op == "incomps":
-        quantitats = [0, 8, 12, 26, 42, 86, 174]
+        quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
-        quantitats = [0, 8, 12, 26, 42, 86, 174]
+        quantitats = [0, 6, 9, 15, 20, 33, 66]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]
     elif op == "sistemes3":
