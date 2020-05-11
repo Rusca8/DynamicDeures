@@ -542,7 +542,15 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
         qdsimples = 0
     print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}")
 
-    segon = False
+    if "segon" in opcions:
+        segon = True
+        qincomps = quantesson(opcions["qincomps"], "incomps")
+        qcompletes = quantesson(opcions["qcompletes"], "completes")
+    else:
+        segon = False
+        qincomps = 0
+        qcompletes = 0
+    print(f"Ax^2+Bx {qincomps}, Ax^2+Bx+C {qcompletes}")
 
     if "sistemes" in opcions:
         sistemes = True
@@ -574,7 +582,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
 
     #preguntes
     if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, qsist, qsist3]):
+        if any([qsimples, qdsimples, qsist, qsist3, qincomps, qcompletes]):
             begin(doc,'questions')
 
             if primer:
@@ -613,6 +621,48 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                 end(doc,"multicols")
                 end(doc,'parts')
                 space(doc,"1cm")
+
+            if segon:
+                bloctitle(doc, "Equacions de segon grau")
+
+            if qincomps:
+                n = qincomps
+                question(doc, f"{n // 2}")
+                doc.append("Resol les següents equacions de segon grau (incompletes).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                for x in range(0, n):
+                    part(doc)
+                    if x<n//4:
+                        if x<2:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(101, 1)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(101, random.choice([2, 3]))))
+                    elif x<n*3//4:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(102, random.choice([2, 3]))))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(random.choice([101, 102]), random.choice([2, 3]))))
+                    space(doc, "0.7cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+
+            if qcompletes:
+                n = qcompletes
+                question(doc, f"{n}")
+                doc.append("Resol les següents equacions de segon grau (completes).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                for x in range(0, n):
+                    part(doc)
+                    if x<n//4:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 1)))
+                    elif x < n*3//4:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(103, random.choice([2, 3]))))
+                    space(doc, "1.4cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
 
             if sistemes:
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
@@ -988,11 +1038,16 @@ def quantesson(value,op):
         quantitats = [0, 3, 6, 9, 12, 24, 64]
     # equacions
     elif op in ["simples", "dsimples"]:
-        quantitats = [0, 8, 12, 26, 42, 86, 174] # arrodonit avall per evitar migpunts
+        quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
+    elif op == "incomps":
+        quantitats = [0, 8, 12, 26, 42, 86, 174]
+    elif op == "completes":
+        quantitats = [0, 8, 12, 26, 42, 86, 174]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]
     elif op == "sistemes3":
         quantitats = [0, 3, 6, 9, 12, 27, 56]
+    # proporcionalitat
     elif op == "directes":
         quantitats = [0, 3, 4, 5, 6, 12, 25]
     elif op == "inverses":

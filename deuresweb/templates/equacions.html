@@ -37,8 +37,8 @@
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq1" aria-expanded="true" aria-controls="opEq1">
           <input type="checkbox" name="primer" autocomplete="off" id="primer" value="Primer grau" checked> Primer grau
         </label>
-        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opEq2" aria-expanded="true" aria-controls="opEq2">
-          <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" disabled> Segon grau
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq2" aria-expanded="true" aria-controls="opEq2">
+          <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" checked> Segon grau
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist">
           <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes
@@ -133,6 +133,97 @@
               </label>
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="noneg" id="noneg4" value="totes" autocomplete="off"> totes
+              </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+
+<div class="collapse show mt-1" id="opEq2">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Equacions de segon grau</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupInciompQuantes"><b>Incompletes</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qincomps" id="qi2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qincomps" id="qi6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qincomps" id="qi9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupSimplesDivQuantes"><b>Simples completes</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qcompletes" id="qc2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcompletes" id="qc6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qcompletes" id="qc9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label for="formNoA"><i>Forçar coeficient A unitari?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noa" id="noa0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noa" id="noa1" value="poques" autocomplete="off"> les primeres
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                <input type="radio" name="noa" id="noa2" value="meitat" autocomplete="off" checked> la meitat
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noa" id="noa3" value="moltes" autocomplete="off"> la majoria
+              </label>
+              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                <input type="radio" name="noa" id="noa4" value="totes" autocomplete="off"> totes
               </label>
             </div>
         </div>

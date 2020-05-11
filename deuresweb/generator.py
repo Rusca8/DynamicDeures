@@ -310,6 +310,204 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             text = text + f'={c}'
         else:
             text = f'{c}=' + text
+
+    elif tipus == 101:  # x^2-C (treure l'arrel)
+        if nivell == 1:  # quadrat perfecte, x2 sense coef
+            x = random.randint(1, 10)
+            text = f"x^2-{pow(x,2)}=0"
+        elif nivell == 2:  # pot sortir impossible
+            x = random.randint(1, 10)
+            if random.choice([0, 0, 1]):  # arrel neg
+                text = f"x^2+{pow(x,2)}"
+            else:
+                text = f"x^2-{pow(x,2)}"  # normal
+            if random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0=" + text
+        elif nivell == 3:  # amb coef
+            x = random.randint(1, 10)
+            a = random.randint(-3, 3)
+            if a == 0:
+                a = random.choice([1, -1])
+            if a > 0:
+                if moneda():
+                    if a == 1:
+                        text = f"x^2+{x*a}"
+                    else:
+                        text = f"{a}x^2+{x*a}"
+                else:
+                    if a == 1:
+                        text = f"{x*a}+x^2"
+                    else:
+                        text = f"{x*a}+{a}x^2"
+            else:
+                if moneda():
+                    if a == -1:
+                        text = f"-x^2{x*a}"
+                    else:
+                        text = f"{a}x^2{x * a}"
+                else:
+                    if a == -1:
+                        text = f"{x*a}-x^2"
+                    else:
+                        text = f"{x * a}{a}x^2"
+            if random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0=" + text
+
+    elif tipus == 102:  # x^2+Bx (desacoblar)
+        x = random.randint(-10, 10)
+        if x == 0:
+            x = random.choice([1, -1])
+        if nivell == 1 or nivell == 2:  # zero a la dreta, sense coef
+            if x > 0:
+                if x == 1:
+                    text = f"x^2+x"
+                else:
+                    text = f"x^2+{x}x"
+            else:
+                if x == -1:
+                    text = f"x^2-x"
+                else:
+                    text = f"x^2{x}x"
+            if nivell == 1 or random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0="+text
+
+        elif nivell == 3:  # amb coef
+            a = random.randint(-3, 3)
+            if a == 0:
+                a = random.choice([-1, 1])
+            tb = f"{a * x}x"
+            if a == 1:
+                ta = "x^2"
+                if x == 1:
+                    tb = "x"
+                elif x == -1:
+                    tb = "-x"
+            elif a == -1:
+                ta = "-x^2"
+                if x == -1:
+                    tb = "x"
+                elif x == 1:
+                    tb = "-x"
+            else:
+                ta = f"{a}x^2"
+                tb = f"{a * x}x"
+
+            if moneda():
+                if a*x > 0:
+                    text = f"{ta}+{tb}"
+                else:
+                    text = f"{ta}{tb}"
+            else:
+                if a > 0:
+                    text = f"{tb}+{ta}"
+                else:
+                    text = f"{tb}{ta}"
+            if random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0=" + text
+
+    elif tipus == 103:  # Ax^2+Bx+C (sencera)
+        x1 = random.randint(-10, 10)
+        if x1 == 0:
+            x1 = random.choice([-1, 1])
+        x2 = random.randint(-7, 7)
+        if x2 == 0:
+            x2 = random.choice([-1, 1])
+        b = -x1 - x2
+        c = x1*x2
+        if nivell == 1:  # sense coef A, ordenada
+            if b > 0:
+                if b == 1:
+                    tb = "+x"
+                else:
+                    tb = f"+{b}x"
+            else:
+                if b == -1:
+                    tb = "-x"
+                else:
+                    tb = f"{b}x"
+            if c > 0:
+                tc = f"+{c}"
+            else:
+                tc = f"{c}"
+            text = f"x^2{tb}{tc}"
+            if random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0=" + text
+
+        elif nivell == 2 or nivell == 3:  # A ±1 || amb coef A
+            x1 = random.randint(-10, 10)
+            if x1 == 0:
+                x1 = random.choice([-1, 1])
+            x2 = random.randint(-7, 7)
+            if x2 == 0:
+                x2 = random.choice([-1, 1])
+            if nivell == 3:
+                a = random.randint(-3, 3)
+                if a == 0:
+                    a = random.choice([-1, 1])
+            else:
+                a = random.choice([-1, 1])
+            b = a * (-x1-x2)
+            c = a * (x1*x2)
+            primer = random.choice([2, 1, 0])
+
+            if a > 0 and primer != 2:
+                if a == 1:
+                    ta = "+x^2"
+                else:
+                    ta = f"+{a}x^2"
+            else:
+                if a == -1:
+                    ta = "-x^2"
+                elif a == 1:
+                    ta = "x^2"
+                else:
+                    ta = f"{a}x^2"
+            if b > 0 and primer != 1:
+                if b == 1:
+                    tb = "+x"
+                else:
+                    tb = f"+{b}x"
+            else:
+                if b == -1:
+                    tb = "-x"
+                elif b == 1:
+                    tb = "x"
+                else:
+                    tb = f"{b}x"
+            if c > 0 and primer != 0:
+                tc = f"+{c}"
+            else:
+                tc = f"{c}"
+
+            if primer == 2:
+                if moneda():
+                    text = f"{ta}{tb}{tc}"
+                else:
+                    text = f"{ta}{tc}{tb}"
+            elif primer == 1:
+                if moneda():
+                    text = f"{tb}{ta}{tc}"
+                else:
+                    text = f"{tb}{tc}{ta}"
+            elif primer == 0:
+                if moneda():
+                    text = f"{tc}{ta}{tb}"
+                else:
+                    text = f"{tc}{tb}{ta}"
+            if random.choice([1, 1, 0]):
+                text = text + "=0"
+            else:
+                text = "0=" + text
     return text
 
 
@@ -561,3 +759,22 @@ for x in range(1, 10):
 print("")
 
 """
+
+print(eq(101, 1))
+print(eq(101, 1))
+print(eq(101, 2))
+print(eq(101, 2))
+print(eq(101, 3))
+print(eq(101, 3), "\n")
+print(eq(102, 1))
+print(eq(102, 1))
+print(eq(102, 2))
+print(eq(102, 2))
+print(eq(102, 3))
+print(eq(102, 3), "\n")
+print(eq(103, 1))
+print(eq(103, 1))
+print(eq(103, 2))
+print(eq(103, 2))
+print(eq(103, 3))
+print(eq(103, 3))
