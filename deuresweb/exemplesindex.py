@@ -17,6 +17,10 @@ def genera(aleatoris=False):
         ex["en"]["divi2"] = g.comb(3, 5)
         ex["en"]["divi3"] = g.comb(3, 6)
         ex["eq"]["simple"] = g.eq(2, 3)
+        ex["eq"]["segoni1"] = g.eq(101, 1)
+        ex["eq"]["segoni2"] = g.eq(102, 3)
+        ex["eq"]["segonc1"] = g.eq(103, 2)
+        ex["eq"]["segonc2"] = g.eq(103, 3)
         ex["eq"]["sis2d"] = g.sisteq(1, 2)
         ex["eq"]["sis3d"] = g.sisteq(101, 3)
         ex["omx"]["suma"] = g.apilades(1, 1, [3, 2])
@@ -38,6 +42,10 @@ def genera(aleatoris=False):
         ex["en"]["divi2"] = r"-36\div 9="
         ex["en"]["divi3"] = r"-42\div (-7)="
         ex["eq"]["simple"] = "2x+5=7"
+        ex["eq"]["segoni1"] = "x^2-9=0"
+        ex["eq"]["segoni2"] = "x^2-7x=0"
+        ex["eq"]["segonc1"] = "x^2-3x+2=0"
+        ex["eq"]["segonc2"] = "-2x^2+12x-10=0"
         ex["eq"]["sis2d"] = r"\begin{cases} x+3y=-14 \\ 5x-3y=-16 \end{cases}"
         ex["eq"]["sis3d"] = r"\begin{cases} x+5y-3z=39 \\ -2x+3y+5z=13 \\ 3x+16y+2z=124 \end{cases}"
         ex["omx"]["suma"] = r"\begin{array}{c}\phantom{+}565\\ \underline{+\phantom{9}64}\\ \end{array}"

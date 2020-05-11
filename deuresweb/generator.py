@@ -327,31 +327,32 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                 text = "0=" + text
         elif nivell == 3:  # amb coef
             x = random.randint(1, 10)
+            c = pow(x,2)
             a = random.randint(-3, 3)
             if a == 0:
                 a = random.choice([1, -1])
             if a > 0:
                 if moneda():
                     if a == 1:
-                        text = f"x^2+{x*a}"
+                        text = f"x^2+{c*a}"
                     else:
-                        text = f"{a}x^2+{x*a}"
+                        text = f"{a}x^2+{c*a}"
                 else:
                     if a == 1:
-                        text = f"{x*a}+x^2"
+                        text = f"{c*a}+x^2"
                     else:
-                        text = f"{x*a}+{a}x^2"
+                        text = f"{c*a}+{a}x^2"
             else:
                 if moneda():
                     if a == -1:
-                        text = f"-x^2{x*a}"
+                        text = f"-x^2{c*a}"
                     else:
-                        text = f"{a}x^2{x * a}"
+                        text = f"{a}x^2{c * a}"
                 else:
                     if a == -1:
-                        text = f"{x*a}-x^2"
+                        text = f"{c*a}-x^2"
                     else:
-                        text = f"{x * a}{a}x^2"
+                        text = f"{c * a}{a}x^2"
             if random.choice([1, 1, 0]):
                 text = text + "=0"
             else:
@@ -524,13 +525,14 @@ def sisteq(tipus, nivell=1, nums=1):
             for n in range(4):
                 if moneda():
                     coefs[n] = -coefs[n]
+            if round(coefs[0]*1./coefs[2], 7) == round(coefs[1]*1./coefs[3], 7):  # crec que això evita SCI
+                coefs[0] = - coefs[0]
             if nivell == 1:
                 coefs[0] = 1
             elif nivell == 2:
                 if not any(n in [1, -1] for n in coefs):
                     coefs[random.randint(0, 3)] = random.choice([1, -1])
 
-            # TODO evitar indeterminats en aquests de 2eq 2in
             # TODO afegir eqns amb les inc barrejades
 
             c = coefs[0]*x + coefs[1]*y

@@ -14,11 +14,59 @@
     <div class="card text-center"> <!-- TODO corregir $$ per $ (MJ en display trepitja els botons) -->
     <h5 class="card-header" id="eq">Equacions</h5>
         <div class="card-body">
-            <p class="card-text">
-                Equacions de primer grau senzilles $${{ ex["eq"]["simple"] }}$$
-                Sistemes lineals de 2 variables $${{ ex["eq"]["sis2d"] }}$$
-                Sistemes lineals de 3 variables $${{ ex["eq"]["sis3d"] }}$$
+            <p class="card-text mb-3">
+                Equacions de primer grau senzilles
             </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["simple"] }}$
+                </div>
+              </div>
+            </div>
+            <p  class="card-text mt-4 mb-3">
+                Equacions de segon grau incompletes
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["segoni1"] }}$
+                </div>
+                <div class="col-sm">
+                  ${{ ex["eq"]["segoni2"] }}$
+                </div>
+              </div>
+            </div>
+            <p  class="card-text mt-4 mb-3">
+                Equacions de segon grau completes
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["segonc1"] }}$
+                </div>
+              </div>
+            </div>
+            <p  class="card-text mt-4 mb-3">
+                Sistemes lineals de 2 variables
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["sis2d"] }}$
+                </div>
+              </div>
+            </div>
+            <p  class="card-text mt-4 mb-3">
+                Sistemes lineals de 3 variables
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["sis3d"] }}$
+                </div>
+              </div>
+            </div>
             <br>
             <a class="btn btn-sm btn-outline-primary btn-block" href="/equacions/" role="button">Crea una fitxa d'Equacions</a>
             <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('eq');">Canvia els exemples</button>
