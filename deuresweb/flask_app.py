@@ -84,12 +84,11 @@ def proporcionalitat():
 @app.route("/success/", methods=["GET", "POST"])
 def success():
     if request.method == "POST":
-        try:
-            g.proporcionalitat(request.form, solucions=False)
-        except:
-            return redirect("/latex_error/successions")
+        print(request.form)
+        g.successions(request.form, solucions=False)
 
-        tele.feedback("prop",request.form)
+
+        tele.feedback("succ",request.form)
         return redirect("/pdf/successions")
     else:
         return render_template("successions.html")
@@ -127,6 +126,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/apilades.pdf")
     elif tema == "proporcionalitat":
         return redirect("/static/pdfs/proporcionalitat.pdf")
+    elif tema == "successions":
+        return redirect("/static/pdfs/successions.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

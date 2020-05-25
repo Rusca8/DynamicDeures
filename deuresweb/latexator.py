@@ -827,19 +827,17 @@ def successions(opcions, solucions=False):
         qdades = 0
         qextreure = 0
 
+    aGeneral = False
+    aAn = False
+    aSn = False
     if qextreure:
         if "aGeneral" in opcions:
             aGeneral = True
-        else:
-            aGeneral = False
         if "aAn" in opcions:
             aAn = True
-        else:
-            aAn = False
         if "aSn" in opcions:
             aSn = True
-        else:
-            aSn = False
+
 
     aextron = opcions["aextron"]
 
@@ -856,19 +854,16 @@ def successions(opcions, solucions=False):
         qgdades = 0
         qgextreure = 0
 
+    gGeneral = False
+    gAn = False
+    gSn = False
     if qgextreure:
         if "gGeneral" in opcions:
             gGeneral = True
-        else:
-            gGeneral = False
         if "gAn" in opcions:
             gAn = True
-        else:
-            gAn = False
         if "gSn" in opcions:
             gSn = True
-        else:
-            gSn = False
 
     gextron = opcions["gextron"]
 
@@ -903,7 +898,8 @@ def successions(opcions, solucions=False):
                 begin(doc, 'parts')
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'%s' % gen.success(1, x % (n//2))))  # segona meitat un pèl més alts
+                    print("x:", x, "n", n, "Nivell: ", x // (n//2) + 1)
+                    doc.append(NoEscape(r'%s' % gen.success(1, x // (n//2) + 1)))  # segona meitat un pèl més alts
                     space(doc, "1cm")
                 end(doc, 'parts')
 
@@ -914,7 +910,7 @@ def successions(opcions, solucions=False):
                 begin(doc, 'parts')
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'%s' % gen.success(1, 2 + x % (n//2))))  # nivells 3 i 4
+                    doc.append(NoEscape(r'%s' % gen.success(1, x // (n//2) + 3)))  # nivells 3 i 4
                     space(doc, "1cm")
                 end(doc, 'parts')
 
@@ -1156,7 +1152,7 @@ def playground(opcions, solucions=False):
         doc.append("Bon dia catalunya són les 16:30")
         space(doc,"5cm")
 
-    doc.generate_pdf("deuresweb/static/pdfs/proves")
+    doc.generate_pdf("deuresweb/static/pdfs/successions")
     print("PDF generat.")
 
     return
