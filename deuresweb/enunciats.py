@@ -804,14 +804,14 @@ def success(tipus, nivell, variant, d, a1, n, an):
         elif nivell == 101:  # bulk troba la diferència, el terme general i el terme an
             text = ""
             for x in range(5):
-                text += f"{a1 + (x) * d}, "
-            text += "..."
+                text += f"{a1 + x * d}, "
+            text += r"...\ "
             if variant == 2:  # trobar diferència, terme general i an indicat
-                text += f" (a_{n}?)"
+                text += " (a_{" + f"{n}" + "}?)"  # TODO make "a" huge cuz it's capital lowercase whatever
             elif variant == 3:  # trobar suma dels primers n termes
-                text += f" (S_{n%4+6}?)"
+                text += " (S_{" + f"{n%4+6}" + "}?)"
             elif variant == 4:
-                text += f" (a_{n}? S{random.randint(5, 15)}?)"
+                text += " (a_{" + f"{n}" + r"}?\ S_{" + f"{random.randint(5, 15)}" + "}?)"
 
     if tipus == 2:  # successions geomètriques
         if nivell in [1, 2]: # trobar el terme n
@@ -828,7 +828,7 @@ def success(tipus, nivell, variant, d, a1, n, an):
                                        f" i que r = {d}. "])
             text += random.choice(["Quin serà el terme " + random.choice(["", "número "]) + f"{n}?",
                                    f"Quin terme ocuparà la posició {n}?",
-                                   f"Calcula el terme a{n}.", f"Quin serà el {ordinal(n)} terme?"])
+                                   "Calcula el terme $a_{" + f"{n}" + "}$.", f"Quin serà el {ordinal(n)} terme?"])
         elif nivell == 3 or nivell == 4:
             text = "En una successió geomètrica, "
             ordre = [0, 1, 2, 3]
@@ -858,13 +858,13 @@ def success(tipus, nivell, variant, d, a1, n, an):
             text = ""
             for x in range(5):
                 text += f"{a1 * pow(d, x)}, "
-            text += "..."
+            text += r"...\ "
             if variant == 2:  # trobar diferència, terme general i an indicat
-                text += f" (a_{n}?)"
+                text += " (a_{" + f"{n}" + "}?)"
             elif variant == 3:  # trobar suma dels primers n termes
-                text += f" (S_{n%4+6}?)"
+                text += " (S_{" + f"{n%4+6}" + "}?)"
             elif variant == 4:
-                text += f" (a_{n}? S_{random.randint(5, 10)}?)"
+                text += " (a_{" + f"{n}" + r"}?\ S_{" + f"{random.randint(5, 10)}" + "}?)"
     return text
 
 

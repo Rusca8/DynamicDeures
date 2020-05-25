@@ -660,7 +660,7 @@ def success(tipus, nivell=1, variant=1):
                 a1 = random.randint(1, 15)
             n = random.randint(6, 60)
         an = a1+(n-1)*d
-        return en.success(tipus, nivell, tipus, d, a1, n, an)
+        return en.success(tipus, nivell, variant, d, a1, n, an)
 
     elif tipus == 2:  # geomètriques
         if nivell == 1 or nivell == 2:  # trobar an sabent a1 i r #TODO decimals/fraccions
