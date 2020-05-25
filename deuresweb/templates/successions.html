@@ -1,0 +1,318 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Successions...</h4>
+    <div class="form-group">
+        <label for="formQuinCurs">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opArit" aria-expanded="true" aria-controls="opSimp">
+          <input type="checkbox" name="simple" autocomplete="off" id="arit" value="Simple" checked> Aritmètiques
+        </label>
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opGeom" aria-expanded="true" aria-controls="opGeom">
+          <input type="checkbox" name="composta" autocomplete="off" id="geom" value="Composta" disabled> Geomètriques
+        </label>
+        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opAltres" aria-expanded="true" aria-controls="opAltres">
+          <input type="checkbox" name="composta" autocomplete="off" id="altres" value="altres" disabled> Altres / Barreja
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+<div class="collapse show mb-2" id="opArit">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Successions Aritmètiques</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDirectesQuantes"><b>Trobar terme n</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qtermen" id="qtn2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qtermen" id="qtn6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qtermen" id="qtn9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupInversesQuantes"><b>Trobar una de les dades</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qdades" id="qd2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdades" id="qd6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qdades" id="qd9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupBarrejatQuantes"><b>Donats els primers termes...</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qextreure" id="qb2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qextreure" id="qb6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qextreure" id="qb9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupOpcions"><i>Quines preguntes?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-4 active">
+                          <input type="checkbox" name="aGeneral" autocomplete="off" id="aCap" value="aCap" checked> General
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="aAn" autocomplete="off" id="aAn" value="aAn"> Terme An
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="aSn" autocomplete="off" id="aSn" value="aSn"> Suma Sn
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
+
+         <div class="form-group mb-0 ml-2">
+            <label for="formGroupOn">Com ho preguntem?</label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
+                <input type="radio" name="aextron" id="separat" value="separat" autocomplete="off"> separat
+              </label>
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
+                <input type="radio" name="aextron" id="seguit" value="seguit" autocomplete="off"> seguit
+              </label>
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini active">
+                <input type="radio" name="aextron" id="alhora" value="alhora" autocomplete="off" checked> alhora
+              </label>
+            </div>
+         </div>
+
+      </div>
+    </div>
+</div>
+
+<div class="collapse show" id="opGeom">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Successions Geomètriques</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDirectesQuantes"><b>Trobar terme n</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qgtermen" id="qgtn2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgtermen" id="qgtn6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgtermen" id="qgtn9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupInversesQuantes"><b>Trobar una de les dades</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qgdades" id="qgd2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgdades" id="qgd6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgdades" id="qgd9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupBarrejatQuantes"><b>Donats els primers termes...</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qgextreure" id="qgb2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qgextreure" id="qgb6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qgextreure" id="qgb9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupOpcions"><i>Quines preguntes?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-4 active">
+                          <input type="checkbox" name="gGeneral" autocomplete="off" id="gCap" value="gCap" checked> General
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="gAn" autocomplete="off" id="gAn" value="gAn"> Terme An
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="gSn" autocomplete="off" id="gSn" value="gSn"> Suma Sn
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
+
+         <div class="form-group mb-0 ml-2">
+            <label for="formGroupGOn">Com ho preguntem?</label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
+                <input type="radio" name="gextron" id="gseparat" value="separat" autocomplete="off"> separat
+              </label>
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
+                <input type="radio" name="gextron" id="gseguit" value="seguit" autocomplete="off"> seguit
+              </label>
+              <label class="btn btn-outline-dark btn-sm py-0 btn-mini active">
+                <input type="radio" name="gextron" id="galhora" value="alhora" autocomplete="off" checked> alhora
+              </label>
+            </div>
+         </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

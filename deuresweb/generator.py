@@ -5,6 +5,7 @@ import enunciats as en
 def moneda():
     return bool(random.getrandbits(1))
 
+
 def comb(tipus, nivell=1, nums=1):
     text = "42"
     if tipus == 1:  # A+B
@@ -27,7 +28,7 @@ def comb(tipus, nivell=1, nums=1):
             if b >= 0:
                 b = f'+{b}'
             text = f'{a}{b}='
-    if tipus == 2: # A±(±B)
+    if tipus == 2:  # A±(±B)
         if nivell == 1 or nivell == 2:  # A positiva, sense -(-B) || amb -(-B)
             a = random.randint(1, 10*nums)
             b = random.randint(-10*nums, 10*nums)
@@ -633,6 +634,63 @@ def systeq3_text (a,b,c,d):
     return ax + by + cz + f'={d}'
 
 
+def success(tipus, nivell=1, variant=1):
+    if tipus == 1:  # aritmètiques
+        if nivell == 1 or nivell == 2:  # trobar an sabent a1 i d
+            d = random.randint(2, 6)
+            a1 = random.randint(1, 10)
+            n = random.randint(2, 30 +50*(nivell-1))
+        elif nivell == 3 or nivell == 4:  # trobar alguna cosa sabent les altres (a1, an, n, d) | d pot ser negativa
+            d = random.randint(2, 9)
+            if nivell == 4 and moneda():
+                d = -d
+            # no faig if comú pq canvis independents
+            if moneda():
+                a1 = random.randint(-9, -1)
+            else:
+                a1 = random.randint(1, 15)
+            n = random.randint(2, 40)
+        elif nivell == 101:
+            d = random.randint(2, 9)
+            if moneda():
+                d = -d
+            if moneda():
+                a1 = random.randint(-9, -1)
+            else:
+                a1 = random.randint(1, 15)
+            n = random.randint(6, 60)
+        an = a1+(n-1)*d
+        return en.success(tipus, nivell, tipus, d, a1, n, an)
+
+    elif tipus == 2:  # geomètriques
+        if nivell == 1 or nivell == 2:  # trobar an sabent a1 i r #TODO decimals/fraccions
+            r = random.randint(2, 5)
+            a1 = random.randint(1, 10)
+            n = random.randint(2, 5 + 5*(nivell-1))
+        elif nivell == 3 or nivell == 4:  # trobar alguna cosa sabent les altres (a1, an, n, d) | d pot ser negativa
+            r = random.randint(2, 5)
+            if nivell == 4 and moneda():
+                r = -r
+            # no faig if comú pq canvis independents
+            if moneda():
+                a1 = random.randint(-9, -1)
+            else:
+                a1 = random.randint(1, 15)
+            n = random.randint(2, 10)
+        elif nivell == 101:
+            r = random.randint(2, 5)
+            if moneda():
+                r = -r
+            if moneda():
+                a1 = random.randint(-9, -1)
+            else:
+                a1 = random.randint(1, 15)
+            n = random.randint(6, 10)
+        an = a1 * pow(r, n-1)
+        return en.success(tipus, nivell, variant, r, a1, n, an)
+    return "No existeix aquest tipus de problema de successions..."
+
+
 def prop(tipus, nivell=1):
     if tipus == 1:  # proporcionalitat simple
         if nivell in [1, 2, 3]:  # només directa || només inversa || random
@@ -760,7 +818,7 @@ for x in range(1, 10):
     print(f"Exercici {x}:", prop(1, 3))
 print("")
 
-"""
+
 
 print(eq(101, 1))
 print(eq(101, 1))
@@ -780,3 +838,38 @@ print(eq(103, 2))
 print(eq(103, 2))
 print(eq(103, 3))
 print(eq(103, 3))
+
+"""
+for x in range(5):
+    print(success(1, 1))
+for x in range(5):
+    print(success(1, 2))
+print("\n")
+for x in range(5):
+    print(success(1, 3))
+for x in range(5):
+    print(success(1, 4))
+print("\n")
+print("Troba la diferència, el terme general i el terme indicat de les successions següents:")
+for x in range(5):
+    print(success(1, 101))
+print("\nGEOM")
+for x in range(5):
+    print(success(2, 1))
+for x in range(5):
+    print(success(2, 2))
+print("\n")
+for x in range(5):
+    print(success(2, 3))
+for x in range(5):
+    print(success(2, 4))
+print("\n")
+print("Troba la diferència, el terme general i el terme indicat de les successions següents:")
+for x in range(5):
+    print(success(2, 101))
+
+print("\n")
+print("Digues si les següents successions són aritmètiques o geomètriques,\n" + \
+      "i calcula'n la distància o raó en cada cas.")
+for x in range(12):
+    print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))

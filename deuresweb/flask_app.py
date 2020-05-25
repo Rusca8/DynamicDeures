@@ -81,6 +81,20 @@ def proporcionalitat():
         return render_template("proporcionalitat.html")
 
 
+@app.route("/success/", methods=["GET", "POST"])
+def success():
+    if request.method == "POST":
+        try:
+            g.proporcionalitat(request.form, solucions=False)
+        except:
+            return redirect("/latex_error/successions")
+
+        tele.feedback("prop",request.form)
+        return redirect("/pdf/successions")
+    else:
+        return render_template("successions.html")
+
+
 @app.route("/proves/", methods=["GET", "POST"])
 def proves():
     if request.method == "POST":
@@ -138,4 +152,4 @@ def notfound(patillada):
 
 
 if __name__ == "__main__":  # això la fa córrer en local
-    app.run()
+    app.run(debug=True)

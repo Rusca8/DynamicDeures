@@ -530,7 +530,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
 
     #getting opcions
     curs = opcions["curs"]
-    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
     if "primer" in opcions:
         primer = True
@@ -756,7 +756,7 @@ def proporcionalitat(opcions, solucions=False):
 
     doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
-    #preguntes
+    # preguntes
     if simple or composta:
         if any([qdirectes, qinverses, qbarrejades]):
             begin(doc,'questions')
@@ -808,7 +808,222 @@ def proporcionalitat(opcions, solucions=False):
 
     return
 
+
+def successions(opcions, solucions=False):
+    tema = "succ"
+
+    #getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "arit" in opcions:
+        arit = True
+        qtermen = quantesson(opcions["qtermen"], "termen")
+        qdades = quantesson(opcions["qdades"], "dades")
+        qextreure = quantesson(opcions["qextreure"], "extreure")
+    else:
+        arit = False
+        qtermen = 0
+        qdades = 0
+        qextreure = 0
+
+    if qextreure:
+        if "aGeneral" in opcions:
+            aGeneral = True
+        else:
+            aGeneral = False
+        if "aAn" in opcions:
+            aAn = True
+        else:
+            aAn = False
+        if "aSn" in opcions:
+            aSn = True
+        else:
+            aSn = False
+
+    aextron = opcions["aextron"]
+
+    print(f"Aritmètiques: Terme n {qtermen}, Dades {qdades}, Extreure {qextreure} (G: {aGeneral} | An: {aAn} | Sn: {aSn})")
+
+    if "geom" in opcions:
+        geom = True
+        qgtermen = quantesson(opcions["qgtermen"], "gtermen")
+        qgdades = quantesson(opcions["qgdades"], "gdades")
+        qgextreure = quantesson(opcions["qgextreure"], "gextreure")
+    else:
+        geom = False
+        qgtermen = 0
+        qgdades = 0
+        qgextreure = 0
+
+    if qgextreure:
+        if "gGeneral" in opcions:
+            gGeneral = True
+        else:
+            gGeneral = False
+        if "gAn" in opcions:
+            gAn = True
+        else:
+            gAn = False
+        if "gSn" in opcions:
+            gSn = True
+        else:
+            gSn = False
+
+    gextron = opcions["gextron"]
+
+    print(f"Geomètriques: Terme n {qgtermen}, Dades {qgdades}, Extreure {qgextreure} (G: {gGeneral} | An: {gAn} | Sn: {gSn})")
+
+    barreja = False
+
+    #PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    #preguntes
+    if arit or geom or barreja:
+        if any([qtermen, qdades, qextreure, qgtermen, qgdades, qgextreure]):
+            begin(doc, 'questions')
+
+            if arit:
+                bloctitle(doc, "Successions aritmètiques")
+
+            if qtermen:
+                n = qtermen
+                question(doc, f"{n}")
+                doc.append("Exercicis de trobar el terme n:")
+                begin(doc, 'parts')
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.success(1, x % (n//2))))  # segona meitat un pèl més alts
+                    space(doc, "1cm")
+                end(doc, 'parts')
+
+            if qdades:
+                n = qdades
+                question(doc, f"{2*n}")
+                doc.append("Exercicis de trobar la dada que falta:")
+                begin(doc, 'parts')
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.success(1, 2 + x % (n//2))))  # nivells 3 i 4
+                    space(doc, "1cm")
+                end(doc, 'parts')
+
+            if qextreure:
+                n = qextreure
+                question(doc, f"{3*n}")
+                if aextron == "alhora" or aextron == "seguit":
+                    t = "Calcula"
+                    if aGeneral:
+                        t += " el terme general"
+                        if aAn or aSn:
+                            if aAn and aSn:
+                                t += ","
+                            else:
+                                if aextron == "alhora":
+                                    t += "i"
+                                else:
+                                    t += "o"
+                    if aAn:
+                        t += " el terme An"
+                        if aextron == "alhora":
+                            t += " indicat"
+                        if aSn:
+                            if aextron == "alhora":
+                                t += "i"
+                            else:
+                                t += "o"
+                    if aSn:
+                        t += " la suma dels n primers termes (Sn)"
+                        if aextron == "alhora":
+                            t += " indicada"
+                    if not (aGeneral or aAn or aSn):
+                        t += " la diferència (d)"
+                    if aextron == "seguit":
+                        if (aGeneral and (aAn or aSn)) or (aAn and aSn):
+                            t += " segons s'indiqui en cada cas"
+                        else:
+                            t += " de cada successió"
+                    t += "."
+                    doc.append(t)
+
+                    avar = []  # per seguit
+                    if aGeneral:
+                        avar.append(1)
+                    if aAn:
+                        avar.append(2)
+                    if aSn:
+                        avar.append(3)
+
+                    if aAn:  # per alhora
+                        if aSn:
+                            variant = 4
+                        else:
+                            variant = 2
+                    elif aSn:
+                        variant = 3
+                    else:
+                        variant = 1
+
+                    begin(doc, 'parts')
+                    for x in range(0, n):
+                        part(doc)
+                        if aextron == "alhora":
+                            doc.append(NoEscape(r'%s' % gen.success(1, 101, variant)))
+                        else:  # seguit
+                            doc.append(NoEscape(r'%s' % gen.success(1, 101, avar[x % (n//len(avar))]) ))
+                        space(doc, "1cm")
+                    end(doc, 'parts')
+                else:
+                    if aGeneral:
+                        doc.append("Calcula el terme general de les següents successions:")
+                    elif not (aAn or aSn):
+                        doc.append("Calcula la diferència (d) de les següents successions:")
+                    begin(doc, 'parts')
+                    for x in range(0, n):  #TODO ojo els punts totals de l'ex (ajustar)
+                        part(doc)
+                        doc.append(NoEscape(r'%s' % gen.success(1, 101, 1)))
+                        space(doc, "1cm")
+                    end(doc, 'parts')
+
+                    doc.append("Calcula per a cada successió el terme An indicat:")
+                    begin(doc, 'parts')
+                    for x in range(0, n):
+                        part(doc)
+                        doc.append(NoEscape(r'%s' % gen.success(1, 101, 2)))
+                        space(doc, "1cm")
+                    end(doc, 'parts')
+
+                    doc.append("Calcula per a cada successió la suma dels n primers termes (Sn):")
+                    begin(doc, 'parts')
+                    for x in range(0, n):
+                        part(doc)
+                        doc.append(NoEscape(r'%s' % gen.success(1, 101, 3)))
+                        space(doc, "1cm")
+                    end(doc, 'parts')
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
 # - - - - - - - - - - - - - - - - - - - - - - - - Playground - - - - - - - - - - - - - - - - - - - - - - - - #
+
 
 def playground(opcions, solucions=False):
     curs = opcions["curs"]
@@ -997,6 +1212,8 @@ def temallarg(tema="no"):
         return "apilades"
     elif tema == "prop":
         return "proporcionalitat"
+    elif tema == "succ":
+        return "successions"
     else:
         return tema
 
