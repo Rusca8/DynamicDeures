@@ -26,10 +26,13 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
   - Additions and substractions
   - Products
   - Divisions
-- Operacions with more digits (columnar)
+- Operations with more digits (columnar)
   - Additions
   - Substractions
   - Multiplicacions
+- Sequences
+  - Aritmetic sequences
+  - Geometric sequences
 
 ## Notes for developers
 For PyLaTeX to run in your local machine you'll need MacTeX or something along the way (I got it to work with MacTeX, which is 6Gb, and couldn't make it work with anything smaller than that).

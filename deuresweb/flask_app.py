@@ -84,10 +84,10 @@ def proporcionalitat():
 @app.route("/success/", methods=["GET", "POST"])
 def success():
     if request.method == "POST":
-        print(request.form)
-        g.successions(request.form, solucions=False)
-
-
+        try:
+            g.successions(request.form, solucions=False)
+        except:
+            return redirect("/latex_error/successions")
         tele.feedback("succ",request.form)
         return redirect("/pdf/successions")
     else:

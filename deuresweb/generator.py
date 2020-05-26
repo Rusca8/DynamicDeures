@@ -96,7 +96,7 @@ def comb(tipus, nivell=1, nums=1):
 
 
 def taules(taula, div=False):
-    a = random.randint(1,10)
+    a = random.randint(1, 10)
     if div:
         return fr'{a*taula}\div {a}='
     else:

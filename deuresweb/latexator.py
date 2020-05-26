@@ -25,6 +25,14 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
         multis = True
         qmultis = quantesson(opcions["qmultis"], "multis")
         qsmultis = quantesson(opcions["qsmultis"], "smultis")
+        taules = []
+        for x in range(1, 13):
+            if f"t{x}" in opcions:
+                taules.append(x)
+        if len(taules) == 0:
+            taules = list(range(1, 11))
+        print("M.Taules: ", taules)
+
     else:
         multis = False
         qmultis = 0
@@ -35,13 +43,23 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
         divis = True
         qdivis = quantesson(opcions["qdivis"], "divis")
         qsdivis = quantesson(opcions["qsdivis"], "sdivis")
+        dtaules = []
+        if multis and opcions["copymult"] == "com":  # si estic copiant les multis, copio les taules
+            dtaules = taules
+        else:
+            for x in range(1, 13):
+                if f"td{x}" in opcions:
+                    dtaules.append(x)
+            if len(dtaules) == 0:
+                dtaules = list(range(1, 11))
+        print("D.Taules: ", dtaules)
     else:
         divis = False
         qdivis = 0
         qsdivis = 0
     print(f"A/B = {qdivis}, A/(-B) = {qsmultis}")
 
-    print("Generant pdf: {} ({})".format(temallarg(tema),curs))
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
     #PyLaTeX code
     geometry = margins()
@@ -111,10 +129,10 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
                     bTitle = "Divisions amb enters"
                 bloctitle(doc, bTitle)
 
-                if qmultis!=0 or qdivis!=0:
-                    if qmultis != 0:
-                        if qdivis != 0:
-                            question(doc,f"{qmultis//2}")
+                if qmultis or qdivis:
+                    if qmultis:
+                        if qdivis:
+                            question(doc, f"{qmultis//2}")
                             doc.append("Calcula les següents multiplicacions i divisions sense signes")
                         else:
                             question(doc,f"{qmultis//2}")
@@ -134,11 +152,15 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
                         n = qdivis
 
                     if qmultis!=0:
-                        for x in range(0,n):
-                            uncalcul(doc,[3,1], "0,2cm") # mult
+                        for x in range(0, n):
+                            part(doc)
+                            doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(taules))))
+                            space(doc, "0,2cm")
                     if qdivis!=0:
-                        for x in range(0,n):
-                            uncalcul(doc,[3,4], "0,2cm") # div
+                        for x in range(0, n):
+                            part(doc)
+                            doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(dtaules), True)))  # true és divis
+                            space(doc, "0,2cm")
                     end(doc,"multicols")
                     end(doc,'parts')
 

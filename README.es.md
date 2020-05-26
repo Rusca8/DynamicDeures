@@ -30,6 +30,9 @@ _Lee esto en otros idiomas: [Catalán (CA)](README.md), [Castellano (ES)](README
   - Sumas
   - Restas
   - Multiplicaciones
+- Succesiones
+  - Succesiones aritméticas
+  - Succesiones geométricas
 
 ## Notas para desarrolladores
 Para que funcione PyLaTeX en local en el ordenador os hará falta MacTeX o alguna cosa por el estilo (yo he conseguido que funcione con MacTeX, que ocupa 6Gb, y no he sabido encontrar nada más pequeño que funcionara).

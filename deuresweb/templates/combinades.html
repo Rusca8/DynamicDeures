@@ -1,6 +1,6 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
-<div class="alert alert-info alert-sm" role="alert">De moment només fan alguna cosa les quantitats (els botons en gris)</div>
+<div class="alert alert-info alert-sm" role="alert">De moment funcionen els botons en gris, i <b>ja es poden triar les taules de multiplicacions i divisions.</b></div>
 {% endblock %}
 {% block principals %}
   <h4 id="titolTema">Fitxa d'Operacions amb Enters...</h4>
@@ -319,13 +319,13 @@
                 <label for="formDiviDobleNegatiu"><i>On les vols?</i></label>
                 <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
                   <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
-                    <input type="radio" name="nonegd" id="nonegd0" value="apart" autocomplete="off"> a part
+                    <input type="radio" name="ondivis" id="apart" value="apart" autocomplete="off"> a part
                   </label>
                   <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
-                    <input type="radio" name="nonegd" id="nonegd1" value="seguit" autocomplete="off"> seguit
+                    <input type="radio" name="ondivis" id="seguit" value="seguit" autocomplete="off"> seguit
                   </label>
                   <label class="btn btn-outline-dark btn-sm py-0 btn-mini active">
-                    <input type="radio" name="nonegd" id="nonegd2" value="barrejat" autocomplete="off" checked> barrejat
+                    <input type="radio" name="ondivis" id="barrejat" value="barrejat" autocomplete="off" checked> barrejat
                   </label>
                 </div>
             </div>

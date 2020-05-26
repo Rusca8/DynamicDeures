@@ -23,3 +23,10 @@
 .heighter {
     min-height: 1000px;
 }
+
+.alert-thin {
+  margin-bottom: 1px;
+  height: 30px;
+  line-height:30px;
+  padding:0px 15px;
+}
