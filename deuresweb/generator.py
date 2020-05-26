@@ -649,7 +649,7 @@ def success(tipus, nivell=1, variant=1):
                 a1 = random.randint(-9, -1)
             else:
                 a1 = random.randint(1, 15)
-            n = random.randint(2, 40)
+            n = random.randint(3, 40)
         elif nivell == 101:
             d = random.randint(2, 9)
             if moneda():
@@ -676,7 +676,7 @@ def success(tipus, nivell=1, variant=1):
                 a1 = random.randint(-9, -1)
             else:
                 a1 = random.randint(1, 15)
-            n = random.randint(2, 10)
+            n = random.randint(3, 10)
         elif nivell == 101:
             r = random.randint(2, 5)
             if moneda():

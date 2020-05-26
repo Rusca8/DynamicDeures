@@ -24,8 +24,8 @@
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opArit" aria-expanded="true" aria-controls="opArit">
           <input type="checkbox" name="arit" autocomplete="off" id="arit" value="arit" checked> Aritmètiques
         </label>
-        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opGeom" aria-expanded="false" aria-controls="opGeom">
-          <input type="checkbox" name="geom" autocomplete="off" id="geom" value="geom" disabled> Geomètriques
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opGeom" aria-expanded="true" aria-controls="opGeom">
+          <input type="checkbox" name="geom" autocomplete="off" id="geom" value="geom"> Geomètriques
         </label>
         <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opAltres" aria-expanded="false" aria-controls="opAltres">
           <input type="checkbox" name="altres" autocomplete="off" id="altres" value="altres" disabled> Altres / Barreja
@@ -173,7 +173,7 @@
     </div>
 </div>
 
-<div class="collapse" id="opGeoJADALLO">  <!-- TODO posar la bona quan ho vulguis activar -->
+<div class="collapse show" id="opGeom">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Successions Geomètriques</h5>
@@ -292,7 +292,7 @@
             </div>
          </div>
 
-         <div class="form-group mb-0 ml-2">
+         <div class="form-group mb-0 ml-4">
             <label for="formGroupGOn">Com ho preguntem?</label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-dark btn-sm py-0 btn-mini">

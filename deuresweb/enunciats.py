@@ -763,51 +763,56 @@ def success(tipus, nivell, variant, d, a1, n, an):
     if tipus == 1:  # successions aritmètiques
         if nivell in [1, 2]: # trobar el terme n
             if moneda():
-                text = random.choice([f"El primer terme d'una successió aritmètica és {a1}",
-                                      f"En una successió aritmètica el primer terme és {a1}",
-                                      f"En una successió aritmètica, a1 = {a1}"])
-                text += random.choice([f", i la diferència entre els termes és {d}. ", f" i d = {d}. ",
-                                       f" i la diferència d és de {d}. "])
+                text = random.choice([f"El primer terme d'una successió aritmètica és ${a1}$",
+                                      f"En una successió aritmètica el primer terme és ${a1}$",
+                                      f"En una successió aritmètica, $a_1 = {a1}$"])
+                text += random.choice([f", i la diferència entre els termes és ${d}$. ", f" i $d = {d}$. ",
+                                       f" i la diferència $d$ és de ${d}$. "])
             else:
-                text = random.choice([f"Sabem que el primer terme d'una successió aritmètica és {a1}",
-                                 f"D'una successió aritmètica sabem que a1 = {a1}"])
-                text += random.choice([f", i que la diferència és {d}. ", f", i que els elements estan separats {d} unitats. ",
-                                       f" i que d = {d}. "])
-            text += random.choice(["Quin serà el terme " + random.choice(["", "número "]) + f"{n}?",
-                                   f"Quin terme ocuparà la posició {n}?",
-                                   f"Calcula el terme a{n}.", f"Quin serà el {ordinal(n)} terme?"])
+                text = random.choice([f"Sabem que el primer terme d'una successió aritmètica és ${a1}$",
+                                 f"D'una successió aritmètica sabem que $a_1 = {a1}$"])
+                text += random.choice([f", i que la diferència és ${d}$. ",
+                                       f", i que els elements estan separats ${d}$ unitats. ",
+                                       f" i que $d = {d}$. "])
+            text += random.choice(["Quin serà el terme " + f"${n}$?",
+                                   f"Quin terme ocuparà la posició ${n}$?",
+                                   "Calcula el terme $a_{"+f"{n}"+"}$.", f"Quin serà el ${ordinal(n)}$ terme?"])
         elif nivell == 3 or nivell == 4:
-            text = "En una successió aritmètica, "  # TODO escriure a3 = 42 en lloc de an = 42 i n = 3
+            text = "En una successió aritmètica, "
             ordre = [0, 1, 2, 3]
             random.shuffle(ordre)
             for x in range(3):
                 if ordre[x] == 0:
-                    text += f"a1 = {a1}"
+                    text += f"$a_1 = {a1}$"
                 elif ordre[x] == 1:
-                    text += f"d = {d}"
+                    text += f"$d = {d}$"
                 elif ordre[x] == 2:
-                    text += f"n = {n}"
+                    if ordre[3] == 3:  # em cal (pregunta an)
+                        text += f"$n = {n}$"
                 elif ordre[x] == 3:
-                    text += f"an = {an}"
+                    if ordre[3] == 2:  # em pregunta n
+                        text += f"$a_n = {an}$"
+                    else:
+                        text += "$a_{" + f"{n}" + "} = " + f"{an}$"
                 if x == 2:
                     text += ". "
                 else:
                     text += ", "
             if ordre[3] == 0:
-                text += "Troba el terme a1 de la successió."
+                text += "Troba el terme $a_1$ de la successió."
             elif ordre[3] == 1:
                 text += "Troba la diferència entre termes."
             elif ordre[3] == 2:
-                text += "Quina posició ocupa aquest terme an?"
+                text += "Quina posició ocupa aquest terme $a_n$?"
             elif ordre[3] == 3:
-                text += "Calcula el terme an."
+                text += "Calcula el terme $a_n$."
         elif nivell == 101:  # bulk troba la diferència, el terme general i el terme an
             text = ""
             for x in range(5):
                 text += f"{a1 + x * d}, "
             text += r"...\ "
             if variant == 2:  # trobar diferència, terme general i an indicat
-                text += " (a_{" + f"{n}" + "}?)"  # TODO make "a" huge cuz it's capital lowercase whatever
+                text += " (a_{" + f"{n}" + "}?)"
             elif variant == 3:  # trobar suma dels primers n termes
                 text += " (S_{" + f"{n%4+6}" + "}?)"
             elif variant == 4:
@@ -816,44 +821,50 @@ def success(tipus, nivell, variant, d, a1, n, an):
     if tipus == 2:  # successions geomètriques
         if nivell in [1, 2]: # trobar el terme n
             if moneda():
-                text = random.choice([f"El primer terme d'una successió geomètrica és {a1}",
-                                      f"En una successió geomètrica el primer terme és {a1}",
-                                      f"En una successió geomètrica, a1 = {a1}"])
-                text += random.choice([f", i la raó entre els termes és {d}. ", f" i r = {d}. ",
-                                       f" i la raó r és de {d}. "])
+                text = random.choice([f"El primer terme d'una successió geomètrica és ${a1}$",
+                                      f"En una successió geomètrica el primer terme és ${a1}$",
+                                      f"En una successió geomètrica, $a_1 = {a1}$"])
+                text += random.choice([f", i la raó entre els termes és ${d}$. ", f" i $r = {d}$. ",
+                                       f" i la raó $r$ és de ${d}$. "])
             else:
-                text = random.choice([f"Sabem que el primer terme d'una successió geomètrica és {a1}",
-                                 f"D'una successió geomètrica sabem que a1 = {a1}"])
-                text += random.choice([f", i que la raó és {d}. ",
-                                       f" i que r = {d}. "])
-            text += random.choice(["Quin serà el terme " + random.choice(["", "número "]) + f"{n}?",
-                                   f"Quin terme ocuparà la posició {n}?",
-                                   "Calcula el terme $a_{" + f"{n}" + "}$.", f"Quin serà el {ordinal(n)} terme?"])
+                text = random.choice([f"Sabem que el primer terme d'una successió geomètrica és ${a1}$",
+                                      f"D'una successió geomètrica sabem que $a_1 = {a1}$"])
+                text += random.choice([f", i que la raó és ${d}$. ",
+                                       f" i que $r = {d}$. "])
+            text += random.choice(["Quin serà el terme " + f"${n}$?",
+                                   f"Quin terme ocuparà la posició ${n}$?",
+                                   "Calcula el terme $a_{" + f"{n}" + "}$.", f"Quin serà el ${ordinal(n)}$ terme?"])
+
         elif nivell == 3 or nivell == 4:
             text = "En una successió geomètrica, "
             ordre = [0, 1, 2, 3]
             random.shuffle(ordre)
             for x in range(3):
                 if ordre[x] == 0:
-                    text += f"$$a_1$$ = {a1}"
+                    text += f"$a_1 = {a1}$"
                 elif ordre[x] == 1:
-                    text += f"r = {d}"
+                    text += f"$r = {d}$"
                 elif ordre[x] == 2:
-                    text += f"n = {n}"
+                    if ordre[3] == 3:  # em cal (pregunta an)
+                        text += f"$n = {n}$"
                 elif ordre[x] == 3:
-                    text += f"$$a_n$$ = {an}"
+                    if ordre[3] == 2:  # em pregunta n
+                        text += f"$a_n = {an}$"
+                    else:
+                        text += "$a_{"+f"{n}"+"} = " + f"{an}$"
                 if x == 2:
                     text += ". "
                 else:
                     text += ", "
             if ordre[3] == 0:
-                text += "Troba el terme a1 de la successió."
+                text += "Troba el terme $a_1$ de la successió."
             elif ordre[3] == 1:
-                text += "Troba la raó entre els termes."
+                text += "Troba la raó $r$ de la successió."
             elif ordre[3] == 2:
-                text += "Quina posició ocupa aquest terme $$a_n$$?"
+                text += "Quina posició ocupa terme $a_n$?"
             elif ordre[3] == 3:
-                text += "Calcula el terme $$a_n$$."
+                text += "Calcula el terme $a_n$."
+
         elif nivell == 101:  # bulk geomètriques (var 1 = només la successió)
             text = ""
             for x in range(5):
@@ -865,6 +876,7 @@ def success(tipus, nivell, variant, d, a1, n, an):
                 text += " (S_{" + f"{n%4+6}" + "}?)"
             elif variant == 4:
                 text += " (a_{" + f"{n}" + r"}?\ S_{" + f"{random.randint(5, 10)}" + "}?)"
+
     return text
 
 

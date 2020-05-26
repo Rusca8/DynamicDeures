@@ -888,6 +888,7 @@ def successions(opcions, solucions=False):
         if any([qtermen, qdades, qextreure, qgtermen, qgdades, qgextreure]):
             begin(doc, 'questions')
 
+            # Aritmètiques
             if arit:
                 bloctitle(doc, "Successions aritmètiques")
 
@@ -898,7 +899,7 @@ def successions(opcions, solucions=False):
                 begin(doc, 'parts')
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'%s' % gen.success(1, x // (n//2) + 1)))  # segona meitat un pèl més alts
+                    doc.append(NoEscape(r'%s' % gen.success(1, min(x // (n//2) + 1, 2))))  # segona meitat un pèl més alts
                     space(doc, "1cm")
                 end(doc, 'parts')
 
@@ -909,8 +910,8 @@ def successions(opcions, solucions=False):
                 begin(doc, 'parts')
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'%s' % gen.success(1, x // (n//2) + 3)))  # nivells 3 i 4
-                    space(doc, "1cm")
+                    doc.append(NoEscape(r'%s' % gen.success(1, min(x // (n//2) + 3, 4))))  # nivells 3 i 4
+                    space(doc, "1.05cm")
                 end(doc, 'parts')
 
             if qextreure:
@@ -976,10 +977,11 @@ def successions(opcions, solucions=False):
                         if aextron == "alhora":
                             doc.append(NoEscape(r'$%s$' % gen.success(1, 101, variant)))
                         else:  # seguit
-                            print(x, n, len(avar), n // len(avar), x // (n//len(avar)), avar[min(x // (n//len(avar)), len(avar)-1)])
+                            # print(x, n, len(avar), n // len(avar), x // (n//len(avar)), avar[min(x // (n//len(avar)), len(avar)-1)])
                             doc.append(NoEscape(r'$%s$' % gen.success(1, 101, avar[min(x // (n//len(avar)), len(avar)-1)]) ))
                         space(doc, "1cm")
                     end(doc, "multicols")
+                    space(doc, "1cm")
                     end(doc, 'parts')
                 else:
                     if aGeneral:
@@ -1016,6 +1018,141 @@ def successions(opcions, solucions=False):
                         for x in range(0, n):
                             part(doc)
                             doc.append(NoEscape(r'$%s$' % gen.success(1, 101, 3)))
+                            space(doc, "1cm")
+                        end(doc, 'multicols')
+                        space(doc, "1.2cm")
+                        end(doc, 'parts')
+
+            # Geomètriques
+            if geom:
+                bloctitle(doc, "Successions geomètriques")
+
+            if qgtermen:
+                n = qgtermen
+                question(doc, f"{n}")
+                doc.append("Exercicis de trobar el terme n:")
+                begin(doc, 'parts')
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.success(2, min(x // (n//2) + 1, 2))))  # segona meitat un pèl més
+                    space(doc, "1cm")
+                end(doc, 'parts')
+
+            if qgdades:
+                n = qgdades
+                question(doc, f"{2*n}")
+                doc.append("Exercicis de trobar la dada que falta:")
+                begin(doc, 'parts')
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'%s' % gen.success(2, min(x // (n//2) + 3, 4))))  # nivells 3 i 4
+                    space(doc, "1.05cm")
+                end(doc, 'parts')
+
+            if qgextreure:
+                n = qgextreure
+                question(doc, f"{3*n}")
+                if gextron == "alhora" or gextron == "seguit":
+                    t = "Calcula"
+                    if gGeneral:
+                        t += " el terme general"
+                        if gAn or gSn:
+                            if gAn and gSn:
+                                t += ","
+                            else:
+                                if gextron == "alhora":
+                                    t += " i"
+                                else:
+                                    t += " o"
+                    if gAn:
+                        t += " el terme $a_n$"
+                        if gextron == "alhora":
+                            t += " indicat"
+                        if gSn:
+                            if gextron == "alhora":
+                                t += " i"
+                            else:
+                                t += " o"
+                    if gSn:
+                        t += r" la suma dels n primers termes $S_n$"
+                        if gextron == "alhora":
+                            t += " indicada"
+                    if not (gGeneral or gAn or gSn):
+                        t += " la raó (r)"
+                    if gextron == "seguit":
+                        if (gGeneral and (gAn or gSn)) or (gAn and gSn):  # si hi ha dues preguntes
+                            t += " segons s'indiqui en cada cas"
+                        else:
+                            t += " de cada successió"
+                    t += "."
+                    doc.append(NoEscape(t))  # NoEscape fa que entrin els $ (i pugui interpretar-ho com inline maths)
+
+                    avar = []  # per seguit
+                    if gGeneral:
+                        avar.append(1)
+                    if gAn:
+                        avar.append(2)
+                    if gSn:
+                        avar.append(3)
+
+                    if gAn:  # per alhora
+                        if gSn:
+                            variant = 4
+                        else:
+                            variant = 2
+                    elif gSn:
+                        variant = 3
+                    else:
+                        variant = 1
+
+                    begin(doc, 'parts')
+                    begin(doc, "multicols", "2")
+                    for x in range(0, n):
+                        part(doc)
+                        if aextron == "alhora":
+                            doc.append(NoEscape(r'$%s$' % gen.success(2, 101, variant)))
+                        else:  # seguit
+                            # print(x, n, len(avar), n // len(avar), x // (n//len(avar)), avar[min(x // (n//len(avar)), len(avar)-1)])
+                            doc.append(NoEscape(r'$%s$' % gen.success(2, 101, avar[min(x // (n//len(avar)), len(avar)-1)]) ))
+                        space(doc, "1cm")
+                    end(doc, "multicols")
+                    space(doc, "1cm")
+                    end(doc, 'parts')
+                else:
+                    if gGeneral:
+                        doc.append("Calcula el terme general de les següents successions:")
+                    elif not (gAn or gSn):
+                        doc.append("Calcula la raó (r) de les següents successions:")
+                    if aGeneral or not (gAn or gSn):
+                        begin(doc, 'parts')
+                        begin(doc, 'multicols', 2)
+                        for x in range(0, n):  #TODO ojo els punts totals de l'ex (ajustar)
+                            part(doc)
+                            doc.append(NoEscape(r'$%s$' % gen.success(2, 101, 1)))
+                            space(doc, "1cm")
+                        end(doc, 'multicols')
+                        space(doc, "1.2cm")
+                        end(doc, 'parts')
+
+                    if gAn:
+                        doc.append(NoEscape(r"Calcula per a cada successió el terme $a_n$ indicat:"))
+                        begin(doc, 'parts')
+                        begin(doc, 'multicols', 2)
+                        for x in range(0, n):
+                            part(doc)
+                            doc.append(NoEscape(r'$%s$' % gen.success(2, 101, 2)))
+                            space(doc, "1cm")
+                        end(doc, 'multicols')
+                        space(doc, "1.2cm")
+                        end(doc, 'parts')
+
+                    if gSn:
+                        doc.append(NoEscape("Calcula per a cada successió la suma dels n primers termes $(S_n)$:"))
+                        begin(doc, 'parts')
+                        begin(doc, 'multicols', 2)
+                        for x in range(0, n):
+                            part(doc)
+                            doc.append(NoEscape(r'$%s$' % gen.success(2, 101, 3)))
                             space(doc, "1cm")
                         end(doc, 'multicols')
                         space(doc, "1.2cm")
@@ -1288,11 +1425,11 @@ def quantesson(value,op):
         quantitats = [0, 3, 4, 5, 6, 11, 23]
     # successions
     elif op in ["termen", "gtermen"]:
-        quantitats = [0, 3, 4, 5, 6, 11, 23]
+        quantitats = [0, 3, 5, 6, 6, 13, 27]
     elif op in ["dades", "gdades"]:
-        quantitats = [0, 3, 4, 5, 6, 11, 23]
+        quantitats = [0, 3, 5, 7, 7, 14, 27]
     elif op in ["extreure", "gextreure"]:
-        quantitats = [0, 3, 4, 5, 12, 24, 48]
+        quantitats = [0, 3, 4, 8, 12, 29, 56]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")

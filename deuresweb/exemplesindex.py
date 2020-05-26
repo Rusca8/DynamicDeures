@@ -1,4 +1,5 @@
 import generator as g
+import random
 
 def genera(aleatoris=False):
     ex = {}
@@ -6,6 +7,7 @@ def genera(aleatoris=False):
     ex["omx"] = {}
     ex["eq"] = {}
     ex["pp"] = {}
+    ex["succ"] = {}
     if aleatoris:
         ex["en"]["suma1"] = g.comb(1, 3)
         ex["en"]["suma2"] = g.comb(2, 1)
@@ -31,6 +33,12 @@ def genera(aleatoris=False):
         ex["omx"]["multid"] = g.apilades(3, 2, [2, 2], [2, 1])
         ex["pp"]["directa"] = g.prop(1, 1)
         ex["pp"]["inversa"] = g.prop(1, 2)
+        ex["succ"]["termen"] = g.success(random.choice([1, 2]), 2)
+        # ex["succ"]["gtermen"] = g.success(2, 2)
+        ex["succ"]["dades"] = g.success(random.choice([1, 2]), 3)
+        # ex["succ"]["gdades"] = g.success(2, 3)
+        ex["succ"]["extreure"] = g.success(1, 101, random.choice([1, 2, 3, 4]))
+        ex["succ"]["gextreure"] = g.success(2, 101, random.choice([1, 2, 3, 4]))
     else:
         ex["en"]["suma1"] = "3+7="
         ex["en"]["suma2"] = "6-8"
@@ -56,5 +64,11 @@ def genera(aleatoris=False):
         ex["omx"]["multid"] = r"\begin{array}{c}\phantom{\times999}73.71\\ \underline{\times\phantom{9999}1.61}\\ \end{array}"
         ex["pp"]["directa"] = "Aquell senyor que passa per allà pot fer 70 dibuixos en 5 minuts. Quants dibuixos podrà fer en 6 minuts?"
         ex["pp"]["inversa"] = "22 equilibristes s'han trobat un ramat de spaghetti, i n'han repartit 14 per cada una. Quants se'n podrien quedar si fossin 77?"
+        ex["succ"]["termen"] = "D'una successió aritmètica sabem que $a_1 = 7$ i que $d = 3$. Calcula el terme $a_{2}$."
+        # ex["succ"]["gtermen"] = "Sabem que el primer terme d'una successió geomètrica és $4$ i que $r = 2$. Quin serà el $2n$ terme?"
+        ex["succ"]["dades"] = "En una successió aritmètica, $a_{23} = 90$, $d = 4$. Troba el terme $a_1$ de la successió."
+        # ex["succ"]["gdades"] = "En una successió geomètrica, $a_1 = -3$, $a_{4} = -375$. Troba la raó $r$ de la successió."
+        ex["succ"]["extreure"] = r"6, 12, 18, 24, 30, ...\  (a_{46}?)"
+        ex["succ"]["gextreure"] = r"5, -25, 125, -625, 3125, ...\  (S_{8}?)"
 
     return ex

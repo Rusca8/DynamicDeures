@@ -195,6 +195,28 @@
             <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pp');">Canvia els exemples</button>
         </div>
     </div>
+
+    <div class="card text-center">
+    <h5 class="card-header" id="succ">Successions</h5>
+        <div class="card-body">
+            <p class="card-text">
+                Trobar terme n (aritmètiques i geomètriques)
+            </p>
+            <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["termen"] }}</i></div>
+            <p class="card-text">
+                Trobar el que falti (aritmètiques i geomètriques)
+            </p>
+            <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["dades"] }}</i></div>
+            <p class="card-text">
+                Extreure dades a partir dels primers termes.
+            </p>
+            <div class="font-weight-light mt-3 mb-2"><i>${{ ex["succ"]["extreure"] }}$</i></div>
+            <div class="font-weight-light mt-3 mb-4"><i>${{ ex["succ"]["gextreure"] }}$</i></div>
+            <br>
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/proporcionalitat/" role="button">Crea una fitxa de Proporcionalitat</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('succ');">Canvia els exemples</button>
+        </div>
+    </div>
 </div>
 </div>
 {% endblock %}
