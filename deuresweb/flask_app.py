@@ -142,6 +142,11 @@ def canvis():
     return render_template("changelog.html")
 
 
+@app.route("/contacte/")
+def contacte():
+    return render_template("contacte.html")
+
+
 @app.route('/latex_error/<pdf>')
 def latexerror(pdf):
     return f"<h2>Hi ha hagut algun problema greu fent el teu pdf de {pdf}</h2><p>...o potser algú ha tingut l'error abans i ha quedat caigut, que també em passa</p>"
