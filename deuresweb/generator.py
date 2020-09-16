@@ -328,7 +328,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                 text = "0=" + text
         elif nivell == 3:  # amb coef
             x = random.randint(1, 10)
-            c = pow(x,2)
+            c = pow(x, 2)
             a = random.randint(-3, 3)
             if a == 0:
                 a = random.choice([1, -1])
@@ -422,8 +422,11 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
         x2 = random.randint(-7, 7)
         if x2 == 0:
             x2 = random.choice([-1, 1])
+        if x1 == -x2:  # evita b=0
+            x1 = x2
         b = -x1 - x2
         c = x1*x2
+
         if nivell == 1:  # sense coef A, ordenada
             if b > 0:
                 if b == 1:
@@ -452,6 +455,9 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             x2 = random.randint(-7, 7)
             if x2 == 0:
                 x2 = random.choice([-1, 1])
+            if x1 == -x2:  # evita b=0
+                x1 = x2
+
             if nivell == 3:
                 a = random.randint(-3, 3)
                 if a == 0:
@@ -510,6 +516,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                 text = text + "=0"
             else:
                 text = "0=" + text
+            print("Nivell 2/3", a, b, c)
     return text
 
 
