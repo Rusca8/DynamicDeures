@@ -213,7 +213,7 @@ def combinades(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - 
         else:
             doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
     else:
-        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
 
     doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
@@ -540,7 +540,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
         else:
             doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
     else:
-        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
 
     doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
@@ -568,11 +568,13 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
         segon = True
         qincomps = quantesson(opcions["qincomps"], "incomps")
         qcompletes = quantesson(opcions["qcompletes"], "completes")
+        qpolis = quantesson(opcions["qpolis"], "polis")
     else:
         segon = False
         qincomps = 0
         qcompletes = 0
-    print(f"Ax^2+Bx {qincomps}, Ax^2+Bx+C {qcompletes}")
+        qpolis = 0
+    print(f"Ax^2+Bx {qincomps}, Ax^2+Bx+C {qcompletes}, P(x)=Q(x) {qpolis}")
 
     if "sistemes" in opcions:
         sistemes = True
@@ -604,28 +606,28 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
 
     #preguntes
     if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, qsist, qsist3, qincomps, qcompletes]):
-            begin(doc,'questions')
+        if any([qsimples, qdsimples, qsist, qsist3, qincomps, qcompletes, qpolis]):
+            begin(doc, 'questions')
 
             if primer:
                 bloctitle(doc, "Equacions de primer grau")
 
-            if qsimples!=0:
+            if qsimples != 0:
                 n = qsimples
                 question(doc, f"{n//2}")
                 doc.append("Resol les següents equacions de primer grau (sense coeficient a la x).")
-                begin(doc,'parts')
-                begin(doc,"multicols","3")
-                for x in range(0,n//2):
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                for x in range(0, n//2):
                     part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.eq(1,1)))  # faig meitat de cada
-                    space(doc,"0.7cm")
-                for x in range(0,n//2):
+                    doc.append(NoEscape(r'$%s$' % gen.eq(1, 1)))  # faig meitat de cada
+                    space(doc, "0.7cm")
+                for x in range(0, n//2):
                     part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.eq(1,2)))  # faig meitat de cada
-                    space(doc,"0.7cm")
-                end(doc,"multicols")
-                end(doc,'parts')
+                    doc.append(NoEscape(r'$%s$' % gen.eq(1, 2)))  # faig meitat de cada
+                    space(doc, "0.7cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
                 space(doc, "0.7cm")
 
             if qdsimples!=0:
@@ -656,15 +658,15 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                 begin(doc, "multicols", "3")
                 for x in range(0, n):
                     part(doc)
-                    if x<n//4:
-                        if x<2:
+                    if x < n//4:
+                        if x < 2:
                             doc.append(NoEscape(r'$%s$' % gen.eq(101, 1)))
                         else:
                             doc.append(NoEscape(r'$%s$' % gen.eq(101, random.choice([2, 3]))))
-                    elif x<n*3//4:
+                    elif x < n*3//4:
                         doc.append(NoEscape(r'$%s$' % gen.eq(102, random.choice([2, 3]))))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(random.choice([101, 102]), random.choice([2, 3]))))
+                        doc.append(NoEscape(r'$%s$' % gen.eq(random.choice([101, 102]), 3)))
                     space(doc, "0.7cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -684,6 +686,20 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
                         doc.append(NoEscape(r'$%s$' % gen.eq(103, 2)))
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.eq(103, random.choice([2, 3]))))
+                    space(doc, "1.4cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "1.4cm")
+
+            if qpolis:
+                n = qpolis
+                question(doc, f"{2*n}")
+                doc.append("Opera i resol les següents equacions de segon grau (polinòmiques).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "2")
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'$%s$' % gen.eq(104)))
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -738,7 +754,7 @@ def equacions(opcions, solucions=False): # - - - - - - - - - - - - - - - - - - -
         else:
             doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
     else:
-        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
 
     doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
@@ -823,7 +839,7 @@ def proporcionalitat(opcions, solucions=False):
         else:
             doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
     else:
-        doc.append("haha.. quina gràcia.. as fet un pdf sense res, que original...")
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
 
     doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
@@ -1434,6 +1450,8 @@ def quantesson(value,op):
         quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
         quantitats = [0, 6, 9, 15, 20, 33, 66]
+    elif op == "polis":
+        quantitats = [0, 4, 6, 10, 14, 22, 44]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]
     elif op == "sistemes3":

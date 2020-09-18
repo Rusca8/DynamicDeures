@@ -516,7 +516,85 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                 text = text + "=0"
             else:
                 text = "0=" + text
-            print("Nivell 2/3", a, b, c)
+
+    elif tipus == 104:  # de moment completes però polinomi (6 termes)
+        x1 = random.randint(-10, 10)
+        if x1 == 0:
+            x1 = random.choice([-1, 1])
+        x2 = random.randint(-7, 7)
+        if x2 == 0:
+            x2 = random.choice([-1, 1])
+        if x1 == -x2:  # evita b=0
+            x1 = x2
+
+        a = random.randint(-3, 3)
+        if a == 0:
+            a = random.choice([-1, 1])
+        b = a * (-x1 - x2)
+        c = a * (x1 * x2)
+        # separa cada terme en dues parts
+        a1 = random.randint(-10, +10)
+        a2 = a - a1
+        b1 = random.randint(-20, +20)
+        b2 = b - b1
+        c1 = random.randint(-30, +30)
+        c2 = c - c1
+
+        ordre = [0, 1, 2, 3, 4, 5]
+        random.shuffle(ordre)
+        text = "="
+        dreta = False
+        for x in ordre:
+            if x == 0:  # a1
+                n = a1
+                g = "x^2"
+            elif x == 1:
+                n = b1
+                g = "x"
+            elif x == 2:
+                n = c1
+                g = ""
+            elif x == 3:
+                n = a2
+                g = "x^2"
+            elif x == 4:
+                n = b2
+                g = "x"
+            elif x == 5:
+                n = c2
+                g = ""
+
+            if n != 0:
+                if moneda():  # esquerra
+                    if abs(n) == 1 and n % 3 != 2:  # evita 1x etc
+                        if n == 1:
+                            text = f"{g}" + text
+                        else:
+                            text = f"-{g}" + text
+                    else:
+                        text = f"{n}{g}" + text
+                    if n > 0:
+                        text = "+" + text
+                else:  # dreta
+                    n = -n
+                    if n > 0:
+                        if dreta:
+                            text += "+"
+                    if abs(n) == 1 and n % 3 != 2:
+                        if n == 1:
+                            text += f"{g}"
+                        else:
+                            text += f"-{g}"
+                    else:
+                        text += f"{n}{g}"
+                    dreta = True
+        if text[0] == "+":
+            text = text[1:]
+        elif text[0] == "=":
+            text = "0" + text
+        elif text[-1] == "=":
+            text += "0"
+
     return text
 
 
@@ -846,7 +924,7 @@ print(eq(103, 2))
 print(eq(103, 3))
 print(eq(103, 3))
 
-"""
+
 for x in range(5):
     print(success(1, 1))
 for x in range(5):
@@ -880,3 +958,4 @@ print("Digues si les següents successions són aritmètiques o geomètriques,\n
       "i calcula'n la distància o raó en cada cas.")
 for x in range(12):
     print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))
+"""
