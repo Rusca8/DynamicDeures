@@ -804,6 +804,214 @@ def prop(tipus, nivell=1):
     return "AQUEST TIPUS DE P NO EXISTEIX 42"
 
 
+def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
+    text = "x"
+    sumasegur = False
+    if -7 in amaga:
+        sumasegur = True
+        amaga.remove(-7)
+    else:
+        if -8 in amaga:
+            amaga.remove(-8)
+            if moneda():
+                sumasegur = True
+
+    if inception == 1:
+        if 6 in opcions:
+            opcions.remove(6)
+        if 8 in opcions:
+            opcions.remove(8)
+
+    if inception < 1:
+        inception = 0
+        fx = 0
+    else:  # si queda recursivitat encara
+        if -4 in amaga:
+            sensearrels = True
+            amaga.remove(-4)
+        else:
+            sensearrels = False
+        for x in amaga:
+            if x in opcions:
+                opcions.remove(x)
+            else:
+                amaga.remove(x)
+
+        fx = random.choice(opcions)
+        if amaga:  # retorno a la llista principal l'amagat
+            opcions += amaga
+            amaga = []
+
+        if fx == 1:  # a^x / e^x
+            if random.choice([0, 0, 1]):  # a^x
+                n = random.randint(2, 9)
+                text = f"{n}^" + "{" + f"{dx(inception-1, opcions, [1], simples=simples)}" + "}"
+            else:  # e^x
+                text = "e^{" + f"{dx(inception-1, opcions, [1], simples=simples)}" + "}"
+
+        elif fx == 2:  # cos(x) / sin(x) / tg(x)
+            if random.choice([0, 0, 1]):
+                text = "cos"
+                amaga += [5]
+            elif moneda():
+                text = "sin"
+                amaga += [5]
+            else:
+                text = "tg"
+                amaga += [2, 5]
+            if random.randint(1, 5) == 1 and not simples:  # exponent intern
+                text += f"^{random.randint(2, 4)}"
+                inception -= 1
+            text += "(" + f"{dx(inception-1, opcions, amaga, simples=simples)}" + ")"
+
+        elif fx == 3:
+            if random.choice([0, 0, 1]):  # log_b x
+                n = random.randint(1, 9)
+                text = "log"
+                if n > 1:
+                    text += f"_{n}"
+                if random.randint(1, 20) == 1 and not simples:  # exponent intern
+                    text += f"^{random.randint(2, 4)}"
+                    inception -= 1
+            else:  # ln x
+                text = "ln"
+                if random.randint(1, 5) == 1 and not simples:  # exponent intern
+                    text += f"^{random.randint(2, 4)}"
+                    inception -= 1
+            text += "(" + f"{dx(inception-1, opcions, simples=simples)}" + ")"
+
+        elif fx == 4:  # x^2 / sqrt
+            if random.choice([0, 0, 0, 1]) and not sensearrels:  # sqrt
+                if random.choice([0, 0, 1]):
+                    text = "\\sqrt[" + f"{random.randint(3, 5)}" + "]{" + f"{dx(inception-1, opcions, [-4], simples=simples)}" + "}"
+                else:
+                    text = "\\sqrt{" + f"{dx(inception-1, opcions, [-4], simples=simples)}" + "}"
+            else:  # pow
+                text = f"{dx(inception-1, opcions, [4], simples=simples)}"
+                if text == "x":
+                    text = "x^"
+                else:
+                    text = "(" + text + ")^"
+                if moneda():
+                    text += f"{random.randint(2, 7)}"
+                elif moneda():
+                    text += "{-" + f"{random.randint(2, 3)}" + "}"
+                else:
+                    text += "{\\frac{1}{" + f"{random.randint(2, 3)}" + "}}"
+
+        elif fx == 5:  # arctg / arcsin / arccos
+            opcions.remove(5)
+            if moneda():
+                text = "arctg"
+            elif moneda():
+                text = "arcsin"
+            else:
+                text = "arccos"
+            if random.randint(1, 9) == 1 and not simples:  # exponent intern
+                text += f"^{random.randint(2, 4)}"
+                inception -= 1
+            text += "(" + f"{dx(inception-1, opcions, [5], simples=simples)}" + ")"
+
+        elif fx == 6:  # f + g
+            opcions.remove(6)
+            t1 = f"{dx(inception-1, opcions, simples=simples)}"
+            if t1[0] != "-":
+                t1 = "+" + t1
+            text = f"{dx(inception-1, opcions, simples=simples)}{t1}"
+
+        elif fx == 7:  # f * g
+            opcions.remove(7)
+            if 8 in opcions:
+                opcions.remove(8)
+            t1 = f"{dx(inception-2, opcions, simples=simples)}"
+            for x in opcions:
+                if x in [5]:  # si vols treure més coses al segon factor, és aquí
+                    opcions.remove(x)
+
+            if inception < 3:
+                ss = [-7]
+            else:
+                ss = [-8]
+            t2 = f"{dx(inception-2, opcions, ss, simples=simples)}"
+            if t1 not in ["x", "-x", "2x", "-2x", "3x", "-3x"]:
+                t1 = f"({t1})"
+            if t2 != "x":
+                t2 = f"({t2})"
+            text = t1 + t2
+
+        elif fx == 8:  # f/g
+            opcions.remove(8)
+            if 7 in opcions:
+                opcions.remove(7)
+            if 5 in opcions:
+                opcions.remove(5)
+
+            if inception < 3:
+                if moneda():
+                    s1 = [-7]
+                    s2 = [-8]
+                else:
+                    s1 = [-8]
+                    s2 = [-7]
+            else:
+                s1 = []
+                s2 = []
+            t1 = f"{dx(inception-2, opcions, s1, simples=simples)}"
+            t2 = f"{dx(inception-2, opcions, s2, simples=simples)}"
+            text = "\\frac{" + t1 + "}{" + t2 + "}"
+
+    # Les sumes i multis les pot fer sempre que no hi ha f+g
+    if fx != 6:
+        n = 1
+        if not (simples and inception < 1):  # multiplica quelcom?
+            if random.randint(1, 10) == 1:
+                n = random.randint(2, 3*(inception+1))
+                if random.randint(1, 5) == 1:
+                    n = -n
+
+                if text[0] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+                    text = f"{n}\\cdot " + text
+                elif text[0] in ["x", "e"]:
+                    text = f"{n}" + text
+                elif text[0] == "-":
+                    text = f"{n}(" + text + ")"
+                else:
+                    text = f"{n}\\, " + text
+            elif random.randint(1, 5) == 1:
+                n = -1
+                if text[0] == "-":
+                    text = "-(" + text + ")"
+                else:
+                    text = "-" + text
+
+        if (random.randint(1, 5) == 1 or sumasegur) and not (simples and inception > 0):  # suma quelcom?
+            m = random.randint(2, 9)
+            if moneda():
+                m = 2*m
+                if moneda():
+                    m = 3*m
+                    if moneda():
+                        m = 4*m
+                        if moneda():
+                            m = 5*m
+            if random.randint(1, 5) == 1:
+                m = -m
+            if moneda():
+                if n > 0:
+                    text = f"{m}+" + text
+                else:
+                    text = f"{m}" + text
+            else:
+                if m > 0:
+                    text += f"+{m}"
+                else:
+                    text += f"{m}"
+    print(text)
+    return text
+
+
+
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - debugging
 
 p = "muldiv"

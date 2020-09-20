@@ -8,6 +8,7 @@ def genera(aleatoris=False):
     ex["eq"] = {}
     ex["pp"] = {}
     ex["succ"] = {}
+    ex["dx"] = {}
     if aleatoris:
         ex["en"]["suma1"] = g.comb(1, 3)
         ex["en"]["suma2"] = g.comb(2, 1)
@@ -39,6 +40,9 @@ def genera(aleatoris=False):
         # ex["succ"]["gdades"] = g.success(2, 3)
         ex["succ"]["extreure"] = g.success(1, 101, random.choice([1, 2, 3, 4]))
         ex["succ"]["gextreure"] = g.success(2, 101, random.choice([1, 2, 3, 4]))
+        ex["dx"]["simple1"] = g.dx(1, [1, 2, 3, 4, 5], simples=True)
+        ex["dx"]["simple2"] = g.dx(1, [1, 2, 3, 4, 5], simples=True)
+        ex["dx"]["cadena"] = g.dx(3, [1, 2, 3, 4, 5])
     else:
         ex["en"]["suma1"] = "3+7="
         ex["en"]["suma2"] = "6-8"
@@ -70,5 +74,8 @@ def genera(aleatoris=False):
         # ex["succ"]["gdades"] = "En una successió geomètrica, $a_1 = -3$, $a_{4} = -375$. Troba la raó $r$ de la successió."
         ex["succ"]["extreure"] = r"6, 12, 18, 24, 30, ...\  (a_{46}?)"
         ex["succ"]["gextreure"] = r"5, -25, 125, -625, 3125, ...\  (S_{8}?)"
+        ex["dx"]["simple1"] = "sin(x+12)"
+        ex["dx"]["simple2"] = r"2\cdot 7^{x}"
+        ex["dx"]["cadena"] = r"ln(-\sqrt{x}+x(6-3x)+10)+6"
 
     return ex

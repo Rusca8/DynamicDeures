@@ -30,9 +30,10 @@ def indexvar():
 @app.route("/equacions/", methods=["GET", "POST"])
 def equacions():
     if request.method == "POST":
-
-        g.equacions(request.form, solucions=False)  # genera el pdf amb latex
-
+        try:
+            g.equacions(request.form, solucions=False)  # genera el pdf amb latex
+        except:
+            return redirect("/latex_error/equacions")
         tele.feedback("eq", request.form)
         return redirect("/pdf/eq")
     else:
@@ -47,7 +48,7 @@ def combinades():
         except:
             return redirect("/latex_error/combinades")
 
-        tele.feedback("comb",request.form)
+        tele.feedback("comb", request.form)
         return redirect("/pdf/comb")
     else:
         return render_template("combinades.html")
@@ -94,6 +95,18 @@ def success():
         return render_template("successions.html")
 
 
+@app.route("/derivades/", methods=["GET", "POST"])
+def derivades():
+    if request.method == "POST":
+
+        g.derivades(request.form, solucions=False)
+
+        tele.feedback("dx", request.form)
+        return redirect("/pdf/derivades")
+    else:
+        return render_template("derivades.html")
+
+
 @app.route("/proves/", methods=["GET", "POST"])
 def proves():
     if request.method == "POST":
@@ -128,6 +141,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":
         return redirect("/static/pdfs/successions.pdf")
+    elif tema == "derivades":
+        return redirect("/static/pdfs/derivades.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

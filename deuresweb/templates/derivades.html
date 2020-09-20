@@ -1,0 +1,105 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Derivades...</h4>
+    <div class="form-group">
+        <label for="formQuinCurs">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opRD" aria-expanded="true" aria-controls="opRD">
+          <input type="checkbox" name="rd" autocomplete="off" id="rd" value="rd" checked> Regles de Derivació
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+<div class="collapse show mb-2" id="opRD">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Regles de Derivació</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDerivadesSimples"><b>Derivades simples</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qsimples" id="qs2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qsimples" id="qs6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qsimples" id="qs9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDerivadesCadena"><b>Regla de la cadena</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qcadena" id="qc2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qcadena" id="qc6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qcadena" id="qc9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

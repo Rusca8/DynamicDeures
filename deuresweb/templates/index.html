@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="alert alert-info alert-thin mb-3 mr-3" role="alert">
-  <b>Nou:</b> Equacions de segon grau amb més termes (opera i resol).
+  <b>Nou:</b> Derivades amb i sense regla de la cadena.
 </div>
 <h5>Benvinguda al generador automàtic de fitxes de matemàtiques que se m'ha acudit intentar fer!</h5>
 <p class="mb-3" id="debugscreen">Escull un tema i ens inventarem la fitxa... <i>(o pots xafardejar aquí a sota quins tipus d'exercicis hi ha)</i></p>
@@ -11,12 +11,13 @@
     <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/success/" role="button">Successions</a>
+    <a class="btn btn-sm btn-mini btn-secondary" href="/derivades/" role="button">Derivades</a>
 </p>
 <div class="heighter">
 <div class="card-columns fantasma collapse mr-3">
 
     <div class="card text-center"> <!-- corregit $$ per $ (MJ en display trepitja els botons) -->
-    <h5 class="card-header" id="eq">Equacions</h5>
+    <h5 class="card-header">Equacions <b id="eq"></b></h5>
         <div class="card-body">
             <p class="card-text mb-3">
                 Equacions de primer grau senzilles
@@ -78,7 +79,7 @@
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header" id="en">Operacions amb enters</h5>
+    <h5 class="card-header">Operacions amb enters <b id="en"></b></h5>
         <div class="card-body">
             <p class="card-text mb-3">
                 Sumes i restes
@@ -135,7 +136,7 @@
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header" id="omx">Operacions amb Més Xifres</h5>
+    <h5 class="card-header">Operacions amb Més Xifres <b id="omx"></b></h5>
         <div class="card-body">
             <p class="card-text mb-3">
                 Sumes (enteres i amb decimals)
@@ -183,7 +184,7 @@
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header" id="pp">Proporcionalitat</h5>
+    <h5 class="card-header">Proporcionalitat<b id="pp"></b></h5>
         <div class="card-body">
             <p class="card-text">
                 Problemes de proporcionalitat simple directa
@@ -200,7 +201,7 @@
     </div>
 
     <div class="card text-center">
-    <h5 class="card-header" id="succ">Successions</h5>
+    <h5 class="card-header">Successions<b id="succ"></b></h5>
         <div class="card-body">
             <p class="card-text">
                 Trobar terme n (aritmètiques i geomètriques)
@@ -220,6 +221,35 @@
             <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('succ');">Canvia els exemples</button>
         </div>
     </div>
+
+    <div class="card text-center">
+    <h5 class="card-header">Derivades<b id="dx"></b></h5>
+        <div class="card-body">
+            <p class="card-text">
+                Sense regla de la cadena
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["dx"]["simple1"] }}$
+                </div>
+                <div class="col-sm">
+                  ${{ ex["dx"]["simple2"] }}$
+                </div>
+              </div>
+            </div>
+            <p class="card-text">
+                Amb regla de la cadena
+            </p>
+            <div>
+                ${{ ex["dx"]["cadena"] }}$
+            </div>
+            <br>
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/derivades/" role="button">Crea una fitxa de Derivades</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('dx');">Canvia els exemples</button>
+        </div>
+    </div>
+
 </div>
 </div>
 {% endblock %}
