@@ -98,9 +98,10 @@ def success():
 @app.route("/derivades/", methods=["GET", "POST"])
 def derivades():
     if request.method == "POST":
-
-        g.derivades(request.form, solucions=False)
-
+        try:
+            g.derivades(request.form, solucions=False)
+        except:
+            return redirect("/latex_error/derivades")
         tele.feedback("dx", request.form)
         return redirect("/pdf/derivades")
     else:
