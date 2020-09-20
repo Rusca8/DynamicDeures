@@ -1571,6 +1571,9 @@ def quantesson(value, op):
         quantitats = [0, 3, 5, 7, 7, 14, 27]
     elif op in ["extreure", "gextreure"]:
         quantitats = [0, 3, 4, 8, 12, 29, 56]
+    # derivades
+    elif op in ["dx_simples", "dx_cadena"]:
+        quantitats = [0, 6, 9, 12, 18, 39, 81]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")
