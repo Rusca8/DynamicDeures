@@ -5,6 +5,7 @@ def genera(aleatoris=False):
     ex = {}
     ex["en"] = {}
     ex["omx"] = {}
+    ex["pow"] = {}
     ex["eq"] = {}
     ex["pp"] = {}
     ex["succ"] = {}
@@ -19,6 +20,14 @@ def genera(aleatoris=False):
         ex["en"]["divi1"] = g.comb(3, 4)
         ex["en"]["divi2"] = g.comb(3, 5)
         ex["en"]["divi3"] = g.comb(3, 6)
+        ex["pow"]["mexp1"] = g.powsqr(1, 1, 2)
+        ex["pow"]["mexp2"] = g.powsqr(1, 2, 3)
+        ex["pow"]["mbase1"] = g.powsqr(2, 1, 2)
+        ex["pow"]["mbase2"] = g.powsqr(2, 2, 3)
+        ex["pow"]["sq1"] = g.powsqr(103, 1, 2)
+        ex["pow"]["sq2"] = g.powsqr(103, 1, 3)
+        ex["pow"]["sqp1"] = g.powsqr(103, 2, 2)
+        ex["pow"]["sqp2"] = g.powsqr(103, 2, 3)
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["segoni1"] = g.eq(101, 1)
         ex["eq"]["segoni2"] = g.eq(102, 3)
@@ -53,6 +62,14 @@ def genera(aleatoris=False):
         ex["en"]["divi1"] = r"20\div 4"
         ex["en"]["divi2"] = r"-36\div 9="
         ex["en"]["divi3"] = r"-42\div (-7)="
+        ex["pow"]["mexp1"] = r"7^{8}\cdot 5^{8}"
+        ex["pow"]["mexp2"] = r"35^{7}\div 7^{7}\cdot (-8)^{7}"
+        ex["pow"]["mbase1"] = r"13^{-8}\cdot 13^{7}"
+        ex["pow"]["mbase2"] = r"5^{7}\cdot 5^{-6}\cdot 5^{5}"
+        ex["pow"]["sq1"] = r"\sqrt[3]{5}\cdot \sqrt[2]{2}"
+        ex["pow"]["sq2"] = r"\sqrt[2]{7}\cdot \sqrt[6]{4}\cdot \sqrt[3]{5}"
+        ex["pow"]["sqp1"] = r"\sqrt[3]{5^{5}}\cdot \sqrt[2]{6^{7}}"
+        ex["pow"]["sqp2"] = r"\sqrt[5]{4^{3}}\cdot \sqrt[2]{2^{4}}\cdot \sqrt[5]{3^{3}}"
         ex["eq"]["simple"] = "2x+5=7"
         ex["eq"]["segoni1"] = "x^2-9=0"
         ex["eq"]["segoni2"] = "x^2-7x=0"
@@ -76,6 +93,6 @@ def genera(aleatoris=False):
         ex["succ"]["gextreure"] = r"5, -25, 125, -625, 3125, ...\  (S_{8}?)"
         ex["dx"]["simple1"] = "sin(x+12)"
         ex["dx"]["simple2"] = r"2\cdot 7^{x}"
-        ex["dx"]["cadena"] = r"ln(-\sqrt{x}+x(6-3x)+10)+6"
+        ex["dx"]["cadena"] = r"-3\, \sqrt{log_2(arcsin(x))}"
 
     return ex

@@ -346,8 +346,8 @@ def powsqr(tipus, nivell=1, termes=2):
         if nivell == 1:  # multiplicant (exp amb signe)
             text = ""
             for x in range(termes):
-                b = random.randint(2, 6)
-                e = random.randint(2, 6)
+                b = random.randint(2, 7)
+                e = random.randint(2, 7)
                 if random.randint(1, 4) == 1:
                     e = -e
                 if x > 0:
@@ -362,17 +362,21 @@ def powsqr(tipus, nivell=1, termes=2):
         if nivell == 1:  # multiplicant, sense exponent
             text = ""
             for x in range(termes):
-                b = random.randint(2, 6)
+                b = random.randint(2, 7)
                 ind = random.randint(2, 6)
+                if x > 0:
+                    text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}" + "}"
         if nivell == 2:  # multiplicant, amb exponent
             text = ""
             for x in range(termes):
-                b = random.randint(2, 6)
+                b = random.randint(2, 7)
                 ind = random.randint(2, 6)
-                opcions = [2, 3, 4, 5, 6]
+                opcions = [2, 3, 4, 5, 6, 7]
                 opcions.remove(ind)
                 e = random.choice(opcions)
+                if x > 0:
+                    text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}^" + "{" + f"{e}" + "}" + "}"
     return text
 
@@ -1309,8 +1313,8 @@ for x in range(12):
     print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))
 """
 for x in range(6):
-    print(powsqr(103, 1, 2))
+    print(powsqr(103, 2, 2))
 
 for x in range(10):
-    print(powsqr(103, 1, 4))
+    print(powsqr(103, 2, 3))
 
