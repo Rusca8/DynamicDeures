@@ -76,7 +76,7 @@ def powsqr():
         except:
             return redirect("/latex_error/apilades")
 
-        tele.feedback("api", request.form)
+        tele.feedback("powsqr", request.form)
         return redirect("/pdf/powsqr")
     else:
         return render_template("powsqr.html")
