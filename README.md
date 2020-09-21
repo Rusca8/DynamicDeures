@@ -15,6 +15,9 @@ _Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](
 ## Temes implementats
 - Equacions
   - Senzilles de primer grau
+  - Segon grau
+    - Senzilles
+    - Polinòmiques
   - Sistemes lineals
     - Dues incògnites
     - Tres incògnites
@@ -30,9 +33,14 @@ _Llegeix això en altres idiomes: [Catalán (CA)](README.md), [Castellano (ES)](
   - Sumes
   - Restes
   - Multiplicacions
+- Potències i arrels
+  - Potències amb la mateixa base o exponent
+  - Arrels amb índex diferent (MCM)
 - Successions
   - Successions aritmètiques
   - Successions geomètriques
+- Derivades
+  - Regles de derivació (amb i sense cadena)
 
 ## Notes per desenvolupadors
 Per fer córrer PyLaTeX en local a l'ordinador necessitareu MacTeX o alguna cosa per l'estil (jo he aconseguit que funcioni amb MacTeX, que ocupa 6Gb, i no he sabut trobar res més petit que funcionés).

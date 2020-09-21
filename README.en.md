@@ -15,6 +15,9 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
 ## Implemented subjects
 - Equations
   - Simple lineal
+  - Quadratic
+    - Simple
+    - Polynomial
   - Lineal systems
     - Two unknowns
     - Three unknowns
@@ -30,9 +33,14 @@ _Read this in other languages: [Catalán (CA)](README.md), [Castellano (ES)](REA
   - Additions
   - Substractions
   - Multiplicacions
+- Powers and square roots
+  - Powers with the same base or exponent
+  - Roots with different index (MCM)
 - Sequences
   - Aritmetic sequences
   - Geometric sequences
+- Derivatives
+  - Rules of derivation (with and without chain)
 
 ## Notes for developers
 For PyLaTeX to run in your local machine you'll need MacTeX or something along the way (I got it to work with MacTeX, which is 6Gb, and couldn't make it work with anything smaller than that).
