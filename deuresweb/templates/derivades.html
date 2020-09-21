@@ -1,6 +1,5 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
-<div class="alert alert-info alert-sm" role="alert">Em falta ajustar quantitats... però ja un altre dia.</b></div>
 {% endblock %}
 {% block principals %}
     <h4 id="titolTema">Fitxa de Derivades...</h4>
@@ -66,6 +65,60 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
+            <label for="formGroupDerivadesMulDiv"><b>Multiplicació i divisió</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qmuldiv" id="qmd2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qmuldiv" id="qmd6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qmuldiv" id="qmd9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar quins tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-3">
+                          <input type="checkbox" name="p6" autocomplete="off" id="p6" value="p6"> f+g
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="p7" autocomplete="off" id="p7" value="p7" checked> f·g
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="p8" autocomplete="off" id="p8" value="p8" checked> f&#247;g
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
+
+        <div class="form-group mb-0 ml-2">
             <label for="formGroupDerivadesCadena"><b>Regla de la cadena</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
@@ -94,6 +147,45 @@
               </label>
             </div>
         </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupFuncions"><i>Triar quins tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-4 active">
+                          <input type="checkbox" name="fx1" autocomplete="off" id="fx1" value="fx1" checked> e<sup>x</sup>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx2" autocomplete="off" id="fx2" value="fx2" checked> sin
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx3" autocomplete="off" id="fx3" value="fx3" checked> log
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx4" autocomplete="off" id="fx4" value="fx4" checked> x<sup>2</sup>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx5" autocomplete="off" id="fx5" value="fx5" checked> arc
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-3 active">
+                          <input type="checkbox" name="fx6" autocomplete="off" id="fx6" value="fx6" checked> f+g
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx7" autocomplete="off" id="fx7" value="fx7" checked> f·g
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="fx8" autocomplete="off" id="fx8" value="fx8" checked> f&#247;g
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
 
       </div>
     </div>

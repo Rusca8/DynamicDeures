@@ -1231,11 +1231,28 @@ def derivades(opcions, solucions=False):
         rd = True
         qsimples = quantesson(opcions["qsimples"], "dx_simples")
         qcadena = quantesson(opcions["qcadena"], "dx_cadena")
+        qmuldiv = quantesson(opcions["qmuldiv"], "dx_muldiv")
     else:
         rd = False
         qsimples = 0
+        qmuldiv = 0
         qcadena = 0
-    print(f"Simples {qsimples}, Amb Cadena {qcadena}")
+
+    funcions = []
+    for x in range(1, 9):  # 1-8
+        if f"fx{x}" in opcions:
+            funcions.append(x)
+    if len(funcions) == 0:
+        funcions = list(range(1, 9))  # 1-8
+
+    print(f"Simples {qsimples}, Muldiv {qmuldiv} Amb Cadena {qcadena} || {funcions}")
+
+    propietats = []
+    for x in range(6, 9):  # 6-8 (sum mul div)
+        if f"p{x}" in opcions:
+            propietats.append(x)
+    if len(propietats) == 0:
+        propietats = list(range(7, 9))  # 7-8 (mul div)
 
     # PyLaTeX code
     geometry = margins()
@@ -1252,7 +1269,7 @@ def derivades(opcions, solucions=False):
 
     # preguntes
     if rd:  # aquí tots els botons grossos
-        if any([qsimples, qcadena]):  # aquí tots els tipus d'exercici
+        if any([qsimples, qmuldiv, qcadena]):  # aquí tots els tipus d'exercici
             begin(doc, 'questions')
 
             if rd:
@@ -1271,18 +1288,52 @@ def derivades(opcions, solucions=False):
                 end(doc, 'multicols')
                 end(doc, 'parts')
 
+            if qmuldiv != 0:
+                n = qmuldiv
+                question(doc, f"{2*n}")
+                t = "Deriva les següents "
+                if 6 in propietats:
+                    t += "sumes"
+                    if 7 in propietats and 8 in propietats:
+                        t += ", "
+                    elif len(propietats) > 1:
+                        t += "i "
+                if 7 in propietats:
+                    if 8 in propietats:
+                        t += "multiplicacions i divisions."
+                    else:
+                        t += "multiplicacions."
+                elif 8 in propietats:
+                    t += "divisions."
+                doc.append(t)
+
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 3):
+                        doc.append(NoEscape(r'$%s$' % gen.dx(2, [1, 2, 3, 4, 5, 6, 7, 8],
+                                                             simples=True, inici=random.choice(propietats))))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.dx(3, [1, 2, 3, 4, 5, 6, 7, 8],
+                                                             simples=True, inici=random.choice(propietats))))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
             if qcadena != 0:
                 n = qcadena
-                question(doc, f"{n}")
+                question(doc, f"{3*n}")
                 doc.append("Resol les següents derivades (amb regla de la cadena).")
                 begin(doc, 'parts')
-                begin(doc, 'multicols', 3)
+                begin(doc, 'multicols', 2)
                 for x in range(0, n):
                     part(doc)
                     if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.dx(2, [1, 2, 3, 4, 5, 6, 7, 8])))
+                        doc.append(NoEscape(r'$%s$' % gen.dx(2, funcions)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.dx(3, [1, 2, 3, 4, 5, 6, 7, 8])))
+                        doc.append(NoEscape(r'$%s$' % gen.dx(3, funcions)))
+                    print("funcions ara és ", funcions)
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1506,13 +1557,13 @@ def tematitol(tema="no"):
     elif tema == "comb":
         return "d'Operacions amb Enters"
     elif tema == "api":
-        return "Operacions amb Més Xifres"
+        return "d'Operacions amb Més Xifres"
     elif tema == "prop":
-        return "Proporcionalitat"
+        return "de Proporcionalitat"
     elif tema == "succ":
-        return "Successions"
+        return "de Successions"
     elif tema == "dx":
-        return "Derivades"
+        return "de Derivades"
     elif tema == "no":
         return "de Qui sap què"
     else:
@@ -1572,8 +1623,10 @@ def quantesson(value, op):
     elif op in ["extreure", "gextreure"]:
         quantitats = [0, 3, 4, 8, 12, 29, 56]
     # derivades
-    elif op in ["dx_simples", "dx_cadena"]:
+    elif op == "dx_simples":
         quantitats = [0, 6, 9, 12, 18, 39, 81]
+    elif op in ["dx_cadena", "dx_muldiv"]:
+        quantitats = [0, 4, 6, 8, 12, 26, 54]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")
@@ -1597,7 +1650,7 @@ def headfoot(doc, opcions, tema="no"):
         r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa %s\\ \large Matemàtiques - %s \scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}" % (
         tema, opcions["curs"],)))
     doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
-    doc.preamble.append(NoEscape(r"\footer{Total: \numpoints punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
+    doc.preamble.append(NoEscape(r"\footer{Total: \numpoints\ punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
 
     return
 

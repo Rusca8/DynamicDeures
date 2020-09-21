@@ -804,7 +804,10 @@ def prop(tipus, nivell=1):
     return "AQUEST TIPUS DE P NO EXISTEIX 42"
 
 
-def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
+def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, inici=0):
+    opcions = opcions[:]  # sense això estic passant la referència i afecta a fora de manera incontrolable
+    amaga = amaga[:]
+    print("opcions és", opcions)
     text = "x"
     sumasegur = False
     if -7 in amaga:
@@ -815,6 +818,11 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
             amaga.remove(-8)
             if moneda():
                 sumasegur = True
+    if -6 in amaga:
+        impedeixsuma = True
+        amaga.remove(-6)
+    else:
+        impedeixsuma = False
 
     if inception == 1:
         if 6 in opcions:
@@ -837,7 +845,15 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
             else:
                 amaga.remove(x)
 
-        fx = random.choice(opcions)
+        if inici != 0:
+            fx = inici
+            if fx not in opcions:
+                opcions.append(fx)
+        else:
+            if opcions:
+                fx = random.choice(opcions)
+            else:
+                fx = 0
         if amaga:  # retorno a la llista principal l'amagat
             opcions += amaga
             amaga = []
@@ -917,7 +933,7 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
             t1 = f"{dx(inception-1, opcions, simples=simples)}"
             if t1[0] != "-":
                 t1 = "+" + t1
-            text = f"{dx(inception-1, opcions, simples=simples)}{t1}"
+            text = f"{dx(inception-1, opcions, [-6], simples=simples)}{t1}"
 
         elif fx == 7:  # f * g
             opcions.remove(7)
@@ -984,16 +1000,19 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
                 else:
                     text = "-" + text
 
-        if (random.randint(1, 5) == 1 or sumasegur) and not (simples and inception > 0):  # suma quelcom?
+        if (random.randint(1, 5) == 1 or sumasegur) and not (simples and inception > 0) and not impedeixsuma:  # suma?
             m = random.randint(2, 9)
             if moneda():
-                m = 2*m
                 if moneda():
-                    m = 3*m
                     if moneda():
-                        m = 4*m
                         if moneda():
-                            m = 5*m
+                            m = random.randint(2, 1080)
+                        else:
+                            m = random.randint(2, 216)
+                    else:
+                        m = random.randint(2, 54)
+                else:
+                    m = random.randint(2, 18)
             if random.randint(1, 5) == 1:
                 m = -m
             if moneda():
@@ -1006,7 +1025,6 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False):
                     text += f"+{m}"
                 else:
                     text += f"{m}"
-    print(text)
     return text
 
 
