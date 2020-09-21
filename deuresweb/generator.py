@@ -1,4 +1,6 @@
-import random, math
+import math
+import random
+
 import enunciats as en
 
 
@@ -252,6 +254,127 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
         text = "42/42"
     return text
 
+
+def powsqr(tipus, nivell=1, termes=2):
+    text = "42^6"
+    if tipus == 1:  # potències, mateix exponent
+        if nivell == 1:  # multiplicant
+            text = ""
+            exp = random.randint(2, 9)
+            if random.randint(1, 4) == 4:
+                exp = -exp
+            if random.randint(1, 20) == 1:
+                exp = random.randint(300, 1458)  # mutació exp enorme
+            for x in range(termes):
+                if x > 0:
+                    text += r"\cdot "
+                if random.randint(1, 15) == 1:  # mutació 1^27482
+                    text += "1^{" + f"{random.randint(1, random.choice([9, 14958]))}" + "}"
+                elif random.randint(1, 15) == 1:
+                    text += f"{random.randint(2, random.choice([9, 9637]))}" + "^0"
+                else:
+                    base = f"{random.randint(2, 10)}"
+                    if random.randint(1, 4) == 4:
+                        base = f"(-{base})"
+                    text += f"{base}" + "^{" + f"{exp}" + "}"
+
+        elif nivell == 2:  # multiplicant i dividint
+            text = ""
+            exp = random.randint(2, 9)
+            if random.randint(1, 4) == 4:
+                exp = -exp
+            if random.randint(1, 20) == 1:
+                exp = random.randint(300, 1458)  # mutació exp enorme
+            bloc = ""
+            multigastada = False  # asseguro 1 div mínim
+            for x in range(termes):
+                if x % 3 == 0:  # primera
+                    a = random.randint(2, 5)
+                    if x != 0:
+                        text += "\\cdot "
+                else:
+                    b = random.randint(2, 9)
+                    if moneda() and not multigastada:
+                        if random.randint(1, 10) == 1:  # mutació 1^27482
+                            bloc += "\\cdot 1^{" + f"{random.randint(1,  random.choice([9, 14958]))}" + "}"
+                        elif random.randint(1, 10) == 1:
+                            bloc += f"\\cdot {random.randint(2, random.choice([9, 9637]))}" + "^0"
+                        else:
+                            if random.randint(1, 4) == 1:
+                                b = f"(-{b})"
+                            bloc += f"\\cdot {b}^" + "{" + f"{exp}" + "}"
+                        multigastada = True
+                    else:
+                        a *= b
+                        if random.randint(1, 4) == 1:
+                            b = f"(-{b})"
+                        bloc += f"\\div {b}^" + "{" + f"{exp}" + "}"
+                if x % 3 == 2 or x == (termes - 1):  # última
+                    text += f"{a}^" + "{" + f"{exp}" + "}" + bloc
+                    bloc = ""
+                    multigastada = False
+
+    elif tipus == 2:  # potències, mateixa base
+        if nivell == 1 or nivell == 2:  # multiplicant // mul i div
+            text = ""
+            base = random.randint(2, 14)
+            if random.randint(1, 4) == 1:
+                base = f"(-{base})"
+            if random.randint(1, 20) == 1:
+                base = random.randint(32, 265)  # mutació base enorme
+
+            for x in range(termes):
+                if x > 0:
+                    if nivell == 1 or moneda():
+                        text += r"\cdot "
+                    else:
+                        text += r"\div "
+                if random.randint(1, 15) == 1:  # mutació 1^27482
+                    text += "1^{" + f"{random.randint(1, random.choice([9, 14958]))}" + "}"
+                elif random.randint(1, 15) == 1:
+                    text += f"{random.randint(2, random.choice([9, 9637]))}" + "^0"
+                else:
+                    exp = random.randint(1, 10)
+                    if random.randint(1, 4) == 1:
+                        exp = -exp
+                    if exp == 1:
+                        text += f"{base}"
+                    else:
+                        text += f"{base}" + "^{" + f"{exp}" + "}"
+
+    elif tipus == 3:  # potències, MCM
+        if nivell == 1:  # multiplicant (exp amb signe)
+            text = ""
+            for x in range(termes):
+                b = random.randint(2, 6)
+                e = random.randint(2, 6)
+                if random.randint(1, 4) == 1:
+                    e = -e
+                if x > 0:
+                    text += "\\cdot"
+                text += f"{b}^" + "{" + f"{e}" + "}"
+
+    elif tipus == 101:  # arrels, mateix exponent
+        pass
+    elif tipus == 102:  # arrels, mateixa base
+        pass
+    elif tipus == 103:  # arrels, MCM
+        if nivell == 1:  # multiplicant, sense exponent
+            text = ""
+            for x in range(termes):
+                b = random.randint(2, 6)
+                ind = random.randint(2, 6)
+                text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}" + "}"
+        if nivell == 2:  # multiplicant, amb exponent
+            text = ""
+            for x in range(termes):
+                b = random.randint(2, 6)
+                ind = random.randint(2, 6)
+                opcions = [2, 3, 4, 5, 6]
+                opcions.remove(ind)
+                e = random.choice(opcions)
+                text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}^" + "{" + f"{e}" + "}" + "}"
+    return text
 
 def eq(tipus, nivell=1):  # de moment tot (2,1)
     x = 1
@@ -689,7 +812,7 @@ def systeq_text(a, b, c):
     return ax + by + f'={c}'
 
 
-def systeq3_text (a,b,c,d):
+def systeq3_text (a, b, c, d):
     if a == 1:
         ax = 'x'
     elif a == -1:
@@ -1185,3 +1308,9 @@ print("Digues si les següents successions són aritmètiques o geomètriques,\n
 for x in range(12):
     print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))
 """
+for x in range(6):
+    print(powsqr(103, 1, 2))
+
+for x in range(10):
+    print(powsqr(103, 1, 4))
+

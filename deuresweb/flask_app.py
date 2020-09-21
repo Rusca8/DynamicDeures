@@ -68,6 +68,20 @@ def apilades():
         return render_template("apilades.html")
 
 
+@app.route("/powsqr/", methods=["GET", "POST"])
+def powsqr():
+    if request.method == "POST":
+        try:
+            g.powsqr(request.form, solucions=False)
+        except:
+            return redirect("/latex_error/apilades")
+
+        tele.feedback("api", request.form)
+        return redirect("/pdf/powsqr")
+    else:
+        return render_template("powsqr.html")
+
+
 @app.route("/proporcionalitat/", methods=["GET", "POST"])
 def proporcionalitat():
     if request.method == "POST":
@@ -138,6 +152,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/proves.pdf")
     elif tema == "apilades":
         return redirect("/static/pdfs/apilades.pdf")
+    elif tema == "powsqr":
+        return redirect("/static/pdfs/powsqr.pdf")
     elif tema == "proporcionalitat":
         return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":

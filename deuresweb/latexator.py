@@ -854,6 +854,133 @@ def proporcionalitat(opcions, solucions=False):
     return
 
 
+def powsqr(opcions, solucions=False):
+    tema = "powsqr"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "pot" in opcions:
+        pot = True
+        qmexp = quantesson(opcions["qmexp"], "p_mexp")
+        qmbase = quantesson(opcions["qmbase"], "p_mbase")
+    else:
+        pot = False
+        qmexp = 0
+        qmbase = 0
+    print(f"Mateix exp {qmexp}, Mateixa base {qmbase}")
+
+    if "sqrt" in opcions:
+        sqrt = True
+        qarrels = quantesson(opcions["qarrels"], "arrels")
+        qearrels = quantesson(opcions["qearrels"], "earrels")
+    else:
+        pot = False
+        qarrels = 0
+        qearrels = 0
+    print(f"Arrels s/ exp {qearrels}, Arrels amb exp {qmbase}")
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if pot or sqrt:
+        if any([qmexp, qmbase, qarrels, qearrels]):
+            begin(doc, 'questions')
+
+            if pot:
+                bloctitle(doc, "Potències")
+
+            if qmexp:
+                n = qmexp
+                question(doc, f"{n}")
+                doc.append("Expressa com un sol exponent.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(1, 1, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(1, 2, 3)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qmbase:
+                n = qmbase
+                question(doc, f"{n}")
+                doc.append("Expressa com un sol exponent.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(2, 1, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(2, 2, 3)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if sqrt:
+                bloctitle(doc, "Arrels")
+
+            if qarrels:
+                n = qarrels
+                question(doc, f"{n}")
+                doc.append("Expressa com una sola arrel.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 1, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 1, 3)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qearrels:
+                n = qearrels
+                question(doc, f"{n}")
+                doc.append("Expressa com una sola arrel.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 2, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 2, 3)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 def successions(opcions, solucions=False):
     tema = "succ"
 
@@ -1541,6 +1668,8 @@ def temallarg(tema="no"):
         return "combinades"
     elif tema == "api":
         return "apilades"
+    elif tema == "powsqr":
+        return "powsqr"
     elif tema == "prop":
         return "proporcionalitat"
     elif tema == "succ":
@@ -1558,6 +1687,8 @@ def tematitol(tema="no"):
         return "d'Operacions amb Enters"
     elif tema == "api":
         return "d'Operacions amb Més Xifres"
+    elif tema == "powsqr":
+        return "de Potències i Arrels"
     elif tema == "prop":
         return "de Proporcionalitat"
     elif tema == "succ":
@@ -1595,6 +1726,9 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 9, 12, 28, 64]
     elif op == "v_dmultis":
         quantitats = [0, 3, 6, 9, 12, 24, 64]
+    # potències i arrels
+    elif op in ["p_mexp", "p_mbase" ,"arrels", "earrels"]:
+        quantitats = [0, 6, 9, 12, 18, 39, 81]
     # equacions
     elif op in ["simples", "dsimples"]:
         quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
