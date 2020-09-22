@@ -60,6 +60,15 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
         qsdivis = 0
     print(f"A/B = {qdivis}, A/(-B) = {qsmultis}")
 
+    if "combinades" in opcions:
+        combis = True
+        qcombis = quantesson(opcions["qcombis"], "combis")
+    else:
+        print("eis")
+        combis = False
+        qcombis = 0
+    print(f"combis = {qcombis}")
+
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
     # PyLaTeX code
@@ -77,12 +86,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
 
     # preguntes
 
-    if sumes or multis or divis:
-        if any([qsumes, qpsumes, qmultis, qsmultis, qdivis, qsdivis]):
+    if sumes or multis or divis or combis:
+        if any([qsumes, qpsumes, qmultis, qsmultis, qdivis, qsdivis, qcombis]):
             begin(doc, 'questions')
 
             if sumes:
-
                 bloctitle(doc, "Sumes i restes amb enters")
 
                 if qsumes != 0:
@@ -102,7 +110,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
 
                 pagebreak(doc, 3)
 
-                if qpsumes != 0:
+                if qpsumes:
                     n = qpsumes
                     question(doc, f"{n // 2}")
                     doc.append("Calcula les següents sumes i restes amb parèntesis.")
@@ -119,6 +127,8 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
 
                 if qsumes == 0 and qpsumes == 0:
                     doc.append("Que diu que en vol, però no en vol.")
+
+
 
             pagebreak(doc, 2)
 
@@ -211,6 +221,33 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
 
                 if qmultis == 0 and qdivis == 0 and qsmultis == 0 and qsdivis == 0:
                     doc.append("Potser que triïs alguna cosa... (o no diguis que vols multiplicar i dividir)")
+
+            if combis:
+                bloctitle(doc, "Operacions combinades")
+
+            if qcombis:
+                n = qcombis
+                question(doc, f"{n}")
+                doc.append("Calcula les següents operacions combinades.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', "2")
+                for x in range((n * 2) // 3):
+                    part(doc)
+                    if x < n // 3:
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=False)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=True)))
+                    space(doc, "1cm")
+                end(doc, "multicols")
+                space(doc, "0.5cm")
+                for x in range(n - ((n * 2) // 3)):
+                    part(doc)
+                    if x < n // 6:
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=False)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=True)))
+                    space(doc, "1cm")
+                end(doc, 'parts')
 
             end(doc, 'questions')
         else:
@@ -1713,6 +1750,8 @@ def quantesson(value, op):
         quantitats = [0, 8, 20, 32, 48, 104, 200]
     elif op in ["smultis", "sdivis"]:
         quantitats = [0, 8, 15, 27, 42, 87, 174]
+    elif op == "combis":
+        quantitats = [0, 3, 6, 9, 9, 19, 41]
     # més xifres
     elif op == "v_sumes":
         quantitats = [0, 4, 8, 12, 16, 35, 64]

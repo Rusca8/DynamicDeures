@@ -97,6 +97,102 @@ def comb(tipus, nivell=1, nums=1):
     return text
 
 
+def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
+    text = "42+6·7"
+    maxn = 10
+    if out == 0:
+        out = inception
+
+    if inception < 1:
+        inception = 0
+        text = f"{num}"
+    else:
+        if op == 0:  # aleatori
+            opcions = [1, 2, 3]
+            muldivscore = len(divisors(num))
+            if muldivscore == 1:  # num primers més sovint suma
+                opcions += [1, 1]
+                if 3 in opcions:
+                    opcions.remove(2)
+                    opcions.append(3)
+            elif muldivscore > 3 or num == 0:  # num amb molts divisors més sovint mul div
+                opcions += [2, 2, 3, 3]
+
+            op = random.choice(opcions)  # sum mul div
+
+        if op == 1:  # suma
+            a = random.randint(1, maxn * inception)
+            if random.choice([0, 0, 1]):
+                a = -a
+            if a == num:
+                if a == 1 or moneda():
+                    a += 1
+                else:
+                    a -= 1
+
+            b = num - a # n = a + b
+
+            t1 = f"{mixcomb(a, inception-1, 0, 1, doblesigne, out)}"
+            t2 = f"{mixcomb(b, inception-1, 0, 1, doblesigne, out)}"
+            if t2[0] == "-":
+                if doblesigne and random.randint(1, 5) == 1:  # A+(-B) / A-B
+                    text = f"{t1}+({t2})"
+                else:
+                    text = f"{t1}{t2}"
+            else:
+                if doblesigne and random.randint(1, 5) == 1 and t2 != 0:  # A-(-B) / A+B
+                    text = f"{t1}-(-{t2})"
+                else:
+                    text = f"{t1}+{t2}"
+            if previ in [2, 3]:
+                text = f"({text})"
+
+        elif op == 2:  # multi
+            if inception == 1 and num in [-1, 1]:  # evito 1*1
+                text = f"{num}"
+            else:
+                if num == 0:
+                    a = random.randint(1, maxn*inception)
+                else:
+                    a = random.choice(divisors(abs(num)))
+                if random.choice([0, 0, 1]):
+                    a = -a
+                if moneda():
+                    b = a
+                    a = num // b
+                else:
+                    b = num // a
+                t1 = f"{mixcomb(a, inception-1, 0, 2, doblesigne, out)}"
+                t2 = f"{mixcomb(b, inception-1, 0, 2, doblesigne, out)}"
+                if t2[0] == "-":  # ±A*(-B)
+                    text = f"{t1}\\cdot ({t2})"
+                else:  # ±A*B
+                    text = f"{t1}\\cdot {t2}"
+
+            if previ == 3:
+                text = f"({text})"
+
+        elif op == 3:  # divi
+            b = random.randint(2, maxn // 2)
+            if random.choice([0, 0, 1]):
+                b = -b
+            a = num * b
+
+            t1 = f"{mixcomb(a, inception-1, 0, 3, doblesigne, out)}"
+            t2 = f"{mixcomb(b, inception-1, 0, 3, doblesigne, out)}"
+            if t2[0] == "-":  # ±A:(-B)
+                text = f"{t1}:({t2})"
+            else:  # ±A:B
+                text = f"{t1}:{t2}"
+            if previ == 3:
+                text = f"({text})"
+
+    if inception == out:
+        return squarebracketer(text)
+    else:
+        return text
+
+
 def taules(taula, div=False):
     a = random.randint(1, 10)
     if div:
@@ -106,6 +202,51 @@ def taules(taula, div=False):
             return fr'{taula}\times {a}='
         else:
             return fr'{a}\times {taula}='
+
+
+def divisors(num):
+    div = [1]
+    for x in range(2, isqrt(num)+1):
+        if num % x == 0:
+            div.append(x)
+    if len(div) > 1:
+        div.remove(1)
+    return div
+
+
+def isqrt(n):  # newton (from stackoverflow)
+    x = n
+    y = (x + 1) // 2
+    while y < x:
+        x = y
+        y = (x + n // x) // 2
+    return x
+
+
+def squarebracketer(text):
+    bracketable = []
+    inception = 0
+    matrioska = False
+    for x in range(len(text)):
+        if text[x] == "(":
+            if inception == 0:
+                bracketable.append([x, -1])
+            else:
+                matrioska = True
+            inception += 1
+        elif text[x] == ")":
+            inception -= 1
+            if inception == 0:
+                if matrioska:
+                    bracketable[-1][1] = x
+                else:
+                    del bracketable[-1]
+                matrioska = False
+    for x in reversed(bracketable):
+        text = text[:x[1]] + "\\rbrack" + text[x[1]+1:]
+        text = text[:x[0]] + "\\lbrack" + text[x[0] + 1:]
+
+    return text
 
 
 def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
@@ -1311,10 +1452,12 @@ print("Digues si les següents successions són aritmètiques o geomètriques,\n
       "i calcula'n la distància o raó en cada cas.")
 for x in range(12):
     print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))
-"""
+
 for x in range(6):
     print(powsqr(103, 2, 2))
 
 for x in range(10):
     print(powsqr(103, 2, 3))
+"""
 
+print(mixcomb(40, 3, op=random.choice([1, 2, 3])))
