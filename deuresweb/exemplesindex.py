@@ -20,6 +20,7 @@ def genera(aleatoris=False):
         ex["en"]["divi1"] = g.comb(3, 4)
         ex["en"]["divi2"] = g.comb(3, 5)
         ex["en"]["divi3"] = g.comb(3, 6)
+        ex["en"]["combi"] = g.mixcomb(random.randint(-10, 20), 3, doblesigne=True)
         ex["pow"]["mexp1"] = g.powsqr(1, 1, 2)
         ex["pow"]["mexp2"] = g.powsqr(1, 2, 3)
         ex["pow"]["mbase1"] = g.powsqr(2, 1, 2)
@@ -62,6 +63,7 @@ def genera(aleatoris=False):
         ex["en"]["divi1"] = r"20\div 4"
         ex["en"]["divi2"] = r"-36\div 9="
         ex["en"]["divi3"] = r"-42\div (-7)="
+        ex["en"]["combi"] = r"(6+32):\lbrack-6-(-8)\rbrack-\lbrack-(1+(-64)):(-6+3)\rbrack"
         ex["pow"]["mexp1"] = r"7^{8}\cdot 5^{8}"
         ex["pow"]["mexp2"] = r"35^{7}\div 7^{7}\cdot (-8)^{7}"
         ex["pow"]["mbase1"] = r"13^{-8}\cdot 13^{7}"
