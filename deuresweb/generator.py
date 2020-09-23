@@ -34,7 +34,7 @@ def comb(tipus, nivell=1, nums=1):
         if nivell == 1 or nivell == 2:  # A positiva, sense -(-B) || amb -(-B)
             a = random.randint(1, 10*nums)
             b = random.randint(-10*nums, 10*nums)
-            if b>0:
+            if b > 0:
                 text = f'(+{b})'
                 if moneda():
                     text = f'{a}+' + text + "="
@@ -553,6 +553,7 @@ def powsqr(tipus, nivell=1, termes=2):
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}^" + "{" + f"{e}" + "}" + "}"
     return text
 
+
 def eq(tipus, nivell=1):  # de moment tot (2,1)
     x = 1
     text = "x=42"
@@ -761,7 +762,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             if nivell == 3:
                 a = random.randint(-3, 3)
                 if a == 0:
-                    a = random.choice([-1, 1])
+                    a = random.choice([-2, 2])
             else:
                 a = random.choice([-1, 1])
             b = a * (-x1-x2)
@@ -913,9 +914,9 @@ def sisteq(tipus, nivell=1, nums=1):
                     coefs[n] = -coefs[n]
             if round(coefs[0]*1./coefs[2], 7) == round(coefs[1]*1./coefs[3], 7):  # crec que això evita SCI
                 coefs[0] = - coefs[0]
-            if nivell == 1:
+            if nivell == 1:  # la primera x sense coef
                 coefs[0] = 1
-            elif nivell == 2:
+            elif nivell == 2:  # alguna incògnita unitària
                 if not any(n in [1, -1] for n in coefs):
                     coefs[random.randint(0, 3)] = random.choice([1, -1])
 

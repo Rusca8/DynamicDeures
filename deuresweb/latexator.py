@@ -15,7 +15,9 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
     if "sumes" in opcions:
         sumes = True
         qsumes = quantesson(opcions["qsumes"], "sumes")
+        fpos = quantesvariant(opcions["fpos"])
         qpsumes = quantesson(opcions["qpsumes"], "psumes")
+        noneg = quantesvariant(opcions["noneg"])
     else:
         sumes = False
         qsumes = 0
@@ -33,6 +35,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
         if len(taules) == 0:
             taules = list(range(1, 11))
         print("M.Taules: ", taules)
+        nonegm = quantesvariant(opcions["nonegm"])
 
     else:
         multis = False
@@ -54,6 +57,8 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
             if len(dtaules) == 0:
                 dtaules = list(range(1, 11))
         print("D.Taules: ", dtaules)
+        nonegd = quantesvariant(opcions["nonegd"])
+
     else:
         divis = False
         qdivis = 0
@@ -102,14 +107,16 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     n = qsumes
                     question(doc, f"{n // 4}")
                     doc.append("Calcula les següents sumes i restes sense parèntesis.")
+                    var = (n * fpos) // 4  # quantitat de punts amb la variant
                     begin(doc, 'parts')
                     begin(doc, "multicols", "4")
-                    for x in range(0, n // 4):
-                        uncalcul(doc, [1, 1], "0.2cm")  # resultat positiu
-                    for x in range(0, n // 4):
-                        uncalcul(doc, [1, 2], "0.2cm")  # a positiva
-                    for x in range(0, n // 2):
-                        uncalcul(doc, [1, 3], "0.2cm")  # normal
+                    for x in range(n):
+                        if x < var:
+                            uncalcul(doc, [1, 1], "0.2cm")  # resultat positiu (proporció escollida)
+                        elif x < (n + var) // 2:
+                            uncalcul(doc, [1, 2], "0.2cm")  # a positiva (meitat de la resta
+                        else:
+                            uncalcul(doc, [1, 3], "0.2cm")  # normal
                     end(doc, "multicols")
                     end(doc, 'parts')
 
@@ -119,14 +126,16 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     n = qpsumes
                     question(doc, f"{n // 2}")
                     doc.append("Calcula les següents sumes i restes amb parèntesis.")
+                    var = (n * noneg) // 4  # quantitat de punts amb la variant
                     begin(doc, 'parts')
                     begin(doc, "multicols", "3")
-                    for x in range(0, n // 3):
-                        uncalcul(doc, [2, 1], "0.2cm")  # a positiva
-                    for x in range(0, n // 3):
-                        uncalcul(doc, [2, 2], "0.2cm")  # no doble neg
-                    for x in range(0, n // 3):
-                        uncalcul(doc, [2, 3], "0.2cm")  # normal
+                    for x in range(n):
+                        if x < var:
+                            uncalcul(doc, [2, 1], "0.2cm")  # sense doble neg
+                        elif x < (n + var) // 2:
+                            uncalcul(doc, [2, 2], "0.2cm")  # a positiva
+                        else:
+                            uncalcul(doc, [2, 3], "0.2cm")  # normal
                     end(doc, "multicols")
                     end(doc, 'parts')
 
@@ -200,26 +209,28 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                         begin(doc, 'parts')
                         begin(doc, "multicols", "3")
 
-                        if qsmultis != 0:
+                        if qsmultis:
                             n = qsmultis
+                            var = (n * nonegm) // 4
                         else:
                             n = qsdivis
+                            var = (n * nonegd) // 4
 
-                        for x in range(0, n // 2):  # meitat sense doble negatiu
-                            if qsmultis != 0 and not qsdivis != 0:
-                                uncalcul(doc, [3, 2], "0,2cm")  # mult
-                            elif qsdivis != 0 and not qsmultis != 0:
-                                uncalcul(doc, [3, 5], "0,2cm")  # div
+                        for x in range(n):
+                            if x < var:
+                                if qsmultis and not qsdivis:
+                                    uncalcul(doc, [3, 2], "0,2cm")  # mult
+                                elif qsdivis and not qsmultis:
+                                    uncalcul(doc, [3, 5], "0,2cm")  # div
+                                else:
+                                    uncalcul(doc, [3, random.choice([2, 5])], "0,2cm")  # mult i div
                             else:
-                                uncalcul(doc, [3, random.choice([2, 5])], "0,2cm")  # mult i div
-
-                        for x in range(0, n // 2):
-                            if qsmultis != 0 and not qsdivis != 0:
-                                uncalcul(doc, [3, 3], "0,2cm")  # mult
-                            elif qsdivis != 0 and not qsmultis != 0:
-                                uncalcul(doc, [3, 6], "0,2cm")  # div
-                            else:
-                                uncalcul(doc, [3, random.choice([3, 6])], "0,2cm")  # mult i div
+                                if qsmultis and not qsdivis:
+                                    uncalcul(doc, [3, 3], "0,2cm")  # mult
+                                elif qsdivis and not qsmultis:
+                                    uncalcul(doc, [3, 6], "0,2cm")  # div
+                                else:
+                                    uncalcul(doc, [3, random.choice([3, 6])], "0,2cm")  # mult i div
 
                         end(doc, "multicols")
                         end(doc, 'parts')
@@ -603,6 +614,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         primer = True
         qsimples = quantesson(opcions["qsimples"], "simples")
         qdsimples = quantesson(opcions["qdsimples"], "dsimples")
+        noneg = quantesvariant(opcions["noneg"])
     else:
         primer = False
         qsimples = 0
@@ -613,6 +625,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         segon = True
         qincomps = quantesson(opcions["qincomps"], "incomps")
         qcompletes = quantesson(opcions["qcompletes"], "completes")
+        noa = quantesvariant(opcions["noa"])
         qpolis = quantesson(opcions["qpolis"], "polis")
     else:
         segon = False
@@ -624,6 +637,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     if "sistemes" in opcions:
         sistemes = True
         qsist = quantesson(opcions["qsist"], "sistemes")
+        nocoef = quantesvariant(opcions["nocoef"])
     else:
         sistemes = False
         qsist = 0
@@ -632,6 +646,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     if "sistemes3" in opcions:
         sistemes3 = True
         qsist3 = quantesson(opcions["qsist3"], "sistemes3")
+        nocoef3 = quantesvariant(opcions["nocoef3"])
     else:
         sistemes3 = False
         qsist3 = 0
@@ -680,11 +695,12 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = qdsimples
                 question(doc, f"{qdsimples}")
                 doc.append("Resol les següents equacions de primer grau (amb coeficient).")
+                var = (n * noneg) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
-                for x in range(0, n):
+                for x in range(n):
                     part(doc)
-                    if x < n // 2:
+                    if x < var:
                         doc.append(NoEscape(r'$%s$' % gen.eq(2, 2)))  # positiu
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.eq(2, 3)))  # enter
@@ -722,16 +738,18 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = qcompletes
                 question(doc, f"{n}")
                 doc.append("Resol les següents equacions de segon grau (completes).")
+                var = (n * noa) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
                 for x in range(0, n):
                     part(doc)
-                    if x < n // 4:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 1)))
-                    elif x < n * 3 // 4:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 2)))
+                    if x < var:
+                        if x < (var // 2) or x == 0:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(103, 1)))  # A = 1, ordenada
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(103, 2)))  # A = ±1
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(103, random.choice([2, 3]))))
+                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 3)))  # normal
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -758,15 +776,17 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = qsist
                 question(doc, f"{n * 2}")
                 doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
+                var = (n * nocoef) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
                 for x in range(0, n):
                     part(doc)
-                    if x < n // 3:
-                        doc.append(NoEscape(
-                            r'$%s$' % gen.sisteq(1, 1)))  # pels sistemes (per la clau de l'esquerra) cal msmath
-                    elif x < 2 * n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(1, 2)))
+                    if x < var:
+                        if x < min(var // 3, 3) or x == 0:
+                            doc.append(NoEscape(
+                                r'$%s$' % gen.sisteq(1, 1)))  # pels sistemes (per la clau de l'esquerra) cal msmath
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.sisteq(1, 2)))
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.sisteq(1, 3)))
                     space(doc, "1.6cm")
@@ -781,16 +801,19 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = qsist3
                 question(doc, f"{n * 5}")
                 doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
+                var = (n * nocoef3) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
-                for x in range(0, n):
+                for x in range(n):
                     part(doc)
-                    if x < n // 4 or n == 0:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 1)))  # escalonat, x a dalt
-                    elif x < n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 2)))  # escalonat, x on sigui
-                    elif x < 2 * n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 3)))  # un coeficient 1
+                    if x < var:
+                        if x < (var * 2 // 3) or x == 0:
+                            if x < min((var // 3), 3) or x == 0:
+                                doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 1)))  # escalonat, x a dalt
+                            else:
+                                doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 2)))  # escalonat, x on sigui
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 3)))  # un coeficient 1
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 4)))  # com sigui
                     space(doc, "0.5cm")
@@ -1809,6 +1832,19 @@ def quantesson(value, op):
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")
     return quantitats[n]
+
+
+def quantesvariant(valor):
+    if valor == "poques":
+        return 1
+    elif valor == "meitat":
+        return 2
+    elif valor == "moltes":
+        return 3
+    elif valor == "totes":
+        return 4
+    else:
+        return 0
 
 
 # *************************** Common Blocks ******************************* #

@@ -1,6 +1,6 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
-<div class="alert alert-info alert-sm" role="alert">Funcionen els botons grisos, les taules de multiplicar i dividir, i les opcions d'operacions combinades.</div>
+<div class="alert alert-info alert-sm" role="alert">Si hi ha multiplicacions i divisions alhora, de moment les barreja (però pots triar taules diferents per les divisions).</div>
 {% endblock %}
 {% block principals %}
   <h4 id="titolTema">Fitxa d'Operacions amb Enters...</h4>
@@ -85,7 +85,7 @@
             </div>
         </div>
         <div class="form-group mb-1 ml-4">
-            <label for="formResultatPositiu"><i>Forçar resultat positiu?</i></label>
+            <label for="formResultatPositiu"><i>Forçar resultat positiu? ✨</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="fpos" id="fpos0" value="no" autocomplete="off"> no
@@ -135,7 +135,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formDobleNegatiu"><i>Evitar doble negatiu?</i></label>
+            <label for="formDobleNegatiu"><i>Evitar doble negatiu? ✨</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="noneg" id="noneg0" value="no" autocomplete="off"> no
@@ -258,7 +258,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formMultiDobleNegatiu"><i>Evitar doble negatiu?</i></label>
+            <label for="formMultiDobleNegatiu"><i>Evitar doble negatiu? ✨</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="nonegm" id="nonegm0" value="no" autocomplete="off"> no
@@ -318,11 +318,11 @@
             <div class="form-group mb-1 ml-2">
                 <label for="formDiviDobleNegatiu"><i>On les vols?</i></label>
                 <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-                  <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
-                    <input type="radio" name="ondivis" id="apart" value="apart" autocomplete="off"> a part
+                  <label class="btn btn-outline-dark btn-sm py-0 btn-mini disabled">
+                    <input type="radio" name="ondivis" id="apart" value="apart" autocomplete="off" disabled> a part
                   </label>
-                  <label class="btn btn-outline-dark btn-sm py-0 btn-mini">
-                    <input type="radio" name="ondivis" id="seguit" value="seguit" autocomplete="off"> seguit
+                  <label class="btn btn-outline-dark btn-sm py-0 btn-mini disabled">
+                    <input type="radio" name="ondivis" id="seguit" value="seguit" autocomplete="off" disabled> seguit
                   </label>
                   <label class="btn btn-outline-dark btn-sm py-0 btn-mini active">
                     <input type="radio" name="ondivis" id="barrejat" value="barrejat" autocomplete="off" checked> barrejat
@@ -428,7 +428,7 @@
             </div>
 
             <div class="form-group mb-1 ml-4">
-                <label for="formDiviDobleNegatiu"><i>Evitar doble negatiu?</i></label>
+                <label for="formDiviDobleNegatiu"><i>Evitar doble negatiu? ✨</i></label>
                 <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                     <input type="radio" name="nonegd" id="nonegd0" value="no" autocomplete="off"> no
