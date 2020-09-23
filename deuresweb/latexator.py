@@ -63,6 +63,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
     if "combinades" in opcions:
         combis = True
         qcombis = quantesson(opcions["qcombis"], "combis")
+        ops = [1, 2, 3]
+        if "op4" in opcions:
+            ops += [4]
+        if "op5" in opcions:
+            ops += [5]
     else:
         print("eis")
         combis = False
@@ -234,18 +239,18 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                 for x in range((n * 2) // 3):
                     part(doc)
                     if x < n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=False)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=False, ops=ops)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=True)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=True, ops=ops)))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 space(doc, "0.5cm")
                 for x in range(n - ((n * 2) // 3)):
                     part(doc)
                     if x < n // 6:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=False)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=False, ops=ops)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=True)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=True, ops=ops)))
                     space(doc, "1cm")
                 end(doc, 'parts')
 

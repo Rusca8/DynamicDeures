@@ -97,7 +97,9 @@ def comb(tipus, nivell=1, nums=1):
     return text
 
 
-def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
+def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 3], hide=[]):
+    ops = ops[:]  # operacions seleccionades al formulari
+    quadrats = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]
     text = "42+6·7"
     maxn = 10
     if out == 0:
@@ -105,7 +107,23 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
 
     if inception < 1:
         inception = 0
-        text = f"{num}"
+        if (4 in ops and not (4 in hide)) and (num in list(range(1, 12)) and moneda()):
+            text = "\\sqrt{" + f"{pow(num, 2)}" + "}"
+        elif (5 in ops and not (5 in hide)) and (num in quadrats):
+            text = f"{isqrt(num)}"
+            if num == 1:
+                if random.choice([1, 1, 0]):
+                    text = "1"
+                else:
+                    text = "(-1)^2"
+            else:
+                if moneda():
+                    text = "{" + text
+                else:
+                    text = "{(-" + text + ")"
+                text = text + "}^2"
+        else:
+            text = f"{num}"
     else:
         if op == 0:  # aleatori
             opcions = [1, 2, 3]
@@ -118,7 +136,12 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
             elif muldivscore > 3 or num == 0:  # num amb molts divisors més sovint mul div
                 opcions += [2, 2, 3, 3]
 
-            op = random.choice(opcions)  # sum mul div
+            if (5 in ops and not (5 in hide)) and (num in quadrats):
+                op = 5
+            elif (4 in ops and not (4 in hide)) and (num in list(range(1, 12)) and random.choice([0, 0, 1])):
+                op = 4  # sqrt
+            else:
+                op = random.choice(opcions)  # sum mul div
 
         if op == 1:  # suma
             a = random.randint(1, maxn * inception)
@@ -130,10 +153,10 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
                 else:
                     a -= 1
 
-            b = num - a # n = a + b
+            b = num - a  # n = a + b
 
-            t1 = f"{mixcomb(a, inception-1, 0, 1, doblesigne, out)}"
-            t2 = f"{mixcomb(b, inception-1, 0, 1, doblesigne, out)}"
+            t1 = f"{mixcomb(a, inception-1, 0, 1, doblesigne, out, ops)}"
+            t2 = f"{mixcomb(b, inception-1, 0, 1, doblesigne, out, ops)}"
             if t2[0] == "-":
                 if doblesigne and random.randint(1, 5) == 1:  # A+(-B) / A-B
                     text = f"{t1}+({t2})"
@@ -162,8 +185,8 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
                     a = num // b
                 else:
                     b = num // a
-                t1 = f"{mixcomb(a, inception-1, 0, 2, doblesigne, out)}"
-                t2 = f"{mixcomb(b, inception-1, 0, 2, doblesigne, out)}"
+                t1 = f"{mixcomb(a, inception-1, 0, 2, doblesigne, out, ops)}"
+                t2 = f"{mixcomb(b, inception-1, 0, 2, doblesigne, out, ops)}"
                 if t2[0] == "-":  # ±A*(-B)
                     text = f"{t1}\\cdot ({t2})"
                 else:  # ±A*B
@@ -178,14 +201,23 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0):
                 b = -b
             a = num * b
 
-            t1 = f"{mixcomb(a, inception-1, 0, 3, doblesigne, out)}"
-            t2 = f"{mixcomb(b, inception-1, 0, 3, doblesigne, out)}"
+            t1 = f"{mixcomb(a, inception-1, 0, 3, doblesigne, out, ops)}"
+            t2 = f"{mixcomb(b, inception-1, 0, 3, doblesigne, out, ops)}"
             if t2[0] == "-":  # ±A:(-B)
                 text = f"{t1}:({t2})"
             else:  # ±A:B
                 text = f"{t1}:{t2}"
             if previ == 3:
                 text = f"({text})"
+
+        elif op == 4:  # sqrt (no gasta nivell)
+            text = "\\sqrt{" + f"{mixcomb(pow(num, 2), inception, 0, 4, doblesigne, out, ops, hide=[4, 5])}" + "}"
+
+        elif op == 5:  # pow (no gasta nivell)
+            n = isqrt(num)
+            if moneda():
+                n = -n
+            text = "{(" + f"{mixcomb(n, inception, 0, 5, doblesigne, out, ops, hide=[5, 4])}" + ")}^2"
 
     if inception == out:
         return squarebracketer(text)
@@ -243,8 +275,8 @@ def squarebracketer(text):
                     del bracketable[-1]
                 matrioska = False
     for x in reversed(bracketable):
-        text = text[:x[1]] + "\\rbrack" + text[x[1]+1:]
-        text = text[:x[0]] + "\\lbrack" + text[x[0] + 1:]
+        text = text[:x[1]] + "\\rbrack " + text[x[1]+1:]
+        text = text[:x[0]] + "\\lbrack " + text[x[0] + 1:]
 
     return text
 
@@ -1460,4 +1492,4 @@ for x in range(10):
     print(powsqr(103, 2, 3))
 """
 
-print(mixcomb(40, 3, op=random.choice([1, 2, 3])))
+print(mixcomb(40, 3, op=random.choice([1, 2, 3]), ops=[1, 2, 3, 4, 5]))
