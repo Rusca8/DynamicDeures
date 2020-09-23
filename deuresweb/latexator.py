@@ -918,7 +918,7 @@ def powsqr(opcions, solucions=False):
         qarrels = quantesson(opcions["qarrels"], "arrels")
         qearrels = quantesson(opcions["qearrels"], "earrels")
     else:
-        pot = False
+        sqrt = False
         qarrels = 0
         qearrels = 0
     print(f"Arrels s/ exp {qearrels}, Arrels amb exp {qmbase}")
