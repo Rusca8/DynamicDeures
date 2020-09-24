@@ -446,7 +446,7 @@ def powsqr(tipus, nivell=1, termes=2):
                 elif random.randint(1, 15) == 1:
                     text += f"{random.randint(2, random.choice([9, 9637]))}" + "^0"
                 else:
-                    base = f"{random.randint(2, 10)}"
+                    base = f"{random.randint(2, 6)}"
                     if random.randint(1, 4) == 4:
                         base = f"(-{base})"
                     text += f"{base}" + "^{" + f"{exp}" + "}"
@@ -527,6 +527,141 @@ def powsqr(tipus, nivell=1, termes=2):
                     text += "\\cdot"
                 text += f"{b}^" + "{" + f"{e}" + "}"
 
+    elif tipus == 10:  # potències, simplificar fraccions
+        fracn = ""
+        tn = (termes * 2) // 3  # màxim 2/3 en un sol costat
+        fracd = ""
+        td = tn
+        primers = [2, 3, 5, 7]
+        if nivell == 1 or nivell == 2:  # només un primer, exponents positius / exponents qualssevol
+            random.shuffle(primers)
+            base = primers[0]
+            for x in range(termes):
+                exp = random.randint(random.choice([-7, -5, -3]), random.choice([3, 5, 7]))
+                if exp == 0 and moneda():
+                    exp = random.choice([2, -2])
+                elif exp < 0 and nivell == 1:
+                    exp = abs(exp)
+                terme = f"{base}"
+                if exp != 1:
+                    terme += "^{" + f"{exp}" + "}"
+
+                if (moneda() and tn > 0) or td < 1:  # num
+                    tn -= 1
+                    if fracn == "":
+                        fracn += terme
+                    else:
+                        fracn += "\\cdot" + terme
+                else:  # den
+                    td -= 1
+                    if fracd == "":
+                        fracd += terme
+                    else:
+                        fracd += "\\cdot" + terme
+            text = "\\frac{" + fracn + "}{" + fracd + "}"
+        elif nivell in [3, 4]:  # només primers, sense exponents de grup / amb exponents de grup
+            pn = False
+            pd = False
+            random.shuffle(primers)
+            if moneda() or termes < 5:
+                bases = primers[:2]  # agafa 0-1
+            else:
+                bases = primers[:3]  # agafa 0-2
+            gastat = []
+            for x in range(termes):
+                if x == termes - 1 and len(gastat) == 1:  # si és l'últim i només he posat una base, forço un altre
+                    bases.remove(gastat[0])
+                base = random.choice(bases)
+                if base not in gastat:
+                    gastat.append(base)
+                exp = random.randint(random.choice([-7, -5, -3]), random.choice([3, 5, 7]))
+                if exp == 0 and moneda():
+                    exp = random.choice([2, -2])
+                terme = f"{base}"
+                if exp != 1:
+                    terme += "^{" + f"{exp}" + "}"
+
+                if (moneda() and tn > 0) or td < 1:  # num
+                    tn -= 1
+                    if fracn == "":
+                        fracn += terme
+                    else:
+                        if moneda():
+                            fracn += "\\cdot" + terme
+                        else:
+                            fracn = terme + "\\cdot" + fracn
+                    if nivell == 4 and random.randint(1, termes) == 1 and not pn:
+                        exp = random.randint(-5, 5)
+                        if exp == 0:
+                            exp = random.choice([-2, 2])
+                        fracn = "(" + fracn + ")^{" + f"{exp}" + "}"
+                        pn = True
+                else:  # den
+                    td -= 1
+                    if fracd == "":
+                        fracd += terme
+                    else:
+                        if moneda():
+                            fracd += "\\cdot" + terme
+                        else:
+                            fracd = terme + "\\cdot" + fracd
+                    if nivell == 4 and random.randint(1, termes) == 1 and not pd:
+                        exp = random.randint(2, 5)
+                        if moneda():
+                            exp = -exp
+                        fracd = "(" + fracd + ")^{" + f"{exp}" + "}"
+                        pd = True
+            text = "\\frac{" + fracn + "}{" + fracd + "}"
+
+        elif nivell in [5, 6, 7]:  # números compostos sense exponent / amb exponent positiu / amb exponent qualsevol
+            tnum = []
+            tden = []
+            for x in range(termes):
+                if (moneda() and tn > 0) or td < 1:  # num
+                    if nivell == 6:
+                        tnum.append(random.choice(primers))
+                    else:
+                        tnum.append(random.choice([2, 3, 5, 7, 11, 13]))
+                    tn -= 1
+                else:  # den
+                    if nivell == 6:
+                        tden.append(random.choice(primers))
+                    else:
+                        tden.append(random.choice([2, 3, 5, 7, 11, 13]))
+                    td -= 2
+            for x in range(termes):
+                minpos = 0
+                for x in range(len(tnum)):
+                    if tnum[x] < tnum[minpos]:
+                        minpos = x
+                tnum[minpos] *= random.choice(primers)
+                minpos = 0
+                for x in range(len(tden)):
+                    if tden[x] < tden[minpos]:
+                        minpos = x
+                tden[minpos] *= random.choice(primers)
+            for x in tnum:
+                if fracn == "":
+                    fracn = f"{x}"
+                else:
+                    fracn += f"\\cdot {x}"
+                if nivell in [6, 7]:
+                    exp = random.randint(2, 4)
+                    if moneda() and nivell == 7:
+                        exp = -exp
+                    fracn += "^{" + f"{exp}" + "}"
+            for x in tden:
+                if fracd == "":
+                    fracd = f"{x}"
+                else:
+                    fracd += f"\\cdot {x}"
+                if nivell in [6, 7]:
+                    exp = random.randint(2, 4)
+                    if moneda() and nivell == 7:
+                        exp = -exp
+                    fracd += "^{" + f"{exp}" + "}"
+
+            text = "\\frac{" + fracn + "}{" + fracd + "}"
     elif tipus == 101:  # arrels, mateix exponent
         pass
     elif tipus == 102:  # arrels, mateixa base
@@ -537,6 +672,8 @@ def powsqr(tipus, nivell=1, termes=2):
             for x in range(termes):
                 b = random.randint(2, 7)
                 ind = random.randint(2, 6)
+                if ind == 2:
+                    ind = ""
                 if x > 0:
                     text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}" + "}"
@@ -547,6 +684,8 @@ def powsqr(tipus, nivell=1, termes=2):
                 ind = random.randint(2, 6)
                 opcions = [2, 3, 4, 5, 6, 7]
                 opcions.remove(ind)
+                if ind == 2:
+                    ind = ""
                 e = random.choice(opcions)
                 if x > 0:
                     text += "\\cdot "
@@ -1493,4 +1632,4 @@ for x in range(10):
     print(powsqr(103, 2, 3))
 """
 
-print(mixcomb(40, 3, op=random.choice([1, 2, 3]), ops=[1, 2, 3, 4, 5]))
+print(powsqr(10, 7, 5))

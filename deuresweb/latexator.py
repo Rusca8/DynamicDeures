@@ -928,23 +928,62 @@ def powsqr(opcions, solucions=False):
 
     if "pot" in opcions:
         pot = True
-        qmexp = quantesson(opcions["qmexp"], "p_mexp")
-        qmbase = quantesson(opcions["qmbase"], "p_mbase")
+        metermes = []
+        for x in range(2, 6):
+            if f"metermes{x}" in opcions:
+                metermes.append(x)
+        if not metermes:
+            metermes = [2, 3]
+        if 2 not in metermes and 3 not in metermes:
+            qmexp = quantesson(opcions["qmexp"], "p_mexp_45")
+        else:
+            qmexp = quantesson(opcions["qmexp"], "p_mexp")
+
+        mbtermes = []
+        for x in range(2, 6):
+            if f"mbtermes{x}" in opcions:
+                mbtermes.append(x)
+        if not mbtermes:
+            mbtermes = [2, 3]
+        if 2 not in mbtermes and 3 not in mbtermes or 5 in mbtermes:
+            qmbase = quantesson(opcions["qmbase"], "p_mbase_45")
+        else:
+            qmbase = quantesson(opcions["qmbase"], "p_mbase")
+
+        qfrac = quantesson(opcions["qfrac"], "p_frac")
+        fmbase = quantesvariant(opcions["fmbase"])
+        qffrac = quantesson(opcions["qffrac"], "p_ffrac")
+        fsexp = quantesvariant(opcions["fsexp"])
+        print(f"Mateix exp {qmexp} ({metermes}), Mateixa base {qmbase} ({mbtermes})")
+        print(f"Frac primers {qfrac}, Frac compost {qffrac}")
     else:
         pot = False
         qmexp = 0
         qmbase = 0
-    print(f"Mateix exp {qmexp}, Mateixa base {qmbase}")
+        qfrac = 0
+        qffrac = 0
+
+
 
     if "sqrt" in opcions:
         sqrt = True
         qarrels = quantesson(opcions["qarrels"], "arrels")
-        qearrels = quantesson(opcions["qearrels"], "earrels")
+        asexp = quantesvariant(opcions["asexp"])
+        atermes = []
+        for x in range(2, 6):
+            if f"atermes{x}" in opcions:
+                atermes.append(x)
+        if not atermes:
+            atermes = [2, 3]
+        if 2 not in atermes and 3 not in atermes:
+            qarrels = quantesson(opcions["qarrels"], "arrels_45")
+        else:
+            qarrels = quantesson(opcions["qarrels"], "arrels")
+        print(f"Arrels s/ exp {qarrels} ({atermes})")
     else:
         sqrt = False
         qarrels = 0
-        qearrels = 0
-    print(f"Arrels s/ exp {qearrels}, Arrels amb exp {qmbase}")
+
 
     # PyLaTeX code
     geometry = margins()
@@ -952,6 +991,7 @@ def powsqr(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -961,7 +1001,7 @@ def powsqr(opcions, solucions=False):
 
     # preguntes
     if pot or sqrt:
-        if any([qmexp, qmbase, qarrels, qearrels]):
+        if any([qmexp, qmbase, qarrels, qfrac, qffrac]):
             begin(doc, 'questions')
 
             if pot:
@@ -972,13 +1012,13 @@ def powsqr(opcions, solucions=False):
                 question(doc, f"{n}")
                 doc.append("Expressa com un sol exponent.")
                 begin(doc, 'parts')
-                begin(doc, 'multicols', 3)
+                if 2 not in metermes and 3 not in metermes:
+                    begin(doc, 'multicols', 2)
+                else:
+                    begin(doc, 'multicols', 3)
                 for x in range(0, n):
                     part(doc)
-                    if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(1, 1, 2)))
-                    else:
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(1, 2, 3)))
+                    doc.append(NoEscape(r'$%s$' % gen.powsqr(1, (2 * x) // n + 1, metermes[(len(metermes) * x) // n])))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -988,13 +1028,57 @@ def powsqr(opcions, solucions=False):
                 question(doc, f"{n}")
                 doc.append("Expressa com un sol exponent.")
                 begin(doc, 'parts')
+                if 2 not in mbtermes and 3 not in mbtermes or 5 in mbtermes:
+                    begin(doc, 'multicols', 2)
+                else:
+                    begin(doc, 'multicols', 3)
+                for x in range(n):
+                    part(doc)  # meitat multi (1) meitat muldiv (2) / macedònia de termes escollida
+                    doc.append(NoEscape(r'$%s$' % gen.powsqr(2, (2 * x) // n + 1, mbtermes[(len(mbtermes) * x) // n])))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qfrac:
+                n = qfrac
+                question(doc, f"{n}")
+                doc.append("Simplifica les fraccions següents")
+                var = (n * fmbase) // 4
+                begin(doc, 'parts')
                 begin(doc, 'multicols', 3)
-                for x in range(0, n):
+                scale = 1.3
+                for x in range(n):
                     part(doc)
-                    if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(2, 1, 2)))
+                    if x < var:
+                        if x < var // 2 or x == 0:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 1, 5))))
+                        else:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 2, 5))))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(2, 2, 3)))
+                        if x < (n + var) // 2:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 3, 5))))
+                        else:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 4, 5))))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qffrac:
+                n = qffrac
+                question(doc, f"{n}")
+                doc.append("Factoritza i simplifica les fraccions següents")
+                var = (n * fsexp) // 4
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                for x in range(n):
+                    part(doc)
+                    if x < var:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 5, 3))))
+                    else:
+                        if x < (n + var) // 2:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 6, 3))))
+                        else:
+                            doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 7, 3))))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1006,30 +1090,19 @@ def powsqr(opcions, solucions=False):
                 n = qarrels
                 question(doc, f"{n}")
                 doc.append("Expressa com una sola arrel.")
+                var = (n * asexp) // 4
                 begin(doc, 'parts')
-                begin(doc, 'multicols', 3)
-                for x in range(0, n):
-                    part(doc)
-                    if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 1, 2)))
-                    else:
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 1, 3)))
-                    space(doc, "1cm")
-                end(doc, 'multicols')
-                end(doc, 'parts')
+                if 2 not in atermes and 3 not in atermes or 5 in atermes:
+                    begin(doc, 'multicols', 2)
+                else:
+                    begin(doc, 'multicols', 3)
 
-            if qearrels:
-                n = qearrels
-                question(doc, f"{n}")
-                doc.append("Expressa com una sola arrel.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 3)
-                for x in range(0, n):
+                for x in range(n):
                     part(doc)
-                    if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 2, 2)))
+                    if x < var:  # sense exponent vs amb exponent. Macedònia de termes
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 1, atermes[(len(atermes) * x) // n])))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 2, 3)))
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(103, 2, atermes[(len(atermes) * x) // n])))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1794,8 +1867,14 @@ def quantesson(value, op):
     elif op == "v_dmultis":
         quantitats = [0, 3, 6, 9, 12, 24, 64]
     # potències i arrels
-    elif op in ["p_mexp", "p_mbase" ,"arrels", "earrels"]:
+    elif op in ["p_mexp", "p_mbase", "arrels"]:
         quantitats = [0, 6, 9, 12, 18, 39, 81]
+    elif op in ["p_mexp_45", "p_mbase_45", "arrels_45"]:
+        quantitats = [0, 4, 6, 8, 12, 26, 54]
+    elif op == "p_frac":
+        quantitats = [0, 3, 6, 9, 17, 35, 71]
+    elif op == "p_ffrac":
+        quantitats = [0, 2, 3, 6, 17, 35, 71]
     # equacions
     elif op in ["simples", "dsimples"]:
         quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
