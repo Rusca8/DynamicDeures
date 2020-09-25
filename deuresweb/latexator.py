@@ -954,20 +954,19 @@ def powsqr(opcions, solucions=False):
         fmbase = quantesvariant(opcions["fmbase"])
         qffrac = quantesson(opcions["qffrac"], "p_ffrac")
         fsexp = quantesvariant(opcions["fsexp"])
+        qdfrac = quantesson(opcions["qdfrac"], "p_dfrac")
         print(f"Mateix exp {qmexp} ({metermes}), Mateixa base {qmbase} ({mbtermes})")
-        print(f"Frac primers {qfrac}, Frac compost {qffrac}")
+        print(f"Frac primers {qfrac}, Frac compost {qffrac}, Frac decimals {qdfrac}")
     else:
         pot = False
         qmexp = 0
         qmbase = 0
         qfrac = 0
         qffrac = 0
-
-
+        qdfrac = 0
 
     if "sqrt" in opcions:
         sqrt = True
-        qarrels = quantesson(opcions["qarrels"], "arrels")
         asexp = quantesvariant(opcions["asexp"])
         atermes = []
         for x in range(2, 6):
@@ -1001,7 +1000,7 @@ def powsqr(opcions, solucions=False):
 
     # preguntes
     if pot or sqrt:
-        if any([qmexp, qmbase, qarrels, qfrac, qffrac]):
+        if any([qmexp, qmbase, qarrels, qfrac, qffrac, qdfrac]):
             begin(doc, 'questions')
 
             if pot:
@@ -1070,15 +1069,30 @@ def powsqr(opcions, solucions=False):
                 var = (n * fsexp) // 4
                 begin(doc, 'parts')
                 begin(doc, 'multicols', 3)
+                scale = 1.3
                 for x in range(n):
                     part(doc)
-                    if x < var:
+                    if x < var or (fsexp != 0 and x == 0):
                         doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 5, 3))))
                     else:
                         if x < (n + var) // 2:
                             doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 6, 3))))
                         else:
                             doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 7, 3))))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qdfrac:
+                n = qdfrac
+                question(doc, f"{n}")
+                doc.append("Factoritza i simplifica les següents fraccions amb decimals")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                scale = 1.3
+                for x in range(n):
+                    part(doc)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(10, 8, 3))))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1873,7 +1887,7 @@ def quantesson(value, op):
         quantitats = [0, 4, 6, 8, 12, 26, 54]
     elif op == "p_frac":
         quantitats = [0, 3, 6, 9, 17, 35, 71]
-    elif op == "p_ffrac":
+    elif op in ["p_ffrac", "p_dfrac"]:
         quantitats = [0, 2, 3, 6, 17, 35, 71]
     # equacions
     elif op in ["simples", "dsimples"]:

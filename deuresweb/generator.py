@@ -618,7 +618,7 @@ def powsqr(tipus, nivell=1, termes=2):
             tden = []
             for x in range(termes):
                 if (moneda() and tn > 0) or td < 1:  # num
-                    if nivell == 6:
+                    if nivell == 6:  # TODO veure què és això
                         tnum.append(random.choice(primers))
                     else:
                         tnum.append(random.choice([2, 3, 5, 7, 11, 13]))
@@ -628,17 +628,17 @@ def powsqr(tipus, nivell=1, termes=2):
                         tden.append(random.choice(primers))
                     else:
                         tden.append(random.choice([2, 3, 5, 7, 11, 13]))
-                    td -= 2
+                    td -= 1
             for x in range(termes):
                 minpos = 0
-                for x in range(len(tnum)):
-                    if tnum[x] < tnum[minpos]:
-                        minpos = x
+                for y in range(len(tnum)):
+                    if tnum[y] < tnum[minpos]:
+                        minpos = y
                 tnum[minpos] *= random.choice(primers)
                 minpos = 0
-                for x in range(len(tden)):
-                    if tden[x] < tden[minpos]:
-                        minpos = x
+                for y in range(len(tden)):
+                    if tden[y] < tden[minpos]:
+                        minpos = y
                 tden[minpos] *= random.choice(primers)
             for x in tnum:
                 if fracn == "":
@@ -660,6 +660,52 @@ def powsqr(tipus, nivell=1, termes=2):
                     if moneda() and nivell == 7:
                         exp = -exp
                     fracd += "^{" + f"{exp}" + "}"
+
+            text = "\\frac{" + fracn + "}{" + fracd + "}"
+
+        elif nivell in [8]:  # decimals (x10^-n)
+            tnum = []
+            tden = []
+            for x in range(termes):
+                if (moneda() and tn > 0) or td < 1:  # num
+                    tnum.append(random.choice(primers))
+                    tn -= 1
+                else:  # den
+                    tden.append(random.choice(primers))
+                    td -= 1
+            for x in range(termes // 2 + 1):
+                minpos = 0
+                for y in range(len(tnum)):
+                    if tnum[y] < tnum[minpos]:
+                        minpos = y
+                tnum[minpos] *= random.choice([2, 3])
+                minpos = 0
+                for y in range(len(tden)):
+                    if tden[y] < tden[minpos]:
+                        minpos = y
+                tden[minpos] *= random.choice(primers)
+            for x in tnum:
+                zeros = random.randint(1, 2)
+                for y in range(zeros):
+                    x = f"0{x}"
+                x = f"0.{x}"
+                while x[-1] == "0":
+                    x = x[:-1]
+                if fracn == "":
+                    fracn = f"{x}"
+                else:
+                    fracn += f"\\cdot {x}"
+            for x in tden:
+                zeros = random.randint(1, 2)
+                for y in range(zeros):
+                    x = f"0{x}"
+                x = f"0.{x}"
+                while x[-1] == "0":
+                    x = x[:-1]
+                if fracd == "":
+                    fracd = f"{x}"
+                else:
+                    fracd += f"\\cdot {x}"
 
             text = "\\frac{" + fracn + "}{" + fracd + "}"
     elif tipus == 101:  # arrels, mateix exponent
@@ -1632,4 +1678,4 @@ for x in range(10):
     print(powsqr(103, 2, 3))
 """
 
-print(powsqr(10, 7, 5))
+print(powsqr(10, 4, 5))
