@@ -1665,6 +1665,7 @@ def derivades(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1717,11 +1718,11 @@ def derivades(opcions, solucions=False):
                 for x in range(0, n):
                     part(doc)
                     if x < (n // 3):
-                        doc.append(NoEscape(r'$%s$' % gen.dx(2, [1, 2, 3, 4, 5, 6, 7, 8],
-                                                             simples=True, inici=random.choice(propietats))))
+                        text = gen.dx(2, [1, 2, 3, 4, 5, 6, 7, 8], simples=True, inici=random.choice(propietats))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.dx(3, [1, 2, 3, 4, 5, 6, 7, 8],
-                                                             simples=True, inici=random.choice(propietats))))
+                        text = gen.dx(3, [1, 2, 3, 4, 5, 6, 7, 8], simples=True, inici=random.choice(propietats))
+                    scale = gen.fxscale(text)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1735,10 +1736,11 @@ def derivades(opcions, solucions=False):
                 for x in range(0, n):
                     part(doc)
                     if x < (n // 2):
-                        doc.append(NoEscape(r'$%s$' % gen.dx(2, funcions)))
+                        text = gen.dx(2, funcions)
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.dx(3, funcions)))
-                    print("funcions ara és ", funcions)
+                        text = gen.dx(3, funcions)
+                    scale = gen.fxscale(text)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')

@@ -1531,7 +1531,6 @@ def prop(tipus, nivell=1):
 def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, inici=0):
     opcions = opcions[:]  # sense això estic passant la referència i afecta a fora de manera incontrolable
     amaga = amaga[:]
-    print("opcions és", opcions)
     text = "x"
     sumasegur = False
     if -7 in amaga:
@@ -1701,16 +1700,18 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
             text = "\\frac{" + t1 + "}{" + t2 + "}"
 
     # Les sumes i multis les pot fer sempre que no hi ha f+g
-    if fx != 6:
+    if fx != 6 and fx != 8:
         n = 1
         if not (simples and inception < 1):  # multiplica quelcom?
-            if random.randint(1, 10) == 1:
+            if random.randint(1, 2) == 1:
                 n = random.randint(2, 3*(inception+1))
                 if random.randint(1, 5) == 1:
                     n = -n
 
                 if text[0] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
-                    text = f"{n}\\cdot " + text
+                    if len(text) > 1:
+                        if text[1] == "^":
+                            text = f"{n}\\cdot " + text
                 elif text[0] in ["x", "e"]:
                     text = f"{n}" + text
                 elif text[0] == "-":
@@ -1752,7 +1753,33 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
     return text
 
 
+def fxscale(text):  # TODO acabar de pensar cómo hacer esto, porque no tiene sentido
+    if "frac" in text[0:8] or (text[0] != "x" and text[1] == "^") or "e" in text[0:4] or "cdot" in text[0:9]:
+        return 1.2
+    else:
+        return 1
 
+    """
+    br = 0
+    es = []
+    emax = 0
+    for x in range(len(text)):
+        if text[x] == "{":
+            br += 1
+        elif text[x] == "}":
+            br -= 1
+            while len(es) > 0 and br <= es[-1]:
+                es = es[:-1]
+        elif text[x] in ["^"]:
+            es.append(br)
+            emax = max(emax, len(es))
+        print(es)
+
+    if emax > 1:
+        return 1.2
+    else:
+        return 1
+    """
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - debugging
 
@@ -1918,3 +1945,5 @@ for x in range(10):
 
 #for x in range(6):
 #    print(fracmix(random.choice([-1, 1])*randomfracnum(3), randomfracnum(3), 3))
+
+print(fxscale("e^{2cos{2x^2}}\\cdot 4^{5}"))
