@@ -26,7 +26,6 @@ def indexvar():
         return f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2><p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>"
 
 
-
 @app.route("/equacions/", methods=["GET", "POST"])
 def equacions():
     if request.method == "POST":
@@ -62,7 +61,7 @@ def apilades():
         except:
             return redirect("/latex_error/apilades")
 
-        tele.feedback("api",request.form)
+        tele.feedback("api", request.form)
         return redirect("/pdf/apilades")
     else:
         return render_template("apilades.html")
@@ -82,6 +81,19 @@ def powsqr():
         return render_template("powsqr.html")
 
 
+@app.route("/fraccions/", methods=["GET", "POST"])
+def fraccions():
+    if request.method == "POST":
+        #try:
+        g.fraccions(request.form, solucions=False)
+    #    except:
+    #        return redirect("/latex_error/fraccions")
+        tele.feedback("frac", request.form)
+        return redirect("/pdf/fraccions")
+    else:
+        return render_template("fraccions.html")
+
+
 @app.route("/proporcionalitat/", methods=["GET", "POST"])
 def proporcionalitat():
     if request.method == "POST":
@@ -90,7 +102,7 @@ def proporcionalitat():
         except:
             return redirect("/latex_error/proporcionalitat")
 
-        tele.feedback("prop",request.form)
+        tele.feedback("prop", request.form)
         return redirect("/pdf/proporcionalitat")
     else:
         return render_template("proporcionalitat.html")
@@ -103,7 +115,7 @@ def success():
             g.successions(request.form, solucions=False)
         except:
             return redirect("/latex_error/successions")
-        tele.feedback("succ",request.form)
+        tele.feedback("succ", request.form)
         return redirect("/pdf/successions")
     else:
         return render_template("successions.html")
@@ -154,6 +166,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/apilades.pdf")
     elif tema == "powsqr":
         return redirect("/static/pdfs/powsqr.pdf")
+    elif tema == "fraccions":
+        return redirect("/static/pdfs/fraccions.pdf")
     elif tema == "proporcionalitat":
         return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":

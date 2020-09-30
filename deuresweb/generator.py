@@ -75,7 +75,7 @@ def comb(tipus, nivell=1, nums=1):
             symbol = r'\times '
             if nivell == 5 or nivell == 6:  # adapto per div
                 if a == 0:  # evito dividir per zero
-                    a == random.randint(1,10+2*(nums-1))
+                    a = random.randint(1, 10+2*(nums-1))
                 aux = a
                 a = a*b
                 b = abs(aux)
@@ -225,6 +225,224 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
         return text
 
 
+def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
+    """
+    Exercicis de fraccions
+
+    tipus = 1 sum/rest, 2 mul/div
+
+    nivell = 1 positiu, 2 pos/neg, 3 pot doble neg
+
+    termes = quantes fraccions
+
+    dmax = màx denom. (sum/rest), màx número (mul/div)
+
+    divis = 0 no, 1 random, 2 sempre
+    """
+
+    if tipus == 1:  # sumes i restes (a/b + c/d)
+        text = "6/42+7/42"
+        if nivell in [1, 2, 3]:  # només sumes de nums positius / també restes (o numerador negatiu) / doble negatiu
+            text = ""
+            for x in range(termes):
+                a = random.randint(1, 10)
+                b = random.randint(2, dmax)
+                if x != 0:
+                    if nivell == 1 or moneda():
+                        if nivell == 3 and moneda():  # doble neg
+                            text += "-"
+                            a = -a
+                        else:
+                            text += "+"
+                    else:
+                        if moneda():
+                            text += "-"
+                        else:
+                            text += "+"
+                            a = -a
+                text += "\\frac{" + f"{a}" + "}{" + f"{b}" + "}"
+
+    elif tipus == 2:  # multis i divis
+        if nivell in [1, 2, 3]:
+            text = ""
+            for x in range(termes):
+                a = random.randint(1, dmax)
+                b = random.randint(2, dmax)
+                if x != 0:
+                    if divis == 0 or (divis == 1 and moneda()):
+                        text += "\\cdot "
+                    else:
+                        text += "\\div "
+                    if nivell == 1 or moneda():
+                        if nivell == 3 and moneda():  # doble neg
+                            a = -a
+                            b = -b
+                    else:
+                        if moneda():
+                            a = -a
+                        else:
+                            b = -b
+                text += "\\frac{" + f"{a}" + "}{" + f"{b}" + "}"
+    return text
+
+
+def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona=False):
+    text = "4/2+42/6*3/42"
+    if out == 0:
+        out = inception
+
+    if inception < 1:
+        inception = 0
+        if den == 1:
+            text = f"{num}"
+            if previ in [2, 3] and num < 0 and segona:
+                text = "(" + text + ")"
+        else:
+            text = "\\frac{" + f"{num}" + "}{" + f"{den}" + "}"
+
+    else:
+        if op == 0:
+            if previ == 1:
+                op = 2
+            else:
+                op = random.randint(1, 2)
+
+        if op == 1:  # sum/rest  (a/b + c/d (+e/f)) -> N = ad+cb (+e), D = bd
+            # numerador
+            b = random.choice(divisors(den))
+            d = den // b
+            # denominador
+            c = 0
+            exactes = []
+            for x in range(-2, 3):  # -2 -> 2
+                a = (num // d) + x
+                if (num - a*d) % b == 0:  # si surt exacte (dues fraccions fan prou)
+                    c = (num - a*d) // b
+                    if a:
+                        exactes.append([a, c])  # guardo les opcions
+            if exactes:
+                a, c = random.choice(exactes)  # i en trio una (si no trio quedarà la última a, que ja em serveix)
+            if c == 0:
+                c = (num - a*d) // b + random.choice([-1, 1])
+            if c == 0:
+                c = random.choice([-1, 1])
+            diff = num - (a*d + c*b)
+            if diff:
+                f = b*d
+                e = diff
+                e, f = fracsimple(e, f)
+            a, b = fracsimple(a, b)
+            c, d = fracsimple(c, d)
+            if b == 1 or d == 1:
+                q = random.randint(2, 3)
+                k = random.choice([-1, 1])
+                a = q*a + k
+                b = q*b
+                c = q*c - k
+                d = q*d
+
+            text = f"{fracmix(a, b, inception-1, previ=op)}"
+            if c*d < 0:  # frac negativa
+                text += f"-{fracmix(-c, d, inception-1, previ=op)}"
+            else:  # frac positiva
+                text += f"+{fracmix(c, d, inception-1, previ=op)}"
+
+            if diff:
+                if e*f < 0:
+                    text += f"-{fracmix(-e, f, 0, previ=op)}"
+                else:
+                    text += f"+{fracmix(e, f, 0, previ=op)}"
+            if previ in [2, 3]:
+                text = "(" + text + ")"
+
+        elif op == 2:  # mul/div (a/b * c/d) o (a/b : d/c)
+            # numerador
+            a = random.choice(divisors(num))
+            c = num // a
+            # denominador
+            b = random.choice(divisors(den))
+            d = den // b
+            # global
+            k = random.choice([2, 3, 4])
+            if moneda():
+                k += 1
+
+            if (moneda() or abs(a) == 1) and not abs(c) == 1:
+                a *= k
+            else:
+                c *= k
+            if (moneda() or abs(b) == 1) and not abs(d) == 1:
+                b *= k
+            else:
+                d *= k
+
+            if a == b or c == d:
+                k = random.randint(2, 3)
+                if a*k == b or d*k == c or (moneda() and not (b*k == a or c*k == d)):
+                    b *= k  # TODO multiplicar l'altra branca de la creu per un num diferent però possible
+                    c *= k
+                    if d*k == c:  # he canviat la segona (quedarà enter a la dreta)
+                        ks = [2, 3, 5, 7]
+                        ks.remove(k)
+                        for x in ks:
+                            if d*k != c and a*k != b:
+                                d *= k
+                                a *= k
+                else:
+                    a *= k
+                    d *= k
+                    if b*k == a:  # he canviat la primera (quedarà enter a l'esquerra)
+                        ks = [2, 3, 5, 7]
+                        ks.remove(k)
+                        for x in ks:
+                            if c*k != d and b*k != a:
+                                c *= k
+                                b *= k
+
+            a, b = fracsimple(a, b)
+            c, d = fracsimple(c, d)
+
+            text = f"{fracmix(a, b, inception - 1, previ=op)}"
+            if (moneda() or c == 0) and not d == 0:  # no volem dividir per zero
+                text += f"\\cdot {fracmix(c, d, inception - 1, previ=op, segona=True)}"
+            else:
+                text += f": {fracmix(d, c, inception - 1, previ=3, segona=True)}"
+
+            if previ == 3:
+                text = "(" + text + ")"
+
+    if inception == out:
+        return squarebracketer(text)
+    else:
+        return text
+
+
+def randomfracnum(n):
+    num = random.choice([2, 3, 5, 7])
+    for x in range(n):
+        if moneda():
+            num *= random.choice([1, 2])
+        else:
+            if moneda():
+                num *= random.choice([1, 2, 3])
+            else:
+                num *= random.choice([2, 3, 5])
+    return num
+
+
+def fracsimple(n, d):
+    """Retorna [n, d] = fracció (n/d) simplificada"""
+    divis = divisors(d, True)
+    for x in divis:
+        if n % x == 0 and d % x == 0:
+            n = n // x
+            d = d // x
+    if d < 0:
+        d = -d
+        n = -n
+    return [n, d]
+
+
 def taules(taula, div=False):
     a = random.randint(1, 10)
     if div:
@@ -236,17 +454,23 @@ def taules(taula, div=False):
             return fr'{a}\times {taula}='
 
 
-def divisors(num):
+def divisors(num, tots=False):
     div = [1]
     for x in range(2, isqrt(num)+1):
         if num % x == 0:
             div.append(x)
-    if len(div) > 1:
+    if len(div) > 1 and not tots:
         div.remove(1)
+    if tots:
+        extra = []
+        for x in div:
+            extra.append(num // x)
+        div += extra
     return div
 
 
 def isqrt(n):  # newton (from stackoverflow)
+    """Part entera de l'arrel quadrada de n"""
     x = n
     y = (x + 1) // 2
     while y < x:
@@ -256,6 +480,7 @@ def isqrt(n):  # newton (from stackoverflow)
 
 
 def squarebracketer(text):
+    """Posa claudàtor al parèntesi més exterior si aquest en té més a dins."""
     bracketable = []
     inception = 0
     matrioska = False
@@ -394,8 +619,8 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             a = random.randint(max(2, pow(10, digits[0]-1)), pow(10, digits[0])-1)
             b = random.randint(max(2, pow(10, digits[1]-1)), pow(10, digits[1])-1)
             digitsc = math.ceil(math.log(a*b, 10))
-            na=""
-            nb=""
+            na = ""
+            nb = ""
             for n in range(digitsc-digits[0]):
                 na += "9"
             for n in range(digitsc-digits[1]):
@@ -1678,4 +1903,5 @@ for x in range(10):
     print(powsqr(103, 2, 3))
 """
 
-print(powsqr(10, 4, 5))
+for x in range(6):
+    print(fracmix(random.choice([-1, 1])*randomfracnum(3), randomfracnum(3), 3))

@@ -1,0 +1,149 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Fraccions...</h4>
+    <div class="form-group">
+        <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso1" value="1r d'ESO" autocomplete="off" disabled> 1ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso2" value="2n d'ESO" autocomplete="off" disabled> 2ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso3" value="3r d'ESO" autocomplete="off" disabled> 3ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso4" value="4t d'ESO" autocomplete="off" disabled> 4ESO
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSimp" aria-expanded="true" aria-controls="opSimp">
+          <input type="checkbox" name="simples" autocomplete="off" id="simples" value="Primer grau" checked> Op. simples
+        </label>
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opComb" aria-expanded="true" aria-controls="opComb">
+          <input type="checkbox" name="combis" autocomplete="off" id="combis" value="Sistemes" checked> Op. combinades
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="collapse show" id="opSimp">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Operacions simples</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupMateixaBase"><b>Sumes i restes</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qsumes" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupMulDiv"><b>Multiplicar i dividir</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qmultis" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar operacions?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="smul" autocomplete="off" id="p7" value="p7" checked> a·b
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="sdiv" autocomplete="off" id="p8" value="p8" checked> a&#247;b
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+         </div>
+
+      </div>
+    </div>
+</div>
+
+
+<div class="collapse show mt-1" id="opComb">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Operacions combinades</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupMulDiv"><b>Operacions combinades</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qcombis" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

@@ -1133,6 +1133,126 @@ def powsqr(opcions, solucions=False):
     return
 
 
+def fraccions(opcions, solucions=False):
+    tema = "frac"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "simples" in opcions:
+        simples = True
+        qsumes = quantesson(opcions["qsumes"], "fr_sumes")
+        qmultis = quantesson(opcions["qmultis"], "fr_multis")
+        if "smul" in opcions:
+            if "sdiv" in opcions:
+                muldiv = 1
+            else:
+                muldiv = 0
+        elif "sdiv" in opcions:
+            muldiv = 2
+        else:
+            muldiv = 1
+        print(f"Frac sumes {qsumes}, Frac multis {qmultis} (muldiv {muldiv})")
+    else:
+        simples = False
+        qsumes = 0
+        qmultis = 0
+
+    if "combis" in opcions:
+        combis = True
+        qcombis = quantesson(opcions["qcombis"], "fr_combis")
+        print(f"Frac combis {qcombis}")
+    else:
+        combis = False
+        qcombis = 0
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if simples or combis:
+        if any([qsumes, qmultis, qcombis]):
+            begin(doc, 'questions')
+
+            if simples:
+                bloctitle(doc, "Operacions simples")
+
+            if qsumes:
+                n = qsumes
+                question(doc, f"{n}")
+                doc.append("Resol les següents sumes i restes de fraccions.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.frac(1, 2, 2))))  # TODO var
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qmultis:
+                n = qmultis
+                question(doc, f"{n}")
+                if muldiv == 1:
+                    doc.append("Resol les següents multiplicacions i divisions de fraccions.")
+                elif muldiv == 0:
+                    doc.append("Resol les següents multiplicacions de fraccions.")
+                else:
+                    doc.append("Resol les següents divisions de fraccions.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.frac(2, 3, 2, divis=muldiv)))) # TODO var
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if combis:
+                bloctitle(doc, "Operacions combinades")
+
+            if qcombis:
+                n = qcombis
+                question(doc, f"{n*4}")
+                doc.append("Resol les següents operacions combinades amb fraccions.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    num = gen.randomfracnum(3)
+                    den = gen.randomfracnum(3)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.fracmix(num, den, 2))))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 def successions(opcions, solucions=False):
     tema = "succ"
 
@@ -1809,7 +1929,6 @@ def old_equacions(opcions):
 
     return
 
-
 # *********************** Functions ************************* #
 
 
@@ -1822,6 +1941,8 @@ def temallarg(tema="no"):
         return "apilades"
     elif tema == "powsqr":
         return "powsqr"
+    elif tema == "frac":
+        return "fraccions"
     elif tema == "prop":
         return "proporcionalitat"
     elif tema == "succ":
@@ -1841,6 +1962,8 @@ def tematitol(tema="no"):
         return "d'Operacions amb Més Xifres"
     elif tema == "powsqr":
         return "de Potències i Arrels"
+    elif tema == "frac":
+        return "de Fraccions"
     elif tema == "prop":
         return "de Proporcionalitat"
     elif tema == "succ":
