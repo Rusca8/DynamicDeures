@@ -308,10 +308,10 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                 op = random.randint(1, 2)
 
         if op == 1:  # sum/rest  (a/b + c/d (+e/f)) -> N = ad+cb (+e), D = bd
-            # numerador
+            # denominador
             b = random.choice(divisors(den))
             d = den // b
-            # denominador
+            # numerador
             c = 0
             exactes = []
             for x in range(-2, 3):  # -2 -> 2
@@ -321,6 +321,11 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                     if a:
                         exactes.append([a, c])  # guardo les opcions
             if exactes:
+                for x in exactes:  # faig una mica de neteja d'uns i números primers lletjos
+                    if len(exactes) < 2:
+                        break
+                    if abs(x[0]) in [1, 13, 17, 19] or abs(x[1] in [1, 13, 17, 19]):
+                        exactes.remove(x)
                 a, c = random.choice(exactes)  # i en trio una (si no trio quedarà la última a, que ja em serveix)
             if c == 0:
                 c = (num - a*d) // b + random.choice([-1, 1])
@@ -356,54 +361,62 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                 text = "(" + text + ")"
 
         elif op == 2:  # mul/div (a/b * c/d) o (a/b : d/c)
+            if num == 1 or den == 1:
+                k = random.choice([2, 3, 4, 5])  # si la frac té un 1 multiplico per tenir més divisors
+                num *= k
+                den *= k
+
             # numerador
             a = random.choice(divisors(num))
             c = num // a
             # denominador
             b = random.choice(divisors(den))
             d = den // b
+
             # global
-            k = random.choice([2, 3, 4])
+            k = random.choice([2, 3, 4])  # trio un número i el multiplico a dalt i a baix
             if moneda():
                 k += 1
-
-            if (moneda() or abs(a) == 1) and not abs(c) == 1:
+            if (moneda() or abs(a) == 1) and not abs(c) == 1:  # si hi ha 1 trio l'1, si no aleatori
                 a *= k
             else:
                 c *= k
-            if (moneda() or abs(b) == 1) and not abs(d) == 1:
+            if (moneda() or abs(b) == 1) and not abs(d) == 1:  # si hi ha 1 trio l'1, si no aleatori
                 b *= k
             else:
                 d *= k
 
+            # evito fraccions = 1
             if a == b or c == d:
                 k = random.randint(2, 3)
                 if a*k == b or d*k == c or (moneda() and not (b*k == a or c*k == d)):
-                    b *= k  # TODO multiplicar l'altra branca de la creu per un num diferent però possible
+                    b *= k
                     c *= k
-                    if d*k == c:  # he canviat la segona (quedarà enter a la dreta)
-                        ks = [2, 3, 5, 7]
-                        ks.remove(k)
-                        for x in ks:
-                            if d*k != c and a*k != b:
-                                d *= k
-                                a *= k
                 else:
                     a *= k
                     d *= k
-                    if b*k == a:  # he canviat la primera (quedarà enter a l'esquerra)
-                        ks = [2, 3, 5, 7]
-                        ks.remove(k)
-                        for x in ks:
-                            if c*k != d and b*k != a:
-                                c *= k
-                                b *= k
+
+            if inception == 1:  # si serà l'última vegada (a la següent entren números)
+                for k in [2, 3, 4, 5, 7]:
+                    if a % b != 0 or random.randint(1, 30) == 1:  # (ja) no tinc enter a l'esquerra (excepte alguns)
+                        break
+                    else:
+                        if c*k % d != 0:  # no causaré enter a la dreta
+                            b *= k
+                            c *= k
+                for k in [2, 3, 4, 5, 7]:
+                    if c % d != 0 or random.randint(1, 30) == 1:  # (ja) no tinc enter a la dreta (excepte alguns)
+                        break
+                    else:
+                        if a*k % b != 0:
+                            a *= k
+                            d *= k
 
             a, b = fracsimple(a, b)
             c, d = fracsimple(c, d)
 
             text = f"{fracmix(a, b, inception - 1, previ=op)}"
-            if (moneda() or c == 0) and not d == 0:  # no volem dividir per zero
+            if (moneda() or c in [0, 1]) and not d == 0:  # no volem dividir per zero (ni fer un enter a la divisió)
                 text += f"\\cdot {fracmix(c, d, inception - 1, previ=op, segona=True)}"
             else:
                 text += f": {fracmix(d, c, inception - 1, previ=3, segona=True)}"
