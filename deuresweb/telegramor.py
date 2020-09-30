@@ -11,4 +11,8 @@ def feedback(tema, opcions):
     if gettoken() == "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11":
         print("utilitzant el token de prova")
     else:
-        urllib.request.urlopen("https://api.telegram.org/bot"+ botToken + "/sendMessage?chat_id=@ddfeedback&disable_notification=true&text="+ telegramText +"&parse_mode=Markdown").read()
+        url = "https://api.telegram.org/bot" + botToken \
+              + "/sendMessage?chat_id=@ddfeedback&disable_notification=true&text=" + telegramText \
+              + "&parse_mode=Markdown"
+        with urllib.request.urlopen(url) as x:
+            x.read()

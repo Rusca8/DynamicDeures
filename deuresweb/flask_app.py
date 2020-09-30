@@ -33,7 +33,7 @@ def equacions():
             g.equacions(request.form, solucions=False)  # genera el pdf amb latex
         except:
             return redirect("/latex_error/equacions")
-        tele.feedback("eq", request.form)
+        #tele.feedback("eq", request.form)
         return redirect("/pdf/eq")
     else:
         return render_template("equacions.html",textbotgen="Generar fitxa!")
@@ -47,7 +47,7 @@ def combinades():
         except:
             return redirect("/latex_error/combinades")
 
-        tele.feedback("comb", request.form)
+        #tele.feedback("comb", request.form)
         return redirect("/pdf/comb")
     else:
         return render_template("combinades.html")
@@ -61,7 +61,7 @@ def apilades():
         except:
             return redirect("/latex_error/apilades")
 
-        tele.feedback("api", request.form)
+        #tele.feedback("api", request.form)
         return redirect("/pdf/apilades")
     else:
         return render_template("apilades.html")
@@ -75,7 +75,7 @@ def powsqr():
         except:
             return redirect("/latex_error/apilades")
 
-        tele.feedback("powsqr", request.form)
+        #tele.feedback("powsqr", request.form)
         return redirect("/pdf/powsqr")
     else:
         return render_template("powsqr.html")
@@ -88,7 +88,7 @@ def fraccions():
         g.fraccions(request.form, solucions=False)
     #    except:
     #        return redirect("/latex_error/fraccions")
-        tele.feedback("frac", request.form)
+        #tele.feedback("frac", request.form)
         return redirect("/pdf/fraccions")
     else:
         return render_template("fraccions.html")
@@ -102,7 +102,7 @@ def proporcionalitat():
         except:
             return redirect("/latex_error/proporcionalitat")
 
-        tele.feedback("prop", request.form)
+        #tele.feedback("prop", request.form)
         return redirect("/pdf/proporcionalitat")
     else:
         return render_template("proporcionalitat.html")
@@ -115,7 +115,7 @@ def success():
             g.successions(request.form, solucions=False)
         except:
             return redirect("/latex_error/successions")
-        tele.feedback("succ", request.form)
+        #tele.feedback("succ", request.form)
         return redirect("/pdf/successions")
     else:
         return render_template("successions.html")
@@ -128,7 +128,7 @@ def derivades():
             g.derivades(request.form, solucions=False)
         except:
             return redirect("/latex_error/derivades")
-        tele.feedback("dx", request.form)
+        #tele.feedback("dx", request.form)
         return redirect("/pdf/derivades")
     else:
         return render_template("derivades.html")

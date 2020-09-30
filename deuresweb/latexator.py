@@ -1202,6 +1202,8 @@ def fraccions(opcions, solucions=False):
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
+                space(doc, "0.3cm")
+
 
             if qmultis:
                 n = qmultis
@@ -1217,7 +1219,11 @@ def fraccions(opcions, solucions=False):
                 scale = 1.3
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.frac(2, 3, 2, divis=muldiv)))) # TODO var
+                    if x == 0 and muldiv in [0, 1]:
+                        doc.append(
+                            NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.frac(2, 3, 2, divis=0))))  # TODO var
+                    else:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.frac(2, 3, 2, divis=muldiv))))  # TODO var
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -2012,6 +2018,11 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 9, 17, 35, 71]
     elif op in ["p_ffrac", "p_dfrac"]:
         quantitats = [0, 2, 3, 6, 17, 35, 71]
+    # fraccions
+    elif op in ["fr_sumes", "fr_multis"]:
+        quantitats = [0, 6, 9, 12, 18, 37, 74]
+    elif op == "fr_combis":
+        quantitats = [0, 3, 6, 9, 11, 24, 50]
     # equacions
     elif op in ["simples", "dsimples"]:
         quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
