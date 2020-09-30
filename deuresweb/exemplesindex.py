@@ -6,6 +6,7 @@ def genera(aleatoris=False):
     ex["en"] = {}
     ex["omx"] = {}
     ex["pow"] = {}
+    ex["frac"] = {}
     ex["eq"] = {}
     ex["pp"] = {}
     ex["succ"] = {}
@@ -36,6 +37,11 @@ def genera(aleatoris=False):
         ex["pow"]["sq2"] = g.powsqr(103, 1, 3)
         ex["pow"]["sqp1"] = g.powsqr(103, 2, 2)
         ex["pow"]["sqp2"] = g.powsqr(103, 2, 3)
+        ex["frac"]["suma1"] = g.frac(1, 1)
+        ex["frac"]["suma2"] = g.frac(1, 3)
+        ex["frac"]["multi"] = g.frac(2, 3, divis=0)
+        ex["frac"]["divi"] = g.frac(2, 3, divis=2)
+        ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["segoni1"] = g.eq(101, 1)
         ex["eq"]["segoni2"] = g.eq(102, 3)
@@ -87,6 +93,11 @@ def genera(aleatoris=False):
         ex["pow"]["sq2"] = r"\sqrt[2]{7}\cdot \sqrt[6]{4}\cdot \sqrt[3]{5}"
         ex["pow"]["sqp1"] = r"\sqrt[3]{5^{5}}\cdot \sqrt[2]{6^{7}}"
         ex["pow"]["sqp2"] = r"\sqrt[5]{4^{3}}\cdot \sqrt[2]{2^{4}}\cdot \sqrt[5]{3^{3}}"
+        ex["frac"]["suma1"] = r"\frac{2}{3}+\frac{5}{4}"
+        ex["frac"]["suma2"] = r"\frac{7}{6}-\frac{9}{2}"
+        ex["frac"]["multi"] = r"\frac{3}{5}\cdot \frac{4}{6}"
+        ex["frac"]["divi"] = r"\frac{3}{5}\div \frac{-1}{-2}"
+        ex["frac"]["combi"] = r"(\frac{3}{2}\cdot \frac{1}{3}-\frac{1}{3}\cdot \frac{3}{2}+\frac{1}{2}): (\frac{2}{4}\cdot \frac{-14}{3}+\frac{7}{5}: \frac{9}{7})"
         ex["eq"]["simple"] = "2x+5=7"
         ex["eq"]["segoni1"] = "x^2-9=0"
         ex["eq"]["segoni2"] = "x^2-7x=0"

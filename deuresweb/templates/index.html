@@ -306,6 +306,59 @@
     </div>
 
     <div class="card text-center">
+    <h5 class="card-header">Fraccions<b id="frac"></b></h5>
+        <div class="card-body">
+            <p class="card-text">
+                Sumes i restes
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["frac"]["suma1"] }}$
+                    </div>
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["frac"]["suma2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Multiplicacions i divisions
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["frac"]["multi"] }}$
+                    </div>
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["frac"]["divi"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Operacions combinades
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["frac"]["combi"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/fraccions/" role="button">Crea una fitxa de Fraccions</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('frac');">Canvia els exemples</button>
+        </div>
+    </div>
+
+    <div class="card text-center">
     <h5 class="card-header">Proporcionalitat<b id="pp"></b></h5>
         <div class="card-body">
             <p class="card-text">
