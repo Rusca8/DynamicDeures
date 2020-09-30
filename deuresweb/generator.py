@@ -1916,5 +1916,5 @@ for x in range(10):
     print(powsqr(103, 2, 3))
 """
 
-for x in range(6):
-    print(fracmix(random.choice([-1, 1])*randomfracnum(3), randomfracnum(3), 3))
+#for x in range(6):
+#    print(fracmix(random.choice([-1, 1])*randomfracnum(3), randomfracnum(3), 3))
