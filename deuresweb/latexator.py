@@ -1997,7 +1997,7 @@ def quantesson(value, op):
     elif op in ["smultis", "sdivis"]:
         quantitats = [0, 8, 15, 27, 42, 87, 174]
     elif op == "combis":
-        quantitats = [0, 3, 6, 9, 9, 19, 41]
+        quantitats = [0, 3, 6, 9, 9, 19, 39]
     # més xifres
     elif op == "v_sumes":
         quantitats = [0, 4, 8, 12, 16, 35, 64]
