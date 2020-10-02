@@ -1528,6 +1528,122 @@ def prop(tipus, nivell=1):
     return "AQUEST TIPUS DE P NO EXISTEIX 42"
 
 
+import random
+
+
+def limits(tipus, nivell=1, conv=3):
+    """
+    Genera un límit del tipus escollit
+
+    :param tipus: 0 Px, 1 frac, 2 fracs, 3 sqrts,
+    :param nivell: 1 ordenat, + desordenat
+    :param conv: 0 zero, 1 num, 2 inf, 3 rand
+    :return: text
+    """
+
+    text = "x^{42}"
+    xto = "42"
+
+    if tipus == 0:  # polinomi
+        text = ""
+        xto = random.choice(["", "-"]) + "\\infty"
+        for x in range(random.choice([3, 4])):
+            coef = random.randint(1, 6)
+            if moneda():
+                coef = -coef
+            if x == 0:
+                exp = ""
+            elif x == 1:
+                exp = "x"
+            else:
+                exp = "x^{" + f"{x}" + "}"
+
+            if moneda() or x == 0 or nivell == 1:
+                if x > 0:
+                    if coef > 0:
+                        text += "+"
+                text += f"{coef}{exp}"
+            else:
+                if text[0] != "-":
+                    text = "+" + text
+                text = f"{coef}{exp}" + text
+
+    if tipus == 1:  # frac infty
+        xto = random.choice(["", "-"]) + "\\infty"
+        gnum = random.randint(2, 5)
+        if conv == 1 or random.choice([0, 0, 1]):  # resultat num
+            gden = gnum
+        elif conv == 2 or moneda():  # resultat inf
+            gden = max(1, random.randint(1, gnum - 1))
+        else:  # resultat 0
+            gden = gnum + random.randint(1, 3)
+
+        tnum = ""
+        ternums = 0
+        quantsvull = random.choice([2, 3])
+        for x in range(gnum+1):
+            coef = random.randint(1, 6)
+            if moneda():
+                coef = -coef
+            if gnum-x > 0:
+                exp = "x"
+                if gnum-x > 1:
+                    exp += "^{" + f"{gnum-x}" + "}"
+            else:
+                exp = ""
+
+            if x == 0:
+                tnum = f"{coef}" + exp
+                ternums += 1
+            else:
+                if (random.randint(0, gnum) != 1 and not ternums >= quantsvull) or ternums + (gnum-x) <= quantsvull:
+                    if moneda() or nivell == 1:  # dreta
+                        if coef > 0:
+                            tnum += "+"
+                        tnum += f"{coef}" + exp
+                        ternums += 1
+                    else:  # esquerra
+                        if tnum[0] != "-":
+                            tnum = "+" + tnum
+                        tnum = f"{coef}" + exp + tnum
+                        ternums += 1
+
+        tden = ""
+        terdens = 0
+        quantsvull = random.choice([2, 3])
+        for x in range(gden+1):
+            coef = random.randint(1, 6)
+            if moneda():
+                coef = -coef
+            if gden-x > 0:
+                exp = "x"
+                if gden - x > 1:
+                    exp += "^{" + f"{gden - x}" + "}"
+            else:
+                exp = ""
+
+            if x == 0:
+                tden = f"{coef}" + exp
+                terdens += 1
+            else:
+                if (random.randint(0, gden) == 1 and not terdens >= quantsvull) or terdens + (gden-x) <= quantsvull:
+                    if moneda() or nivell == 1:  # dreta
+                        if coef > 0:
+                            tden += "+"
+                        tden += f"{coef}" + exp
+                        terdens += 1
+                    else:  # esquerra
+                        if tden[0] != "-":
+                            tden = "+" + tden
+                        tden = f"{coef}" + exp + tden
+                        terdens += 1
+
+        text = "\\frac{" + f"{tnum}" + "}{" + f"{tden}" + "}"
+
+    text = "\\lim_{x\\to" + xto + "}" + text
+    return text
+
+
 def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, inici=0):
     opcions = opcions[:]  # sense això estic passant la referència i afecta a fora de manera incontrolable
     amaga = amaga[:]
@@ -1944,4 +2060,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(fracmix(random.choice([-1, 1])*randomfracnum(3), randomfracnum(3), 3))
+    print(limits(0, 1))

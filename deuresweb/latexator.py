@@ -48,8 +48,10 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
         qdivis = quantesson(opcions["qdivis"], "divis")
         qsdivis = quantesson(opcions["qsdivis"], "sdivis")
         dtaules = []
-        if multis and opcions["copymult"] == "com":  # si estic copiant les multis, copio les taules
+        if multis and opcions["copymult"] == "com":  # si estic copiant les multis, copio les taules i quantitats
             dtaules = taules
+            qdivis = qmultis
+            qsdivis = qsmultis
         else:
             for x in range(1, 13):
                 if f"td{x}" in opcions:
