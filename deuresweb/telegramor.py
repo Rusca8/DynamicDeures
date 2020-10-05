@@ -4,6 +4,7 @@ from teletoken import gettoken
 
 import urllib.parse
 
+
 def feedback(tema, opcions):
     telegramText = "S'han generat exercicis *" + tematitol(tema) + "* _(" + opcions["curs"] + ")_ "
     telegramText = urllib.parse.quote_plus(telegramText)

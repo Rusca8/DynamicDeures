@@ -4,6 +4,7 @@ from pylatex import Document, Section
 from pylatex import Command, NoEscape, Math, Tabular, Package
 
 import generator as gen
+import wolframator as w
 
 
 def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - - - - COMBINADES
@@ -1634,6 +1635,9 @@ def derivades(opcions, solucions=False):
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
+    if opcions["solucions"] == "sí":
+        solucions = True
+
     if "rd" in opcions:
         rd = True
         qsimples = quantesson(opcions["qsimples"], "dx_simples")
@@ -1668,6 +1672,7 @@ def derivades(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet) TODO enllaçar eqs a wolfram
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1691,7 +1696,11 @@ def derivades(opcions, solucions=False):
                 begin(doc, 'multicols', 3)
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.dx(1, [1, 2, 3, 4, 5], simples=True)))
+                    text = gen.dx(1, [1, 2, 3, 4, 5], simples=True)
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{$%s$}' % (w.urlfor(text, t="dx"), text)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % text))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1724,7 +1733,10 @@ def derivades(opcions, solucions=False):
                     else:
                         text = gen.dx(3, [1, 2, 3, 4, 5, 6, 7, 8], simples=True, inici=random.choice(propietats))
                     scale = gen.fxscale(text)
-                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{\scalebox{%s}{$%s$}}' % (w.urlfor(text, t="dx"), scale, text)))
+                    else:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')
@@ -1742,7 +1754,10 @@ def derivades(opcions, solucions=False):
                     else:
                         text = gen.dx(3, funcions)
                     scale = gen.fxscale(text)
-                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{\scalebox{%s}{$%s$}}' % (w.urlfor(text, t="dx"), scale, text)))
+                    else:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
                     space(doc, "1cm")
                 end(doc, 'multicols')
                 end(doc, 'parts')

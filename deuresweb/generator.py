@@ -1531,13 +1531,14 @@ def prop(tipus, nivell=1):
 import random
 
 
-def limits(tipus, nivell=1, conv=3):
+def limits(tipus, nivell=1, conv=3, ordenat=False):
     """
     Genera un límit del tipus escollit
 
     :param tipus: 0 Px, 1 frac, 2 fracs, 3 sqrts,
-    :param nivell: 1 ordenat, + desordenat
+    :param nivell:
     :param conv: 0 zero, 1 num, 2 inf, 3 rand
+    :param ordenat: termes ordenats
     :return: text
     """
 
@@ -1558,7 +1559,7 @@ def limits(tipus, nivell=1, conv=3):
             else:
                 exp = "x^{" + f"{x}" + "}"
 
-            if moneda() or x == 0 or nivell == 1:
+            if moneda() or x == 0 or ordenat:
                 if x > 0:
                     if coef > 0:
                         text += "+"
@@ -1597,7 +1598,7 @@ def limits(tipus, nivell=1, conv=3):
                 ternums += 1
             else:
                 if (random.randint(0, gnum) != 1 and not ternums >= quantsvull) or ternums + (gnum-x) <= quantsvull:
-                    if moneda() or nivell == 1:  # dreta
+                    if moneda() or ordenat:  # dreta
                         if coef > 0:
                             tnum += "+"
                         tnum += f"{coef}" + exp
@@ -1627,7 +1628,7 @@ def limits(tipus, nivell=1, conv=3):
                 terdens += 1
             else:
                 if (random.randint(0, gden) == 1 and not terdens >= quantsvull) or terdens + (gden-x) <= quantsvull:
-                    if moneda() or nivell == 1:  # dreta
+                    if moneda() or ordenat:  # dreta
                         if coef > 0:
                             tden += "+"
                         tden += f"{coef}" + exp
@@ -1640,7 +1641,145 @@ def limits(tipus, nivell=1, conv=3):
 
         text = "\\frac{" + f"{tnum}" + "}{" + f"{tden}" + "}"
 
+    elif tipus == 2:  # frac ± frac (infty)
+        if nivell in [1, 2]:  # num - num / inf - inf
+            if nivell == 1:
+                k = 0  # num - num
+                if random.randint(1, 5) == 1:  # 0 - 0
+                    k = random.randint(-1, -2)
+                # TODO num - 0 and the vicerveza
+                # TODO escriure les fraccions i tal estaria bé
+            else:
+                xto = "\\infty"
+                signe = "-"  # entre fracs
+                # diferència entre els graus de num i den
+                k = random.randint(1, 2)  # inf - inf
+                # graus dels altres termes (Ax^a+Bx^b)/(Cx^c+Dx^d) + (Ex^e+Fx^f)/(Gx^g+Hx^h)
+                c = random.randint(1, 2)
+                g = random.randint(0, 2)
+                a = c + k
+                e = g + k
+
+                b = random.randint(0, c)
+                f = random.randint(0, g)
+                if c-k >= 0:
+                    d = random.randint(0, c-k)
+                else:
+                    d = -42
+                if g-k >= 0:
+                    h = random.randint(0, g-k)
+                else:
+                    h = -42
+                # comprovo que al menys n'hi ha un prou gros per convergent a núm
+                if c>b and g>f and c-k>d and g-k>h:
+                    if moneda():
+                        b = c
+                    else:
+                        f = g
+                # coeficients
+                ca = random.randint(1, 3) * random.choice([1, -1])  # principals
+                cg = random.randint(1, 3) * random.choice([1, -1])
+                ce = random.choice(divisors(ca*cg))  # obligats
+                if moneda():
+                    ce = -ce
+                    signe = "+"
+                cc = ca*cg // ce
+                cb = random.randint(1, 6) * random.choice([1, -1])  # lliures
+                cf = random.randint(1, 6) * random.choice([1, -1])
+                cd = random.randint(1, 6) * random.choice([1, -1])
+                ch = random.randint(1, 6) * random.choice([1, -1])
+                # muntem la fracció
+                num1 = monomi(ca, a)
+                if moneda() and not ordenat:
+                    if num1[0] != "-":
+                        num1 = monomi(cb, b) + "+" + num1
+                    else:
+                        num1 = monomi(cb, b) + num1
+                else:
+                    if cb > 0:
+                        num1 += "+" + monomi(cb, b)
+                    else:
+                        num1 += monomi(cb, b)
+
+                den1 = monomi(cc, c)
+                if d != -42:
+                    if moneda() and not ordenat:
+                        if den1[0] != "-":
+                            den1 = monomi(cd, d) + "+" + den1
+                        else:
+                            den1 = monomi(cd, d) + den1
+                    else:
+                        if cd > 0:
+                            den1 += "+" + monomi(cd, d)
+                        else:
+                            den1 += monomi(cd, d)
+
+                num2 = monomi(ce, e)
+                if moneda() and not ordenat:
+                    if num2[0] != "-":
+                        num2 = monomi(cf, f) + "+" + num2
+                    else:
+                        num2 = monomi(cf, f) + num2
+                else:
+                    if cf > 0:
+                        num2 += "+" + monomi(cf, f)
+                    else:
+                        num2 += monomi(cf, f)
+
+                den2 = monomi(cg, g)
+                if h != -42:
+                    if moneda() and not ordenat:
+                        if den2[0] != "-":
+                            den2 = monomi(ch, h) + "+" + den2
+                        else:
+                            den2 = monomi(ch, h) + den2
+                    else:
+                        if ch > 0:
+                            den2 += "+" + monomi(ch, h)
+                        else:
+                            den2 += monomi(ch, h)
+                f1 = "\\frac{" + f"{num1}" + "}{" + f"{den1}" + "}"
+                if den2 != "1":
+                    f2 = "\\frac{" + f"{num2}" + "}{" + f"{den2}" + "}"
+                else:
+                    f2 = num2
+                    if f2[0] == "-" or signe == "-":
+                        f2 = f"({f2})"
+                text = f1 + signe + f2
+
+                """  # Això és un experiment fracassat però que seria útil per crear polinomis amb qtat de termes defin.
+                gden1 = list(reversed(range(random.randint(1, 2) + 1)))  # P(x) de grau randint(1,2)
+                gden2 = list(reversed(range(random.randint(0, 2) + 1)))  # P(x) de grau randint(0,2)
+                gnum1 = list(reversed(range(gden1[0]+gdif + 1)))  # P(x) del grau que toqui segons dif
+                gnum2 = list(reversed(range(gden2[0]+gdif + 1)))  # P(x) del grau que toqui segons dif
+                
+                # me'n quedo dos o tres (incl. el més gros)
+                tden1 = random.randint(2, 3)
+                tden2 = random.randint(2, 3)
+                tnum1 = random.randint(2, 3)
+                tnum2 = random.randint(2, 3)
+                print(gden1, gden2, gnum1, gnum2)
+                if len(gden1) > tden1:
+                    gden1 = gden1[:1] + random.sample(gden1[1:], tden1-1)  # agafo el més alt i rand fins omplir termes
+                if len(gden2) > tden2:
+                    gden2 = gden2[:1] + random.sample(gden2[1:], tden2-1)
+                if len(gnum1) > tnum1:
+                    gnum1 = gnum1[:1] + random.sample(gnum1[1:], tnum1 - 1)
+                if len(gnum2) > tnum2:
+                    gnum2 = gnum2[:1] + random.sample(gnum2[1:], tnum2-1)
+                print(gden1, gden2, gnum1, gnum2)
+                """
+
     text = "\\lim_{x\\to" + xto + "}" + text
+    return text
+
+
+def monomi(base, exp):
+    text = f"{base}"
+    if exp:
+        text += "x"
+    if exp not in [0, 1]:
+        text += "^{" + f"{exp}" + "}"
     return text
 
 
@@ -2060,4 +2199,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(limits(0, 1))
+    print(limits(2, 2, ordenat=True))

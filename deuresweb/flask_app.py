@@ -125,7 +125,7 @@ def success():
 def derivades():
     if request.method == "POST":
         try:
-            g.derivades(request.form, solucions=False)
+            g.derivades(request.form)
         except:
             return redirect("/latex_error/derivades")
         tele.feedback("dx", request.form)
