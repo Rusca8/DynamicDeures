@@ -801,10 +801,10 @@ def powsqr(tipus, nivell=1, termes=2):
             pn = False
             pd = False
             random.shuffle(primers)
-            if moneda() or termes < 5:
-                bases = primers[:2]  # agafa 0-1
+            if moneda() or termes < 6:
+                bases = primers[:2]  # agafa els dos primers
             else:
-                bases = primers[:3]  # agafa 0-2
+                bases = primers[:3]  # agafa els tres primers
             gastat = []
             for x in range(termes):
                 if x == termes - 1 and len(gastat) == 1:  # si és l'últim i només he posat una base, forço un altre
