@@ -70,10 +70,10 @@ def apilades():
 @app.route("/powsqr/", methods=["GET", "POST"])
 def powsqr():
     if request.method == "POST":
-        try:
-            g.powsqr(request.form, solucions=False)
-        except:
-            return redirect("/latex_error/apilades")
+        #try:
+        g.powsqr(request.form, solucions=False)
+        #except:
+        #    return redirect("/latex_error/apilades")
 
         tele.feedback("powsqr", request.form)
         return redirect("/pdf/powsqr")

@@ -666,7 +666,7 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     return text
 
 
-def powsqr(tipus, nivell=1, termes=2):
+def powsqr(tipus, nivell=1, termes=2, lletres=False):
     text = "42^6"
     if tipus == 1:  # potències, mateix exponent
         if nivell == 1:  # multiplicant
@@ -948,9 +948,9 @@ def powsqr(tipus, nivell=1, termes=2):
             text = "\\frac{" + fracn + "}{" + fracd + "}"
     elif tipus == 101:  # arrels, mateix exponent
         pass
-    elif tipus == 102:  # arrels, mateixa base
+    elif tipus == 102:  # arrels, mateixa base (té sentit?)
         pass
-    elif tipus == 103:  # arrels, MCM
+    elif tipus == 103:  # arrels, índex comú
         if nivell == 1:  # multiplicant, sense exponent
             text = ""
             for x in range(termes):
@@ -974,6 +974,198 @@ def powsqr(tipus, nivell=1, termes=2):
                 if x > 0:
                     text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}^" + "{" + f"{e}" + "}" + "}"
+    elif tipus == 104:  # arrels, combinar radicals
+        text = f"{random.randint(2, 9)}"
+        if nivell in [1, 2]:  # sense intercalar / pot intercalar
+            for x in range(termes):
+                tprev = "\\sqrt"
+                ind = random.randint(2, 5)
+                if ind > 2:
+                    tprev += f"[{ind}]"
+                tprev += "{"
+                text = tprev + text + "} "
+                if nivell > 1 and x < termes-1 and moneda():
+                    text = f"{random.randint(2, 4)}" + text
+    elif tipus == 105:  # arrels, extreure factors
+        if nivell == 1:  # només quadrades, factoritzat
+            primers = [2, 3, 5, 7]
+            if lletres:
+                if moneda():
+                    primers += ["a", "b", "c"]
+                else:
+                    primers += ["x", "y", "z"]
+            factors = random.sample(primers, random.randint(1, 3))
+            for x in range(len(factors)):
+                exp = random.randint(1, 5)
+                if exp == 1:
+                    factors[x] = f"{factors[x]}"
+                else:
+                    factors[x] = f"{factors[x]}^" + "{" + f"{exp}" + "}"
+            for x in range(len(factors)):
+                if x == 0:
+                    text = f"{factors[x]}"
+                else:
+                    text += f"\\cdot {factors[x]}"
+            text = "\\sqrt{" + text + "}"
+
+        elif nivell == 2:  # qualsevol índex, factoritzat
+            index = random.randint(2, 5)
+            primers = [2, 3, 5, 7]
+            if lletres:
+                if moneda():
+                    primers += ["a", "b", "c"]
+                else:
+                    primers += ["x", "y", "z"]
+            factors = random.sample(primers, random.randint(1, 3))
+            for x in range(len(factors)):
+                exp = random.randint(1, 3 + index)
+                if exp == 1:
+                    factors[x] = f"{factors[x]}"
+                else:
+                    factors[x] = f"{factors[x]}^" + "{" + f"{exp}" + "}"
+            for x in range(len(factors)):
+                if x == 0:
+                    text = f"{factors[x]}"
+                else:
+                    text += f"\\cdot {factors[x]}"
+            if index == 2:
+                text = "\\sqrt{" + text + "}"
+            else:
+                text = "\\sqrt[" + f"{index}" + "]{" + text + "}"
+
+        elif nivell == 11:  # només quadrades, per factoritzar
+            seed = random.choice([2, 2, 3, 3, 5, 5, 7])
+            factors = 1
+            if moneda():
+                seed = pow(seed, 2)
+                factors += 1
+            for x in range(random.randint(3, 5)-factors):
+                seed *= random.choice([2, 3])
+            text = "\\sqrt{" + f"{seed}" + "}"
+
+        elif nivell == 12:  # índex qualsevol, per factoritzar
+            index = random.randint(2, 4)
+            if index == 2:
+                return powsqr(105, 11)
+            else:
+                seed = random.choice([2, 3])
+                if moneda():
+                    seed *= seed
+                seed *= pow(random.choice([2, 3]), index)
+                if seed < 100 and random.choice([0, 1, 1]):
+                    seed *= 10
+                text = "\\sqrt[" + f"{index}" + "]{" + f"{seed}" + "}"
+
+    elif tipus == 106:  # arrels, entrar factors
+        if nivell == 1:  # només quadrades
+            pass
+        elif nivell == 2:  # qualsevol índex
+            pass
+    elif tipus == 107:  # sumes i restes simplificant primer
+        if nivell in [1, 11, 2, 12]:  # sense coefs, mateix rad / pot dif // amb coef, mat / pdif
+            seed = random.choice([2, 2, 2, 3, 3, 5])
+            if seed == 2:
+                opcions = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+            elif seed == 3:
+                opcions = [1, 2, 3, 4, 5, 6, 10]
+            elif seed == 5:
+                opcions = [1, 2, 3, 4, 5, 10]
+            triats = random.sample(opcions, termes)
+            text = ""
+            mutat = False
+            for x in range(len(triats)):
+                if x > 0:
+                    text += random.choice(["+", "-"])
+                if nivell in [2, 12]:
+                    coef = random.randint(1, random.choice([5, 10]))
+                    if coef != 1:
+                        text += f"{coef}"
+                if nivell == 11 and not mutat and random.randint(1, 10) == 1:
+                    altseed = [2, 3, 5]
+                    altseed.remove(seed)
+                    altseed = random.choice(altseed)
+                    altop = random.choice([2, 3, 4, 5, 10])
+                    text += "\\sqrt{" + f"{altseed*pow(altop, 2)}" + "}"
+                    mutat = True
+                else:
+                    text += "\\sqrt{" + f"{seed*pow(triats[x], 2)}" + "}"
+
+    elif tipus == 108:  # racionalitzar
+        text = "\\frac{1}{\\sqrt{42}}"
+        if nivell in [1, 2, 3]:  # denominador arrel quadrada
+            num = random.randint(1, random.choice([5, 10]))
+            den = random.randint(2, random.choice([5, 10]))
+            if nivell == 1:
+                text = "\\frac{" + f"{num}" + "}{\\sqrt{" + f"{den}" + "}}"
+            else:
+                index = random.randint(2, 5)
+                if nivell == 3:
+                    exp = random.randint(1, index)
+                    if exp != 1:
+                        den = f"{den}^" + "{" + f"{exp}" + "}"
+                text = "\\frac{" + f"{num}" + "}{\\sqrt[" + f"{index}" + "]{" + f"{den}" + "}}"
+
+        elif nivell in [11, 12]:  # denominador suma (√B+√C), una arrel / dues arrels
+            a = random.randint(1, random.choice([5, 10]))
+            if random.choice([0, 0, 1]):
+                a = -a
+            signe = random.choice(["+", "-"])
+            if nivell == 11 or random.choice([0, 1, 1]):  # una arrel
+                if moneda():  # B + √C
+                    b = random.randint(1, 10)
+                    opcions = [2, 3, 5, 6, 7, 8, 10]
+                    if pow(b, 2) in opcions:
+                        opcions.remove(pow(b, 2))
+                    c = random.choice(opcions)
+                    text = "\\frac{" + f"{a}" + "}{" + f"{b}" + signe + "\\sqrt{" + f"{c}" + "}}"
+                else:  # √B + C
+                    c = random.randint(1, 10)
+                    opcions = [2, 3, 5, 6, 7, 8, 10]
+                    if pow(c, 2) in opcions:
+                        opcions.remove(pow(c, 2))
+                    b = random.choice(opcions)
+                    text = "\\frac{" + f"{a}" + "}{" + "\\sqrt{" + f"{b}" + "}" + signe + f"{c}" + "}"
+            else:  # dues arrels
+                opcions = [2, 3, 5, 6, 7, 8, 10]
+                random.shuffle(opcions)
+                b = opcions.pop()  # gets and removes last element
+                c = opcions.pop()
+                text = "\\frac{" + f"{a}" + "}{" + "\\sqrt{" + f"{b}" + "}" + signe + "\\sqrt{" + f"{c}" + "}}"
+
+        elif nivell in [13, 14]:  # denominador i numerador conjugats, una arrel / dues arrels
+            if nivell == 13 or moneda():  # una arrel
+                if moneda():  # B + √C
+                    b = random.randint(1, 10)
+                    opcions = [2, 3, 5, 6, 7, 8, 10]
+                    if pow(b, 2) in opcions:
+                        opcions.remove(pow(b, 2))
+                    c = random.choice(opcions)
+                    signe = ["+", "-"]
+                    random.shuffle(signe)
+                    num = f"{b}" + signe[0] + "\\sqrt{" + f"{c}" + "}"
+                    den = f"{b}" + signe[1] + "\\sqrt{" + f"{c}" + "}"
+                else:  # √B + C
+                    c = random.randint(1, 10)
+                    opcions = [2, 3, 5, 6, 7, 8, 10]
+                    if pow(c, 2) in opcions:
+                        opcions.remove(pow(c, 2))
+                    b = random.choice(opcions)
+                    signe = ["+", "-"]
+                    random.shuffle(signe)
+                    num = "\\sqrt{" + f"{b}" + "}" + signe[0] + f"{c}"
+                    den = "\\sqrt{" + f"{b}" + "}" + signe[1] + f"{c}"
+            else:  # dues arrels (√A + √B)/(√A - √B)
+                opcions = [2, 3, 5, 6, 7, 8, 10]
+                random.shuffle(opcions)
+                a = opcions.pop()
+                b = opcions.pop()
+                signe = ["+", "-"]
+                random.shuffle(signe)
+                num = "\\sqrt{" + f"{a}" + "}" + signe[0] + "\\sqrt{" + f"{b}" + "}"
+                den = "\\sqrt{" + f"{a}" + "}" + signe[1] + "\\sqrt{" + f"{b}" + "}"
+
+            text = "\\frac{" + num + "}{" + den + "}"
+
     return text
 
 
@@ -2199,4 +2391,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(limits(2, 2, ordenat=True))
+    print(powsqr(108, 13))
