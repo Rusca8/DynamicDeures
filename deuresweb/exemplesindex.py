@@ -23,6 +23,7 @@ def genera(aleatoris=False):
         ex["en"]["divi3"] = g.comb(3, 6)
         ex["en"]["combi1"] = g.mixcomb(random.randint(-10, 20), 3, doblesigne=True)
         ex["en"]["combi2"] = g.mixcomb(random.randint(-10, 20), 3, doblesigne=True, ops=[1, 2, 3, 4, 5])
+        # pow
         ex["pow"]["mexp1"] = g.powsqr(1, 1, 2)
         ex["pow"]["mexp2"] = g.powsqr(1, 2, 3)
         ex["pow"]["mbase1"] = g.powsqr(2, 1, 2)
@@ -37,11 +38,24 @@ def genera(aleatoris=False):
         ex["pow"]["sq2"] = g.powsqr(103, 1, 3)
         ex["pow"]["sqp1"] = g.powsqr(103, 2, 2)
         ex["pow"]["sqp2"] = g.powsqr(103, 2, 3)
+        ex["pow"]["comb1"] = g.powsqr(104, 1, 2)
+        ex["pow"]["comb2"] = g.powsqr(104, 2, 3)
+        ex["pow"]["extr1"] = g.powsqr(105, 1, lletres=0)
+        ex["pow"]["extr2"] = g.powsqr(105, 2, lletres=1)
+        ex["pow"]["intro1"] = g.powsqr(106, 1, lletres=0)
+        ex["pow"]["intro2"] = g.powsqr(106, 2, lletres=1)
+        ex["pow"]["fext1"] = g.powsqr(105, 11)
+        ex["pow"]["fext2"] = g.powsqr(105, 12)
+        ex["pow"]["asum"] = g.powsqr(107, 12, 3)
+        ex["pow"]["racio1"] = g.powsqr(108, random.choice([1, 2, 3]))
+        ex["pow"]["racio2"] = g.powsqr(108, random.choice([12, 14]))
+        # frac
         ex["frac"]["suma1"] = g.frac(1, 1)
         ex["frac"]["suma2"] = g.frac(1, 3)
         ex["frac"]["multi"] = g.frac(2, 3, divis=0)
         ex["frac"]["divi"] = g.frac(2, 3, divis=2)
         ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
+        # eq
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["segoni1"] = g.eq(101, 1)
         ex["eq"]["segoni2"] = g.eq(102, 3)
@@ -50,12 +64,14 @@ def genera(aleatoris=False):
         ex["eq"]["poli"] = g.eq(104)
         ex["eq"]["sis2d"] = g.sisteq(1, 2)
         ex["eq"]["sis3d"] = g.sisteq(101, 3)
+        # omx
         ex["omx"]["suma"] = g.apilades(1, 1, [3, 2])
         ex["omx"]["sumad"] = g.apilades(1, 2, [3, 2], [2, 2])
         ex["omx"]["resta"] = g.apilades(2, 1, [2, 2])
         ex["omx"]["restad"] = g.apilades(2, 3, [3, 2], [2, 2])
         ex["omx"]["multi"] = g.apilades(3, 1, [3, 2])
         ex["omx"]["multid"] = g.apilades(3, 2, [2, 2], [2, 1])
+        # pp
         ex["pp"]["directa"] = g.prop(1, 1)
         ex["pp"]["inversa"] = g.prop(1, 2)
         ex["succ"]["termen"] = g.success(random.choice([1, 2]), 2)
@@ -93,6 +109,17 @@ def genera(aleatoris=False):
         ex["pow"]["sq2"] = r"\sqrt[2]{7}\cdot \sqrt[6]{4}\cdot \sqrt[3]{5}"
         ex["pow"]["sqp1"] = r"\sqrt[3]{5^{5}}\cdot \sqrt[2]{6^{7}}"
         ex["pow"]["sqp2"] = r"\sqrt[5]{4^{3}}\cdot \sqrt[2]{2^{4}}\cdot \sqrt[5]{3^{3}}"
+        ex["pow"]["comb1"] = r"\sqrt[3]{\sqrt{2}}"
+        ex["pow"]["comb2"] = r"\sqrt[4]{2\sqrt{\sqrt[5]{7}}}"
+        ex["pow"]["extr1"] = r"\sqrt{7^{5}}"
+        ex["pow"]["extr2"] = r"\sqrt[4]{5^{6}d^{2}a^{5}}"
+        ex["pow"]["intro1"] = r"3\sqrt{3^{5}}"
+        ex["pow"]["intro2"] = r"2^{3}\cdot 7^{3}\cdot c^{2}\sqrt[5]{7^{8}}"
+        ex["pow"]["fext1"] = r"\sqrt{52}"
+        ex["pow"]["fext2"] = r"\sqrt[4]{480}"
+        ex["pow"]["asum"] = r"8\sqrt{27}-2\sqrt{3}-\sqrt{75}"
+        ex["pow"]["racio1"] = r"\frac{5}{\sqrt{2}}"
+        ex["pow"]["racio2"] = r"\frac{1}{5+\sqrt{6}}"
         ex["frac"]["suma1"] = r"\frac{2}{3}+\frac{5}{4}"
         ex["frac"]["suma2"] = r"\frac{7}{6}-\frac{9}{2}"
         ex["frac"]["multi"] = r"\frac{3}{5}\cdot \frac{4}{6}"

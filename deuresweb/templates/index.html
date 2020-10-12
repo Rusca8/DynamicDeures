@@ -281,7 +281,10 @@
                   </div>
                 </div>
             </div>
-            <br>
+            <hr class="mt-6">
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/powsqr/" role="button">Crea una fitxa de Potències i Arrels</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pow');">Canvia els exemples</button>
+            <hr>
             <p class="card-text">
                 Arrels amb i sense exponents
             </p>
@@ -293,6 +296,99 @@
                     </div>
                     <div class="col-sm">
                       ${{ ex["pow"]["sqp2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Combinar radicals
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["pow"]["comb1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["pow"]["comb2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Extreure factors
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["pow"]["extr1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["pow"]["extr2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Introduir factors
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["pow"]["intro1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["pow"]["intro2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Factoritzar i extreure
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["pow"]["fext1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["pow"]["fext2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Sumes i restes d'arrels
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["pow"]["asum"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Racionalitzar
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["pow"]["racio1"] }}$
+                    </div>
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["pow"]["racio2"] }}$
                     </div>
                   </div>
                 </div>
@@ -390,7 +486,7 @@
             </p>
             <div class="font-weight-light mt-3 mb-2"><i>${{ ex["succ"]["extreure"] }}$</i></div>
             <div class="font-weight-light mt-3 mb-4"><i>${{ ex["succ"]["gextreure"] }}$</i></div>
-            <br>
+
             <a class="btn btn-sm btn-outline-primary btn-block" href="/success/" role="button">Crea una fitxa de Successions</a>
             <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('succ');">Canvia els exemples</button>
         </div>

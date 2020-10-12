@@ -992,7 +992,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
                 if ind > 2:
                     tprev += f"[{ind}]"
                 tprev += "{"
-                text = tprev + text + "} "
+                text = tprev + text + "}"
                 if nivell > 1 and x < termes-1 and moneda():
                     text = f"{random.randint(2, 4)}" + text
     elif tipus == 105:  # arrels, extreure factors
@@ -1222,6 +1222,8 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
                     exp = random.randint(1, index)
                     if exp != 1:
                         den = f"{den}^" + "{" + f"{exp}" + "}"
+                if index == 2:
+                    index = ""
                 text = "\\frac{" + f"{num}" + "}{\\sqrt[" + f"{index}" + "]{" + f"{den}" + "}}"
 
         elif nivell in [11, 12]:  # denominador suma (√B+√C), una arrel / dues arrels
@@ -2510,4 +2512,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(powsqr(106, 2, lletres=1))
+    print(powsqr(108, 12))
