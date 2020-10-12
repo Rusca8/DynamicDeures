@@ -1101,9 +1101,85 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
 
     elif tipus == 106:  # arrels, entrar factors
         if nivell == 1:  # només quadrades
-            pass
+            numeros = [2, 3, 5, 7]
+            lets = ["a", "b", "c", "d", "x", "y", "z"]
+            factors = []
+            if random.randint(1, 10) == 1:
+                lets[2] = "ç"
+            if lletres < 2:
+                factors += numeros
+            if lletres > 0:
+                factors += random.choice([lets[:4], lets[4:]])
+            factors = random.sample(factors, random.choice([1, 3]))
+            seed = random.choice(factors)
+            if len(factors) > 1 and moneda():
+                factors.remove(seed)
+            seed = f"{seed}"
+            exp = random.choice([1, 1, 3, 3, 5])
+            if exp > 1:
+                seed += "^{" + f"{exp}" + "}"
+            text = "\\sqrt{" + seed + "}"
+
+            if not any(x in numeros for x in factors[:-1]):  # no hi ha més números després del primer (dibuixa E<-D)
+                punts = False
+            else:
+                punts = True
+            for x in range(len(factors)):
+                exp = random.randint(1, 3)
+                if exp > 1:
+                    exp = "^{" + f"{exp}" + "}"
+                else:
+                    exp = ""
+                if x > 0:
+                    if not punts or (factors[x] in lets and factors[x-1] in lets):
+                        pass
+                    else:
+                        text = "\\cdot " + text
+                text = f"{factors[x]}" + exp + text
         elif nivell == 2:  # qualsevol índex
-            pass
+            index = random.randint(2, 5)
+            numeros = [2, 3, 5, 7]
+            lets = ["a", "b", "c", "d", "x", "y", "z"]
+            factors = []
+            if random.randint(1, 10) == 1:
+                lets[2] = "ç"
+            if lletres < 2:
+                factors += numeros
+            if lletres > 0:
+                factors += random.choice([lets[:4], lets[4:]])
+            factors = random.sample(factors, random.choice([1, 3]))
+            seed = random.choice(factors)
+            if len(factors) > 1 and moneda():
+                factors.remove(seed)
+            seed = f"{seed}"
+            exps = [1, 2, 3, 4, 5, 6, 7, 8]
+            for x in range(len(exps)):
+                if exps[x] % index == 0:
+                    exps[x] = exps[x]-1  # rebaixo els múltiples de l'arrel (així no es poden treure fora)
+            exp = random.choice(exps)
+            if exp > 1:
+                seed += "^{" + f"{exp}" + "}"
+            if index == 2:
+                text = "\\sqrt{" + seed + "}"
+            else:
+                text = "\\sqrt[" + f"{index}" + "]{" + seed + "}"
+
+            if not any(x in numeros for x in factors[:-1]):  # no hi ha més números després del primer (Escriu E<-D)
+                punts = False
+            else:
+                punts = True
+            for x in range(len(factors)):
+                exp = random.randint(1, 3)
+                if exp > 1:
+                    exp = "^{" + f"{exp}" + "}"
+                else:
+                    exp = ""
+                if x > 0:
+                    if not punts or (factors[x] in lets and factors[x - 1] in lets):
+                        pass
+                    else:
+                        text = "\\cdot " + text
+                text = f"{factors[x]}" + exp + text
     elif tipus == 107:  # sumes i restes simplificant primer
         if nivell in [1, 11, 2, 12]:  # sense coefs, mateix rad / pot dif // amb coef, mat / pdif
             seed = random.choice([2, 2, 2, 3, 3, 5])
@@ -2434,4 +2510,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(powsqr(105, 1, lletres=1))
+    print(powsqr(106, 2, lletres=1))

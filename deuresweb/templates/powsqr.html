@@ -424,6 +424,65 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
+            <label for="formGroupFactors"><b>Introduir factors ✨</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qintrod" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="i123" autocomplete="off" id="i123" value="i123" checked> 123
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="iabc" autocomplete="off" id="iabc" value="iabc" checked> abc
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+         </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label for="formResultatPositiu"><i>Només arrel quadrada?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "iquad" %}
+              {% for n in range(5) %}
+                {% if n == 2 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
             <label for="formGroupFactors2"><b>Factoritzar i extreure ✨</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}

@@ -998,6 +998,19 @@ def powsqr(opcions, solucions=False):
                 lletres = 1
         fquad = quantesvariant(opcions["fquad"])
 
+        qintrod = quantesson(opcions["qintrod"], "a_introd")
+        if "i123" in opcions:
+            if "iabc" in opcions:
+                illetres = 1
+            else:
+                illetres = 0
+        else:
+            if "iabc" in opcions:
+                illetres = 2
+            else:
+                illetres = 1
+        iquad = quantesvariant(opcions["iquad"])
+
         qfextreure = quantesson(opcions["qfextreure"], "fextreure")
         ffquad = quantesvariant(opcions["ffquad"])
 
@@ -1023,11 +1036,18 @@ def powsqr(opcions, solucions=False):
         else:
             rdoble = 0
         print(f"Arrels s/ exp {qarrels} ({atermes})")
-        print(f"Combinar {qcombradi} ({einter}), extreure {qextreure} ({fquad}), fextreure {qfextreure} ({ffquad})")
+        print(f"Combinar {qcombradi} ({einter}), extreure {qextreure} ({fquad}), introduir {qintrod} ({iquad}), "
+              f"fextreure {qfextreure} ({ffquad})")
         print(f"Sumes d'arrels {qasum} ({scoef}), racional {qracions} [{ra}, {rab}]({rquad}, {rdoble})")
     else:
         sqrt = False
         qarrels = 0
+        qcombradi = 0
+        qextreure = 0
+        qintrod = 0
+        qfextreure = 0
+        qasum = 0
+        qracions = 0
 
 
     # PyLaTeX code
@@ -1046,7 +1066,8 @@ def powsqr(opcions, solucions=False):
 
     # preguntes
     if pot or sqrt:
-        if any([qmexp, qmbase, qarrels, qfrac, qffrac, qdfrac, qcombradi, qextreure, qfextreure, qasum, qracions]):
+        if any([qmexp, qmbase, qarrels, qfrac, qffrac, qdfrac, qcombradi, qextreure, qfextreure, qasum, qracions,
+                qintrod]):
             begin(doc, 'questions')
 
             if pot:
@@ -1211,6 +1232,27 @@ def powsqr(opcions, solucions=False):
                             doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 1, lletres=lletres)))
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 2, lletres=lletres)))
+                    space(doc, "0.7cm")
+                end(doc, 'multicols')
+                space(doc, "0.5cm")
+                end(doc, 'parts')
+
+            if qintrod:
+                n = qintrod
+                question(doc, f"{n}")
+                doc.append("Introdueix tots els factors dins l'arrel.")
+                var = (n * iquad) // 4
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 4)
+                for x in range(n):
+                    part(doc)
+                    if x < var:  # només quadrada vs qualsevol
+                        if x == 0 and illetres == 1:  # si hi ha 123 i abc, el primer nums
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(106, 1, lletres=0)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(106, 1, lletres=illetres)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(106, 2, lletres=illetres)))
                     space(doc, "0.7cm")
                 end(doc, 'multicols')
                 space(doc, "0.5cm")
