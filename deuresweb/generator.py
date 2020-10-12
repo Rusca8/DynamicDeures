@@ -196,7 +196,13 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
                 text = f"({text})"
 
         elif op == 3:  # divi
-            b = random.randint(2, maxn // 2)
+            if abs(num) > 11 and num % 10 != 0:  # evito divisions exagerades
+                if num > 13:
+                    b = 2
+                else:
+                    b = random.choice([2, 3])
+            else:
+                b = random.randint(3, maxn // 2)
             if random.choice([0, 0, 1]):
                 b = -b
             a = num * b
