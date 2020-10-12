@@ -2250,7 +2250,7 @@ def quantesson(value, op):
         quantitats = [0, 2, 3, 6, 17, 35, 71]
     elif op in ["combradi"]:
         quantitats = [0, 4, 7, 11, 28, 59, 124]
-    elif op in ["a_extreure"]:
+    elif op in ["a_extreure", "a_introd"]:
         quantitats = [0, 4, 8, 12, 32, 66, 132]
     elif op in ["fextreure"]:
         quantitats = [0, 3, 6, 9, 21, 50, 104]
