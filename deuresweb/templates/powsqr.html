@@ -385,6 +385,28 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="123" autocomplete="off" id="123" value="123" checked> 123
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="abc" autocomplete="off" id="abc" value="abc" checked> abc
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+         </div>
+
+        <div class="form-group mb-1 ml-4">
             <label for="formResultatPositiu"><i>Només arrel quadrada?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "fquad" %}
@@ -505,10 +527,10 @@
                 <div class="col">
                     <div class="btn-group-toggle ml-3" data-toggle="buttons">
                         <label class="btn btn-sm btn-outline-info py-0 btn-mini active" data-toggle="collapse" href="#racionA">
-                          <input type="checkbox" name="ra" autocomplete="off" id="p7" value="p7" checked> √a
+                          <input type="checkbox" name="ra" autocomplete="off" id="ra" value="ra" checked> √a
                         </label>
                         <label class="btn btn-sm btn-outline-info py-0 btn-mini active" data-toggle="collapse" href="#racionAB">
-                          <input type="checkbox" name="rab" autocomplete="off" id="p8" value="p8" checked> a+√b
+                          <input type="checkbox" name="rab" autocomplete="off" id="rab" value="rab" checked> a+√b
                         </label>
                     </div>
                 </div>

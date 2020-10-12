@@ -984,12 +984,26 @@ def powsqr(opcions, solucions=False):
 
         qcombradi = quantesson(opcions["qcombradi"], "combradi")
         einter = quantesvariant(opcions["einter"])
+
         qextreure = quantesson(opcions["qextreure"], "a_extreure")
+        if "123" in opcions:
+            if "abc" in opcions:
+                lletres = 1
+            else:
+                lletres = 0
+        else:
+            if "abc" in opcions:
+                lletres = 2
+            else:
+                lletres = 1
         fquad = quantesvariant(opcions["fquad"])
+
         qfextreure = quantesson(opcions["qfextreure"], "fextreure")
         ffquad = quantesvariant(opcions["ffquad"])
+
         qasum = quantesson(opcions["qasum"], "asum")
         scoef = quantesvariant(opcions["scoef"])
+
         qracions = quantesson(opcions["qracions"], "racions")
         if "ra" in opcions:
             ra = True
@@ -1191,9 +1205,12 @@ def powsqr(opcions, solucions=False):
                 for x in range(n):
                     part(doc)
                     if x < var:  # només quadrada vs qualsevol
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 1)))
+                        if x == 0 and lletres == 1:  # si hi ha 123 i abc, el primer nums
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 1, lletres=0)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 1, lletres=lletres)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 2)))
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(105, 2, lletres=lletres)))
                     space(doc, "0.7cm")
                 end(doc, 'multicols')
                 space(doc, "0.5cm")

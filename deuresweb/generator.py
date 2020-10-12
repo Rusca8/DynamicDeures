@@ -666,7 +666,16 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     return text
 
 
-def powsqr(tipus, nivell=1, termes=2, lletres=False):
+def powsqr(tipus, nivell=1, termes=2, lletres=0):
+    """
+
+    :param tipus:
+    :param nivell:
+    :param termes: quantitat de termes
+    :param lletres: 0 = nums / 1 = nums i llet / 2 = llet
+    :return: text en LaTeX
+    """
+
     text = "42^6"
     if tipus == 1:  # potències, mateix exponent
         if nivell == 1:  # multiplicant
@@ -988,15 +997,28 @@ def powsqr(tipus, nivell=1, termes=2, lletres=False):
                     text = f"{random.randint(2, 4)}" + text
     elif tipus == 105:  # arrels, extreure factors
         if nivell == 1:  # només quadrades, factoritzat
-            primers = [2, 3, 5, 7]
-            if lletres:
+            numeros = [2, 3, 5, 7]
+            lets = ["a", "b", "c", "d", "x", "y", "z"]
+            if random.randint(1, 10) == 1:
+                lets[2] = "ç"
+            primers = []
+            if lletres < 2:
+                primers += numeros
+            if lletres > 0:
                 if moneda():
-                    primers += ["a", "b", "c"]
+                    primers += lets[:4]
                 else:
-                    primers += ["x", "y", "z"]
+                    primers += lets[4:]
             factors = random.sample(primers, random.randint(1, 3))
+            if not any(x in numeros for x in factors[1:]):  # no hi ha més números després del primer
+                punts = False
+            else:
+                punts = True
             for x in range(len(factors)):
-                exp = random.randint(1, 5)
+                if len(factors) == 1:
+                    exp = random.randint(2, 8)
+                else:
+                    exp = random.randint(1, 5)
                 if exp == 1:
                     factors[x] = f"{factors[x]}"
                 else:
@@ -1005,20 +1027,37 @@ def powsqr(tipus, nivell=1, termes=2, lletres=False):
                 if x == 0:
                     text = f"{factors[x]}"
                 else:
-                    text += f"\\cdot {factors[x]}"
+                    if not punts or (factors[x][0] in lets and factors[x - 1][0] in lets):
+                        pass
+                    else:
+                        text += "\\cdot "
+                    text += f"{factors[x]}"
             text = "\\sqrt{" + text + "}"
 
         elif nivell == 2:  # qualsevol índex, factoritzat
             index = random.randint(2, 5)
-            primers = [2, 3, 5, 7]
-            if lletres:
+            numeros = [2, 3, 5, 7]
+            lets = ["a", "b", "c", "d", "x", "y", "z"]
+            if random.randint(1, 10) == 1:
+                lets[2] = "ç"
+            primers = []
+            if lletres < 2:
+                primers += numeros
+            if lletres > 0:
                 if moneda():
-                    primers += ["a", "b", "c"]
+                    primers += lets[:4]
                 else:
-                    primers += ["x", "y", "z"]
+                    primers += lets[4:]
             factors = random.sample(primers, random.randint(1, 3))
+            if not any(x in numeros for x in factors[1:]):  # no hi ha més números després del primer
+                punts = False
+            else:
+                punts = True
             for x in range(len(factors)):
-                exp = random.randint(1, 3 + index)
+                if len(factors) == 1:
+                    exp = random.randint(index, 3 + index)
+                else:
+                    exp = random.randint(1, 3 + index)
                 if exp == 1:
                     factors[x] = f"{factors[x]}"
                 else:
@@ -1027,7 +1066,11 @@ def powsqr(tipus, nivell=1, termes=2, lletres=False):
                 if x == 0:
                     text = f"{factors[x]}"
                 else:
-                    text += f"\\cdot {factors[x]}"
+                    if not punts or (factors[x][0] in lets and factors[x-1][0] in lets):
+                        pass
+                    else:
+                        text += "\\cdot "
+                    text += f"{factors[x]}"
             if index == 2:
                 text = "\\sqrt{" + text + "}"
             else:
@@ -2391,4 +2434,4 @@ for x in range(10):
 """
 
 for x in range(6):
-    print(powsqr(108, 13))
+    print(powsqr(105, 1, lletres=1))
