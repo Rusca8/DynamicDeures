@@ -52,7 +52,7 @@ Degut al sistema de feedback per Telegram que hi tinc muntat (el bot m'avisa qua
 
 En cas de no fer això la web donarà un error en el moment de generar el pdf (perquè no podrà importar la clau secreta del bot, que no he inclòs per motius evidents).
 
-_D'altra banda, a mi PyCharm em marca errors important els meus propis mòduls, però a l'hora de la veritat funciona bé._
+_PD: Pycharm em marcava error important els meus mòduls, però ho he solucionat marcant la carpeta mare (Mark Directory As Sources Root)._
 
 ## Prova-ho!
 Pots accedir a la web per generar les teves fitxes personalitzades aquí: [Dynamic Deures](http://bit.ly/DynamicDeures)

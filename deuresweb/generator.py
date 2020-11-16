@@ -539,7 +539,8 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
                 na += "9"
             for n in range(digitsc-digits[1]):
                 nb += "9"
-            text = r"\begin{array}{c}\phantom{+" + na + "}" + f"{a}" + r"\\ \underline{+\phantom{" + nb + "}" + f"{b}" + r"}\\ \end{array}"
+            text = (r"\begin{array}{c}\phantom{+" + na + "}" + f"{a}" + r"\\ \underline{+\phantom{" + nb + "}"
+                    f"{b}" + r"}\\ \end{array}")
         else:  # amb decimals
             text = "4.2+4.2"
             xa = digits[0] + decimals[0]
@@ -572,7 +573,9 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
                 nbe += "9"
             for n in range(decimalsc - decimals[1]):
                 nbd += "9"
-            text = r"\begin{array}{c}\phantom{+" + nae + "}" + f"{a}" + r"\phantom{" + nad + r"}\\ \underline{+\phantom{" + nbe + "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array}"
+            text = (r"\begin{array}{c}\phantom{+" + nae + "}" + f"{a}" + r"\phantom{" + nad
+                    + r"}\\ \underline{+\phantom{" + nbe + "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array}")
+
     elif tipus == 2:  # restes
         if nivell in [1, 2]:  # sense resultat negatiu || amb resultat negatiu
             text = "42-42"
@@ -593,7 +596,8 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
                 na += "9"
             for n in range(digitsc - digits[1]):
                 nb += "9"
-            text = r"\begin{array}{c}\phantom{-" + na + "}" + f"{a}" + r"\\ \underline{-\phantom{" + nb + "}" + f"{b}" + r"}\\ \end{array} "
+            text = (r"\begin{array}{c}\phantom{-" + na + "}" + f"{a}" + r"\\ \underline{-\phantom{" + nb + "}"
+                    f"{b}" + r"}\\ \end{array} ")
         else:  # decimals
             text = "4.2-4.2"
             xa = digits[0] + decimals[0]
@@ -629,9 +633,8 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
                 nbe += "9"
             for n in range(decimalsc - decimals[1]):
                 nbd += "9"
-            text = r"\begin{array}{c}\phantom{-" + nae + "}" + f"{a}" + r"\phantom{" + nad + r"}\\ \underline{" \
-                                                                                             r"-\phantom{" + nbe + \
-                   "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array} "
+            text = (r"\begin{array}{c}\phantom{-" + nae + "}" + f"{a}" + r"\phantom{" + nad + r"}\\ \underline{"
+                    r"-\phantom{" + nbe + "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array} ")
     elif tipus == 3:  # multis a x b = c
         if nivell == 1:  # sense decimals
             text = "42x42"
@@ -666,7 +669,8 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
                 nb += "9"
             # TODO ajustar per quan algun dels números no té decimals
 
-        text = r"\begin{array}{c}\phantom{\times" + na + "}" + f"{a}" + r"\\ \underline{\times\phantom{" + nb + "}" + f"{b}" + r"}\\ \end{array}"
+        text = (r"\begin{array}{c}\phantom{\times" + na + "}" + f"{a}" + r"\\ \underline{\times\phantom{" + nb + "}"
+                f"{b}" + r"}\\ \end{array}")
     else:  # divis
         text = "42/42"
     return text
@@ -791,7 +795,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
             base = primers[0]
             for x in range(termes):
                 exp = random.randint(random.choice([-7, -5, -3]), random.choice([3, 5, 7]))
-                if exp == 0 and moneda():
+                if exp == 0 and random.randint(1, 3) != 1:
                     exp = random.choice([2, -2])
                 elif exp < 0 and nivell == 1:
                     exp = abs(exp)
@@ -812,6 +816,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
                     else:
                         fracd += "\\cdot" + terme
             text = "\\frac{" + fracn + "}{" + fracd + "}"
+
         elif nivell in [3, 4]:  # només primers, sense exponents de grup / amb exponents de grup
             pn = False
             pd = False
@@ -828,7 +833,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
                 if base not in gastat:
                     gastat.append(base)
                 exp = random.randint(random.choice([-7, -5, -3]), random.choice([3, 5, 7]))
-                if exp == 0 and moneda():
+                if exp == 0 and random.randint(1, 3) != 1:
                     exp = random.choice([2, -2])
                 terme = f"{base}"
                 if exp != 1:
@@ -872,7 +877,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
             for x in range(termes):
                 if (moneda() and tn > 0) or td < 1:  # num
                     if nivell == 6:  # TODO veure què és això
-                        tnum.append(random.choice(primers))
+                        tnum.append(random.choice(primers))  # primers és a l'entrada del tipus [2, 3, 5, 7]
                     else:
                         tnum.append(random.choice([2, 3, 5, 7, 11, 13]))
                     tn -= 1
@@ -1225,7 +1230,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
             else:
                 index = random.randint(2, 5)
                 if nivell == 3:
-                    exp = random.randint(1, index)
+                    exp = random.randint(1, index-1)
                     if exp != 1:
                         den = f"{den}^" + "{" + f"{exp}" + "}"
                 if index == 2:
@@ -1320,6 +1325,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                     text = text + f'={c}'
                 else:
                     text = f'{c}=' + text
+
     elif tipus == 2:  # TIPUS Ax+B=C
         if nivell == 1:  # (innecessari) resultat enter positiu, no divideix per negatiu (a>0), coef max = 50
             x = random.randint(0, 9)
@@ -1354,6 +1360,135 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             text = text + f'={c}'
         else:
             text = f'{c}=' + text
+
+    elif tipus == 3:  # lineals: opera i resol
+        if nivell == 1:  # (6 termes) Ax + Bx + Cx + D + E + F = 0
+            x = random.randint(-10, 10)
+            # coeficients
+            a, b, c = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(3)]
+            if (a+b+c) == 0:  # evito indeterminat
+                if a == 1 or moneda():
+                    a += 1
+                else:
+                    a -= 1
+            blocx = (a+b+c)*x
+            if abs(blocx) > 50:  # si la F quedarà enorme, compenso amb signe contrari i restant gros
+                d, e = [-abs(blocx)//blocx * random.randint(10, 20) for _ in range(2)]
+            else:
+                d, e = [random.choice([-1, 1]) * random.randint(1, 15) for _ in range(2)]
+            f = -1 * ((a+b+c)*x + (d+e))
+            # muntatge
+            if moneda():  # faig al menys un de cada a cada costat
+                etext = f"{monomi(a, 1) + signe(d)}"
+            else:
+                etext = f"{d}" + f"{monomi(a, 1, True)}"
+            if moneda():
+                dtext = f"{monomi(-b, 1) + signe(-e)}"
+            else:
+                dtext = f"{-e}" + f"{monomi(-b, 1, True)}"
+
+            if moneda():
+                etext += f"{monomi(c, 1, True)}"
+            else:
+                dtext += f"{monomi(-c, 1, True)}"
+            if moneda():
+                etext += f"{signe(f)}"
+            else:
+                dtext += f"{signe(-f)}"
+
+            text = etext + "=" + dtext
+
+    elif tipus == 4:  # lineals: amb parèntesis
+        if nivell == 1:  # Ax+B = F(Cx+D)
+            x = random.randint(-10, 10)
+            c = random.randint(1, 5)
+            f = random.randint(2, 3)
+            a = random.randint(max(c, f), 10)
+            if a == c*f:  # evito indefinit
+                a += random.choice([-1, 1])  # això no és mai 0
+            d = random.choice([-1, 1]) * random.randint(1, 5)
+            b = (f*c - a)*x + f*d
+            if random.randint(1, 3) == 1:
+                if random.choice([0, 0, 1]):
+                    swap = f"{monomi(-a, 1, True)}"
+                    text2 = f"{b}"
+                else:
+                    swap = f"{signe(-b)}"
+                    text2 = f"{monomi(a, 1)}"
+            else:
+                swap = ""
+                text2 = f"{monomi(a, 1) + signe(b)}"
+            if moneda():
+                text = f"{f}({monomi(c, 1) + signe(d)}){swap}"
+            else:
+                text = f"{f}({d}{monomi(c, 1, True)}){swap}"
+            if moneda():
+                text += "=" + text2
+            else:
+                text = text2 + "=" + text
+
+        elif nivell == 2:  # E(Ax+B) = F(Cx+D) + G
+            x = random.randint(-10, 10)
+            # coefs
+            a, c = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(2)]
+            e, f = [random.choice([-1, 1]) * random.randint(2, 4) for _ in range(2)]
+            b, d = [random.choice([-1, 1]) * random.randint(1, 7) for _ in range(2)]
+            # coef control
+            if abs(abs(e*a) - abs(f*c)) * abs(x) > 45:  # la diferència entre EA i FC fa un blocx massa gran
+                if abs(e*a) < abs(f*c):
+                    if abs(e) < abs(a):
+                        e = int(e * (abs(f*c) / abs(e*a)))
+                    else:
+                        a = int(a * (abs(f*c) / abs(e*a)))
+                else:
+                    if abs(f) < abs(c):
+                        c = int(c * (abs(e*a) / abs(f*c)))
+                    else:
+                        f = int(f * (abs(e*a) / abs(f*c)))
+            if e*a//abs(e*a) == -f*c//abs(f*c) and abs(e*a-f*c) > 6:  # si sumen (i queda gros) faig que restin
+                c = -c
+            if e*a == f*c:  # evito indeterminat
+                if a == 1 or moneda():
+                    a += 1
+                else:
+                    a -= 1
+            blocx = (e*a - f*c)*x
+            if abs(blocx) > 40:  # si segueix mig gros, ajudo amb els independents
+                if e*b * blocx > 0:  # mateix signe
+                    b = -b
+                if -f*d * blocx > 0:
+                    d = -d
+            else:
+                if abs(abs(e*b) + abs(f*d)) > 10 and e*b * (-f*d) > 0:  # si sumen bastant i els estic sumant, resto
+                    b = -b
+                if (abs(e*b) > abs(f*d) and e*b * blocx > 0) or (abs(f*d) > abs(e*b) and -f*d * blocx > 0):
+                    b = -b
+                    d = -d
+            g = blocx + e*b - f*d
+            # muntatge
+            if moneda():
+                text1 = f"{e}(" + monomi(a, 1) + signe(b) + ")"
+            else:
+                text1 = f"{e}({b}" + monomi(a, 1, True) + ")"
+            if moneda():
+                text2 = f"{f}(" + monomi(c, 1) + signe(d) + ")"
+            else:
+                text2 = f"{f}({d}" + monomi(c, 1, True) + ")"
+            if random.randint(0, 4):  # de tant en tant els poso al mateix costat
+                if text2.startswith("-"):
+                    text1 = text1 + "+" + text2[1:]
+                else:
+                    text1 = text1 + "-" + text2
+                text2 = f"{g}"
+            else:
+                if moneda():
+                    text1 += f"{signe(-g)}"
+                else:
+                    text2 += f"{signe(g)}"
+            if moneda():
+                text = text1 + "=" + text2
+            else:
+                text = text2 + "=" + text1
 
     elif tipus == 101:  # x^2-C (treure l'arrel)
         if nivell == 1:  # quadrat perfecte, x2 sense coef
@@ -1560,7 +1695,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             else:
                 text = "0=" + text
 
-    elif tipus == 104:  # de moment completes però polinomi (6 termes)
+    elif tipus == 104:  # opera i resol (6 termes)
         x1 = random.randint(-10, 10)
         if x1 == 0:
             x1 = random.choice([-1, 1])
@@ -1732,14 +1867,16 @@ def systeq_text(a, b, c):
     return ax + by + f'={c}'
 
 
-def systeq3_text (a, b, c, d):
+def systeq3_text(a, b, c, d):
     if a == 1:
         ax = 'x'
     elif a == -1:
         ax = '-x'
+    elif a == 0:
+        ax = ''
     else:
         ax = f'{a}x'
-    if b >= 0:
+    if b > 0:
         by = '+'
     else:
         by = ''
@@ -1747,9 +1884,11 @@ def systeq3_text (a, b, c, d):
         by = by + 'y'
     elif b == -1:
         by = by + '-y'
+    elif b == 0:
+        by = ''
     else:
         by = by + f'{b}y'
-    if c >= 0:
+    if c > 0:
         cz = '+'
     else:
         cz = ''
@@ -1757,6 +1896,8 @@ def systeq3_text (a, b, c, d):
         cz = cz + 'z'
     elif c == -1:
         cz = cz + '-z'
+    elif c == 0:
+        cz = ''
     else:
         cz = cz + f'{c}z'
     return ax + by + cz + f'={d}'
@@ -1850,14 +1991,15 @@ def prop(tipus, nivell=1):
 import random
 
 
-def limits(tipus, nivell=1, conv=3, ordenat=False):
+def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
     """
     Genera un límit del tipus escollit
 
-    :param tipus: 0 Px, 1 frac, 2 fracs, 3 sqrts,
+    :param tipus: 0 Px, 1 frac, 2 fracs, 3 sqrts, 4 e
     :param nivell:
     :param conv: 0 zero, 1 num, 2 inf, 3 rand
     :param ordenat: termes ordenats
+    :param txto: text 'x tendeix a' (e.g. x->inf)
     :return: text
     """
 
@@ -1888,7 +2030,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False):
                     text = "+" + text
                 text = f"{coef}{exp}" + text
 
-    if tipus == 1:  # frac infty
+    if tipus == 1:  # frac (to infty)
         xto = random.choice(["", "-"]) + "\\infty"
         gnum = random.randint(2, 5)
         if conv == 1 or random.choice([0, 0, 1]):  # resultat num
@@ -1960,7 +2102,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False):
 
         text = "\\frac{" + f"{tnum}" + "}{" + f"{tden}" + "}"
 
-    elif tipus == 2:  # frac ± frac (infty)
+    elif tipus == 2:  # frac ± frac (to infty)
         if nivell in [1, 2]:  # num - num / inf - inf
             if nivell == 1:
                 k = 0  # num - num
@@ -2089,16 +2231,238 @@ def limits(tipus, nivell=1, conv=3, ordenat=False):
                 print(gden1, gden2, gnum1, gnum2)
                 """
 
-    text = "\\lim_{x\\to" + xto + "}" + text
+    elif tipus == 3:  # sqrt ± sqrt (to infty)
+        if nivell == 1:  # arrel - arrel
+            """
+            √(Ax^a+Bx^b)- √(Cx^c+Dx^d)
+            
+            Definició:
+                a>b
+                c>d
+            Indet:
+                a=c
+                A=C
+            Resultat número:
+                a = c = 2 * max(b, d)
+            """
+            xto = "\\infty"
+            # graus
+            b = random.randint(0, 1)
+            if b == 0:
+                d = random.randint(1, 1)
+            else:
+                d = random.randint(0, 1)
+            a = 2*max(b, d)
+            c = a
+            # coefs
+            ca = random.randint(1, 3)
+            cc = ca
+            cb = random.randint(1, random.choice([5, 15])) * random.choice([-1, 1])
+            cd = random.randint(1, random.choice([5, 15])) * random.choice([-1, 1])
+            # muntatge
+            text = "\\sqrt{" + f"{monomi(ca, a)}{monomi(cb, b, True)}" + "}"
+            text += "-\\sqrt{" + f"{monomi(cc, c)}{monomi(cd, d, True)}" + "}"
+
+        elif nivell == 2:  # num - arrel
+            """
+            Ax^a+Bx^b - √(Cx^c+Dx^d)
+            
+            Definició:
+                a>b, c>d, C>0
+            Indet:
+                c = 2a
+                C = A^2
+            Resultat número:
+                b=0 or d=a
+                    b=0 or B=0
+                    d<=a
+            """
+            xto = "\\infty"
+            # graus
+            b = random.choice([-42, 0])
+            d = random.randint(0, 2)
+            if b == 0:  # b ja recolza el resultat enter
+                a = random.randint(max(b+1, d), 2)
+            else:  # b no recolza, per tant d ha de recolzar
+                a = d
+            c = 2*a
+            # coefs
+            ca = random.randint(1, 3)
+            cc = pow(ca, 2)
+            cb = random.randint(1, random.choice([5, 15])) * random.choice([-1, 1])
+            cd = random.randint(1, random.choice([5, 15])) * random.choice([-1, 1])
+            # muntatge
+            if moneda():  # arrel a la dreta
+                text = str(monomi(ca, a)) + str(monomi(cb, b, True))
+                text += "-\\sqrt{" + str(monomi(cc, c) + str(monomi(cd, d, True))) + "}"
+            else:  # arrel a l'esquerra
+                text = "\\sqrt{" + str(monomi(cc, c) + str(monomi(cd, d, True))) + "}"
+                if moneda() or b == -42 or a < 0:
+                    ca = -ca
+                    cb = -cb
+                    text += str(monomi(ca, a, True)) + str(monomi(cb, b, True))
+                else:
+                    text += "-(" + str(monomi(ca, a)) + str(monomi(cb, b, True)) + ")"
+
+    elif tipus == 4:  # 1^inf (coses de la e)
+        text = "1^{\\infty}"
+        xto = "\\infty"
+        if nivell == 1:  # (1+frac)^(frac)
+            """
+                 Ax^a+Bx^b    Ex^e+Fx^f
+            (1 + ---------) ^ ---------
+                 Cx^c+Dx^d    Gx^g+Hx^h
+            
+            Definició:
+                a>b, c>d, e>f, g>h
+            Indet:
+                c>a, e>g
+            Resultat número: 
+                c-a = e-g = dif
+                Enter:
+                    AE % CG = 0
+            """
+            # graus
+            a = random.randint(0, 1)  # ??? Incrementar màx?
+            g = random.randint(0, 1)
+            dif = random.randint(1, 2)
+            c = a + dif
+            e = g + dif
+            if a == 0 or moneda():
+                b = -42
+            else:
+                b = random.randint(0, a-1)
+            if random.randint(1, 5) == 1:
+                d = -42
+            else:
+                d = random.randint(0, c-1)
+            if g == 0 or moneda():
+                h = -42
+            else:
+                h = random.randint(0, g-1)
+            if random.randint(1, 5) == 1:
+                f = -42
+            else:
+                f = random.randint(0, e-1)
+            # coefs
+            ca, ce, cb, cd, cf, ch = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(6)]
+            if random.choice([0, 1, 1]):  # mig sovint forço resultat enter
+                cc = random.choice(divisors(ca*ce))
+                cg = ca*ce // cc  # aquí tinc resultat = 1 (cg és el divisor gros)
+                for x in reversed(range(2, 6)):  # faig el cg una mica més petit si es pot
+                    if cg % x == 0:
+                        cg = cg // x
+                        if moneda():
+                            break
+            else:
+                cc, cg = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(2)]
+            # muntatge
+            signe = random.choice(["-", "+"])
+            m = monomi
+            base = ("(1" + signe + "\\frac{" + m(ca, a) + m(cb, b, True) + "}{" + m(cc, c) + m(cd, d, True) + "})")
+            exp = ("^{" + "\\frac{" + m(ce, e) + m(cf, f, True) + "}{" + m(cg, g) + m(ch, h, True) + "}" + "}")
+            text = base + exp
+
+        elif nivell == 2:  # frac^frac
+            """
+             Ax^a+Bx^b    Ex^e+Fx^f
+            (---------) ^ ---------
+             Cx^c+Dx^d    Gx^g+Hx^h
+            
+            Definició:
+                a>b, c>d, e>f, g>h
+            Indet:
+                a = c
+                A = C
+                e>g
+            Resultat número: 
+                e = c + g - max(b, d)
+            """
+            # graus
+            g = random.randint(0, 1)
+            a = c = random.randint(1, 3)
+            d = random.choice([-42] + list(range(c)))  # de 0 a c-1, o bé inexistent.
+            b = random.choice([-42] + list(range(a)))
+            if d == -42 and b == -42:  # necessito algun dels dos per tenir resultat no 0
+                if moneda():
+                    d = 0
+                else:
+                    b = 0
+            e = c + g - max(b, d)  # això assegura la proporció de graus correcta
+            f = random.choice([-42] + list(range(e)))
+            h = random.choice([-42] + list(range(g)))
+            # coefs
+            ca = cc = random.randint(1, 5) * random.choice([-1, 1])
+            cb, cd, cf, ch = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(4)]
+            if b == -42:
+                cbd = cd
+            elif d == -42:
+                cbd = cb
+            else:
+                cbd = cb - cd
+            if random.choice([0, 1, 1]):  # mig sovint forço resultat enter
+                ce = random.randint(1, 2)
+                gpossibles = divisors(cbd*ce)
+                if len(gpossibles) > 2:
+                    gpossibles = gpossibles[:2]  # si hi ha moltes opcions deixo les baixes (+ marge de maniobra per e)
+                cg = random.choice(gpossibles)
+                if cbd*ce % (cc*cg):  # no divideix exacte
+                    ce *= fracsimple(cbd*ce//cg, cc)[1]  # multiplico a ce la part indivisible per cc
+            else:
+                ce, cg = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(2)]
+            if cb == cd:
+                cd = -cd
+            # muntatge
+            m = monomi
+            base = "(\\frac{" + m(ca, a) + m(cb, b, True) + "}{" + m(cc, c) + m(cd, d, True) + "})"
+            exp = "^{\\frac{" + m(ce, e) + m(cf, f, True) + "}{" + m(cg, g) + m(ch, h, True) + "}}"
+            text = base + exp
+
+    if txto:
+        text = "\\lim\\limits_{x\\to " + xto + "}" + text
+    else:
+        text = "\\lim " + text
     return text
 
 
-def monomi(base, exp):
-    text = f"{base}"
-    if exp:
-        text += "x"
-    if exp not in [0, 1]:
-        text += "^{" + f"{exp}" + "}"
+def signe(num):
+    """returna el número amb signe (retorna buit si és 0)"""
+    if num == 0:
+        return ""
+    elif num > 0:
+        return f"+{num}"
+    else:
+        return f"{num}"
+
+
+def monomi(coef, exp, signe=False, allexps=False):
+    """Retorna el monomi muntat
+
+    :param coef: coeficient
+    :param exp: grau (-42 indica inexistent, excepte si allexps)
+    :param signe: True escriu "+" davant els positius
+    :param allexps: si és cert, -42 serà un exponent com els altres
+    :return: text del monomi
+    """
+    if (exp != -42 or allexps) and coef:
+        # coeficient
+        if abs(coef) == 1 and exp != 0:  # coeficient unitari i hi ha x
+            if coef < 0:
+                text = "-"
+            else:
+                text = ""
+        else:
+            text = f"{coef}"
+        # exponent
+        if exp:
+            text += "x"
+        if exp not in [0, 1]:
+            text += "^{" + f"{exp}" + "}"
+        if signe:
+            if coef > 0:
+                text = "+" + text
+    else:
+        text = ""
     return text
 
 
@@ -2505,7 +2869,7 @@ for x in range(5):
     print(success(2, 101))
 
 print("\n")
-print("Digues si les següents successions són aritmètiques o geomètriques,\n" + \
+print("Digues si les següents successions són aritmètiques o geomètriques,\n"
       "i calcula'n la distància o raó en cada cas.")
 for x in range(12):
     print(success(random.choice([1, 2]), 101, random.choice([1, 2, 3, 4])))
@@ -2516,6 +2880,7 @@ for x in range(6):
 for x in range(10):
     print(powsqr(103, 2, 3))
 """
+""""""
+for x in range(20):
+    print(eq(3, 1))
 
-for x in range(6):
-    print(powsqr(108, 12))

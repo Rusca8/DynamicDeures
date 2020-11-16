@@ -1,0 +1,105 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Derivades...</h4>
+    <div class="form-group">
+        <label for="formQuinCurs">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opA1" aria-expanded="true" aria-controls="opA1">
+          <input type="checkbox" name="apartat1" autocomplete="off" id="apartat1" value="apartat1" checked> Apartat 1
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="collapse show mb-2" id="opA1">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Apartat 1</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDerivadesMulDiv"><b>Exercici 1</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qexercici1" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupMBaseTermes"><i>Triar tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                      <input type="checkbox" name="tipus1" autocomplete="off" id="tipus1" value="tipus1" checked> Tipus 1
+                    </label>
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                      <input type="checkbox" name="tipus2" autocomplete="off" id="tipus2" value="tipus2"> Tipus 2
+                    </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label for="formResultatPositiu"><i>Variant?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "variant" %}
+              {% for n in range(5) %}
+                {% if n == 1 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

@@ -83,11 +83,11 @@ def propsimple(tipus, x, y, x2, y2):
         tresornum, gt, tresor, gp, persona = triacoses(esquelet)
         if tresornum == 1:
             if x == 1:
-                enunciat = f"Si {x} {persona[0]} es queda {tresor[0]} per ell{noa[gp]} sol{noa[gp]}" \
-                           + f" li to{caquen[sp(y)]} {y} {tresor[1][sp(y)]}. "
+                enunciat = (f"Si {x} {persona[0]} es queda {tresor[0]} per ell{noa[gp]} sol{noa[gp]}"
+                            f" li to{caquen[sp(y)]} {y} {tresor[1][sp(y)]}. ")
             else:
-                enunciat = f"Si {x} {persona[1]} es reparteixen {tresor[0]}," \
-                    + f" els to{caquen[sp(y)]} {y} {tresor[1][sp(y)]} per cada un{noa[gp]}. "
+                enunciat = (f"Si {x} {persona[1]} es reparteixen {tresor[0]},"
+                            f" els to{caquen[sp(y)]} {y} {tresor[1][sp(y)]} per cada un{noa[gp]}. ")
             if moneda():
                 enunciat += f"Quant{aes[gp][1]} haurien de ser per què els en toquessin {y2}?"
             else:

@@ -52,7 +52,7 @@ Because of the feedback system I made with Telegram (a bot tells me when a pdf i
 
 Not doing so will throw an error in the moment of building the pdf (since it won't be able to import the bot's secret key, which I haven't included for obvious reasons).
 
-_On the other hand, in my local copy PyCharm signals an import error with my own local modules, though then it runs just fine._
+_PS: Pycharm was showing an error on my own module imports, but I solved it marking the root folder (Mark Directory As Sources Root)._
 
 ## Try it!
 You can access the website to generate your own personalized math worksheets here: [Dynamic Deures](http://bit.ly/DynamicDeures)

@@ -1,5 +1,6 @@
-import generator as g
 import random
+import generator as g
+
 
 def genera(aleatoris=False):
     ex = {}
@@ -57,6 +58,7 @@ def genera(aleatoris=False):
         ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
         # eq
         ex["eq"]["simple"] = g.eq(2, 3)
+        ex["eq"]["1poli"] = random.choice([g.eq(3, 1), g.eq(4, random.choice([1, 2]))])
         ex["eq"]["segoni1"] = g.eq(101, 1)
         ex["eq"]["segoni2"] = g.eq(102, 3)
         ex["eq"]["segonc1"] = g.eq(103, 2)
@@ -84,6 +86,7 @@ def genera(aleatoris=False):
         ex["dx"]["simple2"] = g.dx(1, [1, 2, 3, 4, 5], simples=True)
         ex["dx"]["cadena"] = g.dx(3, [1, 2, 3, 4, 5])
     else:
+        # en
         ex["en"]["suma1"] = "3+7="
         ex["en"]["suma2"] = "6-8"
         ex["en"]["suma3"] = "9-(+5)="
@@ -95,6 +98,7 @@ def genera(aleatoris=False):
         ex["en"]["divi3"] = r"-42\div (-7)="
         ex["en"]["combi1"] = r"(6+32):\lbrack-6-(-8)\rbrack-\lbrack-(1+(-64)):(-6+3)\rbrack"
         ex["en"]["combi2"] = r"\sqrt{36}:3-35:\sqrt{25}+\lbrack -4-(-{3}^2)\rbrack \cdot {(-9:3)}^2"
+        # pow
         ex["pow"]["mexp1"] = r"7^{8}\cdot 5^{8}"
         ex["pow"]["mexp2"] = r"35^{7}\div 7^{7}\cdot (-8)^{7}"
         ex["pow"]["mbase1"] = r"13^{-8}\cdot 13^{7}"
@@ -120,12 +124,15 @@ def genera(aleatoris=False):
         ex["pow"]["asum"] = r"8\sqrt{27}-2\sqrt{3}-\sqrt{75}"
         ex["pow"]["racio1"] = r"\frac{5}{\sqrt{2}}"
         ex["pow"]["racio2"] = r"\frac{1}{5+\sqrt{6}}"
+        # frac
         ex["frac"]["suma1"] = r"\frac{2}{3}+\frac{5}{4}"
         ex["frac"]["suma2"] = r"\frac{7}{6}-\frac{9}{2}"
         ex["frac"]["multi"] = r"\frac{3}{5}\cdot \frac{4}{6}"
         ex["frac"]["divi"] = r"\frac{3}{5}\div \frac{-1}{-2}"
         ex["frac"]["combi"] = r"(\frac{3}{2}\cdot \frac{1}{3}-\frac{1}{3}\cdot \frac{3}{2}+\frac{1}{2}): (\frac{2}{4}\cdot \frac{-14}{3}+\frac{7}{5}: \frac{9}{7})"
+        # eq
         ex["eq"]["simple"] = "2x+5=7"
+        ex["eq"]["1poli"] = "-2x-10-3x-39=1+5x"
         ex["eq"]["segoni1"] = "x^2-9=0"
         ex["eq"]["segoni2"] = "x^2-7x=0"
         ex["eq"]["segonc1"] = "x^2-3x+2=0"

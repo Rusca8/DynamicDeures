@@ -15,7 +15,8 @@ def index():
     try:
         return render_template("index.html", ex=e.genera())
     except:
-        return f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2><p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>"
+        return (f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2>"
+                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>")
 
 
 @app.route('/ex/')
@@ -23,7 +24,8 @@ def indexvar():
     try:
         return render_template("index.html", ex=e.genera(True))
     except:
-        return f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2><p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>"
+        return (f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2>"
+                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>")
 
 
 @app.route("/equacions/", methods=["GET", "POST"])
@@ -121,6 +123,19 @@ def success():
         return render_template("successions.html")
 
 
+@app.route("/limits/", methods=["GET", "POST"])
+def limits():
+    if request.method == "POST":
+        #try:
+        g.limits(request.form)
+        #except:
+        #    return redirect("/latex_error/limits")
+        tele.feedback("lim", request.form)
+        return redirect("/pdf/limits")
+    else:
+        return render_template("limits.html")
+
+
 @app.route("/derivades/", methods=["GET", "POST"])
 def derivades():
     if request.method == "POST":
@@ -172,6 +187,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":
         return redirect("/static/pdfs/successions.pdf")
+    elif tema == "limits":
+        return redirect("/static/pdfs/limits.pdf")
     elif tema == "derivades":
         return redirect("/static/pdfs/derivades.pdf")
     else:
@@ -195,7 +212,8 @@ def contacte():
 
 @app.route('/latex_error/<pdf>')
 def latexerror(pdf):
-    return f"<h2>Hi ha hagut algun problema greu fent el teu pdf de {pdf}</h2><p>...o potser algú ha tingut l'error abans i ha quedat caigut, que també em passa</p>"
+    return (f"<h2>Hi ha hagut algun problema greu fent el teu pdf de {pdf}</h2>"
+            f"<p>...o potser algú ha tingut l'error abans i ha quedat caigut, que també em passa</p>")
 
 
 @app.route('/<patillada>')

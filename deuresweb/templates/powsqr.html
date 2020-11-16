@@ -328,44 +328,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupCombRadi"><b>Combinar radicals ✨</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              {% for n in range(7) %}
-              {% set name = "qcombradi" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label for="formResultatPositiu"><i>Evitar intercalats?</i></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              {% set name = "einter" %}
-              {% for n in range(5) %}
-                {% if n == 2 %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
-                {% else %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
-                {% endif %}
-                  </label>
-              {% endfor %}
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label for="formGroupFactors"><b>Extreure factors ✨</b></label>
+            <label for="formGroupFactors"><b>Extreure factors</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qextreure" %}
@@ -424,7 +387,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupFactors"><b>Introduir factors ✨</b></label>
+            <label for="formGroupFactors"><b>Introduir factors</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qintrod" %}
@@ -483,7 +446,44 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupFactors2"><b>Factoritzar i extreure ✨</b></label>
+            <label for="formGroupCombRadi"><b>Combinar radicals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qcombradi" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label for="formResultatPositiu"><i>Evitar intercalats?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "einter" %}
+              {% for n in range(5) %}
+                {% if n == 2 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupFactors2"><b>Factoritzar i extreure</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qfextreure" %}
@@ -520,7 +520,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupSumes"><b>Sumes i restes ✨</b></label>
+            <label for="formGroupSumes"><b>Sumes i restes</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qasum" %}
@@ -557,7 +557,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupRacio"><b>Racionalitzar ✨</b></label>
+            <label for="formGroupRacio"><b>Racionalitzar</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qracions" %}

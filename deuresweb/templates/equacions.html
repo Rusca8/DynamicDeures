@@ -50,6 +50,9 @@
 {% endblock %}
 
 {% block extres %}
+    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
 <div class="collapse show" id="opEq1">
     <div class="card">
       <div class="card-body">
@@ -116,7 +119,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar coeficient positiu? ✨</i></label>
+            <label for="formDivNegativa"><i>Forçar coeficient positiu?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="noneg" id="noneg0" value="no" autocomplete="off"> no
@@ -133,6 +136,43 @@
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="noneg" id="noneg4" value="totes" autocomplete="off"> totes
               </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupPolinomi"><b>Opera i resol ✨</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "q1polis" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label for="formParentesis"><i>Sense parèntesis?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "sparent" %}
+              {% for n in range(5) %}
+                {% if n == 1 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
             </div>
         </div>
 
@@ -207,7 +247,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formNoA"><i>Forçar coeficient A unitari? ✨</i></label>
+            <label for="formNoA"><i>Forçar coeficient A unitari?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="noa" id="noa0" value="no" autocomplete="off"> no
@@ -228,7 +268,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupPolinomic"><b>Polinòmiques</b></label>
+            <label for="formGroupPolinomic"><b>Opera i resol</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qpolis" id="poli0" value="no" autocomplete="off"> no
@@ -298,7 +338,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar un coeficient unitat? ✨</i></label> <!-- si força les primeres del forçat són x -->
+            <label for="formDivNegativa"><i>Forçar un coeficient unitat?</i></label> <!-- si força les primeres del forçat són x -->
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="nocoef" id="nocoef0" value="no" autocomplete="off"> no
@@ -358,7 +398,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar un coeficient unitat? ✨</i></label> <!-- si força les primeres del forçat són x -->
+            <label for="formDivNegativa"><i>Forçar un coeficient unitat?</i></label> <!-- si força les primeres del forçat són x -->
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="nocoef3" id="nocoef30" value="no" autocomplete="off"> no

@@ -7,6 +7,106 @@ import generator as gen
 import wolframator as w
 
 
+def exemple(opcions, solucions=False):
+    tema = "fex"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "apartat1" in opcions:
+        apartat1 = True
+        qexercici1 = quantesson(opcions["qexercici1"], "exercici1")
+        qexercici2 = quantesson(opcions["qexercici2"], "exercici2")
+        # ...
+        print(f"Exercici 1 {qexercici1}, Exercici 2 {qexercici2} ...")
+    else:
+        apartat1 = False
+        qexercici1 = 0
+        qexercici2 = 0
+        # ...
+
+    if "apartat2" in opcions:
+        apartat2 = True
+        # ...
+    else:
+        apartat2 = False
+        # ...
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    # doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if any([apartat1, apartat2]):  # aquí tots els botons grossos
+        if any([qexercici1, qexercici2]):  # aquí tots els tipus d'exercici
+            begin(doc, 'questions')
+
+            if apartat1:
+                bloctitle(doc, "Primer Apartat")
+
+            if qexercici1:
+                n = qexercici1
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Resol el següent exercici que va de què sé jo.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 3)  # columnes
+                for x in range(0, n):
+                    part(doc)
+                    text = gen.dx(1, [1, 2, 3, 4, 5], simples=True)  # operació whatever que ve del generator
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{$%s$}' % (w.urlfor(text, t="dx"), text)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % text))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qexercici2 != 0:
+                n = qexercici2
+                question(doc, f"{2 * n}")
+                doc.append("Resol el següent exercici que va de què sé jo.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                scale = 1.3  # exemple amb fraccions per engrandir
+                for x in range(0, n):
+                    part(doc)
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{\scalebox{%s}{$%s$}}' % (w.urlfor(text, t="dx"), scale, text)))
+                    else:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if apartat2:
+                bloctitle(doc, "Segon Apartat")
+
+            # exercicis de l'apartat 2
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - - - - COMBINADES
     tema = "comb"
 
@@ -618,11 +718,14 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         qsimples = quantesson(opcions["qsimples"], "simples")
         qdsimples = quantesson(opcions["qdsimples"], "dsimples")
         noneg = quantesvariant(opcions["noneg"])
+        q1polis = quantesson(opcions["q1polis"], "1polis")
+        sparent = quantesvariant(opcions["sparent"])
     else:
         primer = False
         qsimples = 0
         qdsimples = 0
-    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}")
+        q1polis = 0
+    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}, Ax+Bx+Cx+D+E+F=0 {q1polis}")
 
     if "segon" in opcions:
         segon = True
@@ -670,7 +773,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
     # preguntes
     if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, qsist, qsist3, qincomps, qcompletes, qpolis]):
+        if any([qsimples, qdsimples, q1polis, qsist, qsist3, qincomps, qcompletes, qpolis]):
             begin(doc, 'questions')
 
             if primer:
@@ -707,6 +810,27 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                         doc.append(NoEscape(r'$%s$' % gen.eq(2, 2)))  # positiu
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.eq(2, 3)))  # enter
+                    space(doc, "1.4cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "1cm")
+
+            if q1polis != 0:
+                n = q1polis
+                question(doc, f"{n}")
+                doc.append("Opera i resol les següents equacions de primer grau.")
+                var = (n * sparent) // 4
+                begin(doc, 'parts')
+                begin(doc, "multicols", "2")
+                for x in range(n):
+                    part(doc)
+                    if x < var:
+                        doc.append(NoEscape(r'$%s$' % gen.eq(3, 1)))  # sense parèntesis
+                    else:
+                        if x < (n + var) // 2:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(4, 1)))  # un parèntesis
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.eq(4, 2)))  # un parèntesis
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -761,7 +885,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
             if qpolis:
                 n = qpolis
                 question(doc, f"{2 * n}")
-                doc.append("Opera i resol les següents equacions de segon grau (polinòmiques).")
+                doc.append("Opera i resol les següents equacions de segon grau.")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "2")
                 for x in range(0, n):
@@ -1195,27 +1319,6 @@ def powsqr(opcions, solucions=False):
                 space(doc, "0.5cm")
                 end(doc, 'parts')
 
-            if qcombradi:
-                n = qcombradi
-                question(doc, f"{n}")
-                doc.append("Expressa com una sola arrel.")
-                var = (n * einter) // 4
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 4)
-                for x in range(n):
-                    part(doc)
-                    if x < var:  # sense intercalats vs amb intercalats
-                        doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 1, 2)))
-                    else:
-                        if x < (n + var) // 2:  # meitat de la resta
-                            doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 2, 2)))
-                        else:
-                            doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 2, 3)))
-                    space(doc, "0.7cm")
-                end(doc, 'multicols')
-                space(doc, "0.5cm")
-                end(doc, 'parts')
-
             if qextreure:
                 n = qextreure
                 question(doc, f"{n}")
@@ -1253,6 +1356,27 @@ def powsqr(opcions, solucions=False):
                             doc.append(NoEscape(r'$%s$' % gen.powsqr(106, 1, lletres=illetres)))
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.powsqr(106, 2, lletres=illetres)))
+                    space(doc, "0.7cm")
+                end(doc, 'multicols')
+                space(doc, "0.5cm")
+                end(doc, 'parts')
+
+            if qcombradi:
+                n = qcombradi
+                question(doc, f"{n}")
+                doc.append("Expressa com una sola arrel.")
+                var = (n * einter) // 4
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 4)
+                for x in range(n):
+                    part(doc)
+                    if x < var:  # sense intercalats vs amb intercalats
+                        doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 1, 2)))
+                    else:
+                        if x < (n + var) // 2:  # meitat de la resta
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 2, 2)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.powsqr(104, 2, 3)))
                     space(doc, "0.7cm")
                 end(doc, 'multicols')
                 space(doc, "0.5cm")
@@ -1321,12 +1445,12 @@ def powsqr(opcions, solucions=False):
                                 doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(108, 3))))
                     else:  # rab
                         if x < var2:  # sense arrel doble
-                            if x < n // 2 or random.randint(1, 4) == 1:  # a la meitat barreja conjugats
+                            if x < n // 2 or random.choice([0, 1, 1]):  # a la meitat barreja conjugats
                                 doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(108, 11))))
                             else:
                                 doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(108, 13))))
                         else:  # amb arrel doble
-                            if x < n // 2 or random.randint(1, 4) == 1:
+                            if x < n // 2 or random.choice([0, 1, 1]):
                                 doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(108, 12))))
                             else:  # a partir de la meitat barreja amb conjugats
                                 doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.powsqr(108, 14))))
@@ -1839,6 +1963,94 @@ def successions(opcions, solucions=False):
     return
 
 
+def limits(opcions, solucions=False):
+    tema = "lim"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "calcul" in opcions:
+        calcul = True
+        qinf = quantesson(opcions["qinf"], "lim_inf")
+        print(f"Infinit {qinf}")
+
+        lims = []
+        for x in range(5):  # 0-4
+            if f"lim{x}" in opcions:
+                lims.append(x)
+        if not lims:
+            lims = [1, 2, 3, 4]
+    else:
+        calcul = False
+        qinf = 0
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if any([calcul]):  # aquí tots els botons grossos
+        if any([qinf]):  # aquí tots els tipus d'exercici
+            begin(doc, 'questions')
+
+            if calcul:
+                bloctitle(doc, "Càlcul de límits")
+
+            if qinf:
+                n = qinf
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Resol els límits següents.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)  # columnes
+                scale = 1.3
+                text = ""
+                for x in range(0, n):
+                    part(doc)
+                    tipus = random.choice(lims)
+                    if tipus in [0, 1]:
+                        text = gen.limits(tipus)
+                    elif tipus == 2:
+                        text = gen.limits(2, 2)
+                    elif tipus == 3:
+                        text = gen.limits(3, random.choice([1, 2]))  # √A-√B vs A-√B
+                    elif tipus == 4:
+                        text = gen.limits(4, random.choice([1, 2]))  # amb l'1 separat vs sense
+                    if tipus in [1, 2, 4]:
+                        scale = 1.2
+                    else:
+                        scale = 1
+                    if solucions:
+                        doc.append(NoEscape(r'\href{%s}{\scalebox{%s}{$%s$}}' % (w.urlfor(text, t="dx"), scale, text)))
+                    else:
+                        doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 def derivades(opcions, solucions=False):
     tema = "dx"
 
@@ -2185,6 +2397,8 @@ def temallarg(tema="no"):
         return "successions"
     elif tema == "dx":
         return "derivades"
+    elif tema == "lim":
+        return "limits"
     else:
         return tema
 
@@ -2270,7 +2484,7 @@ def quantesson(value, op):
         quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
         quantitats = [0, 6, 9, 15, 20, 33, 66]
-    elif op == "polis":
+    elif op in ["polis", "1polis"]:
         quantitats = [0, 4, 6, 10, 14, 22, 44]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]

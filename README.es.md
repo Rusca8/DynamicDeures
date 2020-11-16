@@ -52,7 +52,8 @@ Debido al sistema de feedback por Telegram que tengo montado en la web (el bot m
 
 En caso de no hacer esto la web dará un error en el momento de generar el pdf (porque no podrá importar la clave secreta del bot, que no he incluído por motivos evidentes).
 
-_Por otro lado, a mí PyCharm me marca un error importando mis propios módulos, pero luego a la hora de la verdad funciona bien._
+_PD: Pycharm me marcaba error importando mis módulos, pero lo he solucionado marcando la carpeta madre (Mark Directory As Sources Root)._
+
 ## Pruébalo!
 Puedes acceder a la web para hacer tus fichas personalizadas aquí: [Dynamic Deures](http://bit.ly/DynamicDeures)
 

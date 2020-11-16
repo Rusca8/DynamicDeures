@@ -1,0 +1,97 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Límits...</h4>
+    <div class="form-group">
+        <label for="formQuinCurs">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opC" aria-expanded="true" aria-controls="opC">
+          <input type="checkbox" name="calcul" autocomplete="off" id="calcul" value="calcul" checked> Càlcul
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="collapse show mb-2" id="opC">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Càlcul de límits</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDerivadesMulDiv"><b>Límits a l'infinit</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qinf" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupMBaseTermes"><i>Triar tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                      <input type="checkbox" name="lim0" autocomplete="off" id="lim0" value="lim0"> poli
+                    </label>
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                      <input type="checkbox" name="lim1" autocomplete="off" id="lim1" value="lim1" checked> frac
+                    </label>
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                      <input type="checkbox" name="lim2" autocomplete="off" id="lim2" value="lim2" checked> fr-fr
+                    </label>
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                      <input type="checkbox" name="lim3" autocomplete="off" id="lim3" value="lim3" checked> arrel
+                    </label>
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                      <input type="checkbox" name="lim4" autocomplete="off" id="lim4" value="lim4" checked> exp
+                    </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}
