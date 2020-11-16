@@ -859,7 +859,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                     space(doc, "0.7cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "0.7cm")
+                space(doc, "0.1cm")
 
             if qcompletes:
                 n = qcompletes
@@ -880,7 +880,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "1.4cm")
+                space(doc, "0.4cm")
 
             if qpolis:
                 n = qpolis
@@ -894,7 +894,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "1.4cm")
+                space(doc, "0.4cm")
 
             if sistemes:
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
