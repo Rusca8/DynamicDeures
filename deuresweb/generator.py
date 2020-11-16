@@ -450,9 +450,14 @@ def randomfracnum(n):
 
 
 def fracsimple(n, d):
-    """Retorna [n, d] = fracció (n/d) simplificada"""
+    """Retorna [n, d] = fracció (n/d) simplificada."""
+    if n == 0:
+        return [0, 1]
+    elif d == 0:
+        return [n, d]
+
     divis = divisors(d, True)
-    for x in divis:
+    for x in reversed(divis):  # important el reversed pq així queden els detalls pel final
         if n % x == 0 and d % x == 0:
             n = n // x
             d = d // x
@@ -496,6 +501,18 @@ def isqrt(n):  # newton (from stackoverflow)
         x = y
         y = (x + n // x) // 2
     return x
+
+
+def mcd(a, b):
+    """Retorna el mcd dels dos números donats (Euler recursiu)"""
+    if b == 0:
+        return a
+    return mcd(b, a % b)
+
+
+def mcm(a, b):
+    """retorna el mcm dels dos números donats (agafant el mcd)"""
+    return a // mcd(a, b) * b
 
 
 def squarebracketer(text):
@@ -1490,6 +1507,307 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             else:
                 text = text2 + "=" + text1
 
+    elif tipus == 5:  # lineals amb fraccions
+        if nivell == 1:  # alguna cosa més senzilla
+            pass
+        elif nivell == 2:  # fraccions (resultat fracció)
+            x = random.randint(-10, 10)
+            # coefs
+            e = random.choice([2, 3])
+            f = random.choice([2, 3, 4, 5, 6, 7])
+            if moneda():
+                e, f = f, e
+            if random.randint(0, 4) and mcm(e, f) < 20:  # de tant en tant un dels dos és ja el mcm
+                if moneda():
+                    e = mcm(e, f)
+                else:
+                    f = mcm(e, f)
+            a, c, g = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(3)]
+            b, d = [random.choice([-1, 1]) * random.randint(0, 10) for _ in range(2)]  # permeto zeros als independents
+            h = random.randint(-5, 5)
+            # coef control
+            na, nc, ng = a, c, g
+            bestnum = 1000000
+            for n in sorted([[1, 1, 1], [1, 1, -1], [1, -1, 1], [-1, 1, 1]]):  # trio signes per fer petit el denomin.
+                num = abs(na * f + nc * e + ng * e * f)
+                if num and num < bestnum:
+                    a, c, g = na, nc, ng
+            nb, nd = b, d
+            bestnum = 1000000
+            for n in sorted([[1, 1], [1, -1]]):  # trio signes per fer petit el numerador
+                num = abs(nb*f + nd*e)
+                if num and num < bestnum:
+                    b, d = nb, nd
+            bestmcd = 1
+            for n in sorted(range(-5, 5)):  # trio la h que millor simplifica
+                # n és h provisional
+                num = b*f + d*e + n*e*f
+                den = a*f + c*e + g*e*f
+                if num and den:
+                    elmcd = mcd(abs(num), abs(den))
+                    if elmcd > bestmcd:
+                        h = n
+                        bestmcd = elmcd
+            # simplificacions (si es pot)
+            if b == 0:
+                a, e = fracsimple(a, e)
+            if d == 0:
+                c, f = fracsimple(c, f)
+            for k in reversed(divisors(e, True)):
+                if not (a % k or b % k or e % k):
+                    a = a // k
+                    b = b // k
+                    e = e // k
+            for k in reversed(divisors(f)):
+                if not (c % k or d % k or f % k):
+                    c = c // k
+                    d = d // k
+                    f = f // k
+            # muntatge
+            m = monomi
+            if a < 0 and b < 0:
+                a = -a
+                b = -b
+                s = "-"
+            else:
+                s = ""
+            if b == 0:
+                frac1 = f"{m(a, 1)}"
+            else:
+                frac1 = random.choice([f"{m(a, 1)}{signe(b)}", f"{b}{m(a, 1, True)}"])
+            if e != 1:
+                frac1 = s + "\\frac{" + frac1 + "}{" + f"{e}" + "}"
+            else:
+                frac1 = s + "(" + frac1 + ")"
+
+            if c < 0 and d < 0:
+                c = -c
+                d = -d
+                s = "-"
+            else:
+                s = ""
+            if d == 0:
+                frac2 = f"{m(c, 1)}"
+            else:
+                frac2 = random.choice([f"{m(c, 1)}{signe(d)}", f"{d}{m(c, 1, True)}"])
+            if f != 1:
+                frac2 = s + "\\frac{" + frac2 + "}{" + f"{f}" + "}"
+            else:
+                frac2 = s + "(" + frac2 + ")"
+
+            if h == 0:
+                frach = ""
+            else:
+                frach = f"{h}"
+
+            etext = frac1
+            dtext = ""
+            for x in sorted(range(4)):  # 0 CDF, 1 G, 2 HJ
+                if x == 0:  # CDF
+                    if moneda():  # esq
+                        if frac2.startswith("-"):
+                            etext += frac2
+                        else:
+                            etext += "+" + frac2
+                    else:  # dr
+                        if frac2.startswith("-"):
+                            if not dtext:
+                                dtext += frac2[1:]
+                            else:
+                                dtext += "+" + frac2[1:]
+                        else:
+                            dtext += "-" + frac2
+                elif x == 1:  # G
+                    if moneda():  # esq
+                        if moneda():  # esq-e
+                            if etext.startswith("-"):
+                                etext = m(g, 1) + etext
+                            else:
+                                etext = m(g, 1) + "+" + etext
+                        else:  # esq-d
+                            etext += m(g, 1, True)
+                    else:  # dr
+                        if not dtext:
+                            dtext = m(-g, 1)
+                        else:
+                            dtext += m(-g, 1, True)
+                elif x == 2 and frach != "":  # H
+                    if moneda():  # esq
+                        if moneda():  # esq-e
+                            if etext.startswith("-"):
+                                etext = frach + etext
+                            else:
+                                etext = frach + "+" + etext
+                        else:  # esq-d
+                            if frach.startswith("-"):
+                                etext += frach
+                            else:
+                                etext += "+" + frach
+                    else:  # dr
+                        if frach.startswith("-"):
+                            if not dtext:
+                                dtext += frach[1:]
+                            else:
+                                dtext += "+" + frach[1:]
+                        else:
+                            dtext += "-" + frach
+            if not dtext:
+                dtext = "0"
+            text = etext + "=" + dtext
+
+        elif nivell == 9:  # (Ax+B)/E + (Cx+D)/F + Gx + H/J = 0;  [J = EF] [simplificat tot quan es pot]
+            """AIXÒ NO HA FUNCIONAT BÉ. CREC QUE NO VAL LA PENA RESULTAT ENTER"""
+            x = random.randint(-10, 10)
+            # coefs
+            e, f = random.sample(sorted([2, 3, 4, 5, 6, 7]), 2)
+            if random.randint(0, 4) and mcm(e, f) < 20:  # de tant en tant un dels dos és ja el mcm
+                if moneda():
+                    e = mcm(e, f)
+                else:
+                    f = mcm(e, f)
+            a, c, g = [random.choice([-1, 1])*random.randint(1, 5) for _ in range(3)]
+            b, d = [random.choice([-1, 1]) * random.randint(0, 10) for _ in range(2)]  # permeto zeros als independents
+            # coef control
+            print(a*f, c*e, g*e*f, ")", x,"// ", b*f, d*e, "||", g, "(", e, f)
+            if abs(g*e*f) > 90 or (abs(g*e*f) > 40 and abs(x) > 3) or (abs(g*e*f) > 25 and abs(x) > 5):
+                if abs(g) > 2:
+                    if abs(g*e*f) < 200 and abs(e*f*2) < 60 and x < 5:
+                        g = random.choice([1, 2, -1, -2])
+                    else:
+                        g = random.choice([1, -1])
+                if abs(g*e*b) > 42:
+                    if abs(x) < 3:
+                        lim = 7
+                    else:
+                        lim = 4
+                    if abs(e) > abs(f):
+                        e = e % lim + 1
+                        if abs(e) == 1:
+                            e += e
+                    else:
+                        f = f % lim + 1
+                        if abs(f) == 1:
+                            f += f
+            print(a*f, c*e, g*e*f, ")", x,"// ", b*f, d*e, "||", g, "(", e, f)
+            if abs(g*e*f) > 30 or x > 5 or abs(a*f + c*e + g*e*f) > 30:
+                if a*f * c*e < 0:  # si no s'ajuden
+                    if abs(abs(a*f) + abs(c*e) - abs(g*e*f)) < abs(g*e*f) \
+                           and not max(abs(a*f), abs(c*e)) > abs(g*e*f):  # si no es desmadrarà
+                        if a * g*e < 0:  # faig que s'ajudin contra el GEF
+                            c = -c
+                        else:
+                            a = -a
+                    else:  # poso el més gros en contra
+                        if (abs(a*f) > abs(c*e) and a * g*e > 0) or (abs(c*e) > abs(a*f) and c * g*f > 0):
+                            a = -a
+                            c = -c
+                else:  # si s'ajuden
+                    if a * g*e > 0:
+                        a = -a
+                        c = -c
+            print(a * f, c * e, g * e * f, ")", x, "// ", b * f, d * e, "||", g, "(", e, f)
+            blocx = (a*f + c*e + g*e*f)*x
+            print(x, blocx)
+            if abs(blocx) > 60:
+                x = max(1, x // 2)
+            if abs(blocx) > 40:
+                x = max(1, x-2)
+            blocx = (a*f + c*e + g*e*f)*x
+            print(x, blocx)
+            h = -(blocx + (b*f+d*e))
+            print(h)
+            j = e*f
+            # simplificacions (si es pot)  # TODO no està bé quan una simplifica més que l'altra
+            if fracsimple(a, e)[1] == fracsimple(b, e)[1]:
+                a = fracsimple(a, e)[0]
+                b, e = fracsimple(b, e)
+            if fracsimple(c, f)[1] == fracsimple(d, f)[1]:
+                c = fracsimple(c, f)[0]
+                d, f = fracsimple(d, f)
+            h, j = fracsimple(h, j)
+            # muntatge
+            m = monomi
+            if a < 0 and b < 0:
+                a = -a
+                b = -b
+                s = "-"
+            else:
+                s = ""
+            frac1 = s + "\\frac{" + random.choice([f"{m(a, 1)}{signe(b)}", f"{b}{m(a, 1, True)}"]) + "}{" + f"{e}" + "}"
+            if c < 0 and d < 0:
+                c = -c
+                d = -d
+                s = "-"
+            else:
+                s = ""
+            frac2 = s + "\\frac{" + random.choice([f"{m(c, 1)}{signe(d)}", f"{d}{m(c, 1, True)}"]) + "}{" + f"{f}" + "}"
+            if h < 0:
+                h = -h
+                s = "-"
+            else:
+                s = ""
+            if h == 0:
+                frach = ""
+            elif j == 1:
+                frach = f"{h}"
+            else:
+                frach = s + "\\frac{" + f"{h}" + "}{" + f"{j}" + "}"
+
+            etext = frac1
+            dtext = ""
+            for x in sorted(range(4)):  # 0 CDF, 1 G, 2 HJ
+                if x == 0:  # CDF
+                    if moneda():  # esq
+                        if frac2.startswith("-"):
+                            etext += frac2
+                        else:
+                            etext += "+" + frac2
+                    else:  # dr
+                        if frac2.startswith("-"):
+                            if not dtext:
+                                dtext += frac2[1:]
+                            else:
+                                dtext += "+" + frac2[1:]
+                        else:
+                            dtext += "-" + frac2
+                elif x == 1:  # G
+                    if moneda():  # esq
+                        if moneda():  # esq-e
+                            if etext.startswith("-"):
+                                etext = m(g, 1) + etext
+                            else:
+                                etext = m(g, 1) + "+" + etext
+                        else:  # esq-d
+                            etext += m(g, 1, True)
+                    else:  # dr
+                        if not dtext:
+                            dtext = m(-g, 1)
+                        else:
+                            dtext += m(-g, 1, True)
+                elif x == 2:  # HJ
+                    if moneda():  # esq
+                        if moneda():  # esq-e
+                            if etext.startswith("-"):
+                                etext = frach + etext
+                            else:
+                                etext = frach + "+" + etext
+                        else:  # esq-d
+                            if frach.startswith("-"):
+                                etext += frach
+                            else:
+                                etext += "+" + frach
+                    else:  # dr
+                        if frach.startswith("-"):
+                            if not dtext:
+                                dtext += frach[1:]
+                            else:
+                                dtext += "+" + frach[1:]
+                        else:
+                            dtext += "-" + frach
+            if not dtext:
+                dtext = "0"
+            text = etext + "=" + dtext
+
     elif tipus == 101:  # x^2-C (treure l'arrel)
         if nivell == 1:  # quadrat perfecte, x2 sense coef
             x = random.randint(1, 10)
@@ -2427,7 +2745,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
 
 def signe(num):
     """returna el número amb signe (retorna buit si és 0)"""
-    if num == 0:
+    if num == 0 or num == "":
         return ""
     elif num > 0:
         return f"+{num}"
@@ -2880,7 +3198,7 @@ for x in range(6):
 for x in range(10):
     print(powsqr(103, 2, 3))
 """
-""""""
+"""
 for x in range(20):
-    print(eq(3, 1))
+    print(eq(5, 2))"""
 

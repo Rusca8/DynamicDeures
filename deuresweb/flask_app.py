@@ -172,25 +172,25 @@ def provaforms():
 def pdfviewer(tema):
     print(f"Visualitzant pdf: {tema}.")
     if tema == "eq":
-        return render_template("pdfviewer.html", link="/static/pdfs/equacions.pdf", title="fitxa d'equacions")
+        return redirect("/static/pdfs/equacions.pdf")
     elif tema == "comb":
-        return render_template("pdfviewer.html", link="/static/pdfs/combinades.pdf", title="fitxa d'operacions amb enters")
+        return redirect("/static/pdfs/combinades.pdf")
     elif tema == "proves":
-        return render_template("pdfviewer.html", link="/static/pdfs/proves.pdf", title="fitxa de proves")
+        return redirect("/static/pdfs/proves.pdf")
     elif tema == "apilades":
-        return render_template("pdfviewer.html", link="/static/pdfs/apilades.pdf", title="fitxa d'operacions amb més xifres")
+        return redirect("/static/pdfs/apilades.pdf")
     elif tema == "powsqr":
-        return render_template("pdfviewer.html", link="/static/pdfs/powsqr.pdf", title="fitxa de potències i arrels")
+        return redirect("/static/pdfs/powsqr.pdf")
     elif tema == "fraccions":
-        return render_template("pdfviewer.html", link="/static/pdfs/fraccions.pdf", title="fitxa de fraccions")
+        return redirect("/static/pdfs/fraccions.pdf")
     elif tema == "proporcionalitat":
-        return render_template("pdfviewer.html", link="/static/pdfs/proporcionalitat.pdf", title="fitxa de proporcionalitat")
+        return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":
-        return render_template("pdfviewer.html", link="/static/pdfs/successions.pdf", title="fitxa de successions")
+        return redirect("/static/pdfs/successions.pdf")
     elif tema == "limits":
-        return render_template("pdfviewer.html", link="/static/pdfs/limits.pdf", title="fitxa de límits")
+        return redirect("/static/pdfs/limits.pdf")
     elif tema == "derivades":
-        return render_template("pdfviewer.html", link="/static/pdfs/derivades.pdf", title="fitxa de derivades")
+        return redirect("/static/pdfs/derivades.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

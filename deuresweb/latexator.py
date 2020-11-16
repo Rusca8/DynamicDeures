@@ -720,12 +720,14 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         noneg = quantesvariant(opcions["noneg"])
         q1polis = quantesson(opcions["q1polis"], "1polis")
         sparent = quantesvariant(opcions["sparent"])
+        q1racios = quantesson(opcions["q1racios"], "1racios")
     else:
         primer = False
         qsimples = 0
         qdsimples = 0
         q1polis = 0
-    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}, Ax+Bx+Cx+D+E+F=0 {q1polis}")
+        q1racios = 0
+    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}, Ax+Bx+Cx+D+E+F=0 {q1polis}, (Ax+B)/C=0 {q1racios}")
 
     if "segon" in opcions:
         segon = True
@@ -764,6 +766,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -773,7 +776,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
     # preguntes
     if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, q1polis, qsist, qsist3, qincomps, qcompletes, qpolis]):
+        if any([qsimples, qdsimples, q1polis, q1racios, qsist, qsist3, qincomps, qcompletes, qpolis]):
             begin(doc, 'questions')
 
             if primer:
@@ -836,6 +839,21 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 end(doc, 'parts')
                 space(doc, "1cm")
 
+            if q1racios:
+                n = q1racios
+                question(doc, f"{2 * n}")
+                doc.append("Resol les següents equacions racionals (no totes tenen resultat bonic!).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "2")
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.eq(5, 2))))
+                    space(doc, "1.4cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "0.4cm")
+
             if segon:
                 bloctitle(doc, "Equacions de segon grau")
 
@@ -856,10 +874,10 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                         doc.append(NoEscape(r'$%s$' % gen.eq(102, random.choice([2, 3]))))
                     else:
                         doc.append(NoEscape(r'$%s$' % gen.eq(random.choice([101, 102]), 3)))
-                    space(doc, "0.7cm")
+                    space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "0.1cm")
+                space(doc, "0.8cm")
 
             if qcompletes:
                 n = qcompletes
@@ -880,7 +898,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "0.4cm")
+                space(doc, "0.9cm")
 
             if qpolis:
                 n = qpolis
@@ -2484,7 +2502,7 @@ def quantesson(value, op):
         quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
         quantitats = [0, 6, 9, 15, 20, 33, 66]
-    elif op in ["polis", "1polis"]:
+    elif op in ["polis", "1polis", "1racios"]:
         quantitats = [0, 4, 6, 10, 14, 22, 44]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]
