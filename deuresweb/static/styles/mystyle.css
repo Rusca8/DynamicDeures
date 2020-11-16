@@ -30,3 +30,9 @@
   line-height:30px;*/
   padding:5px 15px;
 }
+
+.line-height-sm {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    line-height: 1rem;
+}

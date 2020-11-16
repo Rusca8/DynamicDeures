@@ -172,25 +172,25 @@ def provaforms():
 def pdfviewer(tema):
     print(f"Visualitzant pdf: {tema}.")
     if tema == "eq":
-        return redirect("/static/pdfs/equacions.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/equacions.pdf", title="fitxa d'equacions")
     elif tema == "comb":
-        return redirect("/static/pdfs/combinades.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/combinades.pdf", title="fitxa d'operacions amb enters")
     elif tema == "proves":
-        return redirect("/static/pdfs/proves.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/proves.pdf", title="fitxa de proves")
     elif tema == "apilades":
-        return redirect("/static/pdfs/apilades.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/apilades.pdf", title="fitxa d'operacions amb més xifres")
     elif tema == "powsqr":
-        return redirect("/static/pdfs/powsqr.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/powsqr.pdf", title="fitxa de potències i arrels")
     elif tema == "fraccions":
-        return redirect("/static/pdfs/fraccions.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/fraccions.pdf", title="fitxa de fraccions")
     elif tema == "proporcionalitat":
-        return redirect("/static/pdfs/proporcionalitat.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/proporcionalitat.pdf", title="fitxa de proporcionalitat")
     elif tema == "successions":
-        return redirect("/static/pdfs/successions.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/successions.pdf", title="fitxa de successions")
     elif tema == "limits":
-        return redirect("/static/pdfs/limits.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/limits.pdf", title="fitxa de límits")
     elif tema == "derivades":
-        return redirect("/static/pdfs/derivades.pdf")
+        return render_template("pdfviewer.html", link="/static/pdfs/derivades.pdf", title="fitxa de derivades")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

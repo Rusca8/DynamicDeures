@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- boostrap stuff -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- bs -->
+        <title>Dynamic Deures: Generador de Fitxes de Mates</title>
+        <link rel="stylesheet" link href="/static/styles/mystyle.css">
+    </head>
+    <body>
+        <div class="pl-3 font-italic align-top line-height-sm" style="background-color: #f5f1d0;">
+            <small><b>Si t'agrada com ha quedat, desa-la!</b> - Ara és al teu ordinador, però no et refiïs de l'enllaç: quan es creï una {{title}} nova, la vella desapareixerà de la web... </small>
+        </div>
+        <hr class="mt-0 mb-0">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="{{link}}" title="{{title}}" allowfullscreen></iframe>
+        </div>
+    </body>
+</html>
