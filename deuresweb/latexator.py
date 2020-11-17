@@ -2496,14 +2496,18 @@ def quantesson(value, op):
     elif op == "fr_combis":
         quantitats = [0, 3, 6, 9, 11, 24, 50]
     # equacions
-    elif op in ["simples", "dsimples"]:
-        quantitats = [0, 8, 12, 26, 42, 86, 174]  # arrodonit avall per evitar migpunts
+    elif op == "simples":
+        quantitats = [0, 4, 8, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts
+    elif op == "dsimples":
+        quantitats = [0, 3, 6, 9, 16, 32, 68]
     elif op == "incomps":
         quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
         quantitats = [0, 6, 9, 15, 20, 33, 66]
-    elif op in ["polis", "1polis", "1racios"]:
-        quantitats = [0, 4, 6, 10, 14, 22, 44]
+    elif op in ["polis", "1polis"]:
+        quantitats = [0, 2, 4, 8, 10, 22, 44]
+    elif op == "1racios":
+        quantitats = [0, 2, 4, 8, 10, 20, 41]
     elif op == "sistemes":
         quantitats = [0, 3, 6, 9, 12, 21, 45]
     elif op == "sistemes3":
