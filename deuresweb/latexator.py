@@ -798,7 +798,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                     space(doc, "0.7cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "0.7cm")
+                space(doc, "0.2cm")
 
             if qdsimples != 0:
                 n = qdsimples
@@ -2497,9 +2497,9 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 9, 11, 24, 50]
     # equacions
     elif op == "simples":
-        quantitats = [0, 4, 8, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts
+        quantitats = [0, 4, 10, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts
     elif op == "dsimples":
-        quantitats = [0, 3, 6, 9, 16, 32, 68]
+        quantitats = [0, 3, 8, 9, 16, 32, 68]
     elif op == "incomps":
         quantitats = [0, 8, 12, 20, 25, 50, 100]
     elif op == "completes":
