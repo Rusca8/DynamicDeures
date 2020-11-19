@@ -51,6 +51,9 @@ def genera(aleatoris=False):
         ex["pow"]["racio1"] = g.powsqr(108, random.choice([1, 2, 3]))
         ex["pow"]["racio2"] = g.powsqr(108, random.choice([12, 14]))
         # frac
+        ex["frac"]["fgen1"] = g.decimals(4, notac=random.choice([1, 2]))
+        ex["frac"]["fgen2"] = g.decimals(4, notac=1)
+        ex["frac"]["fgen3"] = g.decimals(4, notac=2)
         ex["frac"]["suma1"] = g.frac(1, 1)
         ex["frac"]["suma2"] = g.frac(1, 3)
         ex["frac"]["multi"] = g.frac(2, 3, divis=0)
@@ -59,6 +62,7 @@ def genera(aleatoris=False):
         # eq
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["1poli"] = random.choice([g.eq(3, 1), g.eq(4, random.choice([1, 2]))])
+        ex["eq"]["racio"] = g.eq(5, 2)
         ex["eq"]["segoni1"] = g.eq(101, 1)
         ex["eq"]["segoni2"] = g.eq(102, 3)
         ex["eq"]["segonc1"] = g.eq(103, 2)
@@ -125,6 +129,9 @@ def genera(aleatoris=False):
         ex["pow"]["racio1"] = r"\frac{5}{\sqrt{2}}"
         ex["pow"]["racio2"] = r"\frac{1}{5+\sqrt{6}}"
         # frac
+        ex["frac"]["fgen1"] = r"8.65"
+        ex["frac"]["fgen2"] = r"6.7\overline{42}"
+        ex["frac"]["fgen3"] = r"3.40555..."
         ex["frac"]["suma1"] = r"\frac{2}{3}+\frac{5}{4}"
         ex["frac"]["suma2"] = r"\frac{7}{6}-\frac{9}{2}"
         ex["frac"]["multi"] = r"\frac{3}{5}\cdot \frac{4}{6}"
@@ -133,6 +140,7 @@ def genera(aleatoris=False):
         # eq
         ex["eq"]["simple"] = "2x+5=7"
         ex["eq"]["1poli"] = "-2x-10-3x-39=1+5x"
+        ex["eq"]["racio"] = r"\frac{x}{2}-\frac{x+4}{6}=3x+2"
         ex["eq"]["segoni1"] = "x^2-9=0"
         ex["eq"]["segoni2"] = "x^2-7x=0"
         ex["eq"]["segonc1"] = "x^2-3x+2=0"

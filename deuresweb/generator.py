@@ -231,6 +231,50 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
         return text
 
 
+def decimals(tipus, notac=1):
+    """Retorna un número decimal del tipus escollit
+
+    :param tipus: 1 exacte, 2 mixt, 3 pur, 4 aleatori
+    :param notac: notació (1 barra, 2 suspensiu)
+    """
+    if tipus in [1, 2, 3]:  # exacte, mixt, pur
+        # part entera
+        e = random.randint(0, random.choice([9, 12]))
+        # decimals no periòdics
+        if tipus == 3:  # pur (no en té)
+            n = ""
+        elif tipus == 1:  # exacte (evito 2.0)
+            n = random.randint(1, random.choice([9, random.choice([99, 999])]))
+            if not n % 10:
+                n += 1
+        else:  # mixt (fins a un o dos decimals, 50%/50%)
+            n = random.randint(0, random.choice([9, 99]))
+        # part periòdica
+        if tipus == 1:  # exacte (no en té)
+            p = ""
+        else:  # fins a un, dos o tres decimals (50%/25%/25%)
+            p = random.randint(1, random.choice([9, random.choice([99, 999])]))
+        # muntatge
+        if notac == 1:
+            if p:
+                text = f"{e}.{n}" "\\overline{" f"{p}" "}"
+            else:
+                text = f"{e}.{n}"
+        elif notac == 2:
+            if p:
+                if len(f"{p}") < 3:
+                    p = f"{p}{p}{p}..."
+                else:
+                    p = f"{p}{p}..."
+            text = f"{e}.{n}{p}"
+        return text
+
+    elif tipus == 4:  # barrejats
+        return decimals(random.randint(1, 4), notac=notac)
+
+    return "0.67\\overline{42}"  # just in case
+
+
 def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
     """
     Exercicis de fraccions
@@ -2753,13 +2797,14 @@ def signe(num):
         return f"{num}"
 
 
-def monomi(coef, exp, signe=False, allexps=False):
+def monomi(coef, exp, signe=False, allexps=False, var="x"):
     """Retorna el monomi muntat
 
     :param coef: coeficient
     :param exp: grau (-42 indica inexistent, excepte si allexps)
     :param signe: True escriu "+" davant els positius
     :param allexps: si és cert, -42 serà un exponent com els altres
+    :param var: text de la variable (per defecte "x")
     :return: text del monomi
     """
     if (exp != -42 or allexps) and coef:
@@ -2773,7 +2818,7 @@ def monomi(coef, exp, signe=False, allexps=False):
             text = f"{coef}"
         # exponent
         if exp:
-            text += "x"
+            text += f"{var}"
         if exp not in [0, 1]:
             text += "^{" + f"{exp}" + "}"
         if signe:
@@ -3198,7 +3243,7 @@ for x in range(6):
 for x in range(10):
     print(powsqr(103, 2, 3))
 """
-"""
-for x in range(20):
-    print(eq(5, 2))"""
+""""""
+for x in range(12):
+    print(eq(5, 2))
 

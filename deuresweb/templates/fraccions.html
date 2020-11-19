@@ -27,11 +27,14 @@
   <div class="form-group">
     <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opDeci" aria-expanded="true" aria-controls="opDeci">
+          <input type="checkbox" name="decimals" autocomplete="off" id="decimals" value="Decimals" checked> Decimals ✨
+        </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSimp" aria-expanded="true" aria-controls="opSimp">
-          <input type="checkbox" name="simples" autocomplete="off" id="simples" value="Primer grau" checked> Op. simples
+          <input type="checkbox" name="simples" autocomplete="off" id="simples" value="Simples" checked> Op. simples
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opComb" aria-expanded="true" aria-controls="opComb">
-          <input type="checkbox" name="combis" autocomplete="off" id="combis" value="Sistemes" checked> Op. combinades
+          <input type="checkbox" name="combis" autocomplete="off" id="combis" value="Combinades" checked> Op. combinades
         </label>
     </div>
   </div>
@@ -41,6 +44,83 @@
     {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
     {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
     {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="collapse show mb-1" id="opDeci">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Números Decimals ✨</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formDecim"><b>Fracció Generatriu</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qfgen" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar tipus?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="decim1" autocomplete="off" id="decim1" value="decim1" checked> exacte</span>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="decim2" autocomplete="off" id="decim2" value="decim2" checked> periòdic mixt
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="decim3" autocomplete="off" id="decim3" value="decim3" checked> periòdic pur
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+         </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar notacions?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="barret" autocomplete="off" id="barret" value="barret" checked> 1.2<span style="text-decoration:overline">3</span>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="suspens" autocomplete="off" id="suspens" value="suspens" checked> 1.2333...
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+         </div>
+
+      </div>
+    </div>
+</div>
+
+
 <div class="collapse show" id="opSimp">
     <div class="card">
       <div class="card-body">

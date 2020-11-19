@@ -1496,6 +1496,26 @@ def fraccions(opcions, solucions=False):
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
+    if "decimals" in opcions:
+        decimals = True
+        qfgen = quantesson(opcions["qfgen"], "fgen")
+        fgdecims = []
+        for x in range(1, 4):
+            if f"decim{x}" in opcions:
+                fgdecims.append(x)
+        if not fgdecims:
+            fgdecims = [4]
+        notac = []
+        if "barret" in opcions:
+            notac.append(1)
+        if "suspens" in opcions:
+            notac.append(2)
+        if not notac:
+            notac = [1, 2]
+    else:
+        decimals = False
+        qfgen = False
+
     if "simples" in opcions:
         simples = True
         qsumes = quantesson(opcions["qsumes"], "fr_sumes")
@@ -1538,9 +1558,29 @@ def fraccions(opcions, solucions=False):
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
     # preguntes
-    if simples or combis:
-        if any([qsumes, qmultis, qcombis]):
+    if decimals or simples or combis:
+        if any([qsumes, qmultis, qcombis, qfgen]):
             begin(doc, 'questions')
+
+            if decimals:
+                bloctitle(doc, "Nombres Decimals")
+
+            if qfgen:
+                n = qfgen
+                question(doc, f"{n}")
+                doc.append("Troba la fracció generatriu d'aquests nombres decimals.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', "4")
+                for x in range(0, n):
+                    part(doc)
+                    if x < 3 and (x+1) in fgdecims:
+                        doc.append(NoEscape(r'$%s$' % gen.decimals(x+1, random.choice(notac))))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.decimals(random.choice(fgdecims), random.choice(notac))))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+                space(doc, "0.3cm")
 
             if simples:
                 bloctitle(doc, "Operacions simples")
@@ -2495,6 +2535,8 @@ def quantesson(value, op):
         quantitats = [0, 6, 9, 12, 18, 37, 74]
     elif op == "fr_combis":
         quantitats = [0, 3, 6, 9, 11, 24, 50]
+    elif op == "fgen":
+        quantitats = [0, 4, 8, 12, 24, 52, 112]
     # equacions
     elif op == "simples":
         quantitats = [0, 4, 10, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts

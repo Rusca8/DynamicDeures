@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="alert alert-info alert-thin mb-3 mr-3" role="alert">
-  <b>Nou:</b> Reordeno una mica potències i arrels.<br>
+  <b>Nou:</b> Fracció generatriu.<br>
   <b>Nou:</b> Equacions de primer grau: opera i resol (amb i sense parèntesis).<br>
 </div>
 <h5>Benvinguda al generador automàtic de fitxes de matemàtiques que se m'ha acudit intentar fer!</h5>
@@ -11,7 +11,7 @@
     <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions ✨</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/powsqr/" role="button">Potències i Arrels</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions</a>
+    <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions ✨</a>
     <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
 </p>
 <p class="mb-4">
@@ -39,6 +39,13 @@
             </p>
             <div>
                 ${{ ex["eq"]["1poli"] }}$
+            </div>
+            <br>
+            <p class="card-text">
+                Equacions racionals de primer grau
+            </p>
+            <div style="font-size:1.1em; line-height:0%">
+                ${{ ex["eq"]["racio"] }}$
             </div>
             <p  class="card-text mt-4 mb-3">
                 Equacions de segon grau incompletes
@@ -410,6 +417,25 @@
     <div class="card text-center">
     <h5 class="card-header">Fraccions<b id="frac"></b></h5>
         <div class="card-body">
+            <p class="card-text">
+                Fracció generatriu
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["frac"]["fgen1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["frac"]["fgen2"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["frac"]["fgen3"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
             <p class="card-text">
                 Sumes i restes
             </p>
