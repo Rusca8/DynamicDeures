@@ -1,0 +1,151 @@
+{% extends "formulari.html" %}
+{% block alertatop %}
+{% endblock %}
+{% block principals %}
+    <h4 id="titolTema">Fitxa de Notació Científica i Errors...</h4>
+    <div class="form-group">
+        <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso1" value="1r d'ESO" autocomplete="off" disabled> 1ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso2" value="2n d'ESO" autocomplete="off" disabled> 2ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso3" value="3r d'ESO" autocomplete="off" disabled> 3ESO
+          </label>
+          <label class="btn btn-outline-secondary disabled">
+            <input type="radio" name="curs" id="eso4" value="4t d'ESO" autocomplete="off" disabled> 4ESO
+          </label>
+          <label class="btn btn-outline-secondary active">
+            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+          </label>
+        </div>
+    </div>
+
+  <div class="form-group">
+    <label>Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opNCient" aria-expanded="true" aria-controls="opNCient">
+          <input type="checkbox" name="ncient" autocomplete="off" id="ncient" value="ncient" checked> N. Científica
+        </label>
+        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opErr" aria-expanded="true" aria-controls="opErr">
+          <input type="checkbox" name="errors" autocomplete="off" id="errors" value="errors" disabled> Errors
+        </label>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extres %}
+    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="collapse show mb-1" id="opNCient">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Notació Científica</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formDecim"><b>Passar a científica</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qnumacient" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Una sola xifra significativa?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "nc_unaxs" %}
+              {% for n in range(5) %}
+                {% if n == 1 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formDecim"><b>Escriure totes les xifres</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qcientanum" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Una sola xifra significativa?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "cn_unaxs" %}
+              {% for n in range(5) %}
+                {% if n == 1 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formDecim"><b>Multiplicar i dividir</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qmuldiv" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+                </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block jsextra %}
+<script>
+    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+</script>
+{% endblock %}

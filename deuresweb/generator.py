@@ -275,6 +275,99 @@ def decimals(tipus, notac=1):
     return "0.67\\overline{42}"  # just in case
 
 
+def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
+    """retorna exercicis de notació científica
+
+    :param tipus: 1 num a not, 2 not a num
+    :param nivell: dificultat de l'exercici (10, n*10, r*10)
+    :param direc: signe exp (0 qualsevol, 1 múltiples, 2 submúltiples)
+    :param signes: signe num (0 qualsevol, 1 positiu, 2 negatiu)
+    :param termes: quan tipus 3, quantitat de nums a operar
+    """
+    text = "4.2\\cdot 10^{42}"
+    if tipus == 1:  # de num a notació
+        # num base
+        if nivell in [1, 2]:
+            if nivell == 1:  # 10^x
+                num = 1
+                signe = ""
+            elif nivell == 2:  # z·10^x
+                num = random.randint(2, 9)
+                if not signes:
+                    signe = random.choice(["", "", "-"])
+                elif signes == 1:
+                    signe = ""
+                else:
+                    signe = "-"
+
+            if direc == 1 or (moneda() and not direc == 2):  # múltiple
+                text = signe + f"{(num * pow(10, random.randint(2, 9))):,}".replace(",", ".")
+            else:  # submúltiple
+                while not num % 10:
+                    num = num // 10
+                text = signe + "0," + "".join(["0" for _ in range(random.randint(0, 8))]) + f"{num}"
+
+        elif nivell == 3:  # r·10^x sense intercalats
+            num = random.randint(11, random.choice([99, 999]))
+            if not signes:
+                signe = random.choice(["", "", "-"])
+            elif signes == 1:
+                signe = ""
+            else:
+                signe = "-"
+            if direc == 1 or (moneda() and not direc == 2):  # múltiple
+                text = f"{(num * pow(10, random.randint(0, 9-len(f'{num}')))):,}".replace(",", ".")
+            else:  # submúltiple
+                while not num % 10:
+                    num = num // 10
+                text = signe + "0," + "".join(["0" for _ in range(random.randint(0, 8-len(f'{num}')))]) + f"{num}"
+        else:  # amb la coma pel mig del número (però mai darrera el primer decimal)
+            num = random.randint(100, 99999)
+            if not num % 10:  # evito 0 al final
+                num += random.randint(1, 9)
+            num = f"{num}"
+            coma = random.randint(2, len(num)-1)
+            signe = random.choice(["", "", "-"])
+            text = signe + num[:coma] + "," + num[coma:]
+
+    elif tipus == 2:  # de notació a num
+        if nivell == 1:  # 10s
+            exp = random.randint(1, 9) * random.choice([-1, 1])
+            if not random.randint(0, 20):
+                exp = 0
+            text = "10^{" f"{exp}" "}"
+        elif nivell in [2, 3]:
+            if not signes:
+                signe = random.choice(["", "", "-"])
+            elif signes == 1:
+                signe = ""
+            else:
+                signe = "-"
+            exp = random.randint(1, 9) * random.choice([-1, 1])
+            if not random.randint(0, 20):
+                exp = 0
+            if nivell == 2:
+                num = f"{random.randint(2, 9)}"
+            else:
+                num = random.randint(11, random.choice([99, random.choice([999, 9999])]))
+                while not num % 10:
+                    num = num // 10
+                num = f"{num}"
+                num = f"{num[0]}" "," f"{num[1:]}"
+            text = signe + num + "\\cdot 10^{" f"{exp}" "}"
+
+    elif tipus == 3:  # multis i divis
+        if nivell == 1:  # línia
+            talls = ["(" f"{ncient(2, 3)}"]
+            for _ in range(termes-1):
+                talls.append(")" + random.choice(["\\cdot", "\\cdot", "\\div"]) + "(")
+                talls.append(f"{ncient(2, 3)}")
+            text = "".join(talls) + ")"
+        elif nivell == 2:  # fracció
+            pass
+
+    return text
+
 def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
     """
     Exercicis de fraccions
@@ -3245,5 +3338,5 @@ for x in range(10):
 """
 """"""
 for x in range(12):
-    print(eq(5, 2))
+    print(ncient(3))
 

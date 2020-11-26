@@ -1655,6 +1655,123 @@ def fraccions(opcions, solucions=False):
     return
 
 
+def ncient(opcions, solucions=False):
+    tema = "ncient"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "ncient" in opcions:
+        ncient = True
+        qnumacient = quantesson(opcions["qnumacient"], "numacient")
+        nc_unaxs = quantesvariant(opcions["nc_unaxs"])
+        qcientanum = quantesson(opcions["qcientanum"], "cientanum")
+        cn_unaxs = quantesvariant(opcions["cn_unaxs"])
+        qmuldiv = quantesson(opcions["qmuldiv"], "nc_muldiv")
+    else:
+        ncient = False
+        qnumacient = False
+        qcientanum = False
+        qmuldiv = False
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+
+    headfoot(doc, opcions, tema)
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if ncient:
+        if any([qnumacient, qcientanum, qmuldiv]):
+            begin(doc, 'questions')
+
+            if ncient:
+                bloctitle(doc, "Notació Científica")
+
+            if qnumacient:
+                n = qnumacient
+                var = (n * nc_unaxs) // 4
+                question(doc, f"{n}")
+                doc.append("Passa a notació científica els nombres següents.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', "4")
+                for x in range(0, n):
+                    part(doc)
+                    if x < var or (var and x == 0):
+                        if x == 0:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(1, 1, direc=1)))
+                        elif x == 1:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(1, 2, direc=2)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(1, 2)))
+                    else:
+                        if random.randint(0, 7):
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(1, 3)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(1, 4)))
+                    space(doc, "0.7cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+                space(doc, "0.3cm")
+
+            if qcientanum:
+                n = qcientanum
+                var = (n * cn_unaxs) // 4
+                question(doc, f"{n}")
+                doc.append("Escriu amb totes les xifres els números següents.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', "4")
+                for x in range(0, n):
+                    part(doc)
+                    if x < var or (var and x == 0):
+                        if x == 0:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(2, 1, direc=1)))
+                        elif x == 1:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(2, 2, direc=2)))
+                        else:
+                            doc.append(NoEscape(r'$%s$' % gen.ncient(2, 2)))
+                    else:
+                        doc.append(NoEscape(r'$%s$' % gen.ncient(2, 3)))
+                    space(doc, "0.7cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+                space(doc, "0.3cm")
+
+            if qmuldiv:
+                n = qmuldiv
+                question(doc, f"{n}")
+                doc.append("Escriu amb totes les xifres els números següents.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', "2")
+                for x in range(0, n):
+                    part(doc)
+                    doc.append(NoEscape(r'$%s$' % gen.ncient(3, 1)))
+                    space(doc, "1cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+                space(doc, "0.3cm")
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 def successions(opcions, solucions=False):
     tema = "succ"
 
@@ -2449,6 +2566,8 @@ def temallarg(tema="no"):
         return "powsqr"
     elif tema == "frac":
         return "fraccions"
+    elif tema == "ncient":
+        return "ncient"
     elif tema == "prop":
         return "proporcionalitat"
     elif tema == "succ":
@@ -2472,6 +2591,8 @@ def tematitol(tema="no"):
         return "de Potències i Arrels"
     elif tema == "frac":
         return "de Fraccions"
+    elif tema == "ncient":
+        return "de Notació Científica i Errors"
     elif tema == "prop":
         return "de Proporcionalitat"
     elif tema == "succ":
@@ -2537,6 +2658,11 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 9, 11, 24, 50]
     elif op == "fgen":
         quantitats = [0, 4, 8, 12, 24, 52, 112]
+    # notació científica
+    elif op in ["cientanum", "numacient"]:
+        quantitats = [0, 4, 12, 20, 30, 60, 120]
+    elif op == "nc_muldiv":
+        quantitats = [0, 2, 4, 8, 12, 26, 56]
     # equacions
     elif op == "simples":
         quantitats = [0, 4, 10, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts

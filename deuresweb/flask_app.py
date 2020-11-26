@@ -96,6 +96,19 @@ def fraccions():
         return render_template("fraccions.html")
 
 
+@app.route("/ncient/", methods=["GET", "POST"])
+def ncient():
+    if request.method == "POST":
+        try:
+            g.ncient(request.form, solucions=False)
+        except:
+            return redirect("/latex_error/ncient")
+        tele.feedback("ncient", request.form)
+        return redirect("/pdf/ncient")
+    else:
+        return render_template("ncient.html")
+
+
 @app.route("/proporcionalitat/", methods=["GET", "POST"])
 def proporcionalitat():
     if request.method == "POST":
@@ -126,10 +139,10 @@ def success():
 @app.route("/limits/", methods=["GET", "POST"])
 def limits():
     if request.method == "POST":
-        #try:
-        g.limits(request.form)
-        #except:
-        #    return redirect("/latex_error/limits")
+        try:
+            g.limits(request.form)
+        except:
+            return redirect("/latex_error/limits")
         tele.feedback("lim", request.form)
         return redirect("/pdf/limits")
     else:
@@ -183,6 +196,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/powsqr.pdf")
     elif tema == "fraccions":
         return redirect("/static/pdfs/fraccions.pdf")
+    elif tema == "ncient":
+        return redirect("/static/pdfs/ncient.pdf")
     elif tema == "proporcionalitat":
         return redirect("/static/pdfs/proporcionalitat.pdf")
     elif tema == "successions":
