@@ -1763,7 +1763,7 @@ def ncient(opcions, solucions=False):
             if qmuldiv:
                 n = qmuldiv
                 question(doc, f"{n}")
-                doc.append("Escriu amb totes les xifres els números següents.")
+                doc.append("Realitza les operacions següents.")
                 begin(doc, 'parts')
                 begin(doc, 'multicols', "2")
                 for x in range(0, n):
