@@ -7,6 +7,11 @@
 
         <div class="container-fluid"> <!-- columnes -->
           <div id="generat"></div>
+            <div class="card mb-2 py-0">
+                <div class="card-body py-1">
+                    <i><small>Si crees una fitxa que t'agrada, descarrega-la! <span class="text-secondary">(el proper cop que obris l'enllaç potser ja no hi és...)</span></small></i>
+                </div>
+            </div>
           {% block alertatop %}{% endblock %}
           <div class="row">
             <div class="col-sm-auto mb-2">
@@ -34,7 +39,7 @@
             //sumes = document.getElementById('formulari').elements['curs'].value;
             //console.log(sumes)
 
-            document.getElementById('generat').innerHTML = "S'han generat exercicis de " + curs; //aquí porta les claus (i aparentment cometes)
+            document.getElementById('generat').innerHTML = "S'han generat exercicis de " + curs;
             document.getElementById('generat').className = "alert alert-success";
         };
     </script>

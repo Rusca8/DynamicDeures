@@ -830,13 +830,14 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     return text
 
 
-def powsqr(tipus, nivell=1, termes=2, lletres=0):
-    """
+def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
+    """Retorna exrrcicis de potències i arrels
 
     :param tipus:
     :param nivell:
     :param termes: quantitat de termes
     :param lletres: 0 = nums / 1 = nums i llet / 2 = llet
+    :param fracnums: números per la fracció que fa de base a tipus 3
     :return: text en LaTeX
     """
 
@@ -925,6 +926,60 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0):
                         text += f"{base}"
                     else:
                         text += f"{base}" + "^{" + f"{exp}" + "}"
+
+        if nivell == 3:  # TODO organitzar aquest i els nivells inferiors
+            text = ""
+            if not fracnums:
+                b1, b2 = random.sample([1, 2, 3, 4, 5, 6, 7], 2)
+                b1, b2 = fracsimple(b1, b2)
+            else:
+                b1, b2 = fracnums
+
+            for x in range(termes):
+                if x > 0:
+                    if nivell == 1 or moneda():
+                        text += r"\cdot "
+                    else:
+                        text += r"\div "
+                exp = random.randint(1, 10)
+                if not random.randint(0, 3):
+                    exp = -exp
+                if not random.randint(0, 20) and not fracnums:
+                    alt1 = random.choice([2, 3])
+                    if b1 != alt1:
+                        alt2 = b1
+                    elif b2 != alt1:
+                        alt2 = b2
+                    else:
+                        alt2 = random.choice([5, 7])
+                    base = "\\frac{" f"{alt1}" "}{" f"{alt2}" "}"
+                elif random.randint(0, 4):
+                    base = "\\frac{" f"{b1}" "}{" f"{b2}" "}"
+                else:
+                    base = "\\frac{" f"{b2}" "}{" f"{b1}" "}"
+                if exp == 1:
+                    text += f"{base}"
+                else:
+                    text += f"\\left({base}\\right)" + "^{" + f"{exp}" + "}"
+
+        if nivell == 4:
+            b1, b2 = random.sample([1, 2, 3, 5, 7], 2)
+            b1, b2 = fracsimple(b1, b2)
+            text = "\\left[" + powsqr(2, 3, fracnums=[b1, b2]) + "\\right]^{" + f"{random.randint(2, 5)}" + "}"
+            exp = random.randint(2, 5)
+            if moneda():
+                exp = -exp
+            text = "\\left[" + text + "\\right]^{" + f"{exp}" + "}"
+            for _ in range(termes - 1):
+                exp = random.randint(2, 5)
+                if moneda():
+                    exp = -exp
+                bloc = "\\left[" + powsqr(2, 3, fracnums=[b1, b2]) + "\\right]^{" + f"{exp}" + "}"
+                exp = random.randint(2, 5)
+                if moneda():
+                    exp = -exp
+                bloc = "\\left[" + bloc + "\\right]^{" + f"{exp}" + "}"
+                text += random.choice(["\\cdot", "\\div"]) + bloc
 
     elif tipus == 3:  # potències, MCM
         if nivell == 1:  # multiplicant (exp amb signe)
@@ -3336,7 +3391,9 @@ for x in range(6):
 for x in range(10):
     print(powsqr(103, 2, 3))
 """
-""""""
+"""
 for x in range(12):
-    print(ncient(3))
+    #print(powsqr(2, 3, termes=4), "\\\\ \\\\")
+    print(powsqr(2, 4), "\\\\ \\\\")
+    print("\\\\")"""
 

@@ -767,6 +767,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -780,10 +781,12 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
             begin(doc, 'questions')
 
             if primer:
+                needspace(doc, 8)
                 bloctitle(doc, "Equacions de primer grau")
 
             if qsimples != 0:
                 n = qsimples
+                needspace(doc, 8)
                 question(doc, f"{n // 2}")
                 doc.append("Resol les següents equacions de primer grau (sense coeficient a la x).")
                 begin(doc, 'parts')
@@ -802,6 +805,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
             if qdsimples != 0:
                 n = qdsimples
+                needspace(doc, 8)
                 question(doc, f"{qdsimples}")
                 doc.append("Resol les següents equacions de primer grau (amb coeficient).")
                 var = (n * noneg) // 4
@@ -820,6 +824,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
             if q1polis != 0:
                 n = q1polis
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Opera i resol les següents equacions de primer grau.")
                 var = (n * sparent) // 4
@@ -841,6 +846,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
             if q1racios:
                 n = q1racios
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Resol les següents equacions racionals (no totes tenen resultat bonic!).")
                 begin(doc, 'parts')
@@ -855,10 +861,12 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 space(doc, "0.4cm")
 
             if segon:
+                needspace(doc, 8)
                 bloctitle(doc, "Equacions de segon grau")
 
             if qincomps:
                 n = qincomps
+                needspace(doc, 8)
                 question(doc, f"{n // 2}")
                 doc.append("Resol les següents equacions de segon grau (incompletes).")
                 begin(doc, 'parts')
@@ -881,6 +889,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
             if qcompletes:
                 n = qcompletes
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents equacions de segon grau (completes).")
                 var = (n * noa) // 4
@@ -902,6 +911,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
             if qpolis:
                 n = qpolis
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Opera i resol les següents equacions de segon grau.")
                 begin(doc, 'parts')
@@ -915,10 +925,12 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 space(doc, "0.4cm")
 
             if sistemes:
+                needspace(doc, 12)
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
 
             if qsist != 0:
                 n = qsist
+                needspace(doc, 10)
                 question(doc, f"{n * 2}")
                 doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
                 var = (n * nocoef) // 4
@@ -940,10 +952,12 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 space(doc, "1.6cm")
 
             if sistemes3:
+                needspace(doc, 12)
                 bloctitle(doc, "Sistemes d'equacions de tres incògnites")
 
             if qsist3 != 0:
                 n = qsist3
+                needspace(doc, 10)
                 question(doc, f"{n * 5}")
                 doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
                 var = (n * nocoef3) // 4
@@ -2669,9 +2683,9 @@ def quantesson(value, op):
     elif op == "dsimples":
         quantitats = [0, 3, 8, 9, 16, 32, 68]
     elif op == "incomps":
-        quantitats = [0, 8, 12, 20, 25, 50, 100]
+        quantitats = [0, 6, 9, 12, 15, 33, 66]
     elif op == "completes":
-        quantitats = [0, 6, 9, 15, 20, 33, 66]
+        quantitats = [0, 6, 9, 12, 15, 33, 66]
     elif op in ["polis", "1polis"]:
         quantitats = [0, 2, 4, 8, 10, 22, 44]
     elif op == "1racios":
@@ -2788,7 +2802,19 @@ def br(doc):
 
 
 def pagebreak(doc, priority="4"):
-    doc.append(NoEscape(r'\pagebreak[%s]' % (priority)))
+    doc.append(NoEscape(r'\pagebreak[%s]' % priority))
+
+
+def needspace(doc, height=8, cms=0):
+    """uses needspace package to force page break if not enough space
+
+    :param doc: current doc
+    :param height: height of the needed space (approx, and measured in lines of text)
+    """
+    if cms:
+        doc.append(NoEscape(r'\needspace{%scm}' % cms))
+    else:
+        doc.append(NoEscape(r'\needspace{%s\baselineskip}' % height))
 
 
 def bloctitle(doc, text):
