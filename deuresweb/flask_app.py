@@ -215,6 +215,11 @@ def com():
     return render_template("com.html")
 
 
+@app.route("/donar/")
+def donar():
+    return render_template("donacions.html")
+
+
 @app.route("/canvis/")
 def canvis():
     return render_template("changelog.html")
