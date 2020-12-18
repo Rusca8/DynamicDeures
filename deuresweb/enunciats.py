@@ -7,6 +7,7 @@ noen = ["", "en"]
 noa = ["a", ""]
 lales = [["la", "les"], ["el", "els"]]
 uuna = ["una", "ú"]
+esessin = ["és", "essin"]
 
 poderf = ["podré", "podràs", "podrà", "podrem", "podreu", "podran"]
 trigar = ["trigo", "trigues", "triga", "triguem", "trigueu", "triguen"]
@@ -89,7 +90,7 @@ def propsimple(tipus, x, y, x2, y2):
                 enunciat = (f"Si {x} {persona[1]} es reparteixen {tresor[0]},"
                             f" els to{caquen[sp(y)]} {y} {tresor[1][sp(y)]} per cada un{noa[gp]}. ")
             if moneda():
-                enunciat += f"Quant{aes[gp][1]} haurien de ser per què els en toquessin {y2}?"
+                enunciat += f"Quant{aes[gp][1]} haurien de ser per què els en toqu{esessin[sp(y2)]} {y2}?"
             else:
                 enunciat += f"Quant{aes[gt][1]} n'hi hauria per cadasc{uuna[gp]} si fossin {x2}?"
 

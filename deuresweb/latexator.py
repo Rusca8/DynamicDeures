@@ -54,10 +54,12 @@ def exemple(opcions, solucions=False):
             begin(doc, 'questions')
 
             if apartat1:
+                needspace(doc, 12)
                 bloctitle(doc, "Primer Apartat")
 
             if qexercici1:
                 n = qexercici1
+                needspace(doc, 8)
                 question(doc, f"{n}")  # puntuació de l'exercici
                 doc.append("Resol el següent exercici que va de què sé jo.")
                 begin(doc, 'parts')
@@ -75,6 +77,7 @@ def exemple(opcions, solucions=False):
 
             if qexercici2 != 0:
                 n = qexercici2
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Resol el següent exercici que va de què sé jo.")
                 begin(doc, 'parts')
@@ -91,6 +94,7 @@ def exemple(opcions, solucions=False):
                 end(doc, 'parts')
 
             if apartat2:
+                needspace(doc, 12)
                 bloctitle(doc, "Segon Apartat")
 
             # exercicis de l'apartat 2
@@ -189,6 +193,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
     doc = Document(documentclass="exam", geometry_options=geometry)
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('alphalph'))  # per permetre aa bb cc
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -204,10 +209,12 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
             begin(doc, 'questions')
 
             if sumes:
+                needspace(doc, 12)
                 bloctitle(doc, "Sumes i restes amb enters")
 
                 if qsumes != 0:
                     n = qsumes
+                    needspace(doc, 8)
                     question(doc, f"{n // 4}")
                     doc.append("Calcula les següents sumes i restes sense parèntesis.")
                     var = (n * fpos) // 4  # quantitat de punts amb la variant
@@ -223,10 +230,9 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     end(doc, "multicols")
                     end(doc, 'parts')
 
-                pagebreak(doc, 3)
-
                 if qpsumes:
                     n = qpsumes
+                    needspace(doc, 8)
                     question(doc, f"{n // 2}")
                     doc.append("Calcula les següents sumes i restes amb parèntesis.")
                     var = (n * noneg) // 4  # quantitat de punts amb la variant
@@ -246,10 +252,8 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     doc.append("Que diu que en vol, però no en vol.")
 
 
-
-            pagebreak(doc, 2)
-
             if multis or divis:
+                needspace(doc, 12)
                 if multis and divis:
                     bTitle = "Multiplicacions i divisions amb enters"
                 elif multis:
@@ -259,6 +263,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                 bloctitle(doc, bTitle)
 
                 if qmultis or qdivis:
+                    needspace(doc, 8)
                     if qmultis:
                         if qdivis:
                             question(doc, f"{qmultis // 2}")
@@ -293,9 +298,8 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     end(doc, "multicols")
                     end(doc, 'parts')
 
-                pagebreak(doc, 1)
-
                 if qsmultis != 0 or qsdivis != 0:
+                    needspace(doc, 10)
                     if qsmultis != 0:
                         if qsdivis != 0:
                             question(doc, f"{qsmultis}")
@@ -342,6 +346,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     doc.append("Potser que triïs alguna cosa... (o no diguis que vols multiplicar i dividir)")
 
             if combis:
+                needspace(doc, 12)
                 bloctitle(doc, "Operacions combinades")
 
             if qcombis:
@@ -571,6 +576,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -584,10 +590,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
             begin(doc, 'questions')
 
             if sumes:
+                needspace(doc, 12)
                 bloctitle(doc, "Sumes")
 
             if qsumes:
                 n = qsumes
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents sumes apilades (sense decimals).")
                 begin(doc, 'parts')
@@ -604,6 +612,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
 
             if qdsumes:
                 n = qdsumes
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Resol les següents sumes apilades (amb decimals).")
                 begin(doc, 'parts')
@@ -621,10 +630,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 space(doc, "1cm")
 
             if restes:
+                needspace(doc, 12)
                 bloctitle(doc, "Restes")
 
             if qrestes:
                 n = qrestes
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents restes apilades (sense decimals).")
                 begin(doc, 'parts')
@@ -641,6 +652,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
 
             if qdrestes:
                 n = qdrestes
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Resol les següents restes apilades (amb decimals).")
                 begin(doc, 'parts')
@@ -658,10 +670,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 space(doc, "1cm")
 
             if multis:
+                needspace(doc, 12)
                 bloctitle(doc, "Multiplicacions")
 
             if qmultis:
                 n = qmultis
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents multiplicacions apilades (sense decimals).")
                 begin(doc, 'parts')
@@ -678,6 +692,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
 
             if qdmultis:
                 n = qdmultis
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Resol les següents multiplicacions apilades (amb decimals).")
                 begin(doc, 'parts')
@@ -1018,6 +1033,7 @@ def proporcionalitat(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1031,6 +1047,7 @@ def proporcionalitat(opcions, solucions=False):
             begin(doc, 'questions')
 
             if simple:
+                needspace(doc, 12)
                 bloctitle(doc, "Proporcionalitat simple")
 
             if qdirectes:
@@ -1213,6 +1230,7 @@ def powsqr(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1227,10 +1245,12 @@ def powsqr(opcions, solucions=False):
             begin(doc, 'questions')
 
             if pot:
+                needspace(doc, 12)
                 bloctitle(doc, "Potències")
 
             if qmexp:
                 n = qmexp
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Expressa com un sol exponent.")
                 begin(doc, 'parts')
@@ -1248,6 +1268,7 @@ def powsqr(opcions, solucions=False):
 
             if qmbase:
                 n = qmbase
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Expressa com un sol exponent.")
                 begin(doc, 'parts')
@@ -1265,6 +1286,7 @@ def powsqr(opcions, solucions=False):
 
             if qfrac:
                 n = qfrac
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Simplifica les fraccions següents")
                 var = (n * fmbase) // 4
@@ -1290,6 +1312,7 @@ def powsqr(opcions, solucions=False):
 
             if qffrac:
                 n = qffrac
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Factoritza i simplifica les fraccions següents")
                 var = (n * fsexp) // 4
@@ -1312,6 +1335,7 @@ def powsqr(opcions, solucions=False):
 
             if qdfrac:
                 n = qdfrac
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Factoritza i simplifica les següents fraccions amb decimals")
                 begin(doc, 'parts')
@@ -1327,10 +1351,12 @@ def powsqr(opcions, solucions=False):
 
             space(doc, "0.5cm")
             if sqrt:
+                needspace(doc, 12)
                 bloctitle(doc, "Arrels")
 
             if qarrels:
                 n = qarrels
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Expressa com una sola arrel.")
                 var = (n * asexp) // 4
@@ -1353,6 +1379,7 @@ def powsqr(opcions, solucions=False):
 
             if qextreure:
                 n = qextreure
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Extreu de l'arrel tants factors com puguis.")
                 var = (n * fquad) // 4
@@ -1374,6 +1401,7 @@ def powsqr(opcions, solucions=False):
 
             if qintrod:
                 n = qintrod
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Introdueix tots els factors dins l'arrel.")
                 var = (n * iquad) // 4
@@ -1395,6 +1423,7 @@ def powsqr(opcions, solucions=False):
 
             if qcombradi:
                 n = qcombradi
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Expressa com una sola arrel.")
                 var = (n * einter) // 4
@@ -1416,6 +1445,7 @@ def powsqr(opcions, solucions=False):
 
             if qfextreure:
                 n = qfextreure
+                needspace(doc, 8)
                 question(doc, f"{n*2}")
                 doc.append("Factoritza i extreu tants factors com puguis.")
                 var = (n * ffquad) // 4
@@ -1434,6 +1464,7 @@ def powsqr(opcions, solucions=False):
 
             if qasum:
                 n = qasum
+                needspace(doc, 8)
                 question(doc, f"{2*n}")
                 doc.append("Simplifica al màxim les sumes i restes següents.")
                 var = (n * scoef) // 4
@@ -1458,6 +1489,7 @@ def powsqr(opcions, solucions=False):
 
             if qracions:
                 n = qracions
+                needspace(doc, 8)
                 question(doc, f"{n*2}")
                 doc.append("Racionalitza les fraccions següents.")
                 var1 = (n * rquad) // 4
@@ -1564,6 +1596,7 @@ def fraccions(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1577,10 +1610,12 @@ def fraccions(opcions, solucions=False):
             begin(doc, 'questions')
 
             if decimals:
+                needspace(doc, 12)
                 bloctitle(doc, "Nombres Decimals")
 
             if qfgen:
                 n = qfgen
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Troba la fracció generatriu d'aquests nombres decimals.")
                 begin(doc, 'parts')
@@ -1597,10 +1632,12 @@ def fraccions(opcions, solucions=False):
                 space(doc, "0.3cm")
 
             if simples:
+                needspace(doc, 12)
                 bloctitle(doc, "Operacions simples")
 
             if qsumes:
                 n = qsumes
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents sumes i restes de fraccions.")
                 begin(doc, 'parts')
@@ -1617,6 +1654,7 @@ def fraccions(opcions, solucions=False):
 
             if qmultis:
                 n = qmultis
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 if muldiv == 1:
                     doc.append("Resol les següents multiplicacions i divisions de fraccions.")
@@ -1639,10 +1677,12 @@ def fraccions(opcions, solucions=False):
                 end(doc, 'parts')
 
             if combis:
+                needspace(doc, 12)
                 bloctitle(doc, "Operacions combinades")
 
             if qcombis:
                 n = qcombis
+                needspace(doc, 8)
                 question(doc, f"{n*4}")
                 doc.append("Resol les següents operacions combinades amb fraccions.")
                 begin(doc, 'parts')
@@ -1696,6 +1736,7 @@ def ncient(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1709,10 +1750,12 @@ def ncient(opcions, solucions=False):
             begin(doc, 'questions')
 
             if ncient:
+                needspace(doc, 12)
                 bloctitle(doc, "Notació Científica")
 
             if qnumacient:
                 n = qnumacient
+                needspace(doc, 8)
                 var = (n * nc_unaxs) // 4
                 question(doc, f"{n}")
                 doc.append("Passa a notació científica els nombres següents.")
@@ -1739,6 +1782,7 @@ def ncient(opcions, solucions=False):
 
             if qcientanum:
                 n = qcientanum
+                needspace(doc, 8)
                 var = (n * cn_unaxs) // 4
                 question(doc, f"{n}")
                 doc.append("Escriu amb totes les xifres els números següents.")
@@ -1762,6 +1806,7 @@ def ncient(opcions, solucions=False):
 
             if qmuldiv:
                 n = qmuldiv
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Realitza les operacions següents.")
                 begin(doc, 'parts')
@@ -1855,6 +1900,7 @@ def successions(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -1869,10 +1915,12 @@ def successions(opcions, solucions=False):
 
             # Aritmètiques
             if arit:
+                needspace(doc, 12)
                 bloctitle(doc, "Successions aritmètiques")
 
             if qtermen:
                 n = qtermen
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Exercicis de trobar el terme n:")
                 begin(doc, 'parts')
@@ -1885,6 +1933,7 @@ def successions(opcions, solucions=False):
 
             if qdades:
                 n = qdades
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Exercicis de trobar la dada que falta:")
                 begin(doc, 'parts')
@@ -1896,6 +1945,7 @@ def successions(opcions, solucions=False):
 
             if qextreure:
                 n = qextreure
+                needspace(doc, 8)
                 question(doc, f"{3 * n}")
                 if aextron == "alhora" or aextron == "seguit":
                     t = "Calcula"
@@ -1965,6 +2015,7 @@ def successions(opcions, solucions=False):
                     space(doc, "1cm")
                     end(doc, 'parts')
                 else:
+                    needspace(doc, 8)
                     if aGeneral:
                         doc.append("Calcula el terme general de les següents successions:")
                     elif not (aAn or aSn):
@@ -1981,6 +2032,7 @@ def successions(opcions, solucions=False):
                         end(doc, 'parts')
 
                     if aAn:
+                        needspace(doc, 8)
                         doc.append(NoEscape(r"Calcula per a cada successió el terme $a_n$ indicat:"))
                         begin(doc, 'parts')
                         begin(doc, 'multicols', 2)
@@ -1993,6 +2045,7 @@ def successions(opcions, solucions=False):
                         end(doc, 'parts')
 
                     if aSn:
+                        needspace(doc, 8)
                         doc.append(NoEscape("Calcula per a cada successió la suma dels n primers termes $(S_n)$:"))
                         begin(doc, 'parts')
                         begin(doc, 'multicols', 2)
@@ -2006,10 +2059,12 @@ def successions(opcions, solucions=False):
 
             # Geomètriques
             if geom:
+                needspace(doc, 12)
                 bloctitle(doc, "Successions geomètriques")
 
             if qgtermen:
                 n = qgtermen
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Exercicis de trobar el terme n:")
                 begin(doc, 'parts')
@@ -2021,6 +2076,7 @@ def successions(opcions, solucions=False):
 
             if qgdades:
                 n = qgdades
+                needspace(doc, 8)
                 question(doc, f"{2 * n}")
                 doc.append("Exercicis de trobar la dada que falta:")
                 begin(doc, 'parts')
@@ -2032,6 +2088,7 @@ def successions(opcions, solucions=False):
 
             if qgextreure:
                 n = qgextreure
+                needspace(doc, 8)
                 question(doc, f"{3 * n}")
                 if gextron == "alhora" or gextron == "seguit":
                     t = "Calcula"
@@ -2101,6 +2158,7 @@ def successions(opcions, solucions=False):
                     space(doc, "1cm")
                     end(doc, 'parts')
                 else:
+                    needspace(doc, 8)
                     if gGeneral:
                         doc.append("Calcula el terme general de les següents successions:")
                     elif not (gAn or gSn):
@@ -2117,6 +2175,7 @@ def successions(opcions, solucions=False):
                         end(doc, 'parts')
 
                     if gAn:
+                        needspace(doc, 8)
                         doc.append(NoEscape(r"Calcula per a cada successió el terme $a_n$ indicat:"))
                         begin(doc, 'parts')
                         begin(doc, 'multicols', 2)
@@ -2129,6 +2188,7 @@ def successions(opcions, solucions=False):
                         end(doc, 'parts')
 
                     if gSn:
+                        needspace(doc, 8)
                         doc.append(NoEscape("Calcula per a cada successió la suma dels n primers termes $(S_n)$:"))
                         begin(doc, 'parts')
                         begin(doc, 'multicols', 2)
@@ -2181,6 +2241,7 @@ def limits(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    doc.packages.append(Package('needspace'))
     # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
 
     headfoot(doc, opcions, tema)
@@ -2195,10 +2256,12 @@ def limits(opcions, solucions=False):
             begin(doc, 'questions')
 
             if calcul:
+                needspace(doc, 12)
                 bloctitle(doc, "Càlcul de límits")
 
             if qinf:
                 n = qinf
+                needspace(doc, 8)
                 question(doc, f"{n}")  # puntuació de l'exercici
                 doc.append("Resol els límits següents.")
                 begin(doc, 'parts')
@@ -2284,7 +2347,8 @@ def derivades(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
-    doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet) TODO enllaçar eqs a wolfram
+    doc.packages.append(Package('needspace'))
+    doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -2298,10 +2362,12 @@ def derivades(opcions, solucions=False):
             begin(doc, 'questions')
 
             if rd:
+                needspace(doc, 12)
                 bloctitle(doc, "Regles de Derivació")
 
             if qsimples:
                 n = qsimples
+                needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append("Resol les següents derivades sense regla de la cadena.")
                 begin(doc, 'parts')
@@ -2319,6 +2385,7 @@ def derivades(opcions, solucions=False):
 
             if qmuldiv != 0:
                 n = qmuldiv
+                needspace(doc, 8)
                 question(doc, f"{2*n}")
                 t = "Deriva les següents "
                 if 6 in propietats:
@@ -2355,6 +2422,7 @@ def derivades(opcions, solucions=False):
 
             if qcadena != 0:
                 n = qcadena
+                needspace(doc, 8)
                 question(doc, f"{3*n}")
                 doc.append("Resol les següents derivades (amb regla de la cadena).")
                 begin(doc, 'parts')
