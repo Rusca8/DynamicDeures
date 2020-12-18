@@ -5,7 +5,7 @@
 {% block principals %}
   <h4 id="titolTema">Fitxa d'Operacions amb Enters...</h4>
   <div class="form-group">
-    <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
+    <label>En quin curs estàs pensant?</label><br>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-outline-secondary disabled">
         <input type="radio" name="curs" id="ep1" value="1r de Primària" autocomplete="off" disabled> 1EP
@@ -47,6 +47,20 @@
           <input type="checkbox" name="combinades" autocomplete="off" id="comb" value="combinades" checked> Combinades
         </label>
     </div>
+  </div>
+  <br>
+  <hr>
+
+  <div class="form-group mb-0">
+    <label for="formSolucions" class="mb-0"><i>Incloure les solucions? (op. combinades)</i></label>
+      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+            <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
+          </label>
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+            <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
+          </label>
+      </div>
   </div>
 {% endblock %}
 {% block extres %}

@@ -114,6 +114,9 @@ def exemple(opcions, solucions=False):
 def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - - - - COMBINADES
     tema = "comb"
 
+    if opcions["solucions"] == "sí":
+        solucions = True
+
     # getting opcions
     curs = opcions["curs"]
 
@@ -251,7 +254,6 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                 if qsumes == 0 and qpsumes == 0:
                     doc.append("Que diu que en vol, però no en vol.")
 
-
             if multis or divis:
                 needspace(doc, 12)
                 if multis and divis:
@@ -355,23 +357,27 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                 doc.append("Calcula les següents operacions combinades.")
                 begin(doc, 'parts')
                 begin(doc, 'multicols', "2")
+                solcombis = []
                 for x in range((n * 2) // 3):
                     part(doc)
+                    solcombis.append(random.randint(-10, 20))
                     if x < n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=False, ops=ops)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 2, doblesigne=False, ops=ops)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 2, doblesigne=True, ops=ops)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 2, doblesigne=True, ops=ops)))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 space(doc, "0.5cm")
                 for x in range(n - ((n * 2) // 3)):
                     part(doc)
+                    solcombis.append(random.randint(-10, 20))
                     if x < n // 6:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=False, ops=ops)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 3, doblesigne=False, ops=ops)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(random.randint(-10, 20), 3, doblesigne=True, ops=ops)))
+                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 3, doblesigne=True, ops=ops)))
                     space(doc, "1cm")
                 end(doc, 'parts')
+                blocsolus(doc, solucions, solcombis)
 
             end(doc, 'questions')
         else:
@@ -1960,7 +1966,7 @@ def successions(opcions, solucions=False):
                                 else:
                                     t += " o"
                     if aAn:
-                        t += " el terme $A_n$"
+                        t += " el terme $a_n$"
                         if aextron == "alhora":
                             t += " indicat"
                         if aSn:
@@ -2700,7 +2706,7 @@ def quantesson(value, op):
     elif op in ["smultis", "sdivis"]:
         quantitats = [0, 8, 15, 27, 42, 87, 174]
     elif op == "combis":
-        quantitats = [0, 3, 6, 9, 9, 19, 39]
+        quantitats = [0, 3, 6, 9, 9, 18, 39]
     # més xifres
     elif op == "v_sumes":
         quantitats = [0, 4, 8, 12, 16, 35, 64]
@@ -2826,7 +2832,7 @@ def myconfig(doc, solucions=False):
     doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
     doc.append(NoEscape(r'\bracketedpoints'))
     doc.append(NoEscape(r'\addpoints'))
-    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solució:}\par\noindent}'))
+    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solucions:}\par\noindent}'))
     if solucions:
         doc.append(NoEscape(
             r'\printanswers'))  # Marca les respostes correctes dels multiopció i mostra les respostes definides
@@ -2917,5 +2923,29 @@ def uncalcul(doc, quin=[1, 1], sp="0.7cm"):  # op és llista d'opcions del gener
     part(doc)
     doc.append(NoEscape(r'$%s$' % gen.comb(*quin)))  # asterisc separa la llista i els envia individualment
     space(doc, sp)
+    return
 
+
+def escriusolus(llista):
+    """fa una llista numerada amb totes les solucions de la llista"""
+    for x in range(len(llista)):
+        if x < 26:
+            apartat = f"{chr(x+97)}"  # a-z
+        else:
+            apartat = f"{chr(x//26+96)+chr(x%26+97)}"  # aa-zz
+        llista[x] = r"\textbf{" + apartat + ":} " f"{llista[x]}"
+    return ", ".join(llista)
+
+
+def blocsolus(doc, solucions, llista):
+    """Escriu les solucions al document en cas que s'hagi escollit que n'hi hagi
+
+    :param doc: document LaTeX on escriure-ho.
+    :param solucions: bool, diu si hi ha d'haver o no solucions al document.
+    :param llista: llista de solucions de l'exercici.
+    """
+    if solucions:
+        doc.append(NoEscape(r'\begin{solution}'))
+        doc.append(NoEscape(r'%s' % escriusolus(llista)))
+        doc.append(NoEscape(r'\end{solution}'))
     return
