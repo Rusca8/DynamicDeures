@@ -25,14 +25,14 @@ def indexvar():
         return render_template("index.html", ex=e.genera(True))
     except:
         return (f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2>"
-                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>")
+                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: dynamicdeures@gmail.com)</p>")
 
 
 @app.route("/equacions/", methods=["GET", "POST"])
 def equacions():
     if request.method == "POST":
         try:
-            g.equacions(request.form, solucions=False)  # genera el pdf amb latex
+            g.equacions(request.form, solucions=True)  # genera el pdf amb latex
         except:
             return redirect("/latex_error/equacions")
         tele.feedback("eq", request.form)

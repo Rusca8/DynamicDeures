@@ -90,8 +90,10 @@ def comb(tipus, nivell=1, nums=1):
             if moneda():
                 text = fr'{a}{symbol}{b}='
             else:
-                if a>0:
+                if a > 0:
                     text = fr'(+{a}){symbol}{b}='
+                elif a == 0:
+                    text = fr'{a}{symbol}{b}'
                 else:
                     text = fr'({a}){symbol}{b}='
     return text
@@ -1510,8 +1512,9 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
     return text
 
 
-def eq(tipus, nivell=1):  # de moment tot (2,1)
+def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
     x = 1
+    solus = "NOT DEF"
     text = "x=42"
 
     if tipus == 1:  # TIPUS x+B=C
@@ -1702,7 +1705,7 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
     elif tipus == 5:  # lineals amb fraccions
         if nivell == 1:  # alguna cosa més senzilla
             pass
-        elif nivell == 2:  # fraccions (resultat fracció)
+        elif nivell == 2:  # fraccions (resultat fracció) TODO entendre per què no surt enter
             x = random.randint(-10, 10)
             # coefs
             e = random.choice([2, 3])
@@ -2001,12 +2004,14 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
             text = etext + "=" + dtext
 
     elif tipus == 101:  # x^2-C (treure l'arrel)
+        nexist = False
         if nivell == 1:  # quadrat perfecte, x2 sense coef
             x = random.randint(1, 10)
             text = f"x^2-{pow(x,2)}=0"
         elif nivell == 2:  # pot sortir impossible
             x = random.randint(1, 10)
             if random.choice([0, 0, 1]):  # arrel neg
+                nexist = True
                 text = f"x^2+{pow(x,2)}"
             else:
                 text = f"x^2-{pow(x,2)}"  # normal
@@ -2014,36 +2019,27 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
                 text = text + "=0"
             else:
                 text = "0=" + text
-        elif nivell == 3:  # amb coef
+
+        elif nivell == 3:  # amb coef (ax^2-ac=0)
             x = random.randint(1, 10)
             c = pow(x, 2)
             a = random.randint(-3, 3)
             if a == 0:
                 a = random.choice([1, -1])
-            if a > 0:
-                if moneda():
-                    if a == 1:
-                        text = f"x^2+{c*a}"
-                    else:
-                        text = f"{a}x^2+{c*a}"
-                else:
-                    if a == 1:
-                        text = f"{c*a}+x^2"
-                    else:
-                        text = f"{c*a}+{a}x^2"
+
+            if random.randint(0, 2):  # normalment canviat de signe (arrel possible)
+                tc = -a*c
+            else:  # una de cada tres arrel impossible
+                tc = a*c
+                nexist = True
+
+            if moneda():
+                text = f"{monomi(a, 2)}{signe(tc)}"
             else:
-                if moneda():
-                    if a == -1:
-                        text = f"-x^2{c*a}"
-                    else:
-                        text = f"{a}x^2{c * a}"
-                else:
-                    if a == -1:
-                        text = f"{c*a}-x^2"
-                    else:
-                        text = f"{c * a}{a}x^2"
-            if random.choice([1, 1, 0]):
-                text = text + "=0"
+                text = f"{tc}{monomi(a, 2, True)}"
+
+            if random.randint(0, 2):
+                text += "=0"
             else:
                 text = "0=" + text
 
@@ -2283,11 +2279,32 @@ def eq(tipus, nivell=1):  # de moment tot (2,1)
         elif text[-1] == "=":
             text += "0"
 
+    if solucions:
+        if tipus == 1:  # primer simple
+            solus = f"{c-b}"
+        elif tipus in [2, 3, 4]:  # primer
+            solus = f"{x}"
+        elif tipus == 5:  # fracs
+            pass  # no tinc el resultat, crec, i no sé per què
+        elif tipus == 101:  # treure l'arrel
+            if nexist:
+                solus = r"$\nexists$"
+            else:
+                solus = rf"$\pm ${x}"
+        elif tipus == 102:  # inc. factoritzant
+            solus = f"0,~{-x}"  # (m'he inventat el del factor, no pas l'arrel)
+        elif tipus in [103, 104]:
+            if x1 == x2:
+                solus = f"{x1}"
+            else:
+                solus = f"{x1},~{x2}"  # el ~ fa l'espai intrencable
+        return text, solus
     return text
 
 
-def sisteq(tipus, nivell=1, nums=1):
+def sisteq(tipus, nivell=1, nums=1, solucions=False):
     text = text = r"\begin{cases} x+y=42 \\ x+y=42 \end{cases}"
+    solus = "NOT DEF"
 
     if tipus == 1:  # ax+by=c, dx+ey=f
         if nivell == 1 or nivell == 2 or nivell == 3:  # primera x coef 1 || algun coef ±1 || reducció qualsevol
@@ -2314,6 +2331,7 @@ def sisteq(tipus, nivell=1, nums=1):
             eq1 = systeq_text(coefs[0], coefs[1], c)
             eq2 = systeq_text(coefs[2], coefs[3], f)
             text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
+            solus = f"({x},~{y})"
 
     elif tipus == 101:  # ax+by+cz=d, ex+fy+gz=h, ix+jy+kz=m
         if nivell in [1, 2, 3, 4]:  # escala de ±1 (primera x sola || qualsevol x) || alguna x ±1 || gauss normal
@@ -2354,6 +2372,9 @@ def sisteq(tipus, nivell=1, nums=1):
             eq2 = systeq3_text(coefs[3], coefs[4], coefs[5], h)
             eq3 = systeq3_text(coefs[6], coefs[7], coefs[8], m)
             text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \\ " + eq3 + r" \end{cases}"
+            solus = f"({x},~{y},~{z})"
+    if solucions:
+        return text, solus
     return text
 
 

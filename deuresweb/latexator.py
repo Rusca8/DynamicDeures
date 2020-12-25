@@ -730,6 +730,9 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
 def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - - - - EQUACIONS
     tema = "eq"
 
+    if opcions["solucions"] == "sí":
+        solucions = True
+
     # getting opcions
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
@@ -786,6 +789,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     doc = Document(documentclass="exam", geometry_options=geometry)
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('amssymb'))  # això té el \nexists
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))
     doc.packages.append(Package('needspace'))
@@ -832,16 +836,20 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 var = (n * noneg) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                sols = []
                 for x in range(n):
                     part(doc)
                     if x < var:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(2, 2)))  # positiu
+                        text, sol = gen.eq(2, 2, solucions=True)  # positiu
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(2, 3)))  # enter
+                        text, sol = gen.eq(2, 3, solucions=True)  # enter
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
                 space(doc, "1cm")
+                blocsolus(doc, solucions, sols)
 
             if q1polis != 0:
                 n = q1polis
@@ -851,23 +859,27 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 var = (n * sparent) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "2")
+                sols = []
                 for x in range(n):
                     part(doc)
                     if x < var:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(3, 1)))  # sense parèntesis
+                        text, sol = gen.eq(3, 1, solucions=True)  # sense parèntesis
                     else:
                         if x < (n + var) // 2:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(4, 1)))  # un parèntesis
+                            text, sol = gen.eq(4, 1, solucions=True)  # un parèntesis
                         else:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(4, 2)))  # un parèntesis
+                            text, sol = gen.eq(4, 2, solucions=True)  # un parèntesis
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
                 space(doc, "1cm")
+                blocsolus(doc, solucions, sols)
 
             if q1racios:
                 n = q1racios
-                needspace(doc, 8)
+                needspace(doc, 10)
                 question(doc, f"{2 * n}")
                 doc.append("Resol les següents equacions racionals (no totes tenen resultat bonic!).")
                 begin(doc, 'parts')
@@ -892,21 +904,25 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 doc.append("Resol les següents equacions de segon grau (incompletes).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                sols = []
                 for x in range(0, n):
                     part(doc)
                     if x < n // 4:
                         if x < 2:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(101, 1)))
+                            text, sol = gen.eq(101, 1, solucions=True)
                         else:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(101, random.choice([2, 3]))))
+                            text, sol = gen.eq(101, random.choice([2, 3]), solucions=True)
                     elif x < n * 3 // 4:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(102, random.choice([2, 3]))))
+                        text, sol = gen.eq(102, random.choice([2, 3]), solucions=True)
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(random.choice([101, 102]), 3)))
+                        text, sol = gen.eq(random.choice([101, 102]), 3, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
                 space(doc, "0.8cm")
+                # blocsolus(doc, solucions, sols)
 
             if qcompletes:
                 n = qcompletes
@@ -916,19 +932,23 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 var = (n * noa) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                sols = []
                 for x in range(0, n):
                     part(doc)
                     if x < var:
                         if x < (var // 2) or x == 0:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(103, 1)))  # A = 1, ordenada
+                            text, sol = gen.eq(103, 1, solucions=True)  # A = 1, ordenada
                         else:
-                            doc.append(NoEscape(r'$%s$' % gen.eq(103, 2)))  # A = ±1
+                            text, sol = gen.eq(103, 2, solucions=True)  # A = ±1
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.eq(103, 3)))  # normal
+                        text, sol = gen.eq(103, 3, solucions=True)  # normal
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
                 space(doc, "0.9cm")
+                blocsolus(doc, solucions, sols)
 
             if qpolis:
                 n = qpolis
@@ -937,19 +957,23 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 doc.append("Opera i resol les següents equacions de segon grau.")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "2")
+                sols = []
                 for x in range(0, n):
                     part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.eq(104)))
+                    text, sol = gen.eq(104, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "1.4cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
                 space(doc, "0.4cm")
+                blocsolus(doc, solucions, sols)
 
             if sistemes:
                 needspace(doc, 12)
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
 
-            if qsist != 0:
+            if qsist != 0: # pels sistemes (per la clau de l'esquerra) cal msmath
                 n = qsist
                 needspace(doc, 10)
                 question(doc, f"{n * 2}")
@@ -957,20 +981,23 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 var = (n * nocoef) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                sols = []
                 for x in range(0, n):
                     part(doc)
                     if x < var:
                         if x < min(var // 3, 3) or x == 0:
-                            doc.append(NoEscape(
-                                r'$%s$' % gen.sisteq(1, 1)))  # pels sistemes (per la clau de l'esquerra) cal msmath
+                            text, sol = gen.sisteq(1, 1, solucions=True)
                         else:
-                            doc.append(NoEscape(r'$%s$' % gen.sisteq(1, 2)))
+                            text, sol = gen.sisteq(1, 2, solucions=True)
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(1, 3)))
-                    space(doc, "1.6cm")
+                        text, sol = gen.sisteq(1, 3, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
+                    space(doc, "0.5cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
-                space(doc, "1.6cm")
+                space(doc, "0.5cm")
+                blocsolus(doc, solucions, sols)
 
             if sistemes3:
                 needspace(doc, 12)
@@ -984,21 +1011,25 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 var = (n * nocoef3) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                sols = []
                 for x in range(n):
                     part(doc)
                     if x < var:
                         if x < (var * 2 // 3) or x == 0:
                             if x < min((var // 3), 3) or x == 0:
-                                doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 1)))  # escalonat, x a dalt
+                                text, sol = gen.sisteq(101, 1, solucions=True)  # escalonat, x a dalt
                             else:
-                                doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 2)))  # escalonat, x on sigui
+                                text, sol = gen.sisteq(101, 2, solucions=True)  # escalonat, x on sigui
                         else:
-                            doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 3)))  # un coeficient 1
+                            text, sol = gen.sisteq(101, 3, solucions=True)  # un coeficient 1
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.sisteq(101, 4)))  # com sigui
+                        text, sol = gen.sisteq(101, 4, solucions=True)  # com sigui
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
                     space(doc, "0.5cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
+                blocsolus(doc, solucions, sols)
 
             end(doc, 'questions')
         else:
@@ -2498,7 +2529,7 @@ def playground(opcions, solucions=False):
     doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
     doc.append(NoEscape(r'\bracketedpoints'))
     doc.append(NoEscape(r'\addpoints'))
-    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solució:}\par\noindent}'))
+    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solució:}\noindent}'))  # \par si vols break
     if solucions:
         doc.append(NoEscape(
             r'\printanswers'))  # Marca les respostes correctes dels multiopció (i m'imagino que altres coses si vull)
@@ -2832,7 +2863,7 @@ def myconfig(doc, solucions=False):
     doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
     doc.append(NoEscape(r'\bracketedpoints'))
     doc.append(NoEscape(r'\addpoints'))
-    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solucions:}\par\noindent}'))
+    doc.append(NoEscape(r'\renewcommand{\solutiontitle}{\noindent\textbf{Solucions: }\noindent}'))  # \par si vols break
     if solucions:
         doc.append(NoEscape(
             r'\printanswers'))  # Marca les respostes correctes dels multiopció i mostra les respostes definides
@@ -2933,8 +2964,8 @@ def escriusolus(llista):
             apartat = f"{chr(x+97)}"  # a-z
         else:
             apartat = f"{chr(x//26+96)+chr(x%26+97)}"  # aa-zz
-        llista[x] = r"\textbf{" + apartat + ":} " f"{llista[x]}"
-    return ", ".join(llista)
+        llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
+    return "; ".join(llista)
 
 
 def blocsolus(doc, solucions, llista):
