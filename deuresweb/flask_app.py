@@ -32,7 +32,7 @@ def indexvar():
 def equacions():
     if request.method == "POST":
         try:
-            g.equacions(request.form, solucions=True)  # genera el pdf amb latex
+            g.equacions(request.form)  # genera el pdf amb latex
         except:
             return redirect("/latex_error/equacions")
         tele.feedback("eq", request.form)
