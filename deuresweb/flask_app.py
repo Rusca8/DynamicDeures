@@ -34,11 +34,12 @@ def equacions():
         try:
             g.equacions(request.form)  # genera el pdf amb latex
         except:
+            print("Error Equacions")
             return redirect("/latex_error/equacions")
         tele.feedback("eq", request.form)
         return redirect("/pdf/eq")
     else:
-        return render_template("equacions.html",textbotgen="Generar fitxa!")
+        return render_template("equacions.html", textbotgen="Generar fitxa!")
 
 
 @app.route("/enters/", methods=["GET", "POST"])
@@ -47,6 +48,7 @@ def combinades():
         try:
             g.combinades(request.form, solucions=False)
         except:
+            print("Error Combinades")
             return redirect("/latex_error/combinades")
 
         tele.feedback("comb", request.form)
@@ -61,6 +63,7 @@ def apilades():
         try:
             g.apilades(request.form, solucions=False)
         except:
+            print("Error Apilades")
             return redirect("/latex_error/apilades")
 
         tele.feedback("api", request.form)
@@ -75,6 +78,7 @@ def powsqr():
         try:
             g.powsqr(request.form, solucions=False)
         except:
+            print("Error Potències")
             return redirect("/latex_error/powsqr")
 
         tele.feedback("powsqr", request.form)
@@ -89,6 +93,7 @@ def fraccions():
         try:
             g.fraccions(request.form, solucions=False)
         except:
+            print("Error Fraccions")
             return redirect("/latex_error/fraccions")
         tele.feedback("frac", request.form)
         return redirect("/pdf/fraccions")
@@ -102,6 +107,7 @@ def ncient():
         try:
             g.ncient(request.form, solucions=False)
         except:
+            print("Error Científica")
             return redirect("/latex_error/ncient")
         tele.feedback("ncient", request.form)
         return redirect("/pdf/ncient")
@@ -115,6 +121,7 @@ def proporcionalitat():
         try:
             g.proporcionalitat(request.form, solucions=False)
         except:
+            print("Error Proporcionalitat")
             return redirect("/latex_error/proporcionalitat")
 
         tele.feedback("prop", request.form)
@@ -129,6 +136,7 @@ def success():
         try:
             g.successions(request.form, solucions=False)
         except:
+            print("Error Successions")
             return redirect("/latex_error/successions")
         tele.feedback("succ", request.form)
         return redirect("/pdf/successions")
@@ -142,6 +150,7 @@ def limits():
         try:
             g.limits(request.form)
         except:
+            print("Error Límits")
             return redirect("/latex_error/limits")
         tele.feedback("lim", request.form)
         return redirect("/pdf/limits")
@@ -155,6 +164,7 @@ def derivades():
         try:
             g.derivades(request.form)
         except:
+            print("Error Derivades")
             return redirect("/latex_error/derivades")
         tele.feedback("dx", request.form)
         return redirect("/pdf/derivades")

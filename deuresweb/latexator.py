@@ -2726,7 +2726,6 @@ def tematitol(tema="no"):
 
 def quantesson(value, op):
     n = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"].index(value)
-    print(op, value)
     # enters
     if op == "sumes":
         quantitats = [0, 8, 20, 32, 48, 112, 200]
