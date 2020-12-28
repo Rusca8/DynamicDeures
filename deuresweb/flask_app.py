@@ -75,7 +75,7 @@ def powsqr():
         try:
             g.powsqr(request.form, solucions=False)
         except:
-            return redirect("/latex_error/apilades")
+            return redirect("/latex_error/powsqr")
 
         tele.feedback("powsqr", request.form)
         return redirect("/pdf/powsqr")
