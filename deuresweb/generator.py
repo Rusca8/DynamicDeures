@@ -12,28 +12,27 @@ def comb(tipus, nivell=1, nums=1):
     text = "42"
     if tipus == 1:  # A+B
         if nivell == 1:  # (innecessari) A positiva, resultat positiu
-            a = random.randint(1, 9*nums)
-            b = random.randint(-a, 10*nums)
+            a = random.randint(1, 9 * nums)
+            b = random.randint(-a, 10 * nums)
             if b >= 0:
-
                 b = f'+{b}'
             text = f'{a}{b}='
         elif nivell == 2:  # A positiva
-            a = random.randint(1, 10*nums)
-            b = random.randint(-10*nums, 8*nums)
+            a = random.randint(1, 10 * nums)
+            b = random.randint(-10 * nums, 8 * nums)
             if b >= 0:
                 b = f'+{b}'
             text = f'{a}{b}='
         elif nivell == 3:  # nums qualssevol
-            a = random.randint(-10*nums, 10*nums)
-            b = random.randint(-10*nums, 10*nums)
+            a = random.randint(-10 * nums, 10 * nums)
+            b = random.randint(-10 * nums, 10 * nums)
             if b >= 0:
                 b = f'+{b}'
             text = f'{a}{b}='
     if tipus == 2:  # A±(±B)
         if nivell == 1 or nivell == 2:  # A positiva, sense -(-B) || amb -(-B)
-            a = random.randint(1, 10*nums)
-            b = random.randint(-10*nums, 10*nums)
+            a = random.randint(1, 10 * nums)
+            b = random.randint(-10 * nums, 10 * nums)
             if b > 0:
                 text = f'(+{b})'
                 if moneda():
@@ -46,9 +45,9 @@ def comb(tipus, nivell=1, nums=1):
                 else:
                     text = f'{a}-({b})='
         elif nivell == 3:  # A qualsevol
-            a = random.randint(-10*nums, 10*nums)
-            b = random.randint(-10*nums, 10*nums)
-            if b>0:
+            a = random.randint(-10 * nums, 10 * nums)
+            b = random.randint(-10 * nums, 10 * nums)
+            if b > 0:
                 text = f'(+{b})'
                 if moneda():
                     text = f'{a}+' + text + "="
@@ -63,21 +62,22 @@ def comb(tipus, nivell=1, nums=1):
     elif tipus == 3:  # A*B
         if nivell == 1 or nivell == 4:  # taules de multiplicar || divisions senzilles
             if nivell == 1:  # mult
-                taula = random.randint(1, 10+2*(nums-1))  # nums inclou 11 i 12...
+                taula = random.randint(1, 10 + 2 * (nums - 1))  # nums inclou 11 i 12...
                 text = taules(taula)
             else:  # div
-                b = random.randint(1, 10+2*(nums-1))
-                a = random.randint(1,10)
-                text = fr'{a*b}\div {a}'
-        elif (nivell == 2 or nivell == 3) or (nivell == 5 or nivell == 6):  # (taules amb un signe || amb dos signes) || divisions
-            a = random.randint(-10-2*(nums-1), 10+2*(nums-1))
+                b = random.randint(1, 10 + 2 * (nums - 1))
+                a = random.randint(1, 10)
+                text = fr'{a * b}\div {a}'
+        elif (nivell == 2 or nivell == 3) or (
+                nivell == 5 or nivell == 6):  # (taules amb un signe || amb dos signes) || divisions
+            a = random.randint(-10 - 2 * (nums - 1), 10 + 2 * (nums - 1))
             b = random.randint(1, 10)
             symbol = r'\times '
             if nivell == 5 or nivell == 6:  # adapto per div
                 if a == 0:  # evito dividir per zero
-                    a = random.randint(1, 10+2*(nums-1))
+                    a = random.randint(1, 10 + 2 * (nums - 1))
                 aux = a
-                a = a*b
+                a = a * b
                 b = abs(aux)
                 symbol = r'\div '
             if (nivell == 3 or nivell == 6 or a >= 0) and moneda():
@@ -157,8 +157,8 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
 
             b = num - a  # n = a + b
 
-            t1 = f"{mixcomb(a, inception-1, 0, 1, doblesigne, out, ops)}"
-            t2 = f"{mixcomb(b, inception-1, 0, 1, doblesigne, out, ops)}"
+            t1 = f"{mixcomb(a, inception - 1, 0, 1, doblesigne, out, ops)}"
+            t2 = f"{mixcomb(b, inception - 1, 0, 1, doblesigne, out, ops)}"
             if t2[0] == "-":
                 if doblesigne and random.randint(1, 5) == 1:  # A+(-B) / A-B
                     text = f"{t1}+({t2})"
@@ -177,7 +177,7 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
                 text = f"{num}"
             else:
                 if num == 0:
-                    a = random.randint(1, maxn*inception)
+                    a = random.randint(1, maxn * inception)
                 else:
                     a = random.choice(divisors(abs(num)))
                 if random.choice([0, 0, 1]):
@@ -187,8 +187,8 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
                     a = num // b
                 else:
                     b = num // a
-                t1 = f"{mixcomb(a, inception-1, 0, 2, doblesigne, out, ops)}"
-                t2 = f"{mixcomb(b, inception-1, 0, 2, doblesigne, out, ops)}"
+                t1 = f"{mixcomb(a, inception - 1, 0, 2, doblesigne, out, ops)}"
+                t2 = f"{mixcomb(b, inception - 1, 0, 2, doblesigne, out, ops)}"
                 if t2[0] == "-":  # ±A*(-B)
                     text = f"{t1}\\cdot ({t2})"
                 else:  # ±A*B
@@ -209,8 +209,8 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
                 b = -b
             a = num * b
 
-            t1 = f"{mixcomb(a, inception-1, 0, 3, doblesigne, out, ops)}"
-            t2 = f"{mixcomb(b, inception-1, 0, 3, doblesigne, out, ops)}"
+            t1 = f"{mixcomb(a, inception - 1, 0, 3, doblesigne, out, ops)}"
+            t2 = f"{mixcomb(b, inception - 1, 0, 3, doblesigne, out, ops)}"
             if t2[0] == "-":  # ±A:(-B)
                 text = f"{t1}:({t2})"
             else:  # ±A:B
@@ -318,17 +318,17 @@ def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
             else:
                 signe = "-"
             if direc == 1 or (moneda() and not direc == 2):  # múltiple
-                text = f"{(num * pow(10, random.randint(0, 9-len(f'{num}')))):,}".replace(",", ".")
+                text = f"{(num * pow(10, random.randint(0, 9 - len(f'{num}')))):,}".replace(",", ".")
             else:  # submúltiple
                 while not num % 10:
                     num = num // 10
-                text = signe + "0," + "".join(["0" for _ in range(random.randint(0, 8-len(f'{num}')))]) + f"{num}"
+                text = signe + "0," + "".join(["0" for _ in range(random.randint(0, 8 - len(f'{num}')))]) + f"{num}"
         else:  # amb la coma pel mig del número (però mai darrera el primer decimal)
             num = random.randint(100, 99999)
             if not num % 10:  # evito 0 al final
                 num += random.randint(1, 9)
             num = f"{num}"
-            coma = random.randint(2, len(num)-1)
+            coma = random.randint(2, len(num) - 1)
             signe = random.choice(["", "", "-"])
             text = signe + num[:coma] + "," + num[coma:]
 
@@ -361,7 +361,7 @@ def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
     elif tipus == 3:  # multis i divis
         if nivell == 1:  # línia
             talls = ["(" f"{ncient(2, 3)}"]
-            for _ in range(termes-1):
+            for _ in range(termes - 1):
                 talls.append(")" + random.choice(["\\cdot", "\\cdot", "\\div"]) + "(")
                 talls.append(f"{ncient(2, 3)}")
             text = "".join(talls) + ")"
@@ -369,6 +369,7 @@ def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
             pass
 
     return text
+
 
 def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
     """
@@ -461,8 +462,8 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
             exactes = []
             for x in range(-2, 3):  # -2 -> 2
                 a = (num // d) + x
-                if (num - a*d) % b == 0:  # si surt exacte (dues fraccions fan prou)
-                    c = (num - a*d) // b
+                if (num - a * d) % b == 0:  # si surt exacte (dues fraccions fan prou)
+                    c = (num - a * d) // b
                     if a:
                         exactes.append([a, c])  # guardo les opcions
             if exactes:
@@ -473,12 +474,12 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                         exactes.remove(x)
                 a, c = random.choice(exactes)  # i en trio una (si no trio quedarà la última a, que ja em serveix)
             if c == 0:
-                c = (num - a*d) // b + random.choice([-1, 1])
+                c = (num - a * d) // b + random.choice([-1, 1])
             if c == 0:
                 c = random.choice([-1, 1])
-            diff = num - (a*d + c*b)
+            diff = num - (a * d + c * b)
             if diff:
-                f = b*d
+                f = b * d
                 e = diff
                 e, f = fracsimple(e, f)
             a, b = fracsimple(a, b)
@@ -486,19 +487,19 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
             if b == 1 or d == 1:
                 q = random.randint(2, 3)
                 k = random.choice([-1, 1])
-                a = q*a + k
-                b = q*b
-                c = q*c - k
-                d = q*d
+                a = q * a + k
+                b = q * b
+                c = q * c - k
+                d = q * d
 
-            text = f"{fracmix(a, b, inception-1, previ=op)}"
-            if c*d < 0:  # frac negativa
-                text += f"-{fracmix(-c, d, inception-1, previ=op)}"
+            text = f"{fracmix(a, b, inception - 1, previ=op)}"
+            if c * d < 0:  # frac negativa
+                text += f"-{fracmix(-c, d, inception - 1, previ=op)}"
             else:  # frac positiva
-                text += f"+{fracmix(c, d, inception-1, previ=op)}"
+                text += f"+{fracmix(c, d, inception - 1, previ=op)}"
 
             if diff:
-                if e*f < 0:
+                if e * f < 0:
                     text += f"-{fracmix(-e, f, 0, previ=op)}"
                 else:
                     text += f"+{fracmix(e, f, 0, previ=op)}"
@@ -534,7 +535,7 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
             # evito fraccions = 1
             if a == b or c == d:
                 k = random.randint(2, 3)
-                if a*k == b or d*k == c or (moneda() and not (b*k == a or c*k == d)):
+                if a * k == b or d * k == c or (moneda() and not (b * k == a or c * k == d)):
                     b *= k
                     c *= k
                 else:
@@ -546,14 +547,14 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                     if a % b != 0 or random.randint(1, 30) == 1:  # (ja) no tinc enter a l'esquerra (excepte alguns)
                         break
                     else:
-                        if c*k % d != 0:  # no causaré enter a la dreta
+                        if c * k % d != 0:  # no causaré enter a la dreta
                             b *= k
                             c *= k
                 for k in [2, 3, 4, 5, 7]:
                     if c % d != 0 or random.randint(1, 30) == 1:  # (ja) no tinc enter a la dreta (excepte alguns)
                         break
                     else:
-                        if a*k % b != 0:
+                        if a * k % b != 0:
                             a *= k
                             d *= k
 
@@ -609,7 +610,7 @@ def fracsimple(n, d):
 def taules(taula, div=False):
     a = random.randint(1, 10)
     if div:
-        return fr'{a*taula}\div {a}='
+        return fr'{a * taula}\div {a}='
     else:
         if moneda():
             return fr'{taula}\times {a}='
@@ -619,7 +620,7 @@ def taules(taula, div=False):
 
 def divisors(num, tots=False):
     div = [1]
-    for x in range(2, isqrt(num)+1):
+    for x in range(2, isqrt(num) + 1):
         if num % x == 0:
             div.append(x)
     if len(div) > 1 and not tots:
@@ -675,7 +676,7 @@ def squarebracketer(text):
                     del bracketable[-1]
                 matrioska = False
     for x in reversed(bracketable):
-        text = text[:x[1]] + "\\rbrack " + text[x[1]+1:]
+        text = text[:x[1]] + "\\rbrack " + text[x[1] + 1:]
         text = text[:x[0]] + "\\lbrack " + text[x[0] + 1:]
 
     return text
@@ -686,17 +687,17 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     if tipus == 1:  # sumes
         if nivell == 1:  # sense decimals
             text = "42+42"
-            a = random.randint(max(2, pow(10, digits[0]-1)), pow(10, digits[0])-1)
-            b = random.randint(max(2, pow(10, digits[1]-1)), pow(10, digits[1])-1)
-            digitsc = math.ceil(math.log(a+b, 10))
+            a = random.randint(max(2, pow(10, digits[0] - 1)), pow(10, digits[0]) - 1)
+            b = random.randint(max(2, pow(10, digits[1] - 1)), pow(10, digits[1]) - 1)
+            digitsc = math.ceil(math.log(a + b, 10))
             na = ""
             nb = ""
-            for n in range(digitsc-digits[0]):
+            for n in range(digitsc - digits[0]):
                 na += "9"
-            for n in range(digitsc-digits[1]):
+            for n in range(digitsc - digits[1]):
                 nb += "9"
             text = (r"\begin{array}{c}\phantom{+" + na + "}" + f"{a}" + r"\\ \underline{+\phantom{" + nb + "}"
-                    f"{b}" + r"}\\ \end{array}")
+                                                                                                           f"{b}" + r"}\\ \end{array}")
         else:  # amb decimals
             text = "4.2+4.2"
             xa = digits[0] + decimals[0]
@@ -707,12 +708,12 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             preb = random.randint(max(2, pow(10, xb - 1)), pow(10, xb) - 1)
             b = preb / pow(10, decimals[1])
 
-            res = a+b
+            res = a + b
             rdigits = math.ceil(math.log(math.floor(res), 10))
-            partdecimal = round(res-math.floor(res), 7)  # cal truncar els glitches de binari (fa 2.3560000000023)
+            partdecimal = round(res - math.floor(res), 7)  # cal truncar els glitches de binari (fa 2.3560000000023)
             rdecimals = 0
             while partdecimal - math.floor(partdecimal) != 0:
-                partdecimal = round(partdecimal*10, 7)
+                partdecimal = round(partdecimal * 10, 7)
                 rdecimals += 1
             digitsc = max(digits[0], digits[1], rdigits)
             decimalsc = max(decimals[0], decimals[1], rdecimals)
@@ -753,7 +754,7 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             for n in range(digitsc - digits[1]):
                 nb += "9"
             text = (r"\begin{array}{c}\phantom{-" + na + "}" + f"{a}" + r"\\ \underline{-\phantom{" + nb + "}"
-                    f"{b}" + r"}\\ \end{array} ")
+                                                                                                           f"{b}" + r"}\\ \end{array} ")
         else:  # decimals
             text = "4.2-4.2"
             xa = digits[0] + decimals[0]
@@ -790,18 +791,18 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             for n in range(decimalsc - decimals[1]):
                 nbd += "9"
             text = (r"\begin{array}{c}\phantom{-" + nae + "}" + f"{a}" + r"\phantom{" + nad + r"}\\ \underline{"
-                    r"-\phantom{" + nbe + "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array} ")
+                                                                                              r"-\phantom{" + nbe + "}" + f"{b}" + r"\phantom{" + nbd + r"}}\\ \end{array} ")
     elif tipus == 3:  # multis a x b = c
         if nivell == 1:  # sense decimals
             text = "42x42"
-            a = random.randint(max(2, pow(10, digits[0]-1)), pow(10, digits[0])-1)
-            b = random.randint(max(2, pow(10, digits[1]-1)), pow(10, digits[1])-1)
-            digitsc = math.ceil(math.log(a*b, 10))
+            a = random.randint(max(2, pow(10, digits[0] - 1)), pow(10, digits[0]) - 1)
+            b = random.randint(max(2, pow(10, digits[1] - 1)), pow(10, digits[1]) - 1)
+            digitsc = math.ceil(math.log(a * b, 10))
             na = ""
             nb = ""
-            for n in range(digitsc-digits[0]):
+            for n in range(digitsc - digits[0]):
                 na += "9"
-            for n in range(digitsc-digits[1]):
+            for n in range(digitsc - digits[1]):
                 nb += "9"
         else:  # amb decimals
             text = "4.2 x 4.2"
@@ -826,7 +827,7 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             # TODO ajustar per quan algun dels números no té decimals
 
         text = (r"\begin{array}{c}\phantom{\times" + na + "}" + f"{a}" + r"\\ \underline{\times\phantom{" + nb + "}"
-                f"{b}" + r"}\\ \end{array}")
+                                                                                                                 f"{b}" + r"}\\ \end{array}")
     else:  # divis
         text = "42/42"
     return text
@@ -883,7 +884,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     b = random.randint(2, 9)
                     if moneda() and not multigastada:
                         if random.randint(1, 10) == 1:  # mutació 1^27482
-                            bloc += "\\cdot 1^{" + f"{random.randint(1,  random.choice([9, 14958]))}" + "}"
+                            bloc += "\\cdot 1^{" + f"{random.randint(1, random.choice([9, 14958]))}" + "}"
                         elif random.randint(1, 10) == 1:
                             bloc += f"\\cdot {random.randint(2, random.choice([9, 9637]))}" + "^0"
                         else:
@@ -1215,7 +1216,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     tprev += f"[{ind}]"
                 tprev += "{"
                 text = tprev + text + "}"
-                if nivell > 1 and x < termes-1 and moneda():
+                if nivell > 1 and x < termes - 1 and moneda():
                     text = f"{random.randint(2, 4)}" + text
     elif tipus == 105:  # arrels, extreure factors
         if nivell == 1:  # només quadrades, factoritzat
@@ -1288,7 +1289,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                 if x == 0:
                     text = f"{factors[x]}"
                 else:
-                    if not punts or (factors[x][0] in lets and factors[x-1][0] in lets):
+                    if not punts or (factors[x][0] in lets and factors[x - 1][0] in lets):
                         pass
                     else:
                         text += "\\cdot "
@@ -1304,7 +1305,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
             if moneda():
                 seed = pow(seed, 2)
                 factors += 1
-            for x in range(random.randint(3, 5)-factors):
+            for x in range(random.randint(3, 5) - factors):
                 seed *= random.choice([2, 3])
             text = "\\sqrt{" + f"{seed}" + "}"
 
@@ -1353,7 +1354,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                 else:
                     exp = ""
                 if x > 0:
-                    if not punts or (factors[x] in lets and factors[x-1] in lets):
+                    if not punts or (factors[x] in lets and factors[x - 1] in lets):
                         pass
                     else:
                         text = "\\cdot " + text
@@ -1377,7 +1378,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
             exps = [1, 2, 3, 4, 5, 6, 7, 8]
             for x in range(len(exps)):
                 if exps[x] % index == 0:
-                    exps[x] = exps[x]-1  # rebaixo els múltiples de l'arrel (així no es poden treure fora)
+                    exps[x] = exps[x] - 1  # rebaixo els múltiples de l'arrel (així no es poden treure fora)
             exp = random.choice(exps)
             if exp > 1:
                 seed += "^{" + f"{exp}" + "}"
@@ -1426,10 +1427,10 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     altseed.remove(seed)
                     altseed = random.choice(altseed)
                     altop = random.choice([2, 3, 4, 5, 10])
-                    text += "\\sqrt{" + f"{altseed*pow(altop, 2)}" + "}"
+                    text += "\\sqrt{" + f"{altseed * pow(altop, 2)}" + "}"
                     mutat = True
                 else:
-                    text += "\\sqrt{" + f"{seed*pow(triats[x], 2)}" + "}"
+                    text += "\\sqrt{" + f"{seed * pow(triats[x], 2)}" + "}"
 
     elif tipus == 108:  # racionalitzar
         text = "\\frac{1}{\\sqrt{42}}"
@@ -1441,7 +1442,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
             else:
                 index = random.randint(2, 5)
                 if nivell == 3:
-                    exp = random.randint(1, index-1)
+                    exp = random.randint(1, index - 1)
                     if exp != 1:
                         den = f"{den}^" + "{" + f"{exp}" + "}"
                 if index == 2:
@@ -1512,6 +1513,434 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
     return text
 
 
+def fcomu():  # TODO crear fcomú amb polinomis i tb amb frases generades i encriptades
+    pass
+
+
+def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
+    """genera polinomis i operacions amb polinomis
+
+    :param tipus: operació / tipus d'exercici
+    :param nivell: subtipus d'exercici
+    :param termes: quants termes té cada polinomi (a les ops) / quants polinomis (al de factoritzar)
+    :param noneg: evita doble negatiu restant
+    :param solucions: incloure solució a l'exercici
+    """
+    text = "P(x)=42"
+    solu = "(R: 42)"
+    if tipus == 1:  # suma P(x)+Q(x)
+        if not termes:
+            termes = [4, 3]
+
+        if nivell in [1, 2, 3]:  # ordenat complet / ordenat incomplet / qualsevol
+            # opcions
+            if nivell > 2:
+                ordenat = False
+            else:
+                ordenat = True
+
+            # graus
+            gp = termes[0] - 1
+            gq = termes[1] - 1
+            if nivell > 1:
+                gp += random.randint(0, random.randint(1, 2))
+                gq += random.randint(0, random.randint(1, 2))
+
+            # polinomis
+            px, rufipx = polinomi(gp, termes[0], ordenat, rufinat=True)
+            qx, rufiqx = polinomi(gq, termes[1], ordenat, rufinat=True)
+
+            # solució
+            if solucions:
+                solu = polinomitza(poli_op(1, rufipx, rufiqx))
+
+            text = f"({px})+({qx})"
+
+    elif tipus == 2:  # resta P(x)-Q(x)
+        if not termes:
+            termes = [4, 3]
+
+        if nivell in [1, 2, 3]:  # ordenat complet / ordenat incomplet / qualsevol
+            # opcions
+            if nivell > 2:
+                ordenat = False
+            else:
+                ordenat = True
+
+            if noneg:  # evita negatius al segon polinomi (per no fer -[-k])
+                negatius = 0
+            else:
+                negatius = 1
+
+            # graus
+            gp = termes[0] - 1
+            gq = termes[1] - 1
+            if nivell > 1:
+                gp += random.randint(0, random.randint(1, 2))
+                gq += random.randint(0, random.randint(1, 2))
+
+            # polinomis
+            px, rufipx = polinomi(gp, termes[0], ordenat, rufinat=True)
+            qx, rufiqx = polinomi(gq, termes[1], ordenat, negatius=negatius, rufinat=True)
+
+            # solució
+            if solucions:
+                solu = polinomitza(poli_op(2, rufipx, rufiqx))
+
+            text = f"({px})-({qx})"
+
+    elif tipus == 3:  # multis P(x)*Q(x)
+        if not termes:
+            termes = [3, 2]
+
+        if nivell in [1, 2, 3, 4]:  # complets / incomplets // amb independent / pot sense
+            # opcions
+            if nivell > 2:
+                ordenat = False
+            else:
+                ordenat = True
+
+            # graus
+            gp = termes[0] - 1
+            gq = termes[1] - 1
+            if nivell > 1:
+                gp += random.randint(0, random.randint(1, 2))
+                gq += random.randint(0, random.randint(1, 2))
+
+            # control (vigilo que hi hagi terme independent)
+            if nivell < 3:
+                obligap = [0]
+                obligaq = [0]
+            elif nivell < 4:
+                if moneda():
+                    obligap = [0]
+                    obligaq = []
+                else:
+                    obligaq = [0]
+                    obligap = []
+            else:
+                obligaq = []
+                obligap = []
+
+            # polinomis
+            px, rufipx = polinomi(gp, termes[0], ordenat, cmax=7, obliga=obligap, rufinat=True)
+            qx, rufiqx = polinomi(gq, termes[1], ordenat, cmax=3, obliga=obligaq, rufinat=True)
+
+            # solució
+            if solucions:
+                solu = polinomitza(poli_op(3, rufipx, rufiqx))
+
+            text = f"({px})\\times ({qx})"
+
+    elif tipus in [4, 5]:  # divis (rufini / normal)
+        if not termes:
+            termes = [random.choice([2, 3]), random.choice([2, 3])]  # quocient i divisor
+        if nivell in [1, 2, 3, 4]:  # Exacte complet ordenat / complet ordenat / ordenat / qualsevol
+            # opcions
+            if nivell > 3:
+                ordenat = False
+            else:
+                ordenat = True
+            if nivell > 1:
+                residu = True
+            else:
+                residu = False
+
+            # graus (quocient, divisor)
+            gq = termes[0] - 1
+            gd = termes[1] - 1
+            if nivell > 2:
+                gq += random.randint(0, random.randint(1, 2))
+                gd += random.randint(0, random.randint(1, 2))
+
+            # polinomis
+            qx, rufiqx = polinomi(gq, termes[0], ordenat, cmax=7, rufinat=True)  # quocient
+            if tipus == 4:
+                rufidx = [1, random.randint(1, random.choice([3, 5])) * random.choice([1, -1])]
+                dx = polinomitza(rufidx)
+                gd = 1
+            else:
+                dx, rufidx = polinomi(gd, termes[1], ordenat, cmax=3, rufinat=True)  # divisor
+            rufidend = poli_op(3, rufiqx, rufidx)  # dividend (multiplico)
+            print(rufidend)
+            if residu:  # si tinc opció a residu, en poso
+                rufisidu = [0 for _ in range(gd)]  # màxim un grau menys que el divisor
+                tresidu = random.choice([0, 1, 2])  # quants termes pot tenir el residu (si 0: divi exacte)
+                for x in range(len(rufisidu)):
+                    if tresidu < 1:
+                        break
+                    if rufidend[-x-1] or tipus == 4:  # quan hi ha ruffini els forço encara que (termes + 1)
+                        rcoef = random.randint(1, 10) * random.choice([1, 1, -1])
+                        rufidend[-x-1] += rcoef
+                        rufisidu[-x-1] = rcoef
+                        tresidu -= 1
+                print(rufidend)
+                print(rufisidu)
+            else:
+                rufisidu = []
+                tresidu = 0
+            dendx = polinomitza(rufidend)
+
+            # solució
+            if solucions:
+                if any([x for x in rufisidu]):
+                    solu = f"${qx}$~(R:~${polinomitza(rufisidu)}$)"
+                else:
+                    solu = f"${qx}$~(R:~0)"
+
+            text = f"({dendx})\\div ({dx})"
+
+    elif tipus == 6:  # tª residu / avaluar
+        # grau
+        termes = random.randint(3, 4)
+        gp = termes + random.choice([0, 1, 2])
+
+        # punt x
+        if gp < 5:
+            x = random.randint(1, 3)
+        elif gp < 2:
+            x = random.randint(1, 5)
+        else:  # 5+
+            x = random.randint(1, 2)
+        x *= random.choice([1, 1, -1])
+
+        # polinomis
+        px, rufipx = polinomi(gp, termes, True, cmax=5, obliga=[0], suavitzat=True, rufinat=True)
+        dx = f"x{signe(-x)}"
+
+        # solució
+        solu = poli_aval(rufipx, x)
+
+        # muntatge
+        text = en.px_residu(nivell, px, dx, x)
+
+    elif tipus == 7:  # factoritzar TODO factors no simplificables de grau 2
+        if not termes:
+            termes = random.choice([2, 3])
+        if nivell in [1, 2, 3]:  # sense fcomú ni k / sense k / amb tot
+            if random.randint(0, 5):  # rufinable
+                rufipx = frufinable()
+            else:  # el freak de primer grau
+                rufipx = [random.randint(1, 3), 1]
+            solulist = ["(" + polinomitza(rufipx) + ")"]
+
+            for x in range(termes-1):  # factors rufinables
+                noufact = frufinable()
+                rufipx = poli_op(3, rufipx, noufact)
+                solulist.append("(" + polinomitza(noufact) + ")")
+
+            soluxn = ""
+            if nivell > 1:  # factor x^n
+                if moneda():
+                    exp = random.randint(1, 3)
+                    rufipx = rufipx + [0 for _ in range(exp)]
+                    soluxn = f"{monomi(1, exp)}"
+
+            k = ""
+            if nivell > 2:  # factor k
+                if moneda():
+                    k = random.randint(2, 5) * random.choice([1, 1, -1])
+                    rufipx = [x * k for x in rufipx]
+
+            # muntatge
+            text = polinomitza(rufipx)
+
+            # solució
+            solu = f"{k}" + soluxn + "".join(solulist)
+
+    elif tipus == 8:  # simplificar frac algebraiques
+        if not termes:
+            termes = [random.choice([2, 3]) for _ in range(2)]
+        if nivell:
+            rufinum = frufinable()
+            rufiden = rufinum[:]  # crec que això és important pq no siguin dos sobrenoms de la mateixa llista
+            hihatermes = [1, 1]
+
+            if termes[0] > termes[1] or termes[1] > termes[0] and moneda():  # extra tatxable
+                nouterme = frufinable()
+                rufinum = poli_op(3, rufinum, nouterme)
+                rufiden = poli_op(3, rufiden, nouterme)
+                hihatermes = [x + 1 for x in hihatermes]
+
+            opcionsarrel = [1, -1, 2, -2, 3, -3, 4, -4, 5, -5]
+            random.shuffle(opcionsarrel)
+
+            solunum = []
+            if hihatermes[0] < termes[0]:  # únics num
+                for x in range(termes[0] - hihatermes[0]):
+                    noufact = [1, opcionsarrel.pop()]  # pot donar error si la suma de termes > 12
+                    rufinum = poli_op(3, rufinum, noufact)
+                    hihatermes[0] += 1
+                    solunum.append("(" + polinomitza(noufact) + ")")
+
+            soluden = []
+            if hihatermes[1] < termes[1]:  # únics den
+                for x in range(termes[1] - hihatermes[1]):
+                    noufact = [1, opcionsarrel.pop()]  # pot donar error si la suma de termes > 12
+                    rufiden = poli_op(3, rufiden, noufact)
+                    hihatermes[1] += 1
+                    soluden.append("(" + polinomitza(noufact) + ")")
+
+            if moneda():  # factor x^n compartit
+                exp = random.randint(1, 2)
+                rufinum = rufinum + [0 for _ in range(exp)]
+                rufiden = rufiden + [0 for _ in range(exp)]
+
+            soluxn = ["", ""]
+            if moneda():  # factor x^n únic
+                exp = random.randint(1, 2)
+                if moneda():
+                    rufinum = rufinum + [0 for _ in range(exp)]
+                    soluxn[0] = f"{monomi(1, exp)}"
+                else:
+                    rufiden = rufiden + [0 for _ in range(exp)]
+                    soluxn[1] = f"{monomi(1, exp)}"
+
+            if moneda():  # factor k compartit
+                k = random.randint(2, 5) * random.choice([1, 1, -1])
+                rufinum = [x * k for x in rufinum]
+                rufiden = [x * k for x in rufiden]
+
+            k = ["", ""]
+            if moneda():  # factor k únic
+                if moneda():
+                    k[0] = random.randint(2, 5) * random.choice([1, 1, -1])
+                    rufinum = [x * k[0] for x in rufinum]
+                else:
+                    k[1] = random.randint(2, 5) * random.choice([1, 1, -1])
+                    rufiden = [x * k[1] for x in rufiden]
+
+            # muntatge
+            text = "\\frac{" + polinomitza(rufinum) + "}{" + polinomitza(rufiden) + "}"
+
+            # solució
+            num = f"{k[0]}" + soluxn[0] + "".join(solunum)
+            if not num:
+                num = "1"
+            den = f"{k[1]}" + soluxn[1] + "".join(soluden)
+            if not den:
+                den = "1"
+            solu = ("\\frac{" + num + "}{" + den + "}")
+
+    if solucions:
+        return text, solu
+    return text
+
+
+def frufinable(nmax=5):
+    """Retorna un factor aleatori rufinable
+
+    :param nmax: valor màxim de l'arrel (en valor absolut)
+    """
+    return [1, random.randint(1, random.choice([2, nmax])) * random.choice([1, -1])]
+
+
+def polinomi(grau, termes=0, ordenat=True, cmax=15, obliga=[], negatius=1, suavitzat=False, rufinat=False):
+    """Crea un polinomi aleatori amb els paràmetres proposats (i opcionalment llista de coefs)
+
+    :param grau: grau del polinomi (grau del terme de grau més gran)
+    :param termes: quantitat de termes que tindrà (incloent sempre el de grau més gran)
+    :param ordenat: True vol dir de grau gran a grau petit
+    :param cmax: coeficient màxim que apareixerà al polinomi (per fer una mica de coef control)
+    :param obliga: llista de termes que cal incloure segur (perquè l'exercici en parla, o qui sap)
+    :param negatius: 0 positiu tot, 1 qualsevol, 2 negatiu tot
+    :param suavitzat: suavitza els coeficients (esp. dels graus més alts)
+    :param rufinat: treu una llista amb només els coefs (posant zeros on calgui)
+    """
+    # opcions
+    po = []
+    for x in obliga:
+        if x < grau:  # no incloc el grau en sí pq ja era obligat (si no, no seria del grau adequat)
+            po.append(x)  # graus obligats del polinomi
+
+    if not termes:  # per defecte el faig complet
+        termes = grau + 1
+
+    # càlculs
+    px = list(range(grau+1))
+    for x in po:
+        if x in px:
+            px.remove(x)
+
+    px = px[-1:] + random.sample(px[:-1], termes-1-len(po)) + po
+
+    if ordenat:
+        px.sort()
+        px.reverse()
+    else:
+        random.shuffle(px)
+
+    # muntatge
+    coefs = [0 for _ in range(grau+1)]
+    for i, grau in enumerate(px):
+        if i == 0:
+            signe = False
+        else:
+            signe = True
+        if suavitzat:  # limita els coefs més alts
+            if grau > 2:
+                coef = random.randint(1, min(i+1, 2))
+            else:
+                coef = random.randint(1, 16//(grau+1))
+        else:
+            coef = random.randint(1, cmax)
+        if negatius == 2 or (not negatius == 0 and not random.randint(0, 2)):
+            coef *= -1
+        coefs[-grau-1] = coef
+        px[i] = monomi(coef, grau, signe)
+    if rufinat:
+        return "".join(px), coefs
+    return "".join(px)
+
+
+def polinomitza(rufinat):
+    """escriu el polinomi a partir dels coefs (sense zeros)"""
+    px = []
+    signe = False
+    for i, x in enumerate(rufinat):
+        if x:
+            px.append(monomi(x, len(rufinat)-i-1, signe))
+            signe = True
+    return "".join(px)
+
+
+def poli_op(op, px, qx):
+    if op == 1:  # suma
+        sol = [0 for _ in range(max(len(px), len(qx)))]
+        for x in range(len(sol)):  # això fa la suma. jo tampoc l'entendré d'aquí un mes, but it works
+            if x < len(px):
+                sol[-x-1] += px[-x-1]
+            if x < len(qx):
+                sol[-x-1] += qx[-x-1]
+
+    elif op == 2:  # resta
+        sol = [0 for _ in range(max(len(px), len(qx)))]
+        for x in range(len(sol)):  # això fa la resta. jo tampoc l'entendré d'aquí un mes, but it works
+            if x < len(px):
+                sol[-x-1] += px[-x-1]
+            if x < len(qx):
+                sol[-x-1] -= qx[-x-1]
+
+    elif op == 3:  # multi
+        sol = [0 for _ in range(len(px) + len(qx) - 1)]
+        for x in range(len(px)):
+            for y in range(len(qx)):
+                if px[-x-1] and qx[-y-1]:
+                    sol[-(x+y)-1] += px[-x-1] * qx[-y-1]
+
+    elif op == 4:  # divi
+        pass
+    return sol
+
+
+def poli_aval(rufipx, x):
+    suma = 0
+    for i in range(len(rufipx)):
+        if rufipx[-i-1]:
+            suma += rufipx[-i-1] * pow(x, i)
+    return suma
+
+
 def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
     x = 1
     solus = "NOT DEF"
@@ -1578,17 +2007,17 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             x = random.randint(-10, 10)
             # coeficients
             a, b, c = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(3)]
-            if (a+b+c) == 0:  # evito indeterminat
+            if (a + b + c) == 0:  # evito indeterminat
                 if a == 1 or moneda():
                     a += 1
                 else:
                     a -= 1
-            blocx = (a+b+c)*x
+            blocx = (a + b + c) * x
             if abs(blocx) > 50:  # si la F quedarà enorme, compenso amb signe contrari i restant gros
-                d, e = [-abs(blocx)//blocx * random.randint(10, 20) for _ in range(2)]
+                d, e = [-abs(blocx) // blocx * random.randint(10, 20) for _ in range(2)]
             else:
                 d, e = [random.choice([-1, 1]) * random.randint(1, 15) for _ in range(2)]
-            f = -1 * ((a+b+c)*x + (d+e))
+            f = -1 * ((a + b + c) * x + (d + e))
             # muntatge
             if moneda():  # faig al menys un de cada a cada costat
                 etext = f"{monomi(a, 1) + signe(d)}"
@@ -1616,10 +2045,10 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             c = random.randint(1, 5)
             f = random.randint(2, 3)
             a = random.randint(max(c, f), 10)
-            if a == c*f:  # evito indefinit
+            if a == c * f:  # evito indefinit
                 a += random.choice([-1, 1])  # això no és mai 0
             d = random.choice([-1, 1]) * random.randint(1, 5)
-            b = (f*c - a)*x + f*d
+            b = (f * c - a) * x + f * d
             if random.randint(1, 3) == 1:
                 if random.choice([0, 0, 1]):
                     swap = f"{monomi(-a, 1, True)}"
@@ -1646,37 +2075,39 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             e, f = [random.choice([-1, 1]) * random.randint(2, 4) for _ in range(2)]
             b, d = [random.choice([-1, 1]) * random.randint(1, 7) for _ in range(2)]
             # coef control
-            if abs(abs(e*a) - abs(f*c)) * abs(x) > 45:  # la diferència entre EA i FC fa un blocx massa gran
-                if abs(e*a) < abs(f*c):
+            if abs(abs(e * a) - abs(f * c)) * abs(x) > 45:  # la diferència entre EA i FC fa un blocx massa gran
+                if abs(e * a) < abs(f * c):
                     if abs(e) < abs(a):
-                        e = int(e * (abs(f*c) / abs(e*a)))
+                        e = int(e * (abs(f * c) / abs(e * a)))
                     else:
-                        a = int(a * (abs(f*c) / abs(e*a)))
+                        a = int(a * (abs(f * c) / abs(e * a)))
                 else:
                     if abs(f) < abs(c):
-                        c = int(c * (abs(e*a) / abs(f*c)))
+                        c = int(c * (abs(e * a) / abs(f * c)))
                     else:
-                        f = int(f * (abs(e*a) / abs(f*c)))
-            if e*a//abs(e*a) == -f*c//abs(f*c) and abs(e*a-f*c) > 6:  # si sumen (i queda gros) faig que restin
+                        f = int(f * (abs(e * a) / abs(f * c)))
+            if e * a // abs(e * a) == -f * c // abs(f * c) and abs(
+                    e * a - f * c) > 6:  # si sumen (i queda gros) faig que restin
                 c = -c
-            if e*a == f*c:  # evito indeterminat
+            if e * a == f * c:  # evito indeterminat
                 if a == 1 or moneda():
                     a += 1
                 else:
                     a -= 1
-            blocx = (e*a - f*c)*x
+            blocx = (e * a - f * c) * x
             if abs(blocx) > 40:  # si segueix mig gros, ajudo amb els independents
-                if e*b * blocx > 0:  # mateix signe
+                if e * b * blocx > 0:  # mateix signe
                     b = -b
-                if -f*d * blocx > 0:
+                if -f * d * blocx > 0:
                     d = -d
             else:
-                if abs(abs(e*b) + abs(f*d)) > 10 and e*b * (-f*d) > 0:  # si sumen bastant i els estic sumant, resto
+                if abs(abs(e * b) + abs(f * d)) > 10 and e * b * (
+                        -f * d) > 0:  # si sumen bastant i els estic sumant, resto
                     b = -b
-                if (abs(e*b) > abs(f*d) and e*b * blocx > 0) or (abs(f*d) > abs(e*b) and -f*d * blocx > 0):
+                if (abs(e * b) > abs(f * d) and e * b * blocx > 0) or (abs(f * d) > abs(e * b) and -f * d * blocx > 0):
                     b = -b
                     d = -d
-            g = blocx + e*b - f*d
+            g = blocx + e * b - f * d
             # muntatge
             if moneda():
                 text1 = f"{e}(" + monomi(a, 1) + signe(b) + ")"
@@ -1730,14 +2161,14 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             nb, nd = b, d
             bestnum = 1000000
             for n in sorted([[1, 1], [1, -1]]):  # trio signes per fer petit el numerador
-                num = abs(nb*f + nd*e)
+                num = abs(nb * f + nd * e)
                 if num and num < bestnum:
                     b, d = nb, nd
             bestmcd = 1
             for n in sorted(range(-5, 5)):  # trio la h que millor simplifica
                 # n és h provisional
-                num = b*f + d*e + n*e*f
-                den = a*f + c*e + g*e*f
+                num = b * f + d * e + n * e * f
+                den = a * f + c * e + g * e * f
                 if num and den:
                     elmcd = mcd(abs(num), abs(den))
                     if elmcd > bestmcd:
@@ -1860,17 +2291,17 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                     e = mcm(e, f)
                 else:
                     f = mcm(e, f)
-            a, c, g = [random.choice([-1, 1])*random.randint(1, 5) for _ in range(3)]
+            a, c, g = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(3)]
             b, d = [random.choice([-1, 1]) * random.randint(0, 10) for _ in range(2)]  # permeto zeros als independents
             # coef control
-            print(a*f, c*e, g*e*f, ")", x,"// ", b*f, d*e, "||", g, "(", e, f)
-            if abs(g*e*f) > 90 or (abs(g*e*f) > 40 and abs(x) > 3) or (abs(g*e*f) > 25 and abs(x) > 5):
+            print(a * f, c * e, g * e * f, ")", x, "// ", b * f, d * e, "||", g, "(", e, f)
+            if abs(g * e * f) > 90 or (abs(g * e * f) > 40 and abs(x) > 3) or (abs(g * e * f) > 25 and abs(x) > 5):
                 if abs(g) > 2:
-                    if abs(g*e*f) < 200 and abs(e*f*2) < 60 and x < 5:
+                    if abs(g * e * f) < 200 and abs(e * f * 2) < 60 and x < 5:
                         g = random.choice([1, 2, -1, -2])
                     else:
                         g = random.choice([1, -1])
-                if abs(g*e*b) > 42:
+                if abs(g * e * b) > 42:
                     if abs(x) < 3:
                         lim = 7
                     else:
@@ -1883,35 +2314,35 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                         f = f % lim + 1
                         if abs(f) == 1:
                             f += f
-            print(a*f, c*e, g*e*f, ")", x,"// ", b*f, d*e, "||", g, "(", e, f)
-            if abs(g*e*f) > 30 or x > 5 or abs(a*f + c*e + g*e*f) > 30:
-                if a*f * c*e < 0:  # si no s'ajuden
-                    if abs(abs(a*f) + abs(c*e) - abs(g*e*f)) < abs(g*e*f) \
-                           and not max(abs(a*f), abs(c*e)) > abs(g*e*f):  # si no es desmadrarà
-                        if a * g*e < 0:  # faig que s'ajudin contra el GEF
+            print(a * f, c * e, g * e * f, ")", x, "// ", b * f, d * e, "||", g, "(", e, f)
+            if abs(g * e * f) > 30 or x > 5 or abs(a * f + c * e + g * e * f) > 30:
+                if a * f * c * e < 0:  # si no s'ajuden
+                    if abs(abs(a * f) + abs(c * e) - abs(g * e * f)) < abs(g * e * f) \
+                            and not max(abs(a * f), abs(c * e)) > abs(g * e * f):  # si no es desmadrarà
+                        if a * g * e < 0:  # faig que s'ajudin contra el GEF
                             c = -c
                         else:
                             a = -a
                     else:  # poso el més gros en contra
-                        if (abs(a*f) > abs(c*e) and a * g*e > 0) or (abs(c*e) > abs(a*f) and c * g*f > 0):
+                        if (abs(a * f) > abs(c * e) and a * g * e > 0) or (abs(c * e) > abs(a * f) and c * g * f > 0):
                             a = -a
                             c = -c
                 else:  # si s'ajuden
-                    if a * g*e > 0:
+                    if a * g * e > 0:
                         a = -a
                         c = -c
             print(a * f, c * e, g * e * f, ")", x, "// ", b * f, d * e, "||", g, "(", e, f)
-            blocx = (a*f + c*e + g*e*f)*x
+            blocx = (a * f + c * e + g * e * f) * x
             print(x, blocx)
             if abs(blocx) > 60:
                 x = max(1, x // 2)
             if abs(blocx) > 40:
-                x = max(1, x-2)
-            blocx = (a*f + c*e + g*e*f)*x
+                x = max(1, x - 2)
+            blocx = (a * f + c * e + g * e * f) * x
             print(x, blocx)
-            h = -(blocx + (b*f+d*e))
+            h = -(blocx + (b * f + d * e))
             print(h)
-            j = e*f
+            j = e * f
             # simplificacions (si es pot)  # TODO no està bé quan una simplifica més que l'altra
             if fracsimple(a, e)[1] == fracsimple(b, e)[1]:
                 a = fracsimple(a, e)[0]
@@ -2007,14 +2438,14 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
         nexist = False
         if nivell == 1:  # quadrat perfecte, x2 sense coef
             x = random.randint(1, 10)
-            text = f"x^2-{pow(x,2)}=0"
+            text = f"x^2-{pow(x, 2)}=0"
         elif nivell == 2:  # pot sortir impossible
             x = random.randint(1, 10)
             if random.choice([0, 0, 1]):  # arrel neg
                 nexist = True
-                text = f"x^2+{pow(x,2)}"
+                text = f"x^2+{pow(x, 2)}"
             else:
-                text = f"x^2-{pow(x,2)}"  # normal
+                text = f"x^2-{pow(x, 2)}"  # normal
             if random.choice([1, 1, 0]):
                 text = text + "=0"
             else:
@@ -2028,9 +2459,9 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                 a = random.choice([1, -1])
 
             if random.randint(0, 2):  # normalment canviat de signe (arrel possible)
-                tc = -a*c
+                tc = -a * c
             else:  # una de cada tres arrel impossible
-                tc = a*c
+                tc = a * c
                 nexist = True
 
             if moneda():
@@ -2061,7 +2492,7 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             if nivell == 1 or random.choice([1, 1, 0]):
                 text = text + "=0"
             else:
-                text = "0="+text
+                text = "0=" + text
 
         elif nivell == 3:  # amb coef
             a = random.randint(-3, 3)
@@ -2085,7 +2516,7 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                 tb = f"{a * x}x"
 
             if moneda():
-                if a*x > 0:
+                if a * x > 0:
                     text = f"{ta}+{tb}"
                 else:
                     text = f"{ta}{tb}"
@@ -2109,7 +2540,7 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
         if x1 == -x2:  # evita b=0
             x1 = x2
         b = -x1 - x2
-        c = x1*x2
+        c = x1 * x2
 
         if nivell == 1:  # sense coef A, ordenada
             if b > 0:
@@ -2148,8 +2579,8 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                     a = random.choice([-2, 2])
             else:
                 a = random.choice([-1, 1])
-            b = a * (-x1-x2)
-            c = a * (x1*x2)
+            b = a * (-x1 - x2)
+            c = a * (x1 * x2)
             primer = random.choice([2, 1, 0])
 
             if a > 0 and primer != 2:
@@ -2281,7 +2712,7 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
 
     if solucions:
         if tipus == 1:  # primer simple
-            solus = f"{c-b}"
+            solus = f"{c - b}"
         elif tipus in [2, 3, 4]:  # primer
             solus = f"{x}"
         elif tipus == 5:  # fracs
@@ -2316,7 +2747,7 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
             for n in range(4):
                 if moneda():
                     coefs[n] = -coefs[n]
-            if round(coefs[0]*1./coefs[2], 7) == round(coefs[1]*1./coefs[3], 7):  # crec que això evita SCI
+            if round(coefs[0] * 1. / coefs[2], 7) == round(coefs[1] * 1. / coefs[3], 7):  # crec que això evita SCI
                 coefs[0] = - coefs[0]
             if nivell == 1:  # la primera x sense coef
                 coefs[0] = 1
@@ -2326,8 +2757,8 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
 
             # TODO afegir eqns amb les inc barrejades
 
-            c = coefs[0]*x + coefs[1]*y
-            f = coefs[2]*x + coefs[3]*y
+            c = coefs[0] * x + coefs[1] * y
+            f = coefs[2] * x + coefs[3] * y
             eq1 = systeq_text(coefs[0], coefs[1], c)
             eq2 = systeq_text(coefs[2], coefs[3], f)
             text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
@@ -2346,18 +2777,18 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
                     coefs[n] = -coefs[n]
             if nivell in [1, 2]:
                 coefs[0] = random.choice([1, -1])  # una de les x sola
-                coefs[4] = coefs[3]*coefs[0]*coefs[1]+random.choice([1, -1])  # escalonat amb la segona
+                coefs[4] = coefs[3] * coefs[0] * coefs[1] + random.choice([1, -1])  # escalonat amb la segona
                 if moneda():  # aleatori quina de les dues és l'escalonada
                     for n in range(3):
-                        aux = coefs[n+3]
-                        coefs[n+3] = coefs[n+6]
-                        coefs[n+6] = aux
+                        aux = coefs[n + 3]
+                        coefs[n + 3] = coefs[n + 6]
+                        coefs[n + 6] = aux
                 if nivell == 2 and random.choice([True, True, False]):
                     fila = random.choice([1, 2])  # moc la fila de la x a qualsevol de les altres
                     for n in range(3):
                         aux = coefs[n]
-                        coefs[n] = coefs[n+fila*3]
-                        coefs[n+fila*3] = aux
+                        coefs[n] = coefs[n + fila * 3]
+                        coefs[n + fila * 3] = aux
             elif nivell == 3:
                 if not any(n in [1, -1] for n in [coefs[0], coefs[3], coefs[6]]):
                     coefs[random.choice([0, 3, 6])] = random.choice([1, -1])
@@ -2439,7 +2870,7 @@ def success(tipus, nivell=1, variant=1):
         if nivell == 1 or nivell == 2:  # trobar an sabent a1 i d
             d = random.randint(2, 6)
             a1 = random.randint(1, 10)
-            n = random.randint(2, 30 +50*(nivell-1))
+            n = random.randint(2, 30 + 50 * (nivell - 1))
         elif nivell == 3 or nivell == 4:  # trobar alguna cosa sabent les altres (a1, an, n, d) | d pot ser negativa
             d = random.randint(2, 9)
             if nivell == 4 and moneda():
@@ -2459,14 +2890,14 @@ def success(tipus, nivell=1, variant=1):
             else:
                 a1 = random.randint(1, 15)
             n = random.randint(6, 60)
-        an = a1+(n-1)*d
+        an = a1 + (n - 1) * d
         return en.success(tipus, nivell, variant, d, a1, n, an)
 
     elif tipus == 2:  # geomètriques
         if nivell == 1 or nivell == 2:  # trobar an sabent a1 i r #TODO decimals/fraccions
             r = random.randint(2, 5)
             a1 = random.randint(1, 10)
-            n = random.randint(2, 5 + 5*(nivell-1))
+            n = random.randint(2, 5 + 5 * (nivell - 1))
         elif nivell == 3 or nivell == 4:  # trobar alguna cosa sabent les altres (a1, an, n, d) | d pot ser negativa
             r = random.randint(2, 5)
             if nivell == 4 and moneda():
@@ -2486,7 +2917,7 @@ def success(tipus, nivell=1, variant=1):
             else:
                 a1 = random.randint(1, 15)
             n = random.randint(6, 10)
-        an = a1 * pow(r, n-1)
+        an = a1 * pow(r, n - 1)
         return en.success(tipus, nivell, variant, r, a1, n, an)
     return "No existeix aquest tipus de problema de successions..."
 
@@ -2497,11 +2928,11 @@ def prop(tipus, nivell=1):
             x = random.randint(1, 16)
             ay = random.choice([1, 2, 3, 4])
             by = random.choice([1, 2, 3, 5])
-            y = ay*by
+            y = ay * by
             y2 = random.randint(1, 16)
             if y2 == y:
                 y2 += 1
-            if (y2*x) % y:
+            if (y2 * x) % y:
                 if moneda():
                     x *= ay
                     y2 *= by
@@ -2517,9 +2948,6 @@ def prop(tipus, nivell=1):
         else:
             return "NO HI HA RES AQUÍ 42"
     return "AQUEST TIPUS DE P NO EXISTEIX 42"
-
-
-import random
 
 
 def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
@@ -2574,14 +3002,14 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
         tnum = ""
         ternums = 0
         quantsvull = random.choice([2, 3])
-        for x in range(gnum+1):
+        for x in range(gnum + 1):
             coef = random.randint(1, 6)
             if moneda():
                 coef = -coef
-            if gnum-x > 0:
+            if gnum - x > 0:
                 exp = "x"
-                if gnum-x > 1:
-                    exp += "^{" + f"{gnum-x}" + "}"
+                if gnum - x > 1:
+                    exp += "^{" + f"{gnum - x}" + "}"
             else:
                 exp = ""
 
@@ -2589,7 +3017,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
                 tnum = f"{coef}" + exp
                 ternums += 1
             else:
-                if (random.randint(0, gnum) != 1 and not ternums >= quantsvull) or ternums + (gnum-x) <= quantsvull:
+                if (random.randint(0, gnum) != 1 and not ternums >= quantsvull) or ternums + (gnum - x) <= quantsvull:
                     if moneda() or ordenat:  # dreta
                         if coef > 0:
                             tnum += "+"
@@ -2604,11 +3032,11 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
         tden = ""
         terdens = 0
         quantsvull = random.choice([2, 3])
-        for x in range(gden+1):
+        for x in range(gden + 1):
             coef = random.randint(1, 6)
             if moneda():
                 coef = -coef
-            if gden-x > 0:
+            if gden - x > 0:
                 exp = "x"
                 if gden - x > 1:
                     exp += "^{" + f"{gden - x}" + "}"
@@ -2619,7 +3047,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
                 tden = f"{coef}" + exp
                 terdens += 1
             else:
-                if (random.randint(0, gden) == 1 and not terdens >= quantsvull) or terdens + (gden-x) <= quantsvull:
+                if (random.randint(0, gden) == 1 and not terdens >= quantsvull) or terdens + (gden - x) <= quantsvull:
                     if moneda() or ordenat:  # dreta
                         if coef > 0:
                             tden += "+"
@@ -2654,16 +3082,16 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
 
                 b = random.randint(0, c)
                 f = random.randint(0, g)
-                if c-k >= 0:
-                    d = random.randint(0, c-k)
+                if c - k >= 0:
+                    d = random.randint(0, c - k)
                 else:
                     d = -42
-                if g-k >= 0:
-                    h = random.randint(0, g-k)
+                if g - k >= 0:
+                    h = random.randint(0, g - k)
                 else:
                     h = -42
                 # comprovo que al menys n'hi ha un prou gros per convergent a núm
-                if c>b and g>f and c-k>d and g-k>h:
+                if c > b and g > f and c - k > d and g - k > h:
                     if moneda():
                         b = c
                     else:
@@ -2671,11 +3099,11 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
                 # coeficients
                 ca = random.randint(1, 3) * random.choice([1, -1])  # principals
                 cg = random.randint(1, 3) * random.choice([1, -1])
-                ce = random.choice(divisors(ca*cg))  # obligats
+                ce = random.choice(divisors(ca * cg))  # obligats
                 if moneda():
                     ce = -ce
                     signe = "+"
-                cc = ca*cg // ce
+                cc = ca * cg // ce
                 cb = random.randint(1, 6) * random.choice([1, -1])  # lliures
                 cf = random.randint(1, 6) * random.choice([1, -1])
                 cd = random.randint(1, 6) * random.choice([1, -1])
@@ -2783,7 +3211,7 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
                 d = random.randint(1, 1)
             else:
                 d = random.randint(0, 1)
-            a = 2*max(b, d)
+            a = 2 * max(b, d)
             c = a
             # coefs
             ca = random.randint(1, 3)
@@ -2813,10 +3241,10 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
             b = random.choice([-42, 0])
             d = random.randint(0, 2)
             if b == 0:  # b ja recolza el resultat enter
-                a = random.randint(max(b+1, d), 2)
+                a = random.randint(max(b + 1, d), 2)
             else:  # b no recolza, per tant d ha de recolzar
                 a = d
-            c = 2*a
+            c = 2 * a
             # coefs
             ca = random.randint(1, 3)
             cc = pow(ca, 2)
@@ -2862,24 +3290,24 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
             if a == 0 or moneda():
                 b = -42
             else:
-                b = random.randint(0, a-1)
+                b = random.randint(0, a - 1)
             if random.randint(1, 5) == 1:
                 d = -42
             else:
-                d = random.randint(0, c-1)
+                d = random.randint(0, c - 1)
             if g == 0 or moneda():
                 h = -42
             else:
-                h = random.randint(0, g-1)
+                h = random.randint(0, g - 1)
             if random.randint(1, 5) == 1:
                 f = -42
             else:
-                f = random.randint(0, e-1)
+                f = random.randint(0, e - 1)
             # coefs
             ca, ce, cb, cd, cf, ch = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(6)]
             if random.choice([0, 1, 1]):  # mig sovint forço resultat enter
-                cc = random.choice(divisors(ca*ce))
-                cg = ca*ce // cc  # aquí tinc resultat = 1 (cg és el divisor gros)
+                cc = random.choice(divisors(ca * ce))
+                cg = ca * ce // cc  # aquí tinc resultat = 1 (cg és el divisor gros)
                 for x in reversed(range(2, 6)):  # faig el cg una mica més petit si es pot
                     if cg % x == 0:
                         cg = cg // x
@@ -2933,12 +3361,12 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
                 cbd = cb - cd
             if random.choice([0, 1, 1]):  # mig sovint forço resultat enter
                 ce = random.randint(1, 2)
-                gpossibles = divisors(cbd*ce)
+                gpossibles = divisors(cbd * ce)
                 if len(gpossibles) > 2:
                     gpossibles = gpossibles[:2]  # si hi ha moltes opcions deixo les baixes (+ marge de maniobra per e)
                 cg = random.choice(gpossibles)
-                if cbd*ce % (cc*cg):  # no divideix exacte
-                    ce *= fracsimple(cbd*ce//cg, cc)[1]  # multiplico a ce la part indivisible per cc
+                if cbd * ce % (cc * cg):  # no divideix exacte
+                    ce *= fracsimple(cbd * ce // cg, cc)[1]  # multiplico a ce la part indivisible per cc
             else:
                 ce, cg = [random.choice([-1, 1]) * random.randint(1, 5) for _ in range(2)]
             if cb == cd:
@@ -2998,6 +3426,52 @@ def monomi(coef, exp, signe=False, allexps=False, var="x"):
     return text
 
 
+def rand_multimon(nvars=2):
+    """inventa un monomi amb la quantitat de variables especificada"""
+    # coef
+    coef = random.randint(1, random.choice([10, random.choice([420, 4200])])) * random.choice([-1, 1])
+    # vars
+    varopcions = ["x", "y", "z", "t", "a", "b", random.choice(["c", "ç"]), random.choice(["d", "q"])]
+    vars = random.sample(varopcions, nvars)
+    # exps
+    exps = [random.randint(1, random.choice([5, random.choice([15, 50])])) for _ in range(nvars)]
+    return multimonomi(coef, vars, exps)
+
+
+
+
+def multimonomi(coef, vars=["x", "y"], exps=[], signe=False):
+    """retorna un monomi de múltiples variables
+
+    :param coef: coeficient
+    :param vars: llista dels noms de variable per utilitzar
+    :param exps: llista dels exponents a utilitzar
+    :param signe: incloure signe positiu al text
+    """
+    text = "42xy"
+
+    if len(vars) > len(exps):
+        return "Escolti, doni'm tots els exponents."
+
+    if abs(coef) == 1 and any([exps]):  # coef unitari i hi ha alguna variable té exponent
+        if coef < 0:
+            text = "-"
+        else:
+            text = ""
+    else:
+        text = f"{coef}"
+    # exponent
+    for i, x in enumerate(vars):
+        if exps[i]:
+            text += f"{vars[i]}"
+        if exps[i] not in [0, 1]:
+            text += "^{" f"{exps[i]}" "}"
+        if signe:
+            if coef > 0:
+                text = "+" + text
+    return text
+
+
 def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, inici=0):
     opcions = opcions[:]  # sense això estic passant la referència i afecta a fora de manera incontrolable
     amaga = amaga[:]
@@ -3054,9 +3528,9 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
         if fx == 1:  # a^x / e^x
             if random.choice([0, 0, 1]):  # a^x
                 n = random.randint(2, 9)
-                text = f"{n}^" + "{" + f"{dx(inception-1, opcions, [1], simples=simples)}" + "}"
+                text = f"{n}^" + "{" + f"{dx(inception - 1, opcions, [1], simples=simples)}" + "}"
             else:  # e^x
-                text = "e^{" + f"{dx(inception-1, opcions, [1], simples=simples)}" + "}"
+                text = "e^{" + f"{dx(inception - 1, opcions, [1], simples=simples)}" + "}"
 
         elif fx == 2:  # cos(x) / sin(x) / tg(x)
             if random.choice([0, 0, 1]):
@@ -3071,7 +3545,7 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
             if random.randint(1, 5) == 1 and not simples:  # exponent intern
                 text += f"^{random.randint(2, 4)}"
                 inception -= 1
-            text += "(" + f"{dx(inception-1, opcions, amaga, simples=simples)}" + ")"
+            text += "(" + f"{dx(inception - 1, opcions, amaga, simples=simples)}" + ")"
 
         elif fx == 3:
             if random.choice([0, 0, 1]):  # log_b x
@@ -3087,16 +3561,16 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
                 if random.randint(1, 5) == 1 and not simples:  # exponent intern
                     text += f"^{random.randint(2, 4)}"
                     inception -= 1
-            text += "(" + f"{dx(inception-1, opcions, simples=simples)}" + ")"
+            text += "(" + f"{dx(inception - 1, opcions, simples=simples)}" + ")"
 
         elif fx == 4:  # x^2 / sqrt
             if random.choice([0, 0, 0, 1]) and not sensearrels:  # sqrt
                 if random.choice([0, 0, 1]):
-                    text = "\\sqrt[" + f"{random.randint(3, 5)}" + "]{" + f"{dx(inception-1, opcions, [-4], simples=simples)}" + "}"
+                    text = "\\sqrt[" + f"{random.randint(3, 5)}" + "]{" + f"{dx(inception - 1, opcions, [-4], simples=simples)}" + "}"
                 else:
-                    text = "\\sqrt{" + f"{dx(inception-1, opcions, [-4], simples=simples)}" + "}"
+                    text = "\\sqrt{" + f"{dx(inception - 1, opcions, [-4], simples=simples)}" + "}"
             else:  # pow
-                text = f"{dx(inception-1, opcions, [4], simples=simples)}"
+                text = f"{dx(inception - 1, opcions, [4], simples=simples)}"
                 if text == "x":
                     text = "x^"
                 else:
@@ -3119,20 +3593,20 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
             if random.randint(1, 9) == 1 and not simples:  # exponent intern
                 text += f"^{random.randint(2, 4)}"
                 inception -= 1
-            text += "(" + f"{dx(inception-1, opcions, [5], simples=simples)}" + ")"
+            text += "(" + f"{dx(inception - 1, opcions, [5], simples=simples)}" + ")"
 
         elif fx == 6:  # f + g
             opcions.remove(6)
-            t1 = f"{dx(inception-1, opcions, simples=simples)}"
+            t1 = f"{dx(inception - 1, opcions, simples=simples)}"
             if t1[0] != "-":
                 t1 = "+" + t1
-            text = f"{dx(inception-1, opcions, [-6], simples=simples)}{t1}"
+            text = f"{dx(inception - 1, opcions, [-6], simples=simples)}{t1}"
 
         elif fx == 7:  # f * g
             opcions.remove(7)
             if 8 in opcions:
                 opcions.remove(8)
-            t1 = f"{dx(inception-2, opcions, simples=simples)}"
+            t1 = f"{dx(inception - 2, opcions, simples=simples)}"
             for x in opcions:
                 if x in [5]:  # si vols treure més coses al segon factor, és aquí
                     opcions.remove(x)
@@ -3141,7 +3615,7 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
                 ss = [-7]
             else:
                 ss = [-8]
-            t2 = f"{dx(inception-2, opcions, ss, simples=simples)}"
+            t2 = f"{dx(inception - 2, opcions, ss, simples=simples)}"
             if t1 not in ["x", "-x", "2x", "-2x", "3x", "-3x"]:
                 t1 = f"({t1})"
             if t2 != "x":
@@ -3165,8 +3639,8 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
             else:
                 s1 = []
                 s2 = []
-            t1 = f"{dx(inception-2, opcions, s1, simples=simples)}"
-            t2 = f"{dx(inception-2, opcions, s2, simples=simples)}"
+            t1 = f"{dx(inception - 2, opcions, s1, simples=simples)}"
+            t2 = f"{dx(inception - 2, opcions, s2, simples=simples)}"
             text = "\\frac{" + t1 + "}{" + t2 + "}"
 
     # Les sumes i multis les pot fer sempre que no hi ha f+g
@@ -3174,7 +3648,7 @@ def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, i
         n = 1
         if not (simples and inception < 1):  # multiplica quelcom?
             if random.randint(1, 2) == 1:
-                n = random.randint(2, 3*(inception+1))
+                n = random.randint(2, 3 * (inception + 1))
                 if random.randint(1, 5) == 1:
                     n = -n
 
@@ -3250,6 +3724,7 @@ def fxscale(text):  # TODO acabar de pensar cómo hacer esto, porque no tiene se
     else:
         return 1
     """
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - debugging
 
@@ -3418,3 +3893,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
+for x in range(12):
+    print(en.px_invent())

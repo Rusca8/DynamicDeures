@@ -144,6 +144,20 @@ def success():
         return render_template("successions.html")
 
 
+@app.route("/polis/", methods=["GET", "POST"])
+def polinomis():
+    if request.method == "POST":
+        #try:
+        g.polinomis(request.form)
+        #except:
+        #    print("Error Polinomis")
+        #    return redirect("/latex_error/polinomis")
+        tele.feedback("polis", request.form)
+        return redirect("/pdf/polinomis")
+    else:
+        return render_template("polinomis.html")
+
+
 @app.route("/limits/", methods=["GET", "POST"])
 def limits():
     if request.method == "POST":
@@ -210,6 +224,8 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/ncient.pdf")
     elif tema == "proporcionalitat":
         return redirect("/static/pdfs/proporcionalitat.pdf")
+    elif tema == "polinomis":
+        return redirect("/static/pdfs/polinomis.pdf")
     elif tema == "successions":
         return redirect("/static/pdfs/successions.pdf")
     elif tema == "limits":

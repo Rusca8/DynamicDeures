@@ -756,6 +756,75 @@ def triacoses(esquelet, x=1):
         gp, persona = persones(esquelet, tresornum)
         return [tresornum, gt, tresor, gp, persona]
 
+# *************************** Polinomis ***************************** #
+
+
+def px_residu(nivell, px, dx, x):
+    if nivell == 1:
+        if random.randint(0, 3):
+            text1 = random.choice([f"Avalua el polinomi $P(x)={px}$", f"Troba el valor numèric del polinomi $P(x)={px}$",
+                                   f"Calcula el resultat d'avaluar el polinomi $P(x)={px}$"])
+            text2 = random.choice([f" quan $x={x}$.", f" si sabem que la $x$ val ${x}$.", f" per a $x={x}$.",
+                                   f" quan la $x$ és ${x}$"])
+        else:
+            text1 = random.choice([f"Donat el polinomi $P(x)={px}$,", f"Si sabem que $P(x)={px}$,"])
+            text2 = random.choice([f" calcula $P({x})$.", f" troba el valor de $P(x)$ quan $x={x}$.",
+                                   f" avalua $P(x)$ per $x={x}$."])
+        return text1 + text2
+
+    elif nivell == 2:
+        text1 = random.choice(["", "Sense fer la divisió,", random.choice(["Fent servir el teorema del residu,",
+                               "Aplicant el teorema del residu,", "Mitjançant el teorema del residu,"]),
+                               "Utilitzant el mètode que prefereixis,"])
+        text2 = (random.choice([" digues quin és", " troba", " calcula"])
+                 + random.choice([f" el residu de dividir ${px}$ entre ${dx}$.",
+                                 f" el residu de $({px})\\div({dx})$."]))
+        if not text1:
+            text2 = text2[1:].capitalize()
+        return text1 + text2
+    else:
+        return "No hi ha tants nivells a px_residu"
+
+
+def px_invent():
+    grau = random.randint(2, random.choice([5, 42]))
+    text0 = f"de grau {grau}"
+
+    if grau > 4 or moneda():
+        text1 = "incomplet"
+    else:
+        text1 = "complet"
+
+    text2 = random.choice(["ordenat", "desordenat"])
+
+    coef = random.randint(3, random.choice([10, random.choice([42, 1583])])) * random.choice([1, -1])
+    if moneda():
+        text3 = random.choice([f"amb el terme independent igual a {coef}", f"que el terme independent sigui {coef}",
+                               f"amb un {coef} com a terme independent"])
+    else:
+        grauc = random.randint(1, grau)
+        text3 = random.choice([f"que el coeficient del terme de grau {grauc} sigui {coef}",
+                               f"amb un {coef} al coeficient del terme de grau {grauc}"])
+
+    if not random.randint(0, 5):
+        var = random.choice(["y", "n", "q", "ç", "j", "t", "w"])
+        text4 = random.choice(["que la variable no sigui la x", f"que la variable sigui la {var}",
+                               f"fent servir la variable {var}", f"amb la {var} en el lloc de la x"])
+    else:
+        text4 = ""
+
+    text = []
+    forats = 0
+    for x in [text0, text1, text2, text3, text4]:
+        if x and (random.randint(0, 8) or forats > 1):  # màxim esborro 2 condicions (no nul·les)
+            text.append(x)
+        else:
+            forats += 1
+    if len(text) > 2:
+        intercoma = ", "
+    else:
+        intercoma = ""
+    return text[0].capitalize() + intercoma + ", ".join(text[1:-1]) + " i " + text[-1] + "."
 
 # *************************** Successions *************************** #
 
@@ -881,9 +950,8 @@ def success(tipus, nivell, variant, d, a1, n, an):
     return text
 
 
-
-
 # ****************************** General **************************** #
+
 
 def sp(num):  # hauràs d'afegir un d'allò per incontable, pero bueno
     if num == 1:
