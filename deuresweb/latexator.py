@@ -1881,10 +1881,10 @@ def polinomis(opcions, solucions=False):
 
     if "base" in opcions:
         base = True
-        qmonomi = quantesson(opcions["qmonomi"], "monomi")
-        qinvent = quantesson(opcions["qinvent"], "invent")
-        qaval = quantesson(opcions["qaval"], "aval")
-        qfcomu = quantesson(opcions["qfcomu"], "fcomu")
+        qmonomi = quantesson(opcions["qmonomi"], "px_monomi")
+        qinvent = quantesson(opcions["qinvent"], "px_invent")
+        qaval = quantesson(opcions["qaval"], "px_aval")
+        qfcomu = quantesson(opcions["qfcomu"], "px_fcomu")
         # ...
         print(f"Monomis {qmonomi}, Inventar {qinvent}, Avaluar {qaval}, Fcomu {qfcomu}")
     else:
@@ -1907,7 +1907,7 @@ def polinomis(opcions, solucions=False):
         forufis = quantesvariant(opcions["forufis"])
         qdivis = quantesson(opcions["qdivis"], "px_divis")
         fodivis = quantesvariant(opcions["fodivis"])
-        qresidu = quantesson(opcions["qdivis"], "px_divis")
+        qresidu = quantesson(opcions["qresidu"], "px_residu")
         print(f"Sum {qsumes} [{fosumes}], Rest {qrestes} [{forestes}], Multi {qmultis} [{fomultis}]," +
               f" Rufi {qrufis} [{forufis}], Divi {qdivis} [{fodivis}], Resi {qresidu}")
     else:
@@ -3168,6 +3168,11 @@ def quantesson(value, op):
         quantitats = [0, 3, 4, 5, 6, 11, 22]
     elif op == "barrejades":
         quantitats = [0, 3, 4, 5, 6, 11, 23]
+    # polinomis
+    elif op in ["px_monomi", "px_invent", "px_aval", "px_fcomu", "px_residu"]:
+        quantitats = [0, 2, 4, 6, 12, 24, 48]
+    elif op in ["px_sumes", "px_restes", "px_multis", "px_rufis", "px_divis", "px_factor", "px_algeb"]:
+        quantitats = [0, 2, 4, 6, 12, 24, 48]
     # successions
     elif op in ["termen", "gtermen"]:
         quantitats = [0, 3, 5, 6, 6, 13, 27]
