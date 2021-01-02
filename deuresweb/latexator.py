@@ -5,6 +5,7 @@ from pylatex import Command, NoEscape, Math, Tabular, Package
 
 import generator as gen
 import enunciats as en
+import cryptolator as crypt
 import wolframator as w
 
 
@@ -1885,6 +1886,8 @@ def polinomis(opcions, solucions=False):
         qinvent = quantesson(opcions["qinvent"], "px_invent")
         qaval = quantesson(opcions["qaval"], "px_aval")
         qfcomu = quantesson(opcions["qfcomu"], "px_fcomu")
+        fc1var = quantesvariant(opcions["fc1var"])
+        qcryp = quantesson(opcions["qcryp"], "px_cryp")
         # ...
         print(f"Monomis {qmonomi}, Inventar {qinvent}, Avaluar {qaval}, Fcomu {qfcomu}")
     else:
@@ -1893,6 +1896,7 @@ def polinomis(opcions, solucions=False):
         qinvent = 0
         qaval = 0
         qfcomu = 0
+        qcryp = 0
         # ...
 
     if "ops" in opcions:
@@ -1948,7 +1952,7 @@ def polinomis(opcions, solucions=False):
 
     # preguntes
     if any([base, ops, alges]):  # aquí tots els botons grossos
-        if any([qmonomi, qinvent, qaval, qfcomu,
+        if any([qmonomi, qinvent, qaval, qfcomu, qcryp,
                 qsumes, qrestes, qmultis, qdivis, qrufis, qresidu,
                 qfactor, qalgeb]):  # aquí tots els tipus d'exercici
 
@@ -1971,6 +1975,7 @@ def polinomis(opcions, solucions=False):
                     doc.append(NoEscape(r"$%s$" % text))
                     space(doc, "1cm")
                 end(doc, 'multicols')
+                space(doc, "0.2cm")
                 end(doc, 'parts')
 
             if qinvent:
@@ -1992,27 +1997,56 @@ def polinomis(opcions, solucions=False):
                 question(doc, f"{n}")  # puntuació de l'exercici
                 doc.append("Avalua en el punt demanat.")
                 begin(doc, 'parts')
+                sols = []
                 for x in range(0, n):
                     part(doc)
-                    text = gen.px(6, 1)
+                    text, sol = gen.px(6, 1, solucions=True)
                     doc.append(NoEscape(r"%s" % text))
+                    sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
+                blocsolus(doc, solucions, sols)
 
-            """if qfcomu:  # TODO merge a sense parts si les parts són només 1
-                n = qaval
+            if qfcomu:
+                n = qfcomu
                 needspace(doc, 8)
+                var = (n * fc1var) // 4
                 question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Avalua en el punt demanat.")
+                doc.append("Extreu factor comú de les expressions següents.")
                 begin(doc, 'parts')
-                begin(doc, 'multicols', 4)  # columnes
+                begin(doc, 'multicols', 2)  # columnes
                 for x in range(0, n):
                     part(doc)
-                    text = gen.px(6, 1)
-                    doc.append(NoEscape(r"%s" % text))
+                    if x < var or (var and x == 0):
+                        if x < var // 2 or (var and x==0):
+                            text = gen.px(0, 1, termes=2)  # una variable
+                        else:
+                            text = gen.px(0, 1, termes=3)
+                    else:
+                        if x < (var + n) // 2:
+                            text = gen.px(0, 2, termes=2)  # més variables
+                        else:
+                            text = gen.px(0, 2, termes=3)
+                    doc.append(NoEscape(r"$%s$" % text))
                     space(doc, "1cm")
                 end(doc, 'multicols')
-                end(doc, 'parts')"""  # Pendent
+                space(doc, "0.4cm")
+                end(doc, 'parts')
+
+            if qcryp:
+                n = qcryp
+                needspace(doc, 8)
+                question(doc, f"{4*n}")  # puntuació de l'exercici
+                doc.append("Extreu factor comú per desxifrar el missatge amagat.")
+                begin(doc, 'parts')
+                for x in range(0, n):
+                    part(doc)
+                    sol = en.factorcomu()
+                    # penalty negativa ajuda a saltar de línia entre paraules (si no sovint tallava pel signe)
+                    text = r"\ \ \penalty-200".join([f" ${x}$ " for x in crypt.fc_frase(sol)])
+                    doc.append(NoEscape(r"%s" % text))
+                    space(doc, "2cm")
+                end(doc, 'parts')
 
             if ops:
                 needspace(doc, 12)
@@ -2039,7 +2073,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols, mates=True)
 
             if qrestes:
@@ -2067,7 +2100,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols, mates=True)
 
             if qmultis:
@@ -2094,7 +2126,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols, mates=True)
 
             if qrufis:
@@ -2110,7 +2141,7 @@ def polinomis(opcions, solucions=False):
                     if x < var or (var and x == 0):
                         if x < var // 2 or (var and x == 0):
                             if x == 0:
-                                text, sol = text, sol = gen.px(4, 1, solucions=True)  # ordenat complet exacte
+                                text, sol = gen.px(4, 1, solucions=True)  # ordenat complet exacte
                             else:
                                 text, sol = gen.px(4, 2, solucions=True)  # ordenat complet
                         else:
@@ -2121,7 +2152,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols)
 
             if qdivis:
@@ -2148,7 +2178,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols)
 
             if qresidu:  # TODO merge sense parts si n=1
@@ -2212,7 +2241,6 @@ def polinomis(opcions, solucions=False):
                     sols.append(sol)
                     space(doc, "1cm")
                 end(doc, 'parts')
-                space(doc, "1cm")
                 blocsolus(doc, solucions, sols, mates=True)
 
             end(doc, 'questions')
@@ -3169,10 +3197,22 @@ def quantesson(value, op):
     elif op == "barrejades":
         quantitats = [0, 3, 4, 5, 6, 11, 23]
     # polinomis
-    elif op in ["px_monomi", "px_invent", "px_aval", "px_fcomu", "px_residu"]:
-        quantitats = [0, 2, 4, 6, 12, 24, 48]
-    elif op in ["px_sumes", "px_restes", "px_multis", "px_rufis", "px_divis", "px_factor", "px_algeb"]:
-        quantitats = [0, 2, 4, 6, 12, 24, 48]
+    elif op == "px_monomi":
+        quantitats = [0, 2, 4, 8, 24, 52, 108]
+    elif op in ["px_invent", "px_aval", "px_residu"]:
+        quantitats = [0, 1, 3, 5, 6, 12, 26]
+    elif op == "px_fcomu":
+        quantitats = [0, 2, 4, 6, 12, 26, 54]
+    elif op == "px_cryp":
+        quantitats = [0, 1, 2, 3, 4, 7, 14]
+    elif op in ["px_sumes", "px_restes"]:
+        quantitats = [0, 2, 3, 4, 5, 12, 24]
+    elif op in ["px_multis", "px_rufis", "px_divis"]:
+        quantitats = [0, 2, 3, 4, 5, 12, 24]
+    elif op == "px_factor":
+        quantitats = [0, 2, 3, 6, 12, 20, 46]
+    elif op == "px_algeb":
+        quantitats = [0, 1, 2, 4, 5, 10, 21]
     # successions
     elif op in ["termen", "gtermen"]:
         quantitats = [0, 3, 5, 6, 6, 13, 27]
@@ -3217,6 +3257,7 @@ def headfoot(doc, opcions, tema="no"):
     doc.preamble.append(Command('runningheadrule'))
     doc.preamble.append(Command('footrule'))
     doc.preamble.append(Command('firstpageheadrule'))
+    doc.preamble.append(NoEscape(r"\SolutionEmphasis{\raggedright}"))  # (esto me lo sugirió uno en TeX.StackExchange)
     doc.preamble.append(NoEscape(
         r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa %s\\ \large Matemàtiques - %s \scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}" % (
         tema, opcions["curs"],)))
@@ -3332,7 +3373,7 @@ def escriusolus(llista):
         else:
             apartat = f"{chr(x//26+96)+chr(x%26+97)}"  # aa-zz
         llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
-    return ";  ".join(llista)
+    return r"; \penalty-200 ".join(llista)
 
 
 def blocsolus(doc, solucions, llista, mates=False):

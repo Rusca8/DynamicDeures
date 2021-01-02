@@ -110,7 +110,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label><b>Avaluar P(x) en un punt</b></label>
+            <label><b>Avaluar en un punt</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qaval" %}
@@ -130,11 +130,48 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label><b>Extreure factor comú ❌</b></label>
+            <label><b>Extreure factor comú</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "qfcomu" %}
               {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Una sola variable?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "fc1var" %}
+              {% for n in range(5) %}
+                {% if n == 2 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label><b>Desxifra el missatge (fc)</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qcryp" %}
+              {% if n == 1 %}
                 <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
               {% else %}
@@ -185,7 +222,7 @@
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "fosumes" %}
               {% for n in range(5) %}
-                {% if n == 1 %}
+                {% if n == 2 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}
@@ -222,7 +259,7 @@
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "forestes" %}
               {% for n in range(5) %}
-                {% if n == 1 %}
+                {% if n == 2 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}
@@ -259,7 +296,7 @@
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "fomultis" %}
               {% for n in range(5) %}
-                {% if n == 1 %}
+                {% if n == 2 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}
@@ -296,7 +333,7 @@
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "forufis" %}
               {% for n in range(5) %}
-                {% if n == 1 %}
+                {% if n == 2 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}
@@ -333,7 +370,7 @@
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "fodivis" %}
               {% for n in range(5) %}
-                {% if n == 1 %}
+                {% if n == 2 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}

@@ -147,11 +147,11 @@ def success():
 @app.route("/polis/", methods=["GET", "POST"])
 def polinomis():
     if request.method == "POST":
-        try:
-            g.polinomis(request.form)
-        except:
-            print("Error Polinomis")
-            return redirect("/latex_error/polinomis")
+        #try:
+        g.polinomis(request.form)
+        #except:
+        #    print("Error Polinomis")
+        #    return redirect("/latex_error/polinomis")
         tele.feedback("polis", request.form)
         return redirect("/pdf/polinomis")
     else:

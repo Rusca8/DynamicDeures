@@ -8,6 +8,7 @@ noa = ["a", ""]
 lales = [["la", "les"], ["el", "els"]]
 uuna = ["una", "ú"]
 esessin = ["és", "essin"]
+tdes = [["da", "des"], ["t", "ts"]]
 
 poderf = ["podré", "podràs", "podrà", "podrem", "podreu", "podran"]
 trigar = ["trigo", "trigues", "triga", "triguem", "trigueu", "triguen"]
@@ -947,6 +948,59 @@ def success(tipus, nivell, variant, d, a1, n, an):
             elif variant == 4:
                 text += " (a_{" + f"{n}" + r"}?\ S_{" + f"{random.randint(5, 10)}" + "}?)"
 
+    return text
+
+
+def factorcomu():
+    text = "No ha funcionat la cosa em temo"
+    var1 = random.choice([1, 1, 2, 2, 2])
+    if var1 == 1:  # vull menjar
+        t1 = random.choice(["Amb la gana que tinc podria menjar-me",
+                            "Voldria menjar-me",
+                            "Voldria poder menjar",
+                            "Tinc un gran desig de crospir-me"])
+        t2, g, p = random.choice([[" el cel blau", 1, 0],
+                                  [" el paraigües de la veïna", 1, 0],
+                                  random.choice([[" les potes de la millor taula de l'ikea", 0, 1],
+                                                 [" el moble de sota el microones", 1, 0]]),
+                                  [" un escarabat d'aquells egipcis", 1, 0],
+                                  [" els nebots de la gent del poble", 1, 1]])
+        t3 = random.choice([" cadascun dels dies" + random.choice([" de la meva vida",
+                                                                   " del mes de juliol",
+                                                                   " de la setmana"]),
+                            f" barreja{tdes[g][p]} amb" + random.choice([" carquinyolis de colors",
+                                                                         " suc de cactus",
+                                                                         " pèls de ximpanzé"]),
+                            f" posa{tdes[g][p]} en forma de sopa de lletres",
+                            f" banya{tdes[g][p]} en" + random.choice([" grumolls de colacao",
+                                                                      " suor de cocodril",
+                                                                      " llàgrimes de cuc de terra"])])
+        text = t1 + t2 + t3
+    elif var1 == 2:  #
+        t1 = random.choice(["El secret més ben guardat d'amèrica és que",
+                            "Els meus amics no saben que",
+                            "Tots sabem que d'amagat",
+                            "Per molt que dissimuli es nota bastant que",
+                            "És ben sabut per tots que"])
+        t2 = random.choice([" el president",
+                            " vostè",
+                            random.choice([" la teva germana", " el teu germà"]),
+                            ])
+        t3 = random.choice([" menja mocs de granota",
+                            " s'alimenta d'ulls de sargantana",
+                            " baixa al riu a xuclar llimacs",
+                            " llepa la bústia del veí de dalt",
+                            " parla amb les mosques de casa",
+                            " se'n va a viure sota la pica",
+                            " posa pinya a la pizza",
+                            " barreja nocilla i nutella",
+                            " entona cants gregorians"])
+        t4 = random.choice([" cada cop que en té la oportunitat",
+                            random.choice([" quan hi ha lluna plena", "els dies de lluna plena"]),
+                            " un dia sí i altre també",
+                            random.choice([" quan no mira ningú", " quan estem tots despistats"]),
+                            " perquè li agrada que no vegis"])
+        text = t1 + t2 + t3 + t4
     return text
 
 

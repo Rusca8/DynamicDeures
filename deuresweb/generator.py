@@ -2,6 +2,7 @@ import math
 import random
 
 import enunciats as en
+import cryptolator as crypt
 
 
 def moneda():
@@ -1528,6 +1529,35 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
     """
     text = "P(x)=42"
     solu = "(R: 42)"
+    if tipus == 0:  # fcomú
+        if not termes:
+            termes = 3
+
+        if nivell == 1:  # una variable
+            xn = random.randint(1, 3)  # grau de la x fc
+            k = random.randint(1, 5)
+            rufipx = polinomi(random.choice([termes, termes+1]), termes, cmax=10, obliga=[0], rufinat=True)[1]
+            for i in range(len(rufipx)):
+                rufipx[i] *= k
+            rufipx += [0 for _ in range(xn)]
+            text = polinomitza(rufipx, False)
+
+        elif nivell == 2:  # multivariable
+            varopcions = ["a", "b", "c", "d", "x", "y", "z", "r", "s", "t"]
+            variables = random.sample(varopcions, random.choice([3, 4]))  # trec unes quantes
+            random.shuffle(variables)
+            vcomuns = variables[:2]
+            vopc = variables[2:]
+            text = []
+            k = random.randint(1, 5)
+            signe = False
+            for x in range(termes):
+                coef = random.randint(1, random.choice([4, 10])) * k
+                mvars = vcomuns + random.sample(vopc, 1)
+                exps = [random.randint(1, random.choice([1, 4])) for _ in range(len(mvars))]
+                text.append(multimonomi(coef, mvars, exps, signe))
+                signe = True  # a partir de la segona vull signe obligat
+            text = "".join(text)
     if tipus == 1:  # suma P(x)+Q(x)
         if not termes:
             termes = [4, 3]
@@ -1655,14 +1685,13 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
 
             # polinomis
             qx, rufiqx = polinomi(gq, termes[0], ordenat, cmax=7, rufinat=True)  # quocient
-            if tipus == 4:
+            if tipus == 4:  # si és rufini faig un polinomi de rufini
                 rufidx = [1, random.randint(1, random.choice([3, 5])) * random.choice([1, -1])]
-                dx = polinomitza(rufidx)
+                dx = polinomitza(rufidx, ordenat)
                 gd = 1
             else:
                 dx, rufidx = polinomi(gd, termes[1], ordenat, cmax=3, rufinat=True)  # divisor
             rufidend = poli_op(3, rufiqx, rufidx)  # dividend (multiplico)
-            print(rufidend)
             if residu:  # si tinc opció a residu, en poso
                 rufisidu = [0 for _ in range(gd)]  # màxim un grau menys que el divisor
                 tresidu = random.choice([0, 1, 2])  # quants termes pot tenir el residu (si 0: divi exacte)
@@ -1674,12 +1703,10 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
                         rufidend[-x-1] += rcoef
                         rufisidu[-x-1] = rcoef
                         tresidu -= 1
-                print(rufidend)
-                print(rufisidu)
             else:
                 rufisidu = []
                 tresidu = 0
-            dendx = polinomitza(rufidend)
+            dendx = polinomitza(rufidend, ordenat)
 
             # solució
             if solucions:
@@ -1706,7 +1733,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
 
         # polinomis
         px, rufipx = polinomi(gp, termes, True, cmax=5, obliga=[0], suavitzat=True, rufinat=True)
-        dx = f"x{signe(-x)}"
+        dx = f"x{amb_signe(-x)}"
 
         # solució
         solu = poli_aval(rufipx, x)
@@ -1756,7 +1783,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
             rufiden = rufinum[:]  # crec que això és important pq no siguin dos sobrenoms de la mateixa llista
             hihatermes = [1, 1]
 
-            if termes[0] > termes[1] or termes[1] > termes[0] and moneda():  # extra tatxable
+            if termes[0] > 2 or termes[1] > 2:  # extra tatxable (si algun té 3 factors (rufinables))
                 nouterme = frufinable()
                 rufinum = poli_op(3, rufinum, nouterme)
                 rufiden = poli_op(3, rufiden, nouterme)
@@ -1893,14 +1920,16 @@ def polinomi(grau, termes=0, ordenat=True, cmax=15, obliga=[], negatius=1, suavi
     return "".join(px)
 
 
-def polinomitza(rufinat):
+def polinomitza(rufinat, ordenat=True):
     """escriu el polinomi a partir dels coefs (sense zeros)"""
     px = []
-    signe = False
     for i, x in enumerate(rufinat):
         if x:
-            px.append(monomi(x, len(rufinat)-i-1, signe))
-            signe = True
+            px.append(monomi(x, len(rufinat)-i-1, True))
+    if not ordenat:
+        random.shuffle(px)
+    if px[0].startswith("+"):
+        px[0] = px[0][1:]
     return "".join(px)
 
 
@@ -3384,6 +3413,10 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
     return text
 
 
+def amb_signe(num):
+    return signe(num)
+
+
 def signe(num):
     """returna el número amb signe (retorna buit si és 0)"""
     if num == 0 or num == "":
@@ -3466,9 +3499,9 @@ def multimonomi(coef, vars=["x", "y"], exps=[], signe=False):
             text += f"{vars[i]}"
         if exps[i] not in [0, 1]:
             text += "^{" f"{exps[i]}" "}"
-        if signe:
-            if coef > 0:
-                text = "+" + text
+    if signe:
+        if coef > 0:
+            text = "+" + text
     return text
 
 
@@ -3886,12 +3919,11 @@ for x in range(6):
 
 for x in range(10):
     print(powsqr(103, 2, 3))
-"""
-"""
+
 for x in range(12):
     #print(powsqr(2, 3, termes=4), "\\\\ \\\\")
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(12):
-    print(en.px_invent())
+for x in range(6):
+    pass
