@@ -1745,7 +1745,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
         if not termes:
             termes = random.choice([2, 3])
         if nivell in [1, 2, 3]:  # sense fcomú ni k / sense k / amb tot
-            if random.randint(0, 5):  # rufinable
+            if random.randint(0, 5) or nivell < 3:  # rufinable
                 rufipx = frufinable()
             else:  # el freak de primer grau
                 rufipx = [random.randint(1, 3), 1]
@@ -3925,5 +3925,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(6):
+for x in range(12):
     pass

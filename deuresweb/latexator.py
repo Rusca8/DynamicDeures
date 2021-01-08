@@ -3212,7 +3212,7 @@ def quantesson(value, op):
     elif op == "px_factor":
         quantitats = [0, 2, 3, 6, 12, 20, 46]
     elif op == "px_algeb":
-        quantitats = [0, 1, 2, 4, 5, 10, 21]
+        quantitats = [0, 1, 2, 4, 5, 10, 51]
     # successions
     elif op in ["termen", "gtermen"]:
         quantitats = [0, 3, 5, 6, 6, 13, 27]
@@ -3365,14 +3365,17 @@ def uncalcul(doc, quin=[1, 1], sp="0.7cm"):  # op és llista d'opcions del gener
     return
 
 
-def escriusolus(llista):
+def escriusolus(llista, mates=False):
     """fa una llista numerada amb totes les solucions de la llista"""
     for x in range(len(llista)):
         if x < 26:
             apartat = f"{chr(x+97)}"  # a-z
         else:
             apartat = f"{chr(x//26+96)+chr(x%26+97)}"  # aa-zz
-        llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
+        if mates:
+            llista[x] = r"\textbf{" + apartat + ":}~" f"${llista[x]}$"
+        else:
+            llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
     return r"; \penalty-200 ".join(llista)
 
 
@@ -3382,12 +3385,10 @@ def blocsolus(doc, solucions, llista, mates=False):
     :param doc: document LaTeX on escriure-ho.
     :param solucions: bool, diu si hi ha d'haver o no solucions al document.
     :param llista: llista de solucions de l'exercici.
+    :param mates: true si cal posar $$ a cada apartat / false si és text pla
     """
     if solucions:
         doc.append(NoEscape(r'\begin{solution}'))
-        if mates:
-            doc.append(NoEscape(r'$%s$' % escriusolus(llista)))
-        else:
-            doc.append(NoEscape(r'%s' % escriusolus(llista)))
+        doc.append(NoEscape(r'%s\par' % escriusolus(llista, mates)))
         doc.append(NoEscape(r'\end{solution}'))
     return
