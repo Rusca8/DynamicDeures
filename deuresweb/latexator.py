@@ -758,6 +758,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     if "segon" in opcions:
         segon = True
         qincomps = quantesson(opcions["qincomps"], "incomps")
+        totexist = quantesvariant(opcions["totexist"])
         qcompletes = quantesson(opcions["qcompletes"], "completes")
         noa = quantesvariant(opcions["noa"])
         qpolis = quantesson(opcions["qpolis"], "polis")
@@ -902,22 +903,42 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
             if qincomps:
                 n = qincomps
                 needspace(doc, 8)
+                var = (n * totexist) // 4
                 question(doc, f"{n // 2}")
                 doc.append("Resol les següents equacions de segon grau (incompletes).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
+                oparrel = []
+                opdesac = []
                 sols = []
                 for x in range(0, n):
+                    # control de solucions (per evitar exercicis repetits)
+                    if not oparrel:  # opcions pels exercicis tipus 101
+                        oparrel = [k+1 for k in range(10)]
+                        random.shuffle(oparrel)
+                    if not opdesac:
+                        opdesac = [k+1 for k in range(10)] + [-(k+1) for k in range(10)]
+                        random.shuffle(opdesac)
                     part(doc)
-                    if x < n // 4:
-                        if x < 2:
-                            text, sol = gen.eq(101, 1, solucions=True)
-                        else:
-                            text, sol = gen.eq(101, random.choice([2, 3]), solucions=True)
-                    elif x < n * 3 // 4:
-                        text, sol = gen.eq(102, random.choice([2, 3]), solucions=True)
+                    if x < var:
+                        totexist = True
                     else:
-                        text, sol = gen.eq(random.choice([101, 102]), 3, solucions=True)
+                        totexist = False
+                    if x < n // 4:
+                        if x < 2:  # fer arrel, zero dreta, existeix
+                            text, sol = gen.eq(101, 1, solucions=True, x=oparrel.pop())
+                        else:  # fer arrel, pot coef
+                            text, sol = gen.eq(101, random.choice([2, 3]), solucions=True,
+                                               totexist=totexist, x=oparrel.pop())
+                    elif x < n * 2 // 3:  # desacoblar
+                        text, sol = gen.eq(102, random.choice([2, 3]), solucions=True, x=opdesac.pop())
+                    else:  # les difícils de cada
+                        tipus = random.choice([101, 102])
+                        if tipus == 101:
+                            eqx = oparrel.pop()
+                        else:
+                            eqx = opdesac.pop()
+                        text, sol = gen.eq(tipus, 3, solucions=True, totexist=totexist, x=eqx)
                     doc.append(NoEscape(r'$%s$' % text))
                     sols.append(sol)
                     space(doc, "1.4cm")

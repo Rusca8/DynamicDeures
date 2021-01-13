@@ -1970,8 +1970,16 @@ def poli_aval(rufipx, x):
     return suma
 
 
-def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
-    x = 1
+def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
+    """
+
+    :param tipus: 1, 2... lineals / 101, 102... no lineals
+    :param nivell: (subtipus)
+    :param solucions: incloure solucions (els que en tenen)
+    :param totexist: evitar arrels negatives
+    :param x: solució escollida des de fora (per evitar massa repetits)
+    :return:
+    """
     solus = "NOT DEF"
     text = "x=42"
 
@@ -2464,13 +2472,16 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
             text = etext + "=" + dtext
 
     elif tipus == 101:  # x^2-C (treure l'arrel)
+        print(x)
         nexist = False
         if nivell == 1:  # quadrat perfecte, x2 sense coef
-            x = random.randint(1, 10)
+            if x == -42:  # si no l'he definit des de fora la trio aquí
+                x = random.randint(1, 10)
             text = f"x^2-{pow(x, 2)}=0"
-        elif nivell == 2:  # pot sortir impossible
-            x = random.randint(1, 10)
-            if random.choice([0, 0, 1]):  # arrel neg
+        elif nivell == 2:  # pot sortir impossible (i zero a qualsevol costat)
+            if x == -42:  # si no l'he definit des de fora la trio aquí
+                x = random.randint(1, 10)
+            if random.choice([0, 0, 1]) and not totexist:  # arrel neg
                 nexist = True
                 text = f"x^2+{pow(x, 2)}"
             else:
@@ -2481,13 +2492,14 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                 text = "0=" + text
 
         elif nivell == 3:  # amb coef (ax^2-ac=0)
-            x = random.randint(1, 10)
+            if x == -42:  # si no l'he definit des de fora la trio aquí
+                x = random.randint(1, 10)
             c = pow(x, 2)
             a = random.randint(-3, 3)
             if a == 0:
                 a = random.choice([1, -1])
 
-            if random.randint(0, 2):  # normalment canviat de signe (arrel possible)
+            if random.randint(0, 2) or totexist:  # normalment canviat de signe (arrel possible)
                 tc = -a * c
             else:  # una de cada tres arrel impossible
                 tc = a * c
@@ -2504,7 +2516,8 @@ def eq(tipus, nivell=1, solucions=False):  # de moment tot (2,1)
                 text = "0=" + text
 
     elif tipus == 102:  # x^2+Bx (desacoblar)
-        x = random.randint(-10, 10)
+        if x == -42:  # si no l'he donada, la trio
+            x = random.randint(-10, 10)
         if x == 0:
             x = random.choice([1, -1])
         if nivell == 1 or nivell == 2:  # zero a la dreta, sense coef
@@ -3925,5 +3938,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(12):
-    pass
+for x in range(2):
+    print(fracmix(25, 4, 1))
