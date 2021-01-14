@@ -1984,25 +1984,22 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
     text = "x=42"
 
     if tipus == 1:  # TIPUS x+B=C
-        if nivell == 1 or nivell == 2:  # resultat positiu (x esquerra, números petits || x on sigui, números petits)
+        if nivell == 1 or nivell == 2:  # x esquerra (números petits) || x on sigui, (números petits)
             b = random.randint(1, 5)
             if moneda():
                 b = -b
             c = random.randint(-5, 5)
+            # muntatge
             if moneda():
-                if b >= 0:
-                    b = f'+{b}'
-                text = f'x{b}'
                 if nivell == 1 or moneda():
-                    text = text + f'={c}'
+                    text = f"x{sig(b)}={c}"
                 else:
-                    text = f'{c}=' + text
+                    text = f"{c}=x{sig(b)}"
             else:
-                text = f'{b}+x'
                 if nivell == 1 or moneda():
-                    text = text + f'={c}'
+                    text = f"{b}+x={c}"
                 else:
-                    text = f'{c}=' + text
+                    text = f'{c}={b}+x'
 
     elif tipus == 2:  # TIPUS Ax+B=C
         if nivell == 1:  # (innecessari) resultat enter positiu, no divideix per negatiu (a>0), coef max = 50
@@ -2789,13 +2786,13 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
             for n in range(4):
                 if moneda():
                     coefs[n] = -coefs[n]
-            if round(coefs[0] * 1. / coefs[2], 7) == round(coefs[1] * 1. / coefs[3], 7):  # crec que això evita SCI
-                coefs[0] = - coefs[0]
             if nivell == 1:  # la primera x sense coef
                 coefs[0] = 1
             elif nivell == 2:  # alguna incògnita unitària
                 if not any(n in [1, -1] for n in coefs):
                     coefs[random.randint(0, 3)] = random.choice([1, -1])
+            if round(coefs[0] * 1. / coefs[2], 7) == round(coefs[1] * 1. / coefs[3], 7):  # crec que això evita SCI
+                coefs[0] = - coefs[0]
 
             # TODO afegir eqns amb les inc barrejades
 
@@ -3427,6 +3424,10 @@ def limits(tipus, nivell=1, conv=3, ordenat=False, txto=True, var="x"):
 
 
 def amb_signe(num):
+    return signe(num)
+
+
+def sig(num):
     return signe(num)
 
 
