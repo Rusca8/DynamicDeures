@@ -478,21 +478,23 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                 c = (num - a * d) // b + random.choice([-1, 1])
             if c == 0:
                 c = random.choice([-1, 1])
+            # si l'aproximat amb dues fraccions no surt exacte...
             diff = num - (a * d + c * b)
             if diff:
                 f = b * d
                 e = diff
                 e, f = fracsimple(e, f)
-            a, b = fracsimple(a, b)
-            c, d = fracsimple(c, d)
-            if b == 1 or d == 1:
+            if fracsimple(a, b)[1] == 1 or fracsimple(c, d)[1] == 1:  # si algun denominador sortiria 1, robo un tall
                 q = random.randint(2, 3)
                 k = random.choice([-1, 1])
                 a = q * a + k
                 b = q * b
                 c = q * c - k
                 d = q * d
+            a, b = fracsimple(a, b)
+            c, d = fracsimple(c, d)
 
+            # muntatge
             text = f"{fracmix(a, b, inception - 1, previ=op)}"
             if c * d < 0:  # frac negativa
                 text += f"-{fracmix(-c, d, inception - 1, previ=op)}"
@@ -636,6 +638,8 @@ def divisors(num, tots=False):
 
 def isqrt(n):  # newton (from stackoverflow)
     """Part entera de l'arrel quadrada de n"""
+    if n < 0:
+        print(f"segur que vols fer l'arrel de {n}?")
     x = n
     y = (x + 1) // 2
     while y < x:
@@ -1558,6 +1562,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
                 text.append(multimonomi(coef, mvars, exps, signe))
                 signe = True  # a partir de la segona vull signe obligat
             text = "".join(text)
+
     if tipus == 1:  # suma P(x)+Q(x)
         if not termes:
             termes = [4, 3]
@@ -1849,6 +1854,59 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
                 den = "1"
             solu = ("\\frac{" + num + "}{" + den + "}")
 
+    elif tipus == 106:  # paràmetre(s) tal que residu
+        if nivell in [1, 2, 3]:  # k tal que divi exacta
+            # (Ax^2+Bx+C)*(x-D): un coef k / un coef ka / multi coefs / incl coefs suma (k+1) etc
+            par = "m"  # nom del paràmetre
+            # coefs pre-multi
+            a = random.randint(1, 2) * random.choice([-1, 1])
+            b = random.randint(1, 3) * random.choice([-1, 1])
+            c = random.randint(1, 4) * random.choice([-1, 1])
+            d = random.randint(1, 3) * random.choice([-1, 1])  # important no 0
+            # coef control (per dues k)
+            if abs(c - d*b) > 10 and c*d*b < 0:
+                c = -c
+            if nivell == 3:
+                if b % d and c % d:  # no hi ha múltiples
+                    b = d * random.choice([1, 2, 3])
+                    if a*d < 0:
+                        b = -b
+
+            rufipx = poli_op(3, [a, b, c], [1, -d])
+            if nivell == 1:  # subs pel num sencer
+                i = random.randint(0, len(rufipx)-1)
+                if moneda():
+                    k, rufipx[i] = rufipx[i], inc  # substitueixo per m
+                else:
+                    k, rufipx[i] = -rufipx[i], f"-{par}"  # substitueixo per -m
+
+            elif nivell == 2:  # subs una part del num
+                i = random.randint(0, len(rufipx)-1)
+                divs = divisors(abs(rufipx[i]), True)
+                print(divs)
+                ca = random.choice(divs) * random.choice([-1, 1])  # coef a que deixo davant la k
+                k = rufipx[i] // ca  # per la solu
+                if abs(ca) != 1:
+                    rufipx[i] = f"{ca}{par}"
+                elif ca > 0:
+                    rufipx[i] = f"{par}"
+                else:
+                    rufipx[i] = f"-{par}"
+            elif nivell == 3:  # TODO subs més d'un coeficient per la variable (dos múltiples tipus 2k i 3k o tal)
+                for i in rufipx:
+                    pass
+            elif nivell == 4:  # TODO subs un per sumes (k+1)
+                pass
+            elif nivell == 5:  # TODO subs més d'un per sumes o multis
+                pass
+            elif nivell == 10:  # TODO subs multivar (comparant amb residu)
+                pass
+            px = polinomitza(rufipx)
+            dx = polinomitza([1, -d])
+
+            text = px + " : " + dx
+            solu = f"{k}"
+
     if solucions:
         return text, solu
     return text
@@ -1973,7 +2031,7 @@ def poli_aval(rufipx, x):
 def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
     """
 
-    :param tipus: 1, 2... lineals / 101, 102... no lineals
+    :param tipus: 1, 2... lineals / 101, 102... quadràtiques / 201, 202... irracionals
     :param nivell: (subtipus)
     :param solucions: incloure solucions (els que en tenen)
     :param totexist: evitar arrels negatives
@@ -2749,6 +2807,31 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
         elif text[-1] == "=":
             text += "0"
 
+    elif tipus == 201:  # irracionals TODO acabar i fer més variants d'enunciat
+        if nivell == 1:  # √(Ax+B) = x+C
+            """
+            Operant queda x^2 + (2C-A)x + (c^2-B) = 0
+            """
+            xmax = 4
+            # eq2
+            x1 = random.randint(1, xmax)
+            x2 = random.randint(1, xmax)
+            if x1*x2 > 6 or moneda():
+                x2 = -x2
+            n = -x1-x2
+            m = x1*x2
+            # coef control
+            c = isqrt(abs(n*m)) - random.choice([-1, 0, 1])
+            if n == -2*c:
+                c += random.choice([-1, 1])
+            if n > 0:
+                c = -abs(c)
+            a = n + 2*c
+            b = pow(c, 2) - m
+            print(x1, x2, "/", n, m, "/", a, b, c)
+            text = ("\\sqrt{" + random.choice([f"{monomi(a, 1)}{signe(b)}", f"{b}{monomi(a, 1, True)}"])
+                    + "} = " + random.choice([f"x{signe(c)}", f"{c}{monomi(1, 1, True)}"]))
+
     if solucions:
         if tipus == 1:  # primer simple
             solus = f"{c - b}"
@@ -2768,6 +2851,15 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
                 solus = f"{x1}"
             else:
                 solus = f"{x1},~{x2}"  # el ~ fa l'espai intrencable
+        elif tipus == 201:
+            s = []
+            for x in [x1, x2]:
+                if a * x + b >= 0:
+                    s.append(f"{x}")
+            if s:
+                solus = ",~".join(s)
+            else:
+                solus = r"$\nexists$"
         return text, solus
     return text
 
@@ -3453,7 +3545,7 @@ def monomi(coef, exp, signe=False, allexps=False, var="x"):
     """
     if (exp != -42 or allexps) and coef:
         # coeficient
-        if abs(coef) == 1 and exp != 0:  # coeficient unitari i hi ha x
+        if coef in [1, -1] and exp != 0:  # coeficient unitari i hi ha x
             if coef < 0:
                 text = "-"
             else:
@@ -3466,8 +3558,12 @@ def monomi(coef, exp, signe=False, allexps=False, var="x"):
         if exp not in [0, 1]:
             text += "^{" + f"{exp}" + "}"
         if signe:
-            if coef > 0:
-                text = "+" + text
+            try:
+                if coef >= 0:
+                    text = "+" + text
+            except:
+                if not f"{coef}".startswith("-"):
+                    text = "+" + text
     else:
         text = ""
     return text
@@ -3939,5 +4035,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(2):
-    print(fracmix(25, 4, 1))
+for x in range(4):
+    print(fracmix(25, 4, 1, 1))
