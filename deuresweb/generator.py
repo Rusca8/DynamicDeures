@@ -180,7 +180,7 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
                 if num == 0:
                     a = random.randint(1, maxn * inception)
                 else:
-                    a = random.choice(divisors(abs(num)))
+                    a = random.choice(divisors(num))
                 if random.choice([0, 0, 1]):
                     a = -a
                 if moneda():
@@ -433,23 +433,57 @@ def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
     return text
 
 
-def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona=False):
+def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2], segona=False):
+    """
+    Genera un exercici de fraccions combinades
+
+    :param num: numerador del resultat
+    :param den: denominador del resultat
+    :param inception: nivell d'abstracció (aprox. quantes operacions abans d'arribar a una fracció)
+    :param op: operació del nivell actual (en cas que vingui predefinida)
+    :param previ: de quina operació vinc (per controlar cicles incòmodes i parèntesis)
+    :param doblesigne: (sense ús actualment)
+    :param out: nivell d'abstracció més alt (per gestionar la sortida)
+    :param ops: 1 sumrest, 2 muldiv (3 div), 4 sqrt, 5 pow
+    :param segona: marca les fraccions de la suma que no són la primera (per posar signe també si és +)
+    :return:
+    """
+    ops = ops[:]  # operacions seleccionades al formulari
+    quadrats = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]
     text = "4/2+42/6*3/42"
     if out == 0:
         out = inception
 
-    if inception < 1:
+    if inception < 1:  # tanca ja
         inception = 0
         if den == 1:
             text = f"{num}"
             if previ in [2, 3] and num < 0 and segona:
                 text = "(" + text + ")"
         else:
-            text = "\\frac{" + f"{num}" + "}{" + f"{den}" + "}"
+            if 5 in ops and all([n in quadrats for n in [num, den]]) and num*den > 0:
+                # (no val la pena adaptar això per coses tipus -1/4, que sembla que no surten sovint)
+                text = "(\\frac{" + f"{isqrt(abs(num))}" + "}{" + f"{isqrt(abs(den))}" + "})^2"
+            else:
+                if 5 in ops:  # si permeto quadrats, faig quadrats dels nums individuals
+                    if num > 1 and num in quadrats:
+                        num = f"{isqrt(abs(num))}^2"
+                    elif num < 1 and -num in quadrats:
+                        num = f"-{isqrt(abs(num))}^2"
+                    elif den > 1 and den in quadrats:
+                        den = f"{isqrt(abs(den))}^2"
+                    elif den < 1 and -den in quadrats:
+                        den = f"-{isqrt(abs(den))}^2"
+                text = "\\frac{" + f"{num}" + "}{" + f"{den}" + "}"
 
-    else:
+    else:  # no tanca: trio operació
         if op == 0:
-            if previ == 1:
+            if 5 in ops and previ != 4 and (all([n in quadrats for n in [num, den]])
+                                            or all([n in quadrats for n in [-num, -den]])):  # crec que això no aplica
+                op = 5  # faig quadrat de tot
+            elif 4 in ops and previ not in [4, 5] and all([0 < n < 5 for n in [num, den]]):  # positius 1-4
+                op = 4  # arrel (quan no deixa nums molt xungos)
+            elif previ == 1 and 2 in ops:
                 op = 2
             else:
                 op = random.randint(1, 2)
@@ -461,22 +495,28 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
             # numerador
             c = 0
             exactes = []
+            inexactes = []
             for x in range(-2, 3):  # -2 -> 2
                 a = (num // d) + x
                 if (num - a * d) % b == 0:  # si surt exacte (dues fraccions fan prou)
                     c = (num - a * d) // b
                     if a:
                         exactes.append([a, c])  # guardo les opcions
+                else:
+                    if a:
+                        inexactes.append(a)
             if exactes:
                 for x in exactes:  # faig una mica de neteja d'uns i números primers lletjos
                     if len(exactes) < 2:
                         break
                     if abs(x[0]) in [1, 13, 17, 19] or abs(x[1] in [1, 13, 17, 19]):
                         exactes.remove(x)
-                a, c = random.choice(exactes)  # i en trio una (si no trio quedarà la última a, que ja em serveix)
-            if c == 0:
+                a, c = random.choice(exactes)  # i en trio una
+            elif inexactes:  # si no hi ha exactes trio alguna de les a (si no trio res queda l'última)
+                a = random.choice(inexactes)
+            if not c:
                 c = (num - a * d) // b + random.choice([-1, 1])
-            if c == 0:
+            if not c:
                 c = random.choice([-1, 1])
             # si l'aproximat amb dues fraccions no surt exacte...
             diff = num - (a * d + c * b)
@@ -484,28 +524,53 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                 f = b * d
                 e = diff
                 e, f = fracsimple(e, f)
-            if fracsimple(a, b)[1] == 1 or fracsimple(c, d)[1] == 1:  # si algun denominador sortiria 1, robo un tall
-                q = random.randint(2, 3)
-                k = random.choice([-1, 1])
-                a = q * a + k
-                b = q * b
-                c = q * c - k
-                d = q * d
             a, b = fracsimple(a, b)
             c, d = fracsimple(c, d)
 
+            # si algun denominador surt 1, robo un tall
+            girats = False
+            if b == 1 or d == 1:
+                if b != 1:  # per no repetir codi en simètric, giro els nums i els retorno al final
+                    a, c = c, a
+                    b, d = d, b
+                    girats = True
+                """
+                Tinc [a/1] + [c/d]
+                Faig [a/1 - 1/q] + [c/d + 1/q]
+                Que és [(aq-1)/q] + [(cq+d)/dq]
+                    -> (aq-1)/q funciona sempre
+                    -> (cq+d)/dq hauria de funcionar sempre que [d%q o cq%d] 
+                """
+                for q in random.choice([[2, 3], [3, 2]]) + [5, 7, 1]:  # si no funciona res, deixo 1 (no ho toco)
+                    if d % q or c*q % d:
+                        break
+                k = random.choice([-1, 1])  # signe del tros robat aleatori (de vegades suma de vegades resta)
+                if c*q+k*d == 0:  # compte a no deixar un zero a la nova c
+                    k = -k
+                a = a*q - k
+                b = q
+                c = c*q + k*d
+                d = d*q
+                # resimplifico
+                a, b = fracsimple(a, b)
+                c, d = fracsimple(c, d)
+
+            if girats:
+                a, c = c, a
+                b, d = d, b
+
             # muntatge
-            text = f"{fracmix(a, b, inception - 1, previ=op)}"
+            text = f"{fracmix(a, b, inception - 1, previ=op, out=out, ops=ops)}"
             if c * d < 0:  # frac negativa
-                text += f"-{fracmix(-c, d, inception - 1, previ=op)}"
+                text += f"-{fracmix(-c, d, inception - 1, previ=op, out=out, ops=ops)}"
             else:  # frac positiva
-                text += f"+{fracmix(c, d, inception - 1, previ=op)}"
+                text += f"+{fracmix(c, d, inception - 1, previ=op, out=out, ops=ops)}"
 
             if diff:
                 if e * f < 0:
-                    text += f"-{fracmix(-e, f, 0, previ=op)}"
+                    text += f"-{fracmix(-e, f, 0, previ=op, out=out, ops=ops)}"
                 else:
-                    text += f"+{fracmix(e, f, 0, previ=op)}"
+                    text += f"+{fracmix(e, f, 0, previ=op, out=out, ops=ops)}"
             if previ in [2, 3]:
                 text = "(" + text + ")"
 
@@ -561,17 +626,41 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
                             a *= k
                             d *= k
 
+                # evito fraccions iguals sota arrel
+                if fracsimple(a, b) == fracsimple(c, d) and (previ == 4 or moneda()):
+                    k = []
+                    dsimp = fracsimple(c, d)[1]
+                    for x in [2, 3, 5, 7]:
+                        if dsimp % x:
+                            k.append(x)
+                    if k:
+                        k = random.choice(k)
+                        if moneda():
+                            a *= k
+                            d *= k
+                        else:
+                            b *= k
+                            c *= k
+
             a, b = fracsimple(a, b)
             c, d = fracsimple(c, d)
 
-            text = f"{fracmix(a, b, inception - 1, previ=op)}"
+            text = f"{fracmix(a, b, inception - 1, previ=op, out=out, ops=ops)}"
             if (moneda() or c in [0, 1]) and not d == 0:  # no volem dividir per zero (ni fer un enter a la divisió)
-                text += f"\\cdot {fracmix(c, d, inception - 1, previ=op, segona=True)}"
+                text += f"\\cdot {fracmix(c, d, inception - 1, previ=op, out=out, ops=ops, segona=True)}"
             else:
-                text += f": {fracmix(d, c, inception - 1, previ=3, segona=True)}"
+                text += f": {fracmix(d, c, inception - 1, previ=3, ops=ops, out=out, segona=True)}"
 
             if previ == 3:
                 text = "(" + text + ")"
+
+        elif op == 4:  # sqrt (no gasta nivell)
+            text = "\\sqrt{" f"{fracmix(pow(num, 2), pow(den, 2), inception, previ=4, out=out, ops=ops)}" "}"
+
+        elif op == 5:  # pow (no gasta nivell)
+            if num*den < 0:
+                print("Escolti que amb un signe de cada no en sé.")
+            text = f"({fracmix(isqrt(abs(num)), isqrt(abs(den)), inception, previ=5, out=out, ops=ops)})^2"
 
     if inception == out:
         return squarebracketer(text)
@@ -580,15 +669,19 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, segona
 
 
 def randomfracnum(n):
+    """S'inventa un número per una fracció"""
     num = random.choice([2, 3, 5, 7])
-    for x in range(n):
-        if moneda():
-            num *= random.choice([1, 2])
-        else:
-            if moneda():
-                num *= random.choice([1, 2, 3])
+    if not random.randint(0, 3):  # forço de tant en tant potències per ajudar a exercicis tipus [coses]^2
+        num *= num
+    else:
+        for x in range(n):
+            if x <= n // 2:
+                num *= random.choice([1, 2])
             else:
-                num *= random.choice([2, 3, 5])
+                if moneda():
+                    num *= random.choice([1, 2, 3])
+                else:
+                    num *= random.choice([2, 3, 5])
     return num
 
 
@@ -623,7 +716,7 @@ def taules(taula, div=False):
 
 def divisors(num, tots=False):
     div = [1]
-    for x in range(2, isqrt(num) + 1):
+    for x in range(2, isqrt(abs(num)) + 1):
         if num % x == 0:
             div.append(x)
     if len(div) > 1 and not tots:
@@ -640,6 +733,7 @@ def isqrt(n):  # newton (from stackoverflow)
     """Part entera de l'arrel quadrada de n"""
     if n < 0:
         print(f"segur que vols fer l'arrel de {n}?")
+        n = -n
     x = n
     y = (x + 1) // 2
     while y < x:
@@ -1522,7 +1616,7 @@ def fcomu():  # TODO crear fcomú amb polinomis i tb amb frases generades i encr
     pass
 
 
-def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
+def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
     """genera polinomis i operacions amb polinomis
 
     :param tipus: operació / tipus d'exercici
@@ -1857,7 +1951,6 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
     elif tipus == 106:  # paràmetre(s) tal que residu
         if nivell in [1, 2, 3]:  # k tal que divi exacta
             # (Ax^2+Bx+C)*(x-D): un coef k / un coef ka / multi coefs / incl coefs suma (k+1) etc
-            par = "m"  # nom del paràmetre
             # coefs pre-multi
             a = random.randint(1, 2) * random.choice([-1, 1])
             b = random.randint(1, 3) * random.choice([-1, 1])
@@ -1876,13 +1969,13 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False):
             if nivell == 1:  # subs pel num sencer
                 i = random.randint(0, len(rufipx)-1)
                 if moneda():
-                    k, rufipx[i] = rufipx[i], inc  # substitueixo per m
+                    k, rufipx[i] = rufipx[i], par  # substitueixo per k
                 else:
-                    k, rufipx[i] = -rufipx[i], f"-{par}"  # substitueixo per -m
+                    k, rufipx[i] = -rufipx[i], f"-{par}"  # substitueixo per -k
 
             elif nivell == 2:  # subs una part del num
                 i = random.randint(0, len(rufipx)-1)
-                divs = divisors(abs(rufipx[i]), True)
+                divs = divisors(rufipx[i], True)
                 print(divs)
                 ca = random.choice(divs) * random.choice([-1, 1])  # coef a que deixo davant la k
                 k = rufipx[i] // ca  # per la solu
@@ -4036,4 +4129,4 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(4):
-    print(fracmix(25, 4, 1, 1))
+    pass

@@ -28,15 +28,29 @@
     <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opDeci" aria-expanded="true" aria-controls="opDeci">
-          <input type="checkbox" name="decimals" autocomplete="off" id="decimals" value="Decimals" checked> Decimals ✨
+          <input type="checkbox" name="decimals" autocomplete="off" id="decimals" value="Decimals" checked> Decimals
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSimp" aria-expanded="true" aria-controls="opSimp">
           <input type="checkbox" name="simples" autocomplete="off" id="simples" value="Simples" checked> Op. simples
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opComb" aria-expanded="true" aria-controls="opComb">
-          <input type="checkbox" name="combis" autocomplete="off" id="combis" value="Combinades" checked> Op. combinades
+          <input type="checkbox" name="combis" autocomplete="off" id="combis" value="Combinades" checked> Op. combinades ✨
         </label>
     </div>
+  </div>
+
+  <br>
+  <hr>
+  <div class="form-group mb-0">
+    <label class="mb-0"><i>Incloure les solucions? (op. combinades)</i></label>
+      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+            <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
+          </label>
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+            <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
+          </label>
+      </div>
   </div>
 {% endblock %}
 
@@ -47,7 +61,7 @@
 <div class="collapse show mb-1" id="opDeci">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Números Decimals ✨</h5>
+        <h5 class="card-title">Números Decimals</h5>
 
         <div class="form-group mb-0 ml-2">
             <label for="formDecim"><b>Fracció Generatriu</b></label>
@@ -217,6 +231,27 @@
               </label>
             </div>
         </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label><i>Arrels i/o quadrats? ✨</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="op4" autocomplete="off" id="op4" value="op4"> arrels
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                          <input type="checkbox" name="op5" autocomplete="off" id="op5" value="op5"> quadrats
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
 
       </div>
     </div>

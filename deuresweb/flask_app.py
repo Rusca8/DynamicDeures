@@ -91,7 +91,7 @@ def powsqr():
 def fraccions():
     if request.method == "POST":
         try:
-            g.fraccions(request.form, solucions=False)
+            g.fraccions(request.form)
         except:
             print("Error Fraccions")
             return redirect("/latex_error/fraccions")

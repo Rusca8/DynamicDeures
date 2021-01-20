@@ -1602,6 +1602,9 @@ def fraccions(opcions, solucions=False):
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
+    if opcions["solucions"] == "sí":
+        solucions = True
+
     if "decimals" in opcions:
         decimals = True
         qfgen = quantesson(opcions["qfgen"], "fgen")
@@ -1644,6 +1647,10 @@ def fraccions(opcions, solucions=False):
     if "combis" in opcions:
         combis = True
         qcombis = quantesson(opcions["qcombis"], "fr_combis")
+        cops = [1, 2]  # sumrest i muldiv
+        for x in [4, 5]:
+            if f"op{x}" in opcions:
+                cops.append(x)
         print(f"Frac combis {qcombis}")
     else:
         combis = False
@@ -1655,6 +1662,7 @@ def fraccions(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('setspace'))  # això és per setstretch (interlineat de les solucions)
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
     doc.packages.append(Package('needspace'))
 
@@ -1711,7 +1719,6 @@ def fraccions(opcions, solucions=False):
                 end(doc, 'parts')
                 space(doc, "0.3cm")
 
-
             if qmultis:
                 n = qmultis
                 needspace(doc, 8)
@@ -1748,14 +1755,24 @@ def fraccions(opcions, solucions=False):
                 begin(doc, 'parts')
                 begin(doc, 'multicols', 2)
                 scale = 1.3
+                solus = []
                 for x in range(0, n):
                     part(doc)
                     num = gen.randomfracnum(3)
                     den = gen.randomfracnum(3)
-                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.fracmix(num, den, 2))))
+                    text = gen.fracmix(num, den, 2, ops=cops)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, text)))
                     space(doc, "1cm")
+                    num, den = gen.fracsimple(num, den)
+                    if den == 1:
+                        solu = num
+                    else:
+                        solu = "\\frac{" f"{num}" "}{" f"{den}" "}"
+                    solus.append(solu)
+                    print(solu, text)
                 end(doc, 'multicols')
                 end(doc, 'parts')
+                blocsolus(doc, solucions, solus, mates=True, stretch="1.3")
 
             end(doc, 'questions')
         else:
@@ -3183,9 +3200,9 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 12, 18, 39, 86]
     # fraccions
     elif op in ["fr_sumes", "fr_multis"]:
-        quantitats = [0, 6, 9, 12, 18, 37, 74]
+        quantitats = [0, 3, 6, 12, 18, 37, 74]
     elif op == "fr_combis":
-        quantitats = [0, 3, 6, 9, 11, 24, 50]
+        quantitats = [0, 3, 6, 9, 11, 22, 50]
     elif op == "fgen":
         quantitats = [0, 4, 8, 12, 24, 52, 112]
     # notació científica
@@ -3400,7 +3417,7 @@ def escriusolus(llista, mates=False):
     return r"; \penalty-200 ".join(llista)
 
 
-def blocsolus(doc, solucions, llista, mates=False):
+def blocsolus(doc, solucions, llista, mates=False, stretch=False):
     """Escriu les solucions al document en cas que s'hagi escollit que n'hi hagi
 
     :param doc: document LaTeX on escriure-ho.
@@ -3410,6 +3427,8 @@ def blocsolus(doc, solucions, llista, mates=False):
     """
     if solucions:
         doc.append(NoEscape(r'\begin{solution}'))
+        if stretch:
+            doc.append(NoEscape(r'\setstretch{' f"{stretch}" '}'))
         doc.append(NoEscape(r'%s\par' % escriusolus(llista, mates)))
         doc.append(NoEscape(r'\end{solution}'))
     return
