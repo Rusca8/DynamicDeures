@@ -36,6 +36,9 @@
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opBase" aria-expanded="true" aria-controls="opBase">
           <input type="checkbox" name="base" autocomplete="off" id="base" value="base" checked> Base
         </label>
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opID" aria-expanded="true" aria-controls="opID">
+          <input type="checkbox" name="idnot" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables ✨
+        </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opOps" aria-expanded="true" aria-controls="opOps">
           <input type="checkbox" name="ops" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis
         </label>
@@ -183,6 +186,108 @@
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
                 <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<!-- - - - - - - - - - - - - - - - - - - - ID NOTABLES - - - - - - - - - - - - - - - - - - - - -->
+
+<div class="collapse show mb-2" id="opID">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Identitats Notables</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label><b>Calcular la identitat</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qidnot" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Una sola variable?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "id1var" %}
+              {% for n in range(5) %}
+                {% if n == 2 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label><b>Endevinar la identitat</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "qeidnot" %}
+              {% for n in range(7) %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Una sola variable?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "eid1var" %}
+              {% for n in range(5) %}
+                {% if n == 2 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <label><i>Forçar ordenat?</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "eidord" %}
+              {% for n in range(5) %}
+                {% if n == 1 %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                {% else %}
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+                {% endif %}
+                  </label>
+              {% endfor %}
             </div>
         </div>
 

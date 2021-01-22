@@ -1937,6 +1937,22 @@ def polinomis(opcions, solucions=False):
         qcryp = 0
         # ...
 
+    if "idnot" in opcions:
+        idnot = True
+        qidnot = quantesson(opcions["qidnot"], "px_idnot")
+        id1var = quantesvariant(opcions["id1var"])
+        qeidnot = quantesson(opcions["qeidnot"], "px_eidnot")
+        eid1var = quantesvariant(opcions["eid1var"])
+        eidord = quantesvariant(opcions["eidord"])
+        idnums = [1, 2, 3]
+        eidnums = [1, 2, 3]
+        # ...
+        print(f"Id Notables {qidnot}, Endevinar {qeidnot}")
+    else:
+        idnot = False
+        qidnot = 0
+        qeidnot = 0
+
     if "ops" in opcions:
         ops = True
         qsumes = quantesson(opcions["qsumes"], "px_sumes")
@@ -1989,8 +2005,9 @@ def polinomis(opcions, solucions=False):
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
     # preguntes
-    if any([base, ops, alges]):  # aquí tots els botons grossos
+    if any([base, idnot, ops, alges]):  # aquí tots els botons grossos
         if any([qmonomi, qinvent, qaval, qfcomu, qcryp,
+                qidnot, qeidnot,
                 qsumes, qrestes, qmultis, qdivis, qrufis, qresidu,
                 qfactor, qalgeb]):  # aquí tots els tipus d'exercici
 
@@ -2084,6 +2101,106 @@ def polinomis(opcions, solucions=False):
                     text = r"\ \ \penalty-200".join([f" ${x}$ " for x in crypt.fc_frase(sol)])
                     doc.append(NoEscape(r"%s" % text))
                     space(doc, "2cm")
+                end(doc, 'parts')
+
+            if idnot:
+                needspace(doc, 12)
+                bloctitle(doc, "Identitats notables")
+
+            if qidnot:
+                n = qidnot
+                needspace(doc, 8)
+                var = (n * id1var) // 4
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Desenvolupa les següents identitats notables.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                n1ops = []  # opcions de coef b per les de nivell 1
+                idnumops = []
+                for x in [1, 2]:  # forço que el primer sigui (a±b)
+                    if x in idnums:
+                        idnumops.append(x)
+                        break
+                if n < 4 and 3 in idnums:  # obligo que surti almenys un tipus (a+b)(a-b)
+                    idnumops.append(3)
+                idnumops.reverse()
+                for x in range(0, n):
+                    # control de tipus (a+b) / (a-b) / (a+b)(a-b)
+                    if not idnumops:
+                        idnumops = idnums[:]
+                        random.shuffle(idnumops)
+                    idnum = [idnumops.pop()]  # la funció demana llista
+                    # control de repetits
+                    coefb = 0  # forçar el coeficient b
+                    if not n1ops:
+                        n1ops = [x+1 for x in range(10)]
+                        random.shuffle(n1ops)
+                    # càlculs
+                    part(doc)
+                    if x < var or (var and x == 0):
+                        if x < var // 2 or (var and x == 0):  # primer quart, fàcils (x+B)
+                            nivell = 1
+                            coefb = n1ops.pop()
+                        else:  # segon quart, (Ax+B) / (x^n+B)
+                            nivell = random.choice([2, 3])
+                    else:
+                        if x <= (n + var) // 2:  # tercer quart, multivariable (Axy+B) / (Ax+By)
+                            nivell = random.choice([4, 5])
+                        else:  # últim quart, doble multimonomi
+                            nivell = 6
+                    text = gen.idnotable(1, nivell, idnums=idnum, fcoefb=coefb)
+                    doc.append(NoEscape(r"$%s$" % text))
+                    space(doc, "0.4cm")
+                end(doc, 'multicols')
+                end(doc, 'parts')
+
+            if qeidnot:
+                n = qeidnot
+                needspace(doc, 8)
+                var = (n * eid1var) // 4
+                var2 = (n * eidord) // 4
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Esbrina quines identitats ens ha donat els següents resultats.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                n1ops = []  # opcions de coef b per les de nivell 1
+                idnumops = []
+                for x in [1, 2]:  # forço que el primer sigui (a±b)
+                    if x in eidnums:
+                        idnumops.append(x)
+                        break
+                if n < 4 and 3 in eidnums:  # forço fer almenys un tipus (a+b)(a-b)
+                    idnumops.append(3)
+                idnumops.reverse()
+                ordenat = True
+
+                for x in range(0, n):
+                    # control de tipus (a+b) / (a-b) / (a+b)(a-b)
+                    if not idnumops:
+                        idnumops = eidnums[:]
+                        random.shuffle(idnumops)
+                    idnum = [idnumops.pop()]  # la funció demana llista
+                    # control de repetits
+                    coefb = 0  # forçar el coeficient b
+                    if not n1ops:
+                        n1ops = [x + 1 for x in range(10)]
+                        random.shuffle(n1ops)
+                    # càlculs
+                    part(doc)
+                    if x < var or (var and x == 0):
+                        if x < var // 2 or (var and x == 0):  # primer 'quart', fàcils (x+B)
+                            nivell = 1
+                            coefb = n1ops.pop()
+                        else:  # segon 'quart', (Ax+B) / (x^n+B)
+                            nivell = random.choice([2, 3])
+                    else:  # la resta, multivariable (Axy+B) / (Ax+By)
+                        nivell = random.choice([4, 5])
+                    if x > var2:
+                        ordenat = False
+                    text = gen.idnotable(2, nivell, idnums=idnum, fcoefb=coefb, ordenat=ordenat)
+                    doc.append(NoEscape(r"$%s$" % text))
+                    space(doc, "0.4cm")
+                end(doc, 'multicols')
                 end(doc, 'parts')
 
             if ops:
@@ -3243,6 +3360,8 @@ def quantesson(value, op):
         quantitats = [0, 2, 4, 6, 12, 26, 54]
     elif op == "px_cryp":
         quantitats = [0, 1, 2, 3, 4, 7, 14]
+    elif op in ["px_idnot", "px_eidnot"]:
+        quantitats = [0, 2, 4, 8, 20, 44, 88]
     elif op in ["px_sumes", "px_restes"]:
         quantitats = [0, 2, 3, 4, 5, 12, 24]
     elif op in ["px_multis", "px_rufis", "px_divis"]:

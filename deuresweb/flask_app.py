@@ -147,6 +147,8 @@ def success():
 @app.route("/polis/", methods=["GET", "POST"])
 def polinomis():
     if request.method == "POST":
+        """g.polinomis(request.form)
+        """
         try:
             g.polinomis(request.form)
         except:

@@ -1,5 +1,6 @@
 import math
 import random
+from copy import deepcopy
 
 import enunciats as en
 import cryptolator as crypt
@@ -715,17 +716,22 @@ def taules(taula, div=False):
 
 
 def divisors(num, tots=False):
+    """Retorna els divisors d'un nombre donat (per defecte només la meitat)"""
+    num = abs(num)  # per fer els divisors no m'importa el signe
     div = [1]
-    for x in range(2, isqrt(abs(num)) + 1):
+    for x in range(2, isqrt(num) + 1):
         if num % x == 0:
             div.append(x)
     if len(div) > 1 and not tots:
         div.remove(1)
     if tots:
         extra = []
-        for x in div:
+        for x in reversed(div):
             extra.append(num // x)
-        div += extra
+        if div[-1] == extra[0]:  # evito repetits en casos com el 4
+            div += extra[1:]
+        else:
+            div += extra
     return div
 
 
@@ -1616,6 +1622,112 @@ def fcomu():  # TODO crear fcomú amb polinomis i tb amb frases generades i encr
     pass
 
 
+def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucions=False):
+    """genera exercicis d'identitats notables
+
+    :param tipus: 1 calcular, 2 endevinar
+    :param nivell: 1 (x+B) / 2 (Ax+B) / 3 (x^n+B) / 4 (Axy+B) / 5 (Ax+By) / 6 (Axy^n+Byz^m)
+    :param idnums: 1 (a+b)^2 / 2 (a-b)^2 / 3 (a+b)(a-b)
+    :param fcoefb: forçar coeficient b (número que tindrà el coeficient si el vull triar)
+    :param ordenat: False permet desordre als tipus 2
+    :param solucions: retornar també les solucions
+    """
+    text = "(x+42)^2"
+    solu = ""
+    idnum = random.choice(idnums)
+    varops = random.choice([["x", "y", "z"], ["a", "b", "c"]])
+    if tipus in [1, 2]:  # calcula la idnot / endevina enunciat
+        if nivell in [1, 2, 3]:  # (x+3) sola + indep / (2x+3) coef + indep / (x^2+3) exp + indep
+            # coefs
+            if nivell in [1, 3]:
+                a = 1
+            else:
+                a = random.randint(2, 5)
+            if fcoefb:
+                b = fcoefb
+            else:
+                b = random.randint(1, 10)
+            if nivell == 3:  # pujo l'exponent de la a afegint zeros al mig del rufini
+                zeros = [0 for _ in range(random.randint(1, 3))]
+            else:
+                zeros = []
+            # tipus d'identitat
+            if idnum == 2 or (idnum == 3 and moneda()):
+                b = -b
+            # càlcul
+            base = [a] + zeros + [b]
+            base2 = base[:]
+            if idnum == 3:
+                base2[-1] = -base2[-1]
+            desenv = poli_op(3, base, base2)   # multiplico el quadrat
+            # muntatge
+            if idnum in [1, 2]:
+                base = f"({polinomitza(base)})^2"
+            else:
+                base = f"({polinomitza(base)})({polinomitza(base2)})"
+            desenv = polinomitza(desenv, ordenat)
+
+        elif nivell in [4, 5, 6]:  # (2xy+3) multimonomi + indep / (2x+3y) dues variables / (5xy^2+3x^2y)
+            ca = random.randint(1, 3)  # de moment els deixo tots positius els de davant
+            cb = random.randint(1, 5)
+            va, ea, vb, eb = [], [], [], []
+            if nivell == 4:
+                va = random.sample(varops, 2)
+                ea = [1 for _ in range(len(va))]
+                vb = [random.choice(varops)]
+                eb = [0]
+            elif nivell == 5:
+                va, vb = random.sample(varops, 2)
+                va = [va]
+                vb = [vb]
+                ea, eb = [[1], [1]]
+            elif nivell == 6:
+                va, vb = [random.sample(varops, 2) for _ in range(2)]
+                ea, eb = [[1, random.randint(1, 3)] for _ in range(2)]
+                random.shuffle(ea)
+                random.shuffle(eb)
+                if moneda():  # de tant en tant trec una de les dues variables d'un dels dos costats
+                    if moneda():
+                        va = va[1:]
+                        ea = ea[1:]
+                    else:
+                        vb = vb[1:]
+                        eb = eb[1:]
+                if mumo_semblant([ca, va, ea], [cb, vb, eb]):  # si es podrien sumar, trenco la semblança
+                    if ea[0] > 1:
+                        ea[0] = 1
+                    else:
+                        ea[0] += 1
+            # càlcul
+            a = [ca, va, ea]
+            b = [cb, vb, eb]
+            if idnum == 2 or (idnum == 3 and moneda()):
+                b[0] *= -1
+            base = [a, b]
+            base2 = deepcopy(base)  # sense deepcopy les llistes niades queden enllaçades
+            if idnum == 3:
+                base2[1][0] *= -1
+            desenv = polimumo_op(3, base, base2)  # multiplico el quadrat
+            # muntatge
+            if idnum in [1, 2]:
+                base = f"({polimumitza(base)})^2"
+            else:
+                base = f"({polimumitza(base)})({polimumitza(base2)})"
+            if not ordenat:
+                random.shuffle(desenv)
+            desenv = polimumitza(desenv)
+        if tipus == 1:
+            text = base
+            solu = desenv
+        elif tipus == 2:
+            text = desenv
+            solu = base
+    if solucions:
+        return text, solu
+    else:
+        return text
+
+
 def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
     """genera polinomis i operacions amb polinomis
 
@@ -1974,21 +2086,56 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                     k, rufipx[i] = -rufipx[i], f"-{par}"  # substitueixo per -k
 
             elif nivell == 2:  # subs una part del num
-                i = random.randint(0, len(rufipx)-1)
+                i = random.choice([x for x in range(len(rufipx)) if rufipx[x]])
                 divs = divisors(rufipx[i], True)
-                print(divs)
                 ca = random.choice(divs) * random.choice([-1, 1])  # coef a que deixo davant la k
-                k = rufipx[i] // ca  # per la solu
+                if ca:
+                    k = rufipx[i] // ca  # per la solu
+                else:
+                    k = random.choice([1, -1])
                 if abs(ca) != 1:
                     rufipx[i] = f"{ca}{par}"
                 elif ca > 0:
                     rufipx[i] = f"{par}"
                 else:
                     rufipx[i] = f"-{par}"
-            elif nivell == 3:  # TODO subs més d'un coeficient per la variable (dos múltiples tipus 2k i 3k o tal)
-                for i in rufipx:
-                    pass
+
+            elif nivell == 3:
+                m2 = []
+                m3 = []
+                m4 = []
+                m5 = []
+                for i, x in enumerate(rufipx):
+                    if not x % 4:  # múltiple de 4
+                        m4.append(i)
+                        m2.append(i)
+                    elif not x % 2:  # múltiple de 2
+                        m2.append(i)
+                    if not x % 3:  # múltiple de 3
+                        m3.append(i)
+                    if not x % 5:  # múltiple de 5
+                        m5.append(i)
+                for i in reversed(range(0, 4)):  # llegiré de m5 a m2 perquè mola més com més gros
+                    mn = [m2, m3, m4, m5][i]
+                    if len(mn) > 1:
+                        break
+                if len(mn) < 2:
+                    return genera_ex_px(tipus, 2, solucions=solucions, par=par)  # si no faig prou serà nivell 2
+                elif len(mn) > 2:  # si en tinc molts en deixo 2 (que així també dissimulem una mica)
+                    mn = random.sample(mn, 2)
+                print(rufipx)
+                i += 2  # adapto que i=0 era m2, etc
+                k = random.choice([i, -i])
+                for i in mn:
+                    ca = rufipx[i] // k  # coeficient davant la k
+                    if abs(ca) != 1:
+                        rufipx[i] = f"{ca}{par}"
+                    elif ca > 0:
+                        rufipx[i] = f"{par}"
+                    else:
+                        rufipx[i] = f"-{par}"
             elif nivell == 4:  # TODO subs un per sumes (k+1)
+
                 pass
             elif nivell == 5:  # TODO subs més d'un per sumes o multis
                 pass
@@ -2003,6 +2150,8 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
     if solucions:
         return text, solu
     return text
+
+genera_ex_px = px  # alias perquè sovint matxaco el nom de px amb altres coses perquè sóc un xungo suposo
 
 
 def frufinable(nmax=5):
@@ -2085,6 +2234,12 @@ def polinomitza(rufinat, ordenat=True):
 
 
 def poli_op(op, px, qx):
+    """Suma (op=1), resta (op=2) o multiplica (op=3) els polinomis donats
+
+    :param op: 1 suma, 2 resta, 3 multiplica
+    :param px: primer polinomi a operar, P(x) com a llista de coeficients
+    :param qx: segon polinomi a operar, Q(x) com a llista de coeficients
+    """
     if op == 1:  # suma
         sol = [0 for _ in range(max(len(px), len(qx)))]
         for x in range(len(sol)):  # això fa la suma. jo tampoc l'entendré d'aquí un mes, but it works
@@ -2110,6 +2265,7 @@ def poli_op(op, px, qx):
 
     elif op == 4:  # divi
         pass
+
     return sol
 
 
@@ -3674,8 +3830,6 @@ def rand_multimon(nvars=2):
     return multimonomi(coef, vars, exps)
 
 
-
-
 def multimonomi(coef, vars=["x", "y"], exps=[], signe=False):
     """retorna un monomi de múltiples variables
 
@@ -3686,26 +3840,101 @@ def multimonomi(coef, vars=["x", "y"], exps=[], signe=False):
     """
     text = "42xy"
 
-    if len(vars) > len(exps):
-        return "Escolti, doni'm tots els exponents."
+    if coef:
 
-    if abs(coef) == 1 and any([exps]):  # coef unitari i hi ha alguna variable té exponent
-        if coef < 0:
-            text = "-"
+        if len(vars) > len(exps):
+            return "Escolti, doni'm tots els exponents."
+
+        if abs(coef) == 1 and any(exps):  # coef unitari i hi ha alguna variable té exponent
+            if coef < 0:
+                text = "-"
+            else:
+                text = ""
         else:
-            text = ""
-    else:
-        text = f"{coef}"
-    # exponent
-    for i, x in enumerate(vars):
-        if exps[i]:
-            text += f"{vars[i]}"
-        if exps[i] not in [0, 1]:
-            text += "^{" f"{exps[i]}" "}"
-    if signe:
-        if coef > 0:
-            text = "+" + text
+            text = f"{coef}"
+        # exponent
+        for i, x in enumerate(vars):
+            if exps[i]:
+                text += f"{vars[i]}"
+            if exps[i] not in [0, 1]:
+                text += "^{" f"{exps[i]}" "}"
+        if signe:
+            if coef > 0:
+                text = "+" + text
+    else:  # si no tinc coef no tinc monomi
+        text = ""
     return text
+
+
+def multimonitza(mumo, signe=False):
+    """Crida multimonomi a partir de les dades agrupades: mumo = [coef, [vars], [exps]]"""
+    return multimonomi(mumo[0], mumo[1], mumo[2], signe=signe)
+
+
+def polimumitza(mumopx):
+    """Escriu el text d'un polimultimonomi donat com a llista de mumos, on mumo = [coef, [vars], [exps]]"""
+    mlist = []
+    signe = False
+    for mx in mumopx:
+        mlist.append(multimonitza(mx, signe))
+        signe = True
+    return "".join(mlist)
+
+
+def polimumo_op(op, mumopx, mumoqx):
+    """Opera dos polimultimonomis donats com a llista de mumos, on cada mumo = [coef, [vars], [exps]]"""
+    musol = []
+    if op == 1:  # suma
+        musol = "Això no existeix encara, gamarús"
+    elif op == 2:  # resta
+        musol = "Això no existeix encara, gamarús"
+    elif op == 3:  # multi
+        for mx in mumopx:
+            for my in mumoqx:
+                mnou = mumo_op(3, mx, my)
+                afegit = False
+                for ms in musol:  # miro si el puc sumar amb algun dels que ja tenia
+                    if mumo_semblant(ms, mnou):
+                        ms[0] += mnou[0]  # sumo coefs
+                        afegit = True
+                        break
+                if not afegit:  # si no he pogut l'afegeixo al final
+                    musol.append(mnou)
+    return musol
+
+
+def mumo_semblant(mp, mq):
+    """Et diu si dos multimonomis es poden sumar"""
+    for i, v in enumerate(mp[1]):  # per cada variable de mp
+        if mp[2][i]:  # si la variable té exponent
+            if v in mq[1]:  # i l'altre mumo també la té
+                if mq[2][mq[1].index(v)] != mp[2][i]:  # si tenen exponents diferents plego
+                    return False
+            else:  # si l'altre no la té plego
+                return False
+    # i a la vicerveza (només miro si les té, perquè exponents iguals ja ho he vist abans)
+    for i, v in enumerate(mq[1]):  # per cada variable de mp
+        if mq[2][i]:  # si la variable té exponent
+            if v not in mp[1]:  # si l'altre no la té plego
+                return False
+    # si sobreviu a tot és bona
+    return True
+
+
+def mumo_op(op, mp, mq):
+    """Multiplica dos multimonomis donats en mumo = [coefs, [vars], [exps]]"""
+    if op == 3:
+        musol = [mp[0] * mq[0], mp[1][:], mp[2][:]]
+        for i, v in enumerate(mq[1]):  # per cada variable del segon
+            if v in musol[1]:  # si ja la tenia
+                j = musol[1].index(v)  # miro on la tinc
+                musol[2][j] += mq[2][i]  # sumo els graus
+            else:  # no la tenia
+                musol[1].append(mq[1][i])  # l'afegeixo
+                musol[2].append(mq[2][i])
+    else:
+        musol = "No has pas definit res d'això..."
+    return musol
 
 
 def dx(inception=1, opcions=[1, 2, 3, 4, 5, 6, 7, 8], amaga=[], simples=False, inici=0):
@@ -4128,5 +4357,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(4):
-    pass
+for x in range(10):
+    print(idnotable(2, 6, ordenat=False, solucions=True))

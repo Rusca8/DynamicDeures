@@ -59,6 +59,7 @@ def genera(aleatoris=False):
         ex["frac"]["multi"] = g.frac(2, 3, divis=0)
         ex["frac"]["divi"] = g.frac(2, 3, divis=2)
         ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
+        ex["frac"]["combi2"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3, ops=[1, 2, 4, 5])
         # eq
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["1poli"] = random.choice([g.eq(3, 1), g.eq(4, random.choice([1, 2]))])
@@ -137,6 +138,7 @@ def genera(aleatoris=False):
         ex["frac"]["multi"] = r"\frac{3}{5}\cdot \frac{4}{6}"
         ex["frac"]["divi"] = r"\frac{3}{5}\div \frac{-1}{-2}"
         ex["frac"]["combi"] = r"(\frac{3}{2}\cdot \frac{1}{3}-\frac{1}{3}\cdot \frac{3}{2}+\frac{1}{2}): (\frac{2}{4}\cdot \frac{-14}{3}+\frac{7}{5}: \frac{9}{7})"
+        ex["frac"]["combi2"] = r"\lbrack \sqrt{\frac{17}{2}-\frac{1}{2}+1}: (\frac{10}{3}-\frac{43}{21})\rbrack ^2"
         # eq
         ex["eq"]["simple"] = "2x+5=7"
         ex["eq"]["1poli"] = "-2x-10-3x-39=1+5x"
