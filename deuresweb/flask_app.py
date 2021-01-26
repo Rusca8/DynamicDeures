@@ -16,7 +16,7 @@ def index():
         return render_template("index.html", ex=e.genera())
     except:
         return (f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2>"
-                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: rusca.dev@gmail.com)</p>")
+                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: dynamicdeures@gmail.com)</p>")
 
 
 @app.route('/ex/')
@@ -35,6 +35,7 @@ def equacions():
             g.equacions(request.form)  # genera el pdf amb latex
         except:
             print("Error Equacions")
+            tele.error("eq")
             return redirect("/latex_error/equacions")
         tele.feedback("eq", request.form)
         return redirect("/pdf/eq")
@@ -45,10 +46,13 @@ def equacions():
 @app.route("/enters/", methods=["GET", "POST"])
 def combinades():
     if request.method == "POST":
+        """g.combinades(request.form, solucions=False)
+        """
         try:
-            g.combinades(request.form, solucions=False)
+            g.combinades(request.form)
         except:
             print("Error Combinades")
+            tele.error("comb")
             return redirect("/latex_error/combinades")
 
         tele.feedback("comb", request.form)
@@ -64,6 +68,7 @@ def apilades():
             g.apilades(request.form, solucions=False)
         except:
             print("Error Apilades")
+            tele.error("api")
             return redirect("/latex_error/apilades")
 
         tele.feedback("api", request.form)
@@ -79,6 +84,7 @@ def powsqr():
             g.powsqr(request.form, solucions=False)
         except:
             print("Error Potències")
+            tele.error("powsqr")
             return redirect("/latex_error/powsqr")
 
         tele.feedback("powsqr", request.form)
@@ -94,6 +100,7 @@ def fraccions():
             g.fraccions(request.form)
         except:
             print("Error Fraccions")
+            tele.error("frac")
             return redirect("/latex_error/fraccions")
         tele.feedback("frac", request.form)
         return redirect("/pdf/fraccions")
@@ -108,6 +115,7 @@ def ncient():
             g.ncient(request.form, solucions=False)
         except:
             print("Error Científica")
+            tele.error("ncient")
             return redirect("/latex_error/ncient")
         tele.feedback("ncient", request.form)
         return redirect("/pdf/ncient")
@@ -122,6 +130,7 @@ def proporcionalitat():
             g.proporcionalitat(request.form, solucions=False)
         except:
             print("Error Proporcionalitat")
+            tele.error("prop")
             return redirect("/latex_error/proporcionalitat")
 
         tele.feedback("prop", request.form)
@@ -137,6 +146,7 @@ def success():
             g.successions(request.form, solucions=False)
         except:
             print("Error Successions")
+            tele.error("succ")
             return redirect("/latex_error/successions")
         tele.feedback("succ", request.form)
         return redirect("/pdf/successions")
@@ -153,6 +163,7 @@ def polinomis():
             g.polinomis(request.form)
         except:
             print("Error Polinomis")
+            tele.error("polis")
             return redirect("/latex_error/polinomis")
         tele.feedback("polis", request.form)
         return redirect("/pdf/polinomis")
@@ -167,6 +178,7 @@ def limits():
             g.limits(request.form)
         except:
             print("Error Límits")
+            tele.error("lim")
             return redirect("/latex_error/limits")
         tele.feedback("lim", request.form)
         return redirect("/pdf/limits")
@@ -181,6 +193,7 @@ def derivades():
             g.derivades(request.form)
         except:
             print("Error Derivades")
+            tele.error("dx")
             return redirect("/latex_error/derivades")
         tele.feedback("dx", request.form)
         return redirect("/pdf/derivades")
@@ -261,7 +274,8 @@ def contacte():
 @app.route('/latex_error/<pdf>')
 def latexerror(pdf):
     return (f"<h2>Hi ha hagut algun problema greu fent el teu pdf de {pdf}</h2>"
-            f"<p>...o potser algú ha tingut l'error abans i ha quedat caigut, que també em passa</p>")
+            f"<p><i>...o potser algú ha tingut l'error abans i ha quedat caigut, que també em passa.</i></p><hr>"
+            f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: dynamicdeures@gmail.com)</p>")
 
 
 @app.route('/<patillada>')

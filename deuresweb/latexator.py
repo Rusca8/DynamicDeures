@@ -121,6 +121,7 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
 
     # getting opcions
     curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
     if "sumes" in opcions:
         sumes = True
@@ -128,11 +129,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
         fpos = quantesvariant(opcions["fpos"])
         qpsumes = quantesson(opcions["qpsumes"], "psumes")
         noneg = quantesvariant(opcions["noneg"])
+        print(f"A+B = {qsumes}, A+(+B) = {qpsumes}")
     else:
         sumes = False
         qsumes = 0
         qpsumes = 0
-    print(f"A+B = {qsumes}, A+(+B) = {qpsumes}")
 
     if "multiplicacions" in opcions:
         multis = True
@@ -146,12 +147,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
             taules = list(range(1, 11))
         print("M.Taules: ", taules)
         nonegm = quantesvariant(opcions["nonegm"])
-
+        print(f"A*B = {qmultis}, A*(-B) = {qsmultis}")
     else:
         multis = False
         qmultis = 0
         qsmultis = 0
-    print(f"A*B = {qmultis}, A*(-B) = {qsmultis}")
 
     if "divisions" in opcions:
         divis = True
@@ -170,12 +170,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                 dtaules = list(range(1, 11))
         print("D.Taules: ", dtaules)
         nonegd = quantesvariant(opcions["nonegd"])
-
+        print(f"A/B = {qdivis}, A/(-B) = {qsdivis}")
     else:
         divis = False
         qdivis = 0
         qsdivis = 0
-    print(f"A/B = {qdivis}, A/(-B) = {qsmultis}")
 
     if "combinades" in opcions:
         combis = True
@@ -185,13 +184,11 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
             ops += [4]
         if "op5" in opcions:
             ops += [5]
+        print(f"combis = {qcombis}")
     else:
         print("eis")
         combis = False
         qcombis = 0
-    print(f"combis = {qcombis}")
-
-    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
     # PyLaTeX code
     geometry = margins()
@@ -208,53 +205,52 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
     # preguntes
-
-    if sumes or multis or divis or combis:
-        if any([qsumes, qpsumes, qmultis, qsmultis, qdivis, qsdivis, qcombis]):
+    if any([sumes, multis, divis, combis]):
+        if any([qsumes, qpsumes,
+                qmultis, qsmultis,
+                qdivis, qsdivis,
+                qcombis]):
             begin(doc, 'questions')
 
             if sumes:
                 needspace(doc, 12)
                 bloctitle(doc, "Sumes i restes amb enters")
 
-                if qsumes != 0:
-                    n = qsumes
-                    needspace(doc, 8)
-                    question(doc, f"{n // 4}")
-                    doc.append("Calcula les següents sumes i restes sense parèntesis.")
-                    var = (n * fpos) // 4  # quantitat de punts amb la variant
-                    begin(doc, 'parts')
-                    begin(doc, "multicols", "4")
-                    for x in range(n):
-                        if x < var:
-                            uncalcul(doc, [1, 1], "0.2cm")  # resultat positiu (proporció escollida)
-                        elif x < (n + var) // 2:
-                            uncalcul(doc, [1, 2], "0.2cm")  # a positiva (meitat de la resta
-                        else:
-                            uncalcul(doc, [1, 3], "0.2cm")  # normal
-                    end(doc, "multicols")
-                    end(doc, 'parts')
+            if qsumes != 0:
+                n = qsumes
+                needspace(doc, 8)
+                question(doc, f"{n // 4}")
+                doc.append("Calcula les següents sumes i restes sense parèntesis.")
+                var = (n * fpos) // 4  # quantitat de punts amb la variant
+                begin(doc, 'parts')
+                begin(doc, "multicols", "4")
+                for x in range(n):
+                    if x < var:
+                        uncalcul(doc, [1, 1], "0.2cm")  # resultat positiu (proporció escollida)
+                    elif x < (n + var) // 2:
+                        uncalcul(doc, [1, 2], "0.2cm")  # a positiva (meitat de la resta
+                    else:
+                        uncalcul(doc, [1, 3], "0.2cm")  # normal
+                end(doc, "multicols")
+                end(doc, 'parts')
 
-                if qpsumes:
-                    n = qpsumes
-                    needspace(doc, 8)
-                    question(doc, f"{n // 2}")
-                    doc.append("Calcula les següents sumes i restes amb parèntesis.")
-                    var = (n * noneg) // 4  # quantitat de punts amb la variant
-                    begin(doc, 'parts')
-                    begin(doc, "multicols", "3")
-                    for x in range(n):
-                        if x < var:
-                            uncalcul(doc, [2, 1], "0.2cm")  # sense doble neg
-                        elif x < (n + var) // 2:
-                            uncalcul(doc, [2, 2], "0.2cm")  # a positiva
-                        else:
-                            uncalcul(doc, [2, 3], "0.2cm")  # normal
-                    end(doc, "multicols")
-                    end(doc, 'parts')
-
-                if qsumes == 0 and qpsumes == 0:
-                    doc.append("Que diu que en vol, però no en vol.")
+            if qpsumes:
+                n = qpsumes
+                needspace(doc, 8)
+                question(doc, f"{n // 2}")
+                doc.append("Calcula les següents sumes i restes amb parèntesis.")
+                var = (n * noneg) // 4  # quantitat de punts amb la variant
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                for x in range(n):
+                    if x < var:
+                        uncalcul(doc, [2, 1], "0.2cm")  # sense doble neg
+                    elif x < (n + var) // 2:
+                        uncalcul(doc, [2, 2], "0.2cm")  # a positiva
+                    else:
+                        uncalcul(doc, [2, 3], "0.2cm")  # normal
+                end(doc, "multicols")
+                end(doc, 'parts')
 
             if multis or divis:
                 needspace(doc, 12)
@@ -266,88 +262,85 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     bTitle = "Divisions amb enters"
                 bloctitle(doc, bTitle)
 
-                if qmultis or qdivis:
-                    needspace(doc, 8)
-                    if qmultis:
-                        if qdivis:
-                            question(doc, f"{qmultis // 2}")
-                            doc.append("Calcula les següents multiplicacions i divisions sense signes")
-                        else:
-                            question(doc, f"{qmultis // 2}")
-                            doc.append("Calcula les següents multiplicacions sense signes")
+            if qmultis or qdivis:
+                needspace(doc, 8)
+                if qmultis:
+                    if qdivis:
+                        question(doc, f"{qmultis // 2}")
+                        doc.append("Calcula les següents multiplicacions i divisions sense signes")
                     else:
-                        question(doc, f"{qdivis // 2}")
-                        doc.append("Calcula les següents divisions sense signes")
+                        question(doc, f"{qmultis // 2}")
+                        doc.append("Calcula les següents multiplicacions sense signes")
+                else:
+                    question(doc, f"{qdivis // 2}")
+                    doc.append("Calcula les següents divisions sense signes")
 
-                    begin(doc, 'parts')
-                    begin(doc, "multicols", "4")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "4")
 
-                    if qmultis != 0 and qdivis != 0:
-                        n = qmultis // 2
-                    elif qmultis != 0:
-                        n = qmultis
+                if qmultis != 0 and qdivis != 0:
+                    n = qmultis // 2
+                elif qmultis != 0:
+                    n = qmultis
+                else:
+                    n = qdivis
+
+                if qmultis != 0:
+                    for x in range(0, n):
+                        part(doc)
+                        doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(taules))))
+                        space(doc, "0,2cm")
+                if qdivis != 0:
+                    for x in range(0, n):
+                        part(doc)
+                        doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(dtaules), True)))  # true és divis
+                        space(doc, "0,2cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+
+            if qsmultis != 0 or qsdivis != 0:
+                needspace(doc, 10)
+                if qsmultis != 0:
+                    if qsdivis != 0:
+                        question(doc, f"{qsmultis}")
+                        doc.append(
+                            "Calcula les següents multiplicacions i divisions amb signes")  # TODO afegir suport per nums grans
                     else:
-                        n = qdivis
-
-                    if qmultis != 0:
-                        for x in range(0, n):
-                            part(doc)
-                            doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(taules))))
-                            space(doc, "0,2cm")
-                    if qdivis != 0:
-                        for x in range(0, n):
-                            part(doc)
-                            doc.append(NoEscape(r'$%s$' % gen.taules(random.choice(dtaules), True)))  # true és divis
-                            space(doc, "0,2cm")
-                    end(doc, "multicols")
-                    end(doc, 'parts')
+                        question(doc, f"{qsmultis}")
+                        doc.append("Calcula les següents multiplicacions amb signes")
+                else:
+                    question(doc, f"{qsdivis}")
+                    doc.append("Calcula les següents divisions amb signes")
 
                 if qsmultis != 0 or qsdivis != 0:
-                    needspace(doc, 10)
-                    if qsmultis != 0:
-                        if qsdivis != 0:
-                            question(doc, f"{qsmultis}")
-                            doc.append(
-                                "Calcula les següents multiplicacions i divisions amb signes")  # TODO afegir suport per nums grans
-                        else:
-                            question(doc, f"{qsmultis}")
-                            doc.append("Calcula les següents multiplicacions amb signes")
+                    begin(doc, 'parts')
+                    begin(doc, "multicols", "3")
+
+                    if qsmultis:
+                        n = qsmultis
+                        var = (n * nonegm) // 4
                     else:
-                        question(doc, f"{qsdivis}")
-                        doc.append("Calcula les següents divisions amb signes")
+                        n = qsdivis
+                        var = (n * nonegd) // 4
 
-                    if qsmultis != 0 or qsdivis != 0:
-                        begin(doc, 'parts')
-                        begin(doc, "multicols", "3")
-
-                        if qsmultis:
-                            n = qsmultis
-                            var = (n * nonegm) // 4
-                        else:
-                            n = qsdivis
-                            var = (n * nonegd) // 4
-
-                        for x in range(n):
-                            if x < var:
-                                if qsmultis and not qsdivis:
-                                    uncalcul(doc, [3, 2], "0,2cm")  # mult
-                                elif qsdivis and not qsmultis:
-                                    uncalcul(doc, [3, 5], "0,2cm")  # div
-                                else:
-                                    uncalcul(doc, [3, random.choice([2, 5])], "0,2cm")  # mult i div
+                    for x in range(n):
+                        if x < var:
+                            if qsmultis and not qsdivis:
+                                uncalcul(doc, [3, 2], "0,2cm")  # mult
+                            elif qsdivis and not qsmultis:
+                                uncalcul(doc, [3, 5], "0,2cm")  # div
                             else:
-                                if qsmultis and not qsdivis:
-                                    uncalcul(doc, [3, 3], "0,2cm")  # mult
-                                elif qsdivis and not qsmultis:
-                                    uncalcul(doc, [3, 6], "0,2cm")  # div
-                                else:
-                                    uncalcul(doc, [3, random.choice([3, 6])], "0,2cm")  # mult i div
+                                uncalcul(doc, [3, random.choice([2, 5])], "0,2cm")  # mult i div
+                        else:
+                            if qsmultis and not qsdivis:
+                                uncalcul(doc, [3, 3], "0,2cm")  # mult
+                            elif qsdivis and not qsmultis:
+                                uncalcul(doc, [3, 6], "0,2cm")  # div
+                            else:
+                                uncalcul(doc, [3, random.choice([3, 6])], "0,2cm")  # mult i div
 
-                        end(doc, "multicols")
-                        end(doc, 'parts')
-
-                if qmultis == 0 and qdivis == 0 and qsmultis == 0 and qsdivis == 0:
-                    doc.append("Potser que triïs alguna cosa... (o no diguis que vols multiplicar i dividir)")
+                    end(doc, "multicols")
+                    end(doc, 'parts')
 
             if combis:
                 needspace(doc, 12)
