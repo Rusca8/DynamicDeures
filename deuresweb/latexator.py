@@ -766,9 +766,11 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         sistemes = True
         qsist = quantesson(opcions["qsist"], "sistemes")
         nocoef = quantesvariant(opcions["nocoef"])
+        qnsist = quantesson(opcions["qnsist"], "nsistemes")
     else:
         sistemes = False
         qsist = 0
+        qnsist = 0
     print(f"Ax+By=C i Dx+Ey=F {qsist}")
 
     if "sistemes3" in opcions:
@@ -786,6 +788,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('amssymb'))  # això té el \nexists
+    doc.packages.append(Package('setspace'))  # això és per setstretch (interlineat de les solucions)
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('graphicx'))
     doc.packages.append(Package('needspace'))
@@ -798,7 +801,9 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
     # preguntes
     if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, q1polis, q1racios, qsist, qsist3, qincomps, qcompletes, qpolis]):
+        if any([qsimples, qdsimples, q1polis, q1racios,
+                qincomps, qcompletes, qpolis,
+                qsist, qsist3]):
             begin(doc, 'questions')
 
             if primer:
@@ -989,7 +994,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 needspace(doc, 12)
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
 
-            if qsist != 0: # pels sistemes (per la clau de l'esquerra) cal msmath
+            if qsist != 0:  # pels sistemes (per la clau de l'esquerra) cal msmath
                 n = qsist
                 needspace(doc, 10)
                 question(doc, f"{n * 2}")
@@ -1014,6 +1019,38 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 end(doc, 'parts')
                 space(doc, "0.5cm")
                 blocsolus(doc, solucions, sols)
+
+            if qnsist != 0:  # pels sistemes (per la clau de l'esquerra) cal msmath
+                n = qnsist
+                needspace(doc, 10)
+                question(doc, f"{n * 3}")
+                doc.append("Resol els següents sistemes d'equacions no lineals.")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                sols = []
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):  # x+y=A, xy=B
+                        if x <= (n*2 // 6):
+                            text, sol = gen.sisteq(11, 1, solucions=True)
+                        elif x <= (n*3 // 6):
+                            text, sol = gen.sisteq(11, 2, solucions=True)
+                        else:
+                            text, sol = gen.sisteq(11, 3, solucions=True)
+                    else:  # x^2+y^2=A, x+y=B
+                        if x <= (n*4 // 6):
+                            text, sol = gen.sisteq(12, 1, solucions=True)
+                        elif x <= (n*5 // 6):
+                            text, sol = gen.sisteq(12, 2, solucions=True)
+                        else:
+                            text, sol = gen.sisteq(12, 3, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
+                    space(doc, "0.5cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "0.5cm")
+                blocsolus(doc, solucions, sols, mates=True, stretch="1.3")
 
             if sistemes3:
                 needspace(doc, 12)
@@ -3333,7 +3370,7 @@ def quantesson(value, op):
         quantitats = [0, 2, 4, 8, 10, 22, 44]
     elif op == "1racios":
         quantitats = [0, 2, 4, 8, 10, 20, 41]
-    elif op == "sistemes":
+    elif op in ["sistemes", "nsistemes"]:
         quantitats = [0, 3, 6, 9, 12, 21, 45]
     elif op == "sistemes3":
         quantitats = [0, 3, 6, 9, 12, 27, 56]
@@ -3526,10 +3563,10 @@ def escriusolus(llista, mates=False):
             llista[x] = r"\textbf{" + apartat + ":}~" f"${llista[x]}$"
         else:
             llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
-    return r"; \penalty-200 ".join(llista)
+    return r"; \penalty-300 ".join(llista)
 
 
-def blocsolus(doc, solucions, llista, mates=False, stretch=False):
+def blocsolus(doc, solucions, llista, mates=False, stretch=False):  # stretch necessita package
     """Escriu les solucions al document en cas que s'hagi escollit que n'hi hagi
 
     :param doc: document LaTeX on escriure-ho.

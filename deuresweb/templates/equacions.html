@@ -40,7 +40,7 @@
           <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" checked> Segon grau
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist">
-          <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes
+          <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes ✨
         </label>
         <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opSist3" aria-expanded="false" aria-controls="opSist">
           <input type="checkbox" name="sistemes3" autocomplete="off" id="div" value="Sistemes 3D"> Sistemes 3D
@@ -251,7 +251,7 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
-            <label><i>Evitar arrels negatives? ✨</i></label>
+            <label><i>Evitar arrels negatives?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "totexist" %}
               {% for n in range(5) %}
@@ -405,6 +405,36 @@
               </label>
               <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                 <input type="radio" name="nocoef" id="nocoef4" value="totes" autocomplete="off"> totes
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupSistemesQuants"><b>No lineals ✨</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn1" value="poques" autocomplete="off"> pocs
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qnsist" id="qsn2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn3" value="moltes" autocomplete="off"> molts
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qnsist" id="qsn6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qnsist" id="qsn9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>

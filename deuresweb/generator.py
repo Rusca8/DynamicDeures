@@ -238,7 +238,7 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
 def decimals(tipus, notac=1):
     """Retorna un número decimal del tipus escollit
 
-    :param tipus: 1 exacte, 2 mixt, 3 pur, 4 aleatori
+    : tipus: 1 exacte, 2 mixt, 3 pur, 4 aleatori
     :param notac: notació (1 barra, 2 suspensiu)
     """
     if tipus in [1, 2, 3]:  # exacte, mixt, pur
@@ -702,6 +702,16 @@ def fracsimple(n, d):
         d = -d
         n = -n
     return [n, d]
+
+
+def fraconum(n, d, simplifica=False):
+    """Si només tinc numerador, retorna el número; si no, retorna el LaTeX de la fracció"""
+    if simplifica:
+        n, d = fracsimple(n, d)
+    if d == 1 or d == -1:
+        return f"{d*n}"  # tinc en compte el signe del denominador
+    else:
+        return "\\frac{" f"{n}" "}{" f"{d}" "}"
 
 
 def taules(taula, div=False):
@@ -3118,7 +3128,7 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
     solus = "NOT DEF"
 
     if tipus == 1:  # ax+by=c, dx+ey=f
-        if nivell == 1 or nivell == 2 or nivell == 3:  # primera x coef 1 || algun coef ±1 || reducció qualsevol
+        if nivell in [1, 2, 3]:  # primera x coef 1 || algun coef ±1 || reducció qualsevol
             eq1 = "x+y=42"
             eq2 = "x+y=42"
             x = random.randint(-10, 10)
@@ -3142,6 +3152,119 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
             eq1 = systeq_text(coefs[0], coefs[1], c)
             eq2 = systeq_text(coefs[2], coefs[3], f)
             text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
+            solus = f"({x},~{y})"
+
+    elif tipus == 11:  # Ax+By=C, Dx*y=E (sense coef / un coef / dos dels tres coefs)
+        # solucions
+        x, y = [random.randint(1, 10) * random.choice([1, -1]) for _ in range(2)]
+        # coefs
+        a = 1
+        b = 1
+        d = 1
+        if nivell == 1 and moneda():  # en algunes de l'1 canvio un signe
+            b = -1
+        elif nivell == 2:  # al segon introdueixo un número als factors
+            a = random.randint(2, 5) * random.choice([-1, 1])
+            if moneda():
+                a, b = b, a
+        elif nivell == 3:  # poso dos dels tres coeficients
+            a, b = [random.randint(1, 5) * random.choice([1, -1]) for _ in range(2)]
+            d = random.randint(1, 3)
+            if not random.randint(0, 2):
+                d = 1
+            elif moneda():
+                a = random.choice([1, -1])
+            else:
+                b = random.choice([1, -1])
+        # càlcul
+        c = a*x + b*y
+        e = d * x*y
+        # muntatge
+        eq1 = f"{monomi(a, 1)}{monomi(b, 1, True, var='y')}={c}"
+        eq2 = f"{multimonomi(d, exps=[1, 1])}={e}"
+        text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
+        # solucions
+        if solucions:
+            x2 = fraconum(*fracsimple(b*y, a))  # la segona solució, que surt d'intercanviar les variables (Ax=By)
+            y2 = fraconum(*fracsimple(a*x, b))  # el * desplega la llista en forma arguments individuals
+            x = f"{x}"
+            y = f"{y}"
+            if x == x2 and y == y2:
+                solus = f"({x},~{y})"
+            else:
+                solus = f"({x},~{y}),~({x2},~{y2})"
+    elif tipus == 12:  # estil Ax^2+By^2=C, Dx+Ey=F
+        """
+        Ax^2+By^2=C, Dx+Ey=F
+        - Hi ha segona solució si A*E^2+B*D^2 (és el coef del terme de segon grau)
+        - La segona solució (aïllant de la fórmula quadràtica) és: 
+                     x2 = 2BFD/(A*E^2+B*D^2) - x1
+        """
+        x, y = [random.randint(1, 6) * random.choice([1, -1]) for _ in range(2)]
+        a, b, d, e = [1 for _ in range(4)]
+        if nivell == 1:  # x^2-y^2=C, x+y=F (eq primer grau)
+            """Unitaris amb un negatiu a la quadràtica: elimina el terme de 2n grau"""
+            if random.randint(0, 3):
+                b = -1
+            else:
+                a = -1
+            if moneda():
+                if random.randint(0, 3):
+                    e = -1
+                else:
+                    d = -1
+
+        elif nivell == 2:  # equació de segon grau (i en tot cas negatiu a sota)
+            if moneda():
+                if random.randint(0, 3):
+                    e = -1
+                else:
+                    d = -1
+        elif nivell == 3:  # Ax^2-By^2=C, Dx+Ey=F (coeficients "qualssevol")
+            a, e = [random.randint(1, 3)*random.choice([-1, 1]) for _ in range(2)]
+            # coef control
+            """
+            Busco opcions per resultat enter a 2BFD/(AE^2+BD^2)
+            ...o eliminació del terme quadràtic
+            """
+            opcions = []
+            primer = []
+            for b in reversed(range(1, 4)):
+                for d in reversed(range(1, 4)):
+                    f = d*x + e*y
+                    num = 2*b*f*d
+                    den = a*e*e+b*d*d
+                    if not den:  # equació de primer grau (em serveix de candidat també)
+                        primer.append([b, d])
+                    elif not num % den:  # si surt enter el guardo de candidat
+                        opcions.append([b, d])
+            if opcions or primer:  # tendeix a haver-hi molts enters (1-5) i algun primer (0-2)
+                b, d = random.choice(opcions + primer)
+        # càlcul
+        c = a*x*x + b*y*y
+        f = d*x + e*y
+        # muntatge
+        eq1 = f"{monomi(a, 2)}{monomi(b, 2, True, var='y')}={c}"
+        eq2 = f"{monomi(d, 1)}{monomi(e, 1, True, var='y')}={f}"
+        text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
+        # solucions
+        ca = a*e*e + b*d*d
+        if ca:  # equació de 2n grau
+            # càlcul
+            x2n = 2*b*f*d - ca*x
+            x2d = ca
+            y2n = f*x2d-d*x2n
+            y2d = e*x2d
+            # muntatge
+            x = f"{x}"
+            y = f"{y}"
+            x2 = fraconum(*fracsimple(x2n, x2d))
+            y2 = fraconum(*fracsimple(y2n, y2d))
+            if y == y2 and x == x2:
+                solus = f"({x},~{y})"
+            else:
+                solus = f"({x},~{y}),~({x2},~{y2})"
+        else:  # primer grau (perd el terme de 2n)
             solus = f"({x},~{y})"
 
     elif tipus == 101:  # ax+by+cz=d, ex+fy+gz=h, ix+jy+kz=m
@@ -4358,4 +4481,4 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(10):
-    print(idnotable(2, 6, ordenat=False, solucions=True))
+    print(sisteq(12, 3, solucions=True))

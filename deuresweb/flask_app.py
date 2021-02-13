@@ -31,6 +31,8 @@ def indexvar():
 @app.route("/equacions/", methods=["GET", "POST"])
 def equacions():
     if request.method == "POST":
+        """g.equacions(request.form)
+        """
         try:
             g.equacions(request.form)  # genera el pdf amb latex
         except:
