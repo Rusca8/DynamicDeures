@@ -180,7 +180,7 @@
               {% for n in range(5) %}
                 {% if n == 1 %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
                 {% else %}
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini">
                     <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}

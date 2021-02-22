@@ -2289,7 +2289,6 @@ def poli_aval(rufipx, x):
 
 def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
     """
-
     :param tipus: 1, 2... lineals / 101, 102... quadràtiques / 201, 202... irracionals
     :param nivell: (subtipus)
     :param solucions: incloure solucions (els que en tenen)
@@ -3067,9 +3066,9 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
             text += "0"
 
     elif tipus == 201:  # irracionals TODO acabar i fer més variants d'enunciat
-        if nivell == 1:  # √(Ax+B) = x+C
+        if nivell in [1, 2]:  # √(Ax+B) = x+C
             """
-            Operant queda x^2 + (2C-A)x + (c^2-B) = 0
+            Operant queda x^2 + (2C-A)x + (C^2-B) = 0
             """
             xmax = 4
             # eq2
@@ -4481,4 +4480,4 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(10):
-    print(sisteq(12, 3, solucions=True))
+    print(eq(201, 1, solucions=True))

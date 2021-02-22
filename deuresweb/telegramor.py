@@ -2,10 +2,16 @@ import urllib.request
 from latexator import tematitol, temallarg
 from teletoken import gettoken
 
+from threading import Thread  # per async
+
 import urllib.parse
 
 
 def feedback(tema, opcions):
+    Thread(target=send_feedback, args=[tema, opcions]).start()  # fet així és asíncron (per si telegram respon tard)
+
+
+def send_feedback(tema, opcions):
     teletexto = "S'han generat exercicis *" + tematitol(tema) + "* _(" + opcions["curs"] + ")_ "
     teletexto = urllib.parse.quote_plus(teletexto)
     bottoken = gettoken()
@@ -20,6 +26,10 @@ def feedback(tema, opcions):
 
 
 def error(tema):
+    Thread(target=send_error, args=[tema]).start()  # fet així és asíncron (per si telegram respon tard a urlopen)
+
+
+def send_error(tema):
     teletexto = "⚠️ *Error* (" + temallarg(tema) + ")"
     teletexto = urllib.parse.quote_plus(teletexto)
     bottoken = gettoken()
