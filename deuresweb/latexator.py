@@ -570,6 +570,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
         qsist3 = 0
     print(f"Ax+By+Cz=D ... etc que em fa mandra copiar {qsist}")
     """
+    scale = 1.3  # per si me l'oblido
 
     # PyLaTeX code
     geometry = margins()
@@ -578,6 +579,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('needspace'))
+    doc.packages.append(Package('graphicx'))
 
     headfoot(doc, opcions, tema)
     myconfig(doc, solucions)
@@ -601,11 +603,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents sumes apilades (sense decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(sdalt)
                     b = random.choice(sbaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(1, 1, [a, b])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(1, 1, [a, b]))))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -618,13 +621,14 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents sumes apilades (amb decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(sddalt)
                     b = random.choice(sdbaix)
                     c = random.choice(sdecidalt)
                     d = random.choice(sdecibaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(1, 2, [a, b], [c, d])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(1, 2, [a, b], [c, d]))))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -641,11 +645,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents restes apilades (sense decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(rdalt)
                     b = random.choice(rbaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(2, x // n + 1, [a, b])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(2, x // n + 1, [a, b]))))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -658,13 +663,14 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents restes apilades (amb decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(rddalt)
                     b = random.choice(rdbaix)
                     c = random.choice(rdecidalt)
                     d = random.choice(rdecibaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(2, 3, [a, b], [c, d])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(2, 3, [a, b], [c, d]))))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -681,11 +687,12 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents multiplicacions apilades (sense decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(mdalt)
                     b = random.choice(mbaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(3, 1, [a, b])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(3, 1, [a, b]))))
                     space(doc, "1.6cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -698,13 +705,14 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                 doc.append("Resol les següents multiplicacions apilades (amb decimals).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "4")
+                scale = 1.3
                 for x in range(0, n):
                     part(doc)
                     a = random.choice(mddalt)
                     b = random.choice(mbaix)
                     c = random.choice(mdecidalt)
                     d = random.choice(mdecibaix)
-                    doc.append(NoEscape(r'\Large $%s$\normalsize' % gen.apilades(3, 2, [a, b], [c, d])))
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(3, 2, [a, b], [c, d]))))
                     space(doc, "2.1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -3315,17 +3323,17 @@ def quantesson(value, op):
         quantitats = [0, 3, 6, 9, 9, 18, 39]
     # més xifres
     elif op == "v_sumes":
-        quantitats = [0, 4, 8, 12, 16, 35, 64]
+        quantitats = [0, 4, 8, 12, 16, 35, 76]
     elif op == "v_dsumes":
-        quantitats = [0, 4, 8, 12, 16, 35, 64]
+        quantitats = [0, 4, 8, 12, 16, 35, 76]
     elif op == "v_restes":
-        quantitats = [0, 4, 8, 12, 16, 35, 64]
+        quantitats = [0, 4, 8, 12, 16, 35, 76]
     elif op == "v_drestes":
-        quantitats = [0, 4, 8, 12, 16, 35, 64]
+        quantitats = [0, 4, 8, 12, 16, 35, 76]
     elif op == "v_multis":
-        quantitats = [0, 3, 6, 9, 12, 28, 64]
+        quantitats = [0, 3, 6, 9, 12, 28, 60]
     elif op == "v_dmultis":
-        quantitats = [0, 3, 6, 9, 12, 24, 64]
+        quantitats = [0, 3, 6, 9, 12, 24, 50]
     # potències i arrels
     elif op in ["p_mexp", "p_mbase", "arrels"]:
         quantitats = [0, 3, 6, 12, 21, 48, 101]
