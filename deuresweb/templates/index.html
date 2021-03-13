@@ -3,6 +3,7 @@
 <div class="alert alert-info alert-thin mb-1 mr-3 py-1" role="alert">
     <small>
         <b>Nou:</b> Sistemes d'equacions no lineals.<br>
+        <b>Nou:</b> Exemples d'exercicis de polinomis (aquí sota).<br>
     </small>
 </div>
 <!--
@@ -12,24 +13,57 @@
     </small>
 </div>
 -->
-<h5>Benvinguda al generador automàtic de fitxes de matemàtiques que se m'ha acudit intentar fer!</h5>
-<p class="mb-3" id="debugscreen">Escull un tema i ens inventarem la fitxa... <i>(o pots xafardejar aquí a sota quins tipus d'exercicis hi ha)</i></p>
-<p class="mb-4">
-    <a class="btn btn-sm btn-mini btn-secondary" href="/enters/" role="button">Operacions amb Enters</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/powsqr/" role="button">Potències i Arrels</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/ncient/" role="button">Notació Científica</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/polis/" role="button">Polinomis</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions ✨</a>
+<h5 class="mt-3">Benvinguda!</h5>
+<p class="mb-3" id="debugscreen">Escull un tema i ens inventarem una fitxa única...<br>
+    <small><i>...o pots xafardejar quins tipus d'exercicis hi ha, als exemples d'aquí baix.</i></small>
 </p>
-<p class="mb-4">
-    <a class="btn btn-sm btn-mini btn-secondary" href="/success/" role="button">Successions</a>
-    <a class="btn btn-sm btn-mini btn-secondary" href="/derivades/" role="button">Derivades</a>
+<p class="mb-2">
+    {% set mtemes = 2 %}
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/enters/" role="button">Operacions amb Enters</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#en" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#omx" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#frac" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/powsqr/" role="button">Potències i Arrels</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pow" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/ncient/" role="button">Notació Científica</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary disabled" href="#ncient" role="button" disabled>Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pp" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/polis/" role="button">Polinomis</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#px" role="button">Ex</a>
+    </div>
+    <div class="btn-group mb-{{mtemes}}" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions ✨</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#eq" role="button">Ex</a>
+    </div>
+</p>
+<p class="mb-2">
+    <div class="btn-group" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/success/" role="button">Successions</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#succ" role="button">Ex</a>
+    </div>
+    <div class="btn-group" role="group">
+        <a class="btn btn-sm btn-mini btn-secondary" href="/derivades/" role="button">Derivades</a>
+        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#dx" role="button">Ex</a>
+    </div>
 </p>
 <div class="heighter">
-<div class="card-columns fantasma collapse mr-3">
+<div class="card-columns fantasma collapse mr-3 mt-4">
 
     <div class="card text-center"> <!-- corregit $$ per $ (MJ en display trepitja els botons) -->
     <h5 class="card-header">Equacions <b id="eq"></b></h5>
@@ -94,6 +128,19 @@
               <div class="row">
                 <div class="col-sm">
                   ${{ ex["eq"]["sis2d"] }}$
+                </div>
+              </div>
+            </div>
+            <p  class="card-text mt-4 mb-3">
+                Sistemes no lineals de 2 variables
+            </p>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  ${{ ex["eq"]["sisnl1"] }}$
+                </div>
+                <div class="col-sm">
+                  ${{ ex["eq"]["sisnl2"] }}$
                 </div>
               </div>
             </div>
@@ -503,6 +550,159 @@
     </div>
 
     <div class="card text-center">
+    <h5 class="card-header">Polinomis<b id="px"></b></h5>
+        <div class="card-body">
+            <p class="card-text">
+                Inventar polinomis segons descripció
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                        <i>{{ ex["px"]["inv"] }}</i>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Factor comú
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["px"]["fcom1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["px"]["fcom2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Calcular identitats notables
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["px"]["idnot1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["px"]["idnot2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Endevinar identitats notables
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["px"]["eidnot1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["px"]["eidnot2"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Sumes i restes de polinomis
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                      ${{ ex["px"]["sumrest"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Multiplicacions de polinomis
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                      ${{ ex["px"]["multi"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Divisions de polinomis
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                      ${{ ex["px"]["rufi"] }}$
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                      ${{ ex["px"]["divi"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Teorema del residu
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                        <i>{{ ex["px"]["tres"] }}</i>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Factoritzar polinomis
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["px"]["fact"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Simplificar fraccions algebraiques
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                      ${{ ex["px"]["alg"] }}$
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
+        </div>
+    </div>
+
+    <div class="card text-center">
     <h5 class="card-header">Proporcionalitat<b id="pp"></b></h5>
         <div class="card-body">
             <p class="card-text">
@@ -576,11 +776,11 @@
 {% block js %}
     <script>
         function refresca(anchor){
-            p = location.href.split("/")
-            if (p[p.length-1] == ""){
-                window.location = "/ex#" + anchor;
-            } else {
+            p = location.href.split("/");
+            if (p.includes("ex")){
                 location.reload();
+            }else{
+                window.location = "/ex/#" + anchor;
             }
         };
         setTimeout(mostra, 150);

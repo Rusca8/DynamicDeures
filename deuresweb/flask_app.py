@@ -21,6 +21,8 @@ def index():
 
 @app.route('/ex/')
 def indexvar():
+    """return render_template("index.html", ex=e.genera(True))
+    """
     try:
         return render_template("index.html", ex=e.genera(True))
     except:

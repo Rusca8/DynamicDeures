@@ -1644,7 +1644,10 @@ def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucio
     """
     text = "(x+42)^2"
     solu = ""
-    idnum = random.choice(idnums)
+    try:
+        idnum = random.choice(idnums)
+    except:  # per quan només n'hi ha un però no està dins una llista
+        idnum = idnums
     varops = random.choice([["x", "y", "z"], ["a", "b", "c"]])
     if tipus in [1, 2]:  # calcula la idnot / endevina enunciat
         if nivell in [1, 2, 3]:  # (x+3) sola + indep / (2x+3) coef + indep / (x^2+3) exp + indep
@@ -4480,4 +4483,4 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(10):
-    print(eq(201, 1, solucions=True))
+    print(px(6, 2))

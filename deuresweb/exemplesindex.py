@@ -9,6 +9,7 @@ def genera(aleatoris=False):
     ex["pow"] = {}
     ex["frac"] = {}
     ex["eq"] = {}
+    ex["px"] = {}
     ex["pp"] = {}
     ex["succ"] = {}
     ex["dx"] = {}
@@ -60,6 +61,21 @@ def genera(aleatoris=False):
         ex["frac"]["divi"] = g.frac(2, 3, divis=2)
         ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
         ex["frac"]["combi2"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3, ops=[1, 2, 4, 5])
+        # px
+        ex["px"]["inv"] = g.en.px_invent()
+        ex["px"]["fcom1"] = g.px(0, 1, termes=2)
+        ex["px"]["fcom2"] = g.px(0, 2)
+        ex["px"]["idnot1"] = g.idnotable(1, random.choice([1, 2]), random.choice([random.choice([1, 3]), 2]))
+        ex["px"]["idnot2"] = g.idnotable(1, random.choice([4, 5, 6]), random.choice([random.choice([1, 2]), 3]))
+        ex["px"]["eidnot1"] = g.idnotable(2, random.choice([1, 2]), random.choice([random.choice([1, 2]), 3]))
+        ex["px"]["eidnot2"] = g.idnotable(2, random.choice([4, 5, 6]), random.choice([random.choice([1, 3]), 2]))
+        ex["px"]["sumrest"] = g.px(random.choice([1, 2]), random.choice([1, 2, 3]))
+        ex["px"]["multi"] = g.px(3, random.randint(1, 4))
+        ex["px"]["rufi"] = g.px(4, random.randint(1, 2))
+        ex["px"]["divi"] = g.px(5, random.randint(1, 2))
+        ex["px"]["tres"] = g.px(6, 2)
+        ex["px"]["fact"] = g.px(7, 3)
+        ex["px"]["alg"] = g.px(8)
         # eq
         ex["eq"]["simple"] = g.eq(2, 3)
         ex["eq"]["1poli"] = random.choice([g.eq(3, 1), g.eq(4, random.choice([1, 2]))])
@@ -70,6 +86,8 @@ def genera(aleatoris=False):
         ex["eq"]["segonc2"] = g.eq(103, 3)
         ex["eq"]["poli"] = g.eq(104)
         ex["eq"]["sis2d"] = g.sisteq(1, 2)
+        ex["eq"]["sisnl1"] = g.sisteq(11, random.choice([1, 2, 3]))
+        ex["eq"]["sisnl2"] = g.sisteq(12, random.choice([1, 2, 3]))
         ex["eq"]["sis3d"] = g.sisteq(101, 3)
         # omx
         ex["omx"]["suma"] = g.apilades(1, 1, [3, 2])
@@ -139,6 +157,21 @@ def genera(aleatoris=False):
         ex["frac"]["divi"] = r"\frac{3}{5}\div \frac{-1}{-2}"
         ex["frac"]["combi"] = r"(\frac{3}{2}\cdot \frac{1}{3}-\frac{1}{3}\cdot \frac{3}{2}+\frac{1}{2}): (\frac{2}{4}\cdot \frac{-14}{3}+\frac{7}{5}: \frac{9}{7})"
         ex["frac"]["combi2"] = r"\lbrack \sqrt{\frac{17}{2}-\frac{1}{2}+1}: (\frac{10}{3}-\frac{43}{21})\rbrack ^2"
+        # px
+        ex["px"]["inv"] = r"De grau 34, incomplet, desordenat i que el terme independent sigui 6."
+        ex["px"]["fcom1"] = r"8x^{5}-2x^{2}"
+        ex["px"]["fcom2"] = r"10bax+10ba^{4}x+20bat"
+        ex["px"]["idnot1"] = r"(x+3)^2"
+        ex["px"]["idnot2"] = r"(2ba^{3}+a)(2ba^{3}-a)"
+        ex["px"]["eidnot1"] = r"x^{2}+10x+25"
+        ex["px"]["eidnot2"] = r"9c^{2}a^{2}-4"
+        ex["px"]["sumrest"] = r"(15x^{3}+14x^{2}+15x-12)+(x^{2}+x-11)"
+        ex["px"]["multi"] = r"(-5x^{2}-6x-4)\times (x+2)"
+        ex["px"]["rufi"] = "(7x^{2}-13x-2)\div (x-2)"
+        ex["px"]["divi"] = "(-6x^{5}-6x^{4}-5x^{3}-5x^{2})\div (x^{2}+x)"
+        ex["px"]["tres"] = r"Sense fer la divisió, digues quin és el residu de $(-x^{4}+4x^{2}-7x+1)\div(x+2)$."
+        ex["px"]["fact"] = r"x^{5}-3x^{4}-10x^{3}"
+        ex["px"]["alg"] = r"\frac{x^{3}+2x^{2}-8x}{x^{4}-12x^{2}+16x}"
         # eq
         ex["eq"]["simple"] = "2x+5=7"
         ex["eq"]["1poli"] = "-2x-10-3x-39=1+5x"
@@ -149,7 +182,10 @@ def genera(aleatoris=False):
         ex["eq"]["segonc2"] = "-2x^2+12x-10=0"
         ex["eq"]["poli"] = "-16-3x^2=10x-8x-24-2x^2"
         ex["eq"]["sis2d"] = r"\begin{cases} x+3y=-14 \\ 5x-3y=-16 \end{cases}"
+        ex["eq"]["sisnl1"] = r"\begin{cases} 2x+y=20 \\ xy=18 \end{cases}"
+        ex["eq"]["sisnl2"] = r"\begin{cases} x^{2}+y^{2}=10 \\ x+y=-4 \end{cases}"
         ex["eq"]["sis3d"] = r"\begin{cases} x+5y-3z=39 \\ -2x+3y+5z=13 \\ 3x+16y+2z=124 \end{cases}"
+        # omx
         ex["omx"]["suma"] = r"\begin{array}{c}\phantom{+}565\\ \underline{+\phantom{9}64}\\ \end{array}"
         ex["omx"]["sumad"] = r"\begin{array}{c}\phantom{+}115.19\phantom{9}\\ \underline{+\phantom{9}43.658\phantom{}}\\ \end{array}"
         ex["omx"]["resta"] = r"\begin{array}{c}\phantom{-}93\\ \underline{-\phantom{}11}\\ \end{array}"
