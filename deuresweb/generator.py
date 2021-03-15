@@ -1632,7 +1632,7 @@ def fcomu():  # TODO crear fcomú amb polinomis i tb amb frases generades i encr
     pass
 
 
-def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucions=False):
+def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, ordre2=False, solucions=False):
     """genera exercicis d'identitats notables
 
     :param tipus: 1 calcular, 2 endevinar
@@ -1640,6 +1640,7 @@ def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucio
     :param idnums: 1 (a+b)^2 / 2 (a-b)^2 / 3 (a+b)(a-b)
     :param fcoefb: forçar coeficient b (número que tindrà el coeficient si el vull triar)
     :param ordenat: False permet desordre als tipus 2
+    :param ordre2: Considera que "ordenat" vol dir a^2+b^2+2ab
     :param solucions: retornar també les solucions
     """
     text = "(x+42)^2"
@@ -1678,7 +1679,7 @@ def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucio
                 base = f"({polinomitza(base)})^2"
             else:
                 base = f"({polinomitza(base)})({polinomitza(base2)})"
-            desenv = polinomitza(desenv, ordenat)
+            desenv = polinomitza(desenv, ordenat, ordre2=ordre2)
 
         elif nivell in [4, 5, 6]:  # (2xy+3) multimonomi + indep / (2x+3y) dues variables / (5xy^2+3x^2y)
             ca = random.randint(1, 3)  # de moment els deixo tots positius els de davant
@@ -1728,6 +1729,9 @@ def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, solucio
                 base = f"({polimumitza(base)})({polimumitza(base2)})"
             if not ordenat:
                 random.shuffle(desenv)
+            elif ordre2:  # quan "ordenat" vol dir a^2+b^2+2ab
+                desenv = [desenv[0]]+[desenv[2]]+[desenv[1]]
+                print(desenv)
             desenv = polimumitza(desenv)
         if tipus == 1:
             text = base
@@ -2233,14 +2237,22 @@ def polinomi(grau, termes=0, ordenat=True, cmax=15, obliga=[], negatius=1, suavi
     return "".join(px)
 
 
-def polinomitza(rufinat, ordenat=True):
-    """escriu el polinomi a partir dels coefs (sense zeros)"""
+def polinomitza(rufinat, ordenat=True, ordre2=False):
+    """escriu el polinomi a partir dels coefs (sense zeros)
+
+    :param rufinat: polinomi donat com a llista de coeficients del rufini
+    :param ordenat: de grau més gran a grau més petit
+    :param ordre2: en id. notables significa escriure'l a^2+b^2+2ab
+    """
     px = []
     for i, x in enumerate(rufinat):
         if x:
             px.append(monomi(x, len(rufinat)-i-1, True))
     if not ordenat:
         random.shuffle(px)
+    elif ordre2 and len(px) == 3:
+        px = [px[0]]+[px[2]]+[px[1]]
+        print(px)
     if px[0].startswith("+"):
         px[0] = px[0][1:]
     return "".join(px)

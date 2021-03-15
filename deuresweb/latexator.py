@@ -1982,8 +1982,25 @@ def polinomis(opcions, solucions=False):
         qeidnot = quantesson(opcions["qeidnot"], "px_eidnot")
         eid1var = quantesvariant(opcions["eid1var"])
         eidord = quantesvariant(opcions["eidord"])
-        idnums = [1, 2, 3]
-        eidnums = [1, 2, 3]
+
+        idnums = []
+        for x in range(3):
+            if f"idnt{x+1}" in opcions:
+                idnums.append(x+1)
+        if not idnums:
+            idnums = [1, 2, 3]
+
+        eidnums = []
+        for x in range(3):
+            if f"eidnt{x+1}" in opcions:
+                eidnums.append(x+1)
+        if not eidnums:
+            eidnums = [1, 2, 3]
+
+        if opcions["ordre2"] == "ordre2":
+            ordre2 = True
+        else:
+            ordre2 = False
         # ...
         print(f"Id Notables {qidnot}, Endevinar {qeidnot}")
     else:
@@ -2235,7 +2252,7 @@ def polinomis(opcions, solucions=False):
                         nivell = random.choice([4, 5])
                     if x > var2:
                         ordenat = False
-                    text = gen.idnotable(2, nivell, idnums=idnum, fcoefb=coefb, ordenat=ordenat)
+                    text = gen.idnotable(2, nivell, idnums=idnum, fcoefb=coefb, ordenat=ordenat, ordre2=ordre2)
                     doc.append(NoEscape(r"$%s$" % text))
                     space(doc, "0.4cm")
                 end(doc, 'multicols')

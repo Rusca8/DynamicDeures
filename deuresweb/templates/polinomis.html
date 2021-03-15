@@ -221,6 +221,31 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label><i>Triar quins tipus? ✨</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-2" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-3 active">
+                          <input type="checkbox" name="idnt1" autocomplete="off" id="idnt1" value="idnt1" checked> (a+b)²
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="idnt2" autocomplete="off" id="idnt2" value="idnt2" checked> (a-b)²
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="idnt3" autocomplete="off" id="idnt3" value="idnt3" checked> (a+b)(a-b)
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
             <label><i>Una sola variable?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "id1var" %}
@@ -258,6 +283,31 @@
         </div>
 
         <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupPropietats"><i>Triar quins tipus? ✨</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-2" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-3 active">
+                          <input type="checkbox" name="eidnt1" autocomplete="off" id="eidnt1" value="eidnt1" checked> (a+b)²
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="eidnt2" autocomplete="off" id="eidnt2" value="eidnt2" checked> (a-b)²
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="eidnt3" autocomplete="off" id="eidnt3" value="eidnt3" checked> (a+b)(a-b)
+                        </label>
+                    </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-4">
             <label><i>Una sola variable?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "eid1var" %}
@@ -274,7 +324,7 @@
             </div>
         </div>
 
-        <div class="form-group mb-1 ml-4">
+        <div class="form-group mb-0 ml-4">
             <label><i>Forçar ordenat?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "eidord" %}
@@ -288,6 +338,18 @@
                 {% endif %}
                   </label>
               {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-5">
+            <label><i>...què vol dir ordenat? ✨</i></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+                    <input type="radio" name="ordre2" id="ordre1" value="ordre1" autocomplete="off" checked> a²+2ab+b²
+                  </label>
+                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+                    <input type="radio" name="ordre2" id="ordre2" value="ordre2" autocomplete="off"> a²+b²+2ab
+                  </label>
             </div>
         </div>
 
