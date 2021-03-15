@@ -4483,4 +4483,6 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(10):
-    print(px(6, 2))
+    sol = en.factorcomu()
+    ex = " ".join([fr" $\ \ \ \ {x}$ " for x in crypt.fc_frase(sol)])
+    print(ex, sol)

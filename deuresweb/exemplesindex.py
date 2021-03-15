@@ -62,9 +62,13 @@ def genera(aleatoris=False):
         ex["frac"]["combi"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3)
         ex["frac"]["combi2"] = g.fracmix(random.choice([-1, 1]) * g.randomfracnum(3), g.randomfracnum(3), 3, ops=[1, 2, 4, 5])
         # px
+        ex["px"]["monom1"] = g.rand_multimon(2)
+        ex["px"]["monom2"] = g.rand_multimon(3)
         ex["px"]["inv"] = g.en.px_invent()
+        ex["px"]["aval"] = g.px(6, 1)
         ex["px"]["fcom1"] = g.px(0, 1, termes=2)
         ex["px"]["fcom2"] = g.px(0, 2)
+        ex["px"]["cryp"] = " ".join([fr" $\ \ \ \ {x}$ " for x in g.crypt.fc_frase(g.en.factorcomu())])
         ex["px"]["idnot1"] = g.idnotable(1, random.choice([1, 2]), random.choice([random.choice([1, 3]), 2]))
         ex["px"]["idnot2"] = g.idnotable(1, random.choice([4, 5, 6]), random.choice([random.choice([1, 2]), 3]))
         ex["px"]["eidnot1"] = g.idnotable(2, random.choice([1, 2]), random.choice([random.choice([1, 2]), 3]))
@@ -158,9 +162,13 @@ def genera(aleatoris=False):
         ex["frac"]["combi"] = r"(\frac{3}{2}\cdot \frac{1}{3}-\frac{1}{3}\cdot \frac{3}{2}+\frac{1}{2}): (\frac{2}{4}\cdot \frac{-14}{3}+\frac{7}{5}: \frac{9}{7})"
         ex["frac"]["combi2"] = r"\lbrack \sqrt{\frac{17}{2}-\frac{1}{2}+1}: (\frac{10}{3}-\frac{43}{21})\rbrack ^2"
         # px
+        ex["px"]["monom1"] = r"7ya^{3}"
+        ex["px"]["monom2"] = r"-53z^{10}a^{32}y^{4}"
         ex["px"]["inv"] = r"De grau 34, incomplet, desordenat i que el terme independent sigui 6."
+        ex["px"]["aval"] = "Troba el valor numèric del polinomi $P(x)=x^{5}+x^{4}+5x^{2}-7$ per a $x=1$."
         ex["px"]["fcom1"] = r"8x^{5}-2x^{2}"
         ex["px"]["fcom2"] = r"10bax+10ba^{4}x+20bat"
+        ex["px"]["cryp"] = r"$\ \ \ \ me^{2}lus-es^{2}l$   $\ \ \ \ camsi-nmaoi$   $\ \ \ \ ensab+qasub+beas$   $\ \ \ \ tleva-a^{2}l$   $\ \ \ \ mgaer-nreg-gaer$   $\ \ \ \ jmean-m^{2}oecn-mesn$   $\ \ \ \ grdea-enotd-dea$   $\ \ \ \ nqua-uahiq$   $\ \ \ \ hal+lhaun-a^{2}h$   $\ \ \ \ nple+lepa$"
         ex["px"]["idnot1"] = r"(x+3)^2"
         ex["px"]["idnot2"] = r"(2ba^{3}+a)(2ba^{3}-a)"
         ex["px"]["eidnot1"] = r"x^{2}+10x+25"

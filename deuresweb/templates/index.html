@@ -553,6 +553,22 @@
     <h5 class="card-header">Polinomis<b id="px"></b></h5>
         <div class="card-body">
             <p class="card-text">
+                Indicar coeficient, part literal, grau... de monomis.
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                        <i>${{ ex["px"]["monom1"] }}$</i>
+                    </div>
+                    <div class="col-sm">
+                        <i>${{ ex["px"]["monom2"] }}$</i>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
                 Inventar polinomis segons descripció
             </p>
             <div class="font-weight-light mt-3 mb-2">
@@ -566,7 +582,20 @@
             </div>
             <br>
             <p class="card-text">
-                Factor comú
+                Avaluar polinomis en un punt
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                        <i>{{ ex["px"]["aval"] }}</i>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <br>
+            <p class="card-text">
+                Extreure factor comú
             </p>
             <div class="font-weight-light mt-3 mb-2">
                 <div class="container">
@@ -581,6 +610,22 @@
                 </div>
             </div>
             <br>
+            <p class="card-text">
+                Extreure la frase amagada
+            </p>
+            <div class="font-weight-light mt-3 mb-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm" style="font-size:0.8em; line-height:150%">
+                      {{ ex["px"]["cryp"] }}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <hr class="mt-6">
+            <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
+            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
+            <hr>
             <p class="card-text">
                 Calcular identitats notables
             </p>
