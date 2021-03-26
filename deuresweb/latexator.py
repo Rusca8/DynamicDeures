@@ -4,6 +4,7 @@ from pylatex import Document, Section
 from pylatex import Command, NoEscape, Math, Tabular, Package
 
 import generator as gen
+import q_generator as qgen
 import enunciats as en
 import cryptolator as crypt
 import wolframator as w
@@ -3088,6 +3089,142 @@ def derivades(opcions, solucions=False):
     return
 
 
+# - - - - - - - - - - - - - - - - - - - - - - - - Química - - - - - - - - - - - - - - - - - - - - - - - - - #
+
+
+def q_formul(opcions, solucions=False):
+    tema = "q_formul"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "inorg" in opcions:
+        inorg = True
+        qsimples = quantesson(opcions["qsimples"], "q_simples")
+        qhidrurs = quantesson(opcions["qhidrurs"], "q_hidrurs")
+        qoxids = quantesson(opcions["qoxids"], "q_oxids")
+        qsbin = quantesson(opcions["qsbin"], "q_sbin")
+        qhidroxids = quantesson(opcions["qhidroxids"], "q_hidroxids")
+        # ...
+        #print(f"Exercici 1 {qexercici1}, Exercici 2 {qexercici2} ...")
+    else:
+        inorg = False
+        qsimples = 0
+        qhidrurs = 0
+        qoxids = 0
+        qsbin = 0
+        qhidroxids = 0
+        # ...
+
+    if "org" in opcions:
+        org = True
+        # ...
+    else:
+        org = False
+        # ...
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))
+    doc.packages.append(Package('isotope'))  # paquet per escriure isòtops
+    doc.packages.append(Package('array'))
+    doc.packages.append(Package('longtable'))
+    doc.packages.append(NoEscape(r"\usepackage[catalan]{babel}"))  # ela geminada
+    # doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
+
+    headfoot(doc, opcions, tema, assig="Química")
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if any([inorg, org]):  # aquí tots els botons grossos
+        if any([qsimples, qhidrurs, qoxids, qsbin, qhidroxids]):  # aquí tots els tipus d'exercici
+            begin(doc, 'questions')
+
+            if inorg:
+                needspace(doc, 12)
+                bloctitle(doc, "Formulació inorgànica")
+
+            if qsimples:
+                n = qsimples
+                needspace(doc, 8)
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append(r"Omple aquesta taula de substàncies simples")
+                header = ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    filataula(doc, qgen.finorg(1), py=10)
+                tancataula(doc)
+
+            if qhidrurs:
+                n = qhidrurs
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append(r"Omple aquesta taula d'hidrurs.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    filataula(doc, qgen.finorg(10, 1), py=10)
+                tancataula(doc)
+
+            if qoxids:
+                n = qoxids
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append(r"Omple aquesta taula d'òxids.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    filataula(doc, qgen.finorg(10, 2), py=10)
+                tancataula(doc)
+
+            if qsbin:
+                n = qsbin
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append(r"Omple aquesta taula de compostos binaris.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    filataula(doc, qgen.finorg(10, 3), py=10)
+                tancataula(doc)
+
+            if qhidroxids:
+                n = qhidroxids
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append(r"Omple aquesta taula d'hidròxids.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    filataula(doc, qgen.finorg(10, 4), py=10)
+                tancataula(doc)
+
+            if org:
+                needspace(doc, 12)
+                bloctitle(doc, "Formulació Orgànica")
+            # exercicis d'orgànica'
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+
+    return
+
+
 # - - - - - - - - - - - - - - - - - - - - - - - - Playground - - - - - - - - - - - - - - - - - - - - - - - - #
 
 
@@ -3100,6 +3237,10 @@ def playground(opcions, solucions=False):
     doc = Document(documentclass="exam", geometry_options=geometry)
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('isotope'))  # paquet per escriure isòtops
+    doc.packages.append(Package('longtable'))
+    doc.packages.append(Package('array'))
+    doc.packages.append(NoEscape(r"\usepackage[catalan]{babel}"))  # ela geminada
 
     # header and footer
     doc.preamble.append(Command('pagestyle', "headandfoot"))
@@ -3212,13 +3353,104 @@ def playground(opcions, solucions=False):
     part(doc)
     doc.append(NoEscape(fr'Si vols demostrat com la a, \\ hi ha el paq xlop que ho fa sol'))
     space(doc, "1cm")
-    for x in range(0, 12):
-        part(doc)
-        doc.append(NoEscape(r'${%s}$' % (gen.apilades(3, [(x // 3) + 1, (x % 3) + 1]))))
-        space(doc, "1cm")
 
     end(doc, "multicols")
     end(doc, 'parts')
+
+    question(doc, "42")
+    doc.append(r"Taula formulació inorgànica ions, diatòmics i ozó")
+    doc.append(NoEscape(R"\\"))
+    obretaula(doc, taulaconfig(4, "c", [0, 1, -1]))
+    filataula(doc, ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"])
+    for x in range(12):
+        filataula(doc, qgen.finorg(1), py=10)
+    tancataula(doc)
+
+    question(doc, "42")
+    doc.append(r"Taula de nomenclatura negativa")
+    doc.append(NoEscape(R"\\"))
+    obretaula(doc, "||c|c|c||c|c||c|c||")
+    filataula(doc, ["Z", "Símbol", "Element", "Valències Positives", "València negativa", "Ió negatiu", "Nom negatiu"])
+    for z in range(118):
+        if "vn" in qgen.elements[z]:
+            if "vp" in qgen.elements[z]:
+                vp = ", ".join([f"{v}" for v in qgen.elements[z]["vp"]])
+            else:
+                vp = "-"
+            filataula(doc, [f"{z}",
+                       qgen.elements[z]["sym"],
+                       qgen.elements[z]["nom"],
+                       vp,
+                       ", ".join([f"{v}" for v in qgen.elements[z]["vn"]]),
+                       qgen.symio(z, qgen.elements[z]["vn"][0]),
+                       qgen.nomio(z, qgen.elements[z]["vn"][0], True)
+                       ])
+    tancataula(doc)
+
+    question(doc, "42")
+    doc.append(r"Vaig a veure si faig una taula de molècules.")
+    doc.append(NoEscape(R"\\"))
+    space(doc, "1cm")
+    # taula
+    obretaula(doc, "||c||c|c|c||")
+    filataula(doc, ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"])
+    for x in range(6):
+        filataula(doc, qgen.finorg(10, 1), py=10)
+    doc.append(NoEscape(r"\hline"))
+    for x in range(6):
+        filataula(doc, qgen.finorg(10, 2), py=10)
+    doc.append(NoEscape(r"\hline"))
+    for x in range(6):
+        filataula(doc, qgen.finorg(10, 3), py=10)
+    doc.append(NoEscape(r"\hline"))
+    for x in range(6):
+        filataula(doc, qgen.finorg(10, 4), py=10)
+    tancataula(doc)
+
+    question(doc, "30")
+    doc.append(r"Vaig a veure si puc fer una taula d'isòtops")
+    doc.append(NoEscape(R"\\"))
+    space(doc, "1cm")
+    # taula
+    obretaula(doc, "||c|c|c||c|c||c|c||")
+    filataula(doc, ["Z", "Símbol", "Element", "Valències Positives", "València negativa", "Ió més estable", "Nom ió"])
+    for x in range(119):
+        vp = "-"
+        vn = "-"
+        ime = "-"
+        io = "-"
+        if "vp" in qgen.elements[x]:
+            vp = ", ".join([f"{v}" for v in qgen.elements[x]["vp"]])
+            print(vp)
+        if "vn" in qgen.elements[x]:
+            vn = ", ".join([f"{v}" for v in qgen.elements[x]["vn"]])
+        if "ime" in qgen.elements[x]:
+            ime = qgen.elements[x]['ime']
+            if ime == 1:
+                exp = "+"
+            elif ime == -1:
+                exp = "-"
+            elif ime > 0:
+                exp = f"{ime}+"
+            else:
+                exp = f"{abs(ime)}-"
+            ime = r"$\isotope{" + qgen.elements[x]["sym"] + "}^{" + exp + "}$"
+        if "ime" in qgen.elements[x]:
+            if qgen.elements[x]["ime"] > 0:
+                io = "Ió " + qgen.elements[x]["nom"]
+                if vp != "-":
+                    if len(qgen.elements[x]["vp"]) > 1:
+                        io += f" ({qgen.romans[qgen.elements[x]['ime']]})"
+            else:
+                if "nneg" in qgen.elements[x]:
+                    io = "Ió " + qgen.elements[x]["nneg"]
+                else:
+                    io = "(Anió " + qgen.elements[x]["nom"] + ")"
+
+        if not all([x == "-" for x in [vp, vn]]):
+            filataula(doc, [f"{x}", qgen.elements[x]["sym"], qgen.elements[x]["nom"], vp, vn, ime, io])
+    #filataula(doc, ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom Comú"])
+    tancataula(doc)
 
     end(doc, 'questions')
 
@@ -3294,6 +3526,9 @@ def temallarg(tema="no"):
         return "derivades"
     elif tema == "lim":
         return "limits"
+    # química
+    elif tema == "q_formul":
+        return "formulacio"
     else:
         return tema
 
@@ -3319,6 +3554,10 @@ def tematitol(tema="no"):
         return "de Successions"
     elif tema == "dx":
         return "de Derivades"
+    # química
+    elif tema == "q_formul":
+        return "de Formulació"
+    # res
     elif tema == "no":
         return "de Qui sap què"
     else:
@@ -3437,6 +3676,10 @@ def quantesson(value, op):
         quantitats = [0, 6, 9, 12, 18, 39, 81]
     elif op in ["dx_cadena", "dx_muldiv"]:
         quantitats = [0, 4, 6, 8, 12, 26, 54]
+    # ************* química ************* #
+    # formulació inorgànica
+    elif op in ["q_simples", "q_hidrurs", "q_oxids", "q_sbin", "q_hidroxids"]:
+        quantitats = [0, 3, 5, 8, 11, 22, 52]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")
@@ -3462,7 +3705,7 @@ def margins():
     return {"tmargin": "40mm", "lmargin": "15mm", "bmargin": "20mm", "rmargin": "15mm"}
 
 
-def headfoot(doc, opcions, tema="no"):
+def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
     tema = tematitol(tema)
     # header and footer
     doc.preamble.append(Command('pagestyle', "headandfoot"))
@@ -3471,8 +3714,8 @@ def headfoot(doc, opcions, tema="no"):
     doc.preamble.append(Command('firstpageheadrule'))
     doc.preamble.append(NoEscape(r"\SolutionEmphasis{\raggedright}"))  # (esto me lo sugirió uno en TeX.StackExchange)
     doc.preamble.append(NoEscape(
-        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa %s\\ \large Matemàtiques - %s \scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}" % (
-        tema, opcions["curs"],)))
+        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa" + tema + r"\\ \large " + assig
+        + f" - {opcions['curs']} " r"\scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}"))
     doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
     doc.preamble.append(NoEscape(r"\footer{Total: \numpoints\ punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
 
@@ -3575,6 +3818,80 @@ def uncalcul(doc, quin=[1, 1], sp="0.7cm"):  # op és llista d'opcions del gener
     doc.append(NoEscape(r'$%s$' % gen.comb(*quin)))  # asterisc separa la llista i els envia individualment
     space(doc, sp)
     return
+
+
+def taulaconfig(ncols, align, dobles=[]):
+    if align == "m":  # compte a tenir el paquet array
+        align = r"m{5cm}"
+    config = ['|']
+    for c in range(ncols):
+        if c in dobles:
+            config.append('|')
+        config.append(fr"{align}|")
+    if c+1 in dobles or -1 in dobles:
+        config.append('|')
+    return "".join(config)
+
+
+def obretaula(doc, estructura, vorasobre=True, header=[], longtable=True):
+    if longtable:
+        obrellarga(doc, estructura, vorasobre, header=header)
+    else:
+        doc.append(NoEscape(r"\begin{tabular}[b]{" + estructura + "}"))  # la b ajuda amb l'espai sota l'enunciat (o no...)
+        if vorasobre:
+            doc.append(NoEscape(r"\hline"))
+
+
+def obrellarga(doc, estructura, vorasobre=True, header=[]):
+    """inicia taula multipaginable (cal 'longtable' package)"""
+    # estructura de la taula
+    doc.append(NoEscape(r"\begin{longtable}[b]{" + estructura + "}"))
+    if vorasobre:
+        doc.append(NoEscape(r"\hline"))
+    # capçalera inici
+    filataula(doc, header)
+    doc.append(NoEscape(r"\endfirsthead"))
+    if vorasobre:
+        doc.append(NoEscape(r"\hline"))
+    # capçalera cont
+    filataula(doc, header)
+    doc.append(NoEscape(r"\endhead"))
+    # peu trencat
+    filataula(doc, ["..." for _ in header], False)
+    doc.append(NoEscape(r"\hline"))
+    doc.append(NoEscape(r"\endfoot"))
+    # últim peu
+    doc.append(NoEscape(r"\hline"))
+    doc.append(NoEscape(r"\endlastfoot"))
+
+
+def filataula(doc, caselles, vorasota=True, py=0):
+    """afegeix una fila a la taula, donades les caselles
+
+    :param doc: document al qual afegir la taula
+    :param caselles: llista amb les caselles de la taula
+    :param vorasota: marcar la vora sota cada fila
+    :param py: padding vertical (en desenes d'alçada de la x minúscula: py=35 és padding de '3.5ex')
+    """
+    # càlculs padding
+    if py:
+        pt = py + 22  # corregeixo la pròpia alçada del text (la implementació de pt que tinc compta des de baseline)
+        pt = r" \rule{0pt}{" + f"{pt // 10}.{pt % 10}ex" + "} "
+        pb = f"[{py // 10}.{py % 10}ex]"
+    else:
+        pt = ""
+        pb = ""
+    # muntatge
+    doc.append(NoEscape(pt + r" & ".join(caselles) + rf"\\" + pb))  # \\[3ex] fa espai a sota
+    if vorasota:
+        doc.append(NoEscape(r"\hline"))
+
+
+def tancataula(doc, longtable=True):
+    if longtable:
+        end(doc, "longtable")
+    else:
+        end(doc, "tabular")
 
 
 def escriusolus(llista, mates=False):

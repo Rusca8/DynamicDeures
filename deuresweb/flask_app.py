@@ -205,14 +205,31 @@ def derivades():
         return render_template("derivades.html")
 
 
+@app.route("/q/formul/", methods=["GET", "POST"])
+def q_formul():
+    if request.method == "POST":
+        """g.q_formul(request.form)
+        """
+        try:
+            g.q_formul(request.form)
+        except:
+            print("Error Formulació")
+            tele.error("q_formul")
+            return redirect("/latex_error/q_formul")
+        tele.feedback("q_formul", request.form)
+        return redirect("/pdf/q_formul")
+    else:
+        return render_template("q_formulac.html")
+
+
 @app.route("/proves/", methods=["GET", "POST"])
 def proves():
     if request.method == "POST":
         print(request.form)
-        g.proporcionalitat(request.form, solucions=False)
-        return redirect("/pdf/proporcionalitat")
+        g.playground(request.form, solucions=False)
+        return redirect("/pdf/successions")
     else:
-        return render_template("proporcionalitat.html")
+        return render_template("provaforms.html")
 
 
 @app.route("/provaforms/", methods=["GET", "POST"])
@@ -251,6 +268,9 @@ def pdfviewer(tema):
         return redirect("/static/pdfs/limits.pdf")
     elif tema == "derivades":
         return redirect("/static/pdfs/derivades.pdf")
+    # química
+    elif tema == "q_formul":
+        return redirect("/static/pdfs/formulacio.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

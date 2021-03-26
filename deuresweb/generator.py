@@ -1912,7 +1912,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 gd += random.randint(0, random.randint(1, 2))
 
             # polinomis
-            qx, rufiqx = polinomi(gq, termes[0], ordenat, cmax=7, rufinat=True)  # quocient
+            qx, rufiqx = polinomi(gq, termes[0], ordenat=True, cmax=7, rufinat=True)  # quocient
             if tipus == 4:  # si és rufini faig un polinomi de rufini
                 rufidx = [1, random.randint(1, random.choice([3, 5])) * random.choice([1, -1])]
                 dx = polinomitza(rufidx, ordenat)
@@ -4494,7 +4494,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(10):
-    sol = en.factorcomu()
-    ex = " ".join([fr" $\ \ \ \ {x}$ " for x in crypt.fc_frase(sol)])
-    print(ex, sol)
+for x in range(1):
+    pass
