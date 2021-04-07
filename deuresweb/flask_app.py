@@ -19,6 +19,15 @@ def index():
                 f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: dynamicdeures@gmail.com)</p>")
 
 
+@app.route('/q/')
+def q_index():
+    try:
+        return render_template("q_index.html")
+    except:
+        return (f"<h1>Ui</h1><h2>Hi ha hagut algun problema carregant la pàgina.</h2>"
+                f"<p>Si es manté avisa'm! (Twitter: @Rusca8 | Insta: @drusca8 | Mail: dynamicdeures@gmail.com)</p>")
+
+
 @app.route('/ex/')
 def indexvar():
     """return render_template("index.html", ex=e.genera(True))
@@ -205,6 +214,9 @@ def derivades():
         return render_template("derivades.html")
 
 
+# - - - - - - - - - - - - - - - - PLANES DD QUÍMICA - - - - - - - - - - - - - - - - - #
+
+
 @app.route("/q/formul/", methods=["GET", "POST"])
 def q_formul():
     if request.method == "POST":
@@ -222,10 +234,29 @@ def q_formul():
         return render_template("q_formulac.html")
 
 
+@app.route("/q/iso/", methods=["GET", "POST"])
+def q_iso():
+    if request.method == "POST":
+        """g.q_iso(request.form)
+        """
+        try:
+            g.q_iso(request.form)
+        except:
+            print("Error Isòtops")
+            tele.error("q_iso")
+            return redirect("/latex_error/q_iso")
+        tele.feedback("q_iso", request.form)
+        return redirect("/pdf/q_iso")
+    else:
+        return render_template("q_isotops.html")
+
+
+# - - - - - - - - - - - - - - - - - - #
+
+
 @app.route("/proves/", methods=["GET", "POST"])
 def proves():
     if request.method == "POST":
-        print(request.form)
         g.playground(request.form, solucions=False)
         return redirect("/pdf/successions")
     else:
@@ -271,6 +302,8 @@ def pdfviewer(tema):
     # química
     elif tema == "q_formul":
         return redirect("/static/pdfs/formulacio.pdf")
+    elif tema == "q_iso":
+        return redirect("/static/pdfs/isotops.pdf")
     else:
         return f"No s'ha trobat el pdf {tema}"
 

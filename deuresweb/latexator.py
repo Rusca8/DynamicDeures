@@ -42,6 +42,7 @@ def exemple(opcions, solucions=False):
     doc.packages.append(Package('multicol'))
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))  # per arrossegar coses si salta de línia
     # doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
     # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
 
@@ -3092,6 +3093,77 @@ def derivades(opcions, solucions=False):
 # - - - - - - - - - - - - - - - - - - - - - - - - Química - - - - - - - - - - - - - - - - - - - - - - - - - #
 
 
+def q_iso(opcions, solucions=False):
+    tema = "q_iso"
+
+    # getting opcions
+    curs = opcions["curs"]
+    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+
+    if "iso" in opcions:
+        iso = True
+        qzapne = quantesson(opcions["qzapne"], "q_zapne")
+        # ...
+        print(f"Zapne {qzapne}")
+    else:
+        iso = False
+        qzapne = 0
+        # ...
+
+    # PyLaTeX code
+    geometry = margins()
+    doc = Document(documentclass="exam", geometry_options=geometry)
+    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('amsmath'))
+    doc.packages.append(Package('alphalph'))
+    doc.packages.append(Package('needspace'))
+    doc.packages.append(Package('isotope'))  # paquet per escriure isòtops
+    doc.packages.append(Package('array'))
+    doc.packages.append(Package('longtable'))
+    doc.packages.append(NoEscape(r"\usepackage[catalan]{babel}"))  # ela geminada
+    # doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
+    # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
+
+    headfoot(doc, opcions, tema, assig="Química")
+    myconfig(doc, solucions)
+
+    doc.append(NoEscape(
+        r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
+
+    # preguntes
+    if any([iso]):  # aquí tots els botons grossos
+        if any([qzapne]):  # aquí tots els tipus d'exercici
+            begin(doc, 'questions')
+
+            if iso:
+                needspace(doc, 12)
+                bloctitle(doc, "Isòtops")
+
+            if qzapne:
+                n = qzapne
+                needspace(doc, 8)
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Omple la taula següent.")
+                header = [envt("Nom", 6), envt("Símbol"), envt("Z"), envt("A"), envt("p"), envt("n"), envt("e"),
+                          envt("càrrega", 1)]
+                obretaula(doc, taulaconfig(8, "c", [0, 2, 4, 7, -1]), header=header)
+                # trio per avançat la selecció d'elements (z petits però no repetits)
+                prezs = random.sample(qgen.els_ist[0:min(max(n + 10, 40), 117)], n)  # min 40, màx n+10 (no més de 117)
+                for x in range(n):
+                    filataula(doc, qgen.fisotops(1, 1 if x < n//4 else 2, prez=prezs[x % n]), py=10)
+                tancataula(doc)
+
+            end(doc, 'questions')
+        else:
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+    else:
+        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print("PDF generat.")
+    return
+
+
 def q_formul(opcions, solucions=False):
     tema = "q_formul"
 
@@ -3387,6 +3459,17 @@ def playground(opcions, solucions=False):
                        ])
     tancataula(doc)
 
+    question(doc, "52")
+    doc.append(r"Taula zapne d'isòtops")
+    n = 30
+    header = [envt("Nom", 6), envt("Símbol"), envt("Z"), envt("A"), envt("p"), envt("n"), envt("e"), envt("càrrega", 1)]
+    obretaula(doc, taulaconfig(8, "c", [0, 2, 4, 7, -1]), header=header)
+    # trio per avançat la selecció d'elements (z petits però no repetits)
+    prezs = random.sample(qgen.els_ist[0:min(max(n + 10, 40), 117)], n)  # min 40, màx n+10, però no més de 117
+    for x in range(n):
+        filataula(doc, qgen.fisotops(1, 2, prez=prezs[x % n]), py=10)
+    tancataula(doc)
+
     question(doc, "42")
     doc.append(r"Vaig a veure si faig una taula de molècules.")
     doc.append(NoEscape(R"\\"))
@@ -3529,6 +3612,8 @@ def temallarg(tema="no"):
     # química
     elif tema == "q_formul":
         return "formulacio"
+    elif tema == "q_iso":
+        return "isotops"
     else:
         return tema
 
@@ -3557,6 +3642,8 @@ def tematitol(tema="no"):
     # química
     elif tema == "q_formul":
         return "de Formulació"
+    elif tema == "q_iso":
+        return "d'Isòtops"
     # res
     elif tema == "no":
         return "de Qui sap què"
@@ -3680,6 +3767,8 @@ def quantesson(value, op):
     # formulació inorgànica
     elif op in ["q_simples", "q_hidrurs", "q_oxids", "q_sbin", "q_hidroxids"]:
         quantitats = [0, 3, 5, 8, 11, 22, 52]
+    elif op in ["q_zapne"]:
+        quantitats = [0, 3, 5, 8, 11, 22, 52]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
         print("no he trobat el codi")
@@ -3714,7 +3803,7 @@ def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
     doc.preamble.append(Command('firstpageheadrule'))
     doc.preamble.append(NoEscape(r"\SolutionEmphasis{\raggedright}"))  # (esto me lo sugirió uno en TeX.StackExchange)
     doc.preamble.append(NoEscape(
-        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa" + tema + r"\\ \large " + assig
+        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa " + tema + r"\\ \large " + assig
         + f" - {opcions['curs']} " r"\scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}"))
     doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
     doc.preamble.append(NoEscape(r"\footer{Total: \numpoints\ punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
@@ -3894,6 +3983,10 @@ def tancataula(doc, longtable=True):
         end(doc, "tabular")
 
 
+def envt(text, qtat=4):
+    return "".join(['\\ ' for _ in range(qtat)] + [text] + ['\\ ' for _ in range(qtat+1)])
+
+
 def escriusolus(llista, mates=False):
     """fa una llista numerada amb totes les solucions de la llista"""
     for x in range(len(llista)):
@@ -3923,3 +4016,4 @@ def blocsolus(doc, solucions, llista, mates=False, stretch=False):  # stretch ne
         doc.append(NoEscape(r'%s\par' % escriusolus(llista, mates)))
         doc.append(NoEscape(r'\end{solution}'))
     return
+

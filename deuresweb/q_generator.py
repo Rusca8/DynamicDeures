@@ -102,59 +102,70 @@ def dde(z, qtat=0):
 
 
 # stats extrets
+els_ist = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+           30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+           58, 59, 60, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 90]
 els_v = [1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 19, 20, 24, 25, 26, 27, 28, 29, 30, 33, 34, 35, 37, 38, 42,
          47, 48, 50, 51, 52, 53, 55, 56, 78, 79, 80, 82, 83, 87, 88]
 els_vp = [1, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 19, 20, 24, 25, 26, 27, 28, 29, 30, 33, 34, 35, 37, 38, 42, 47,
           48, 50, 51, 52, 53, 55, 56, 78, 79, 80, 82, 83, 87, 88]
 els_vn = [1, 6, 7, 8, 9, 14, 15, 16, 17, 33, 34, 35, 51, 52, 53]
 els_ve = [7, 8]
-els_nneg = [1, 7, 8, 9, 15, 16, 17, 33, 34, 35, 51, 52, 53]
+els_nneg = [1, 6, 7, 8, 9, 14, 15, 16, 17, 33, 34, 35, 51, 52, 53]
 # llista
 elements = [
     # [Símbol, Nom Element, {
     #                        nneg: nom ió negatiu,
     #                        mm: massa molar,
-    #                        ist: isòtops,
+    #                        ist: isòtops estables,
     #                        vp: valències positives,
     #                        vn: valència negativa,
-    #                        ve: valències extra (excepcions)
-    #                        ime: ió més estable
+    #                        ve: valències extra (excepcions),
+    #                        ime: ió més estable, (font: periodictable.com)
+    #                        oen: ordre electro-negativitat (IUPAC) :: El més petit va a la dreta en binaris.
     #                        }]
     {"sym": "X", "nom": "Element",
      },
     # 1
     {"sym": "H", "nom": "Hidrogen",
      "nneg": "Hidrur",
+     "ist": [1, 2],
      "vp": [1],
      "vn": [-1],
      "ime": 1,
      "oen": 11,
      },
     {"sym": "He", "nom": "Heli",
+     "ist": [3, 4],
      },
     {"sym": "Li", "nom": "Liti",
+     "ist": [6, 7],
      "vp": [1],
      "ime": 1,
      "oen": 100,
      },
     {"sym": "Be", "nom": r"Beri\lgem i",
+     "ist": [9],
      "vp": [2],
      "ime": 2,
      "oen": 94,
      },
     {"sym": "B", "nom": "Bor",
+     "ist": [10, 11],
      "vp": [3],
      "ime": 3,
      "oen": 22,
      },
     {"sym": "C", "nom": "Carboni",
      "nneg": "Carbur",
+     "ist": [12, 13],
      "vp": [2, 4],
      "vn": [-4],
      "oen": 17,
      },
     {"sym": "N", "nom": "Nitrogen",
      "nneg": "Nitrur",
+     "ist": [14, 15],
      "vp": [1, 3, 5],
      "vn": [-3],
      "ve": [2, 4],
@@ -163,6 +174,7 @@ elements = [
      },
     {"sym": "O", "nom": "Oxigen",
      "nneg": "Òxid",
+     "ist": [16, 17, 18],
      "vn": [-2],
      "ve": [-1],
      "ime": -2,
@@ -170,36 +182,43 @@ elements = [
      },
     {"sym": "F", "nom": "Fluor",
      "nneg": "Fluorur",
+     "ist": [19],
      "vn": [-1],
      "ime": -1,
      "oen": 1,
      },
     # 10
     {"sym": "Ne", "nom": "Neó",
+     "ist": [20, 21, 22],
      },
     {"sym": "Na", "nom": "Sodi",
+     "ist": [23],
      "vp": [1],
      "ime": 1,
      "oen": 101,
      },
     {"sym": "Mg", "nom": "Magnesi",
+     "ist": [24, 25, 26],
      "vp": [2],
      "ime": 2,
      "oen": 95,
      },
     {"sym": "Al", "nom": "Alumini",
+     "ist": [27],
      "vp": [3],
      "ime": 3,
      "oen": 23,
      },
     {"sym": "Si", "nom": "Silici",
      "nneg": "Silicur",
+     "ist": [28, 29, 30],
      "vp": [4],
      "vn": [-4],
      "oen": 18,
      },
     {"sym": "P", "nom": "Fòsfor",
      "nneg": "Fosfur",
+     "ist": [31],
      "vp": [3, 5],
      "vn": [-3],
      "ime": -3,
@@ -207,6 +226,7 @@ elements = [
      },
     {"sym": "S", "nom": "Sofre",
      "nneg": "Sulfur",
+     "ist": [32, 33, 34, 36],
      "vp": [4, 6],
      "vn": [-2],
      "ime": -2,
@@ -214,77 +234,95 @@ elements = [
      },
     {"sym": "Cl", "nom": "Clor",
      "nneg": "Clorur",
+     "ist": [35, 37],
      "vp": [1, 3, 5, 7],
      "vn": [-1],
      "ime": -1,
      "oen": 2,
      },
     {"sym": "Ar", "nom": "Argó",
+     "ist": [36, 38, 40],
      },
     {"sym": "K", "nom": "Potassi",
+     "ist": [39, 41],
      "vp": [1],
      "ime": 1,
      "oen": 102,
      },
     # 20
     {"sym": "Ca", "nom": "Calci",
+     "ist": [40, 42, 43, 44, 46],
      "vp": [2],
      "ime": 2,
      "oen": 96,
      },
     {"sym": "Sc", "nom": "Escandi",
+     "ist": [45],
      "oen": 62,
      },
     {"sym": "Ti", "nom": "Titani",
+     "ist": [46, 47, 48, 49, 50],
      "oen": 58,
      },
     {"sym": "V", "nom": "Vanadi",
+     "ist": [51],
      "oen": 54,
      },
     {"sym": "Cr", "nom": "Crom",
+     "ist": [50, 52, 53, 54],
      "vp": [2, 3, 6],
      "oen": 50,
      },
     {"sym": "Mn", "nom": "Manganès",
+     "ist": [55],
      "vp": [2, 3, 4, 6, 7],
      "oen": 46,
      },
     {"sym": "Fe", "nom": "Ferro",
+     "ist": [54, 56, 57, 58],
      "vp": [2, 3],
      "oen": 42,
      },
     {"sym": "Co", "nom": "Cobalt",
+     "ist": [59],
      "vp": [2, 3],
      "oen": 38,
      },
     {"sym": "Ni", "nom": "Níquel",
+     "ist": [58, 60, 61, 62, 64],
      "vp": [2, 3],
      "oen": 34,
      },
     {"sym": "Cu", "nom": "Coure",
+     "ist": [63, 65],
      "vp": [1, 2],
      "oen": 30,
      },
     # 30
     {"sym": "Zn", "nom": "Zinc",
+     "ist": [64, 66, 67, 68, 70],
      "vp": [2],
      "ime": 2,
      "oen": 27,
      },
     {"sym": "Ga", "nom": r"Ga\lgem i",
+     "ist": [69, 71],
      "oen": 24,
      },
     {"sym": "Ge", "nom": "Germani",
+     "ist": [70, 72, 73, 74],
      "oen": 19,
      },
     {"sym": "As", "nom": "Arsènic",
      "nneg": "Arsenur",
+     "ist": [75],
      "vp": [3, 5],
      "vn": [-3],
      "oen": 14,
      },
     {"sym": "Se", "nom": "Seleni",
      "nneg": "Selenur",
+     "ist": [74, 76, 77, 78, 80],
      "vp": [4, 6],
      "vn": [-2],
      "ime": -2,
@@ -292,34 +330,42 @@ elements = [
      },
     {"sym": "Br", "nom": "Brom",
      "nneg": "Bromur",
+     "ist": [79, 81],
      "vp": [1, 3, 5, 7],
      "vn": [-1],
      "ime": -1,
      "oen": 3,
      },
     {"sym": "Kr", "nom": "Criptó",
+     "ist": [78, 80, 82, 83, 84, 86],
      },
     {"sym": "Rb", "nom": "Rubidi",
+     "ist": [85],
      "vp": [1],
      "ime": 1,
      "oen": 103,
      },
     {"sym": "Sr", "nom": "Estronci",
+     "ist": [84, 86, 87, 88],
      "vp": [2],
      "ime": 2,
      "oen": 97,
      },
     {"sym": "Y", "nom": "Itri",
+     "ist": [89],
      "oen": 63,
      },
     # 40
     {"sym": "Zr", "nom": "Zirconi",
+     "ist": [90, 91, 92, 94],
      "oen": 59,
      },
     {"sym": "Nb", "nom": "Niobi",
+     "ist": [93],
      "oen": 55,
      },
     {"sym": "Mo", "nom": "Molibdè",
+     "ist": [92, 94, 95, 96, 97, 98],
      "vp": [6],
      "oen": 51,
      },
@@ -327,32 +373,40 @@ elements = [
      "oen": 47,
      },
     {"sym": "Ru", "nom": "Ruteni",
+     "ist": [96, 98, 99, 100, 101, 102, 104],
      "oen": 43,
      },
     {"sym": "Rh", "nom": "Rodi",
+     "ist": [103],
      "oen": 39,
      },
     {"sym": "Pd", "nom": "Paladi",
+     "ist": [102, 104, 105, 106, 108, 110],
      "oen": 35,
      },
     {"sym": "Ag", "nom": "Argent",
+     "ist": [107, 109],
      "vp": [1],
      "oen": 31,
      },
     {"sym": "Cd", "nom": "Cadmi",
+     "ist": [106, 108, 110, 111, 112, 114],
      "vp": [2],
      "oen": 28,
      },
     {"sym": "In", "nom": "Indi",
+     "ist": [113],
      "oen": 25,
      },
     # 50
     {"sym": "Sn", "nom": "Estany",
+     "ist": [112, 114, 115, 116, 117, 118, 119, 120, 122, 124],
      "vp": [2, 4],
      "oen": 20,
      },
     {"sym": "Sb", "nom": "Antimoni",
      "nneg": "Antimonur",
+     "ist": [121, 123],
      "vp": [3, 5],
      "vn": [-3],
      "ime": -3,
@@ -360,6 +414,7 @@ elements = [
      },
     {"sym": "Te", "nom": r"Te\lgem uri",
      "nneg": r"Te\lgem urur",
+     "ist": [120, 122, 124, 125, 126],
      "vp": [4, 6],
      "vn": [-2],
      "ime": -2,
@@ -367,105 +422,134 @@ elements = [
      },
     {"sym": "I", "nom": "Iode",
      "nneg": "Iodur",
+     "ist": [127],
      "vp": [1, 3, 5, 7],
      "vn": [-1],
      "ime": -1,
      "oen": 4,
      },
     {"sym": "Xe", "nom": "Xenó",
+     "ist": [124, 126, 128, 129, 130, 131, 132, 134, 136],
      },
     {"sym": "Cs", "nom": "Cesi",
+     "ist": [133],
      "vp": [1],
      "ime": 1,
      "oen": 114,
      },
     {"sym": "Ba", "nom": "Bari",
+     "ist": [130, 132, 134, 135, 136, 137, 138],
      "vp": [2],
      "ime": 2,
      "oen": 98,
      },
     {"sym": "La", "nom": "Lantani",
+     "ist": [139],
      "oen": 64,
      },
     {"sym": "Ce", "nom": "Ceri",
+     "ist": [136, 138, 140, 142],
      "oen": 65,
      },
     {"sym": "Pr", "nom": "Praseodimi",
+     "ist": [141],
      "oen": 66,
      },
     # 60
     {"sym": "Ne", "nom": "Neodimi",
+     "ist": [142, 143, 145, 146, 148],
      "oen": 67,
      },
     {"sym": "Pm", "nom": "Prometi",
      "oen": 68,
      },
     {"sym": "Sm", "nom": "Samari",
+     "ist": [144, 149, 150, 152, 154],
      "oen": 69,
      },
     {"sym": "Eu", "nom": "Europi",
+     "ist": [151, 153],
      "oen": 70,
      },
     {"sym": "Gd", "nom": "Gadolini",
+     "ist": [154, 155, 156, 157, 158, 160],
      "oen": 71,
      },
     {"sym": "Tb", "nom": "Terbi",
+     "ist": [159],
      "oen": 72,
      },
-    {"sym": "Di", "nom": "Disprosi",
+    {"sym": "Dy", "nom": "Disprosi",
+     "ist": [156, 158, 160, 161, 162, 163, 164],
      "oen": 73,
      },
     {"sym": "Ho", "nom": "Holmi",
+     "ist": [165],
      "oen": 74,
      },
     {"sym": "Er", "nom": "Erbi",
+     "ist": [162, 164, 166, 167, 168, 170],
      "oen": 75,
      },
     {"sym": "Tm", "nom": "Tuli",
+     "ist": [169],
      "oen": 76,
      },
     # 70
     {"sym": "Yb", "nom": "Iterbi",
+     "ist": [168, 170, 171, 172, 173, 174, 176],
      "oen": 77,
      },
     {"sym": "Lu", "nom": "Luteci",
+     "ist": [175],
      "oen": 78,
      },
     {"sym": "Hf", "nom": "Hafni",
+     "ist": [176, 177, 178, 179, 180],
      "oen": 60,
      },
     {"sym": "Ta", "nom": "Tàntal",
+     "ist": [181],
      "oen": 56,
      },
     {"sym": "W", "nom": "Tungstè",
+     "ist": [180, 182, 183, 184, 186],
      "oen": 52,
      },
     {"sym": "Re", "nom": "Reni",
+     "ist": [185],
      "oen": 48,
      },
     {"sym": "Os", "nom": "Osmi",
+     "ist": [184, 187, 188, 189, 190, 192],
      "oen": 44,
      },
     {"sym": "Ir", "nom": "Iridi",
+     "ist": [191, 193],
      "oen": 40,
      },
     {"sym": "Pt", "nom": "Platí",
+     "ist": [192, 194, 195, 196, 198],
      "vp": [2, 4],
      "oen": 36,
      },
     {"sym": "Au", "nom": "Or",
+     "ist": [197],
      "vp": [1, 3],
      "oen": 32,
      },
     # 80
     {"sym": "Hg", "nom": "Mercuri",
+     "ist": [196, 198, 199, 200, 201, 202, 204],
      "vp": [1, 2],
      "oen": 29,
      },
     {"sym": "Tl", "nom": "Tali",
+     "ist": [203, 205],
      "oen": 26,
      },
     {"sym": "Pb", "nom": "Plom",
+     "ist": [204, 206, 207, 208],
      "vp": [2, 4],
      "oen": 21,
      },
@@ -496,6 +580,7 @@ elements = [
      },
     # 90
     {"sym": "Th", "nom": "Tori",
+     "ist": [232],
      "oen": 80,
      },
     {"sym": "Pa", "nom": "Protoactini",
@@ -590,12 +675,15 @@ elements = [
 
 def elemstats():
     """funció que faig servir per actualitzar les llistes"""
+    ist = []
     vp = []
     vn = []
     ve = []
     v = []
     nneg = []
     for x in range(1, 119):  # de l'1 al 118
+        if "ist" in elements[x]:
+            ist.append(x)
         if "vp" in elements[x]:
             vp.append(x)
         if "vn" in elements[x]:
@@ -606,6 +694,7 @@ def elemstats():
             nneg.append(x)
         if any([v in ["vp", "vn"] for v in elements[x]]):
             v.append(x)
+    print(f"els_ist = {ist}")
     print(f"els_v = {v}")
     print(f"els_vp = {vp}")
     print(f"els_vn = {vn}")
@@ -751,6 +840,61 @@ def nommolec(elems=[], valens=[], nomencs=[1, 2, 3]):
     return noms
 
 
+def fisotops(tipus, nivell=1, prez=0):
+    """Treu files de la taula d'isòtops (zapne)
+
+    :param tipus: tipus d'exercici (1 = taula zapne)
+    :param nivell: 1 sense càrrega, 2 amb càrrega
+    :param prez: element (z) escollit a priori
+    """
+    fila = []
+    if tipus == 1:
+        # tria
+        if not prez:
+            z = random.choice(els_ist)
+        else:
+            z = prez
+        a = random.choice(elements[z]["ist"])
+        if nivell == 1:  # sense ions
+            estat = 0
+        elif nivell == 2:  # amb ions
+            if z in els_vn and (len(elements[z]["ist"]) > 1 or moneda()):
+                estat = random.choice(elements[z]["vn"])
+            elif z in els_vp:
+                estat = random.choice(elements[z]["vp"])
+            else:
+                estat = 0
+        else:  # TODO amb configuració electrònica?
+            return ["no", "tinc", "tants", "nivells"]
+        # càlcul
+        p = z
+        n = a-z
+        e = p-estat
+        if estat:
+            q = estatexp(estat)
+        else:
+            q = ""
+        # muntatge
+        symdata = (a, z, elements[z]["sym"], q)
+        sym = r"$\isotope[%s][%s]{%s}^{%s}$" % symdata
+        nom = elements[z]["nom"]
+        fila = [nom, sym, f"{z}", f"{a}", f"{p}", f"{n}", f"{e}", f"{estat}"]
+        # buidatge
+        if not random.randint(0, 4):  # només símbol
+            fila = [x if i == 1 else "" for i, x in enumerate(fila)]
+        else:
+            # trec el símbol
+            fila[1] = ""
+            # deixo només una de les tres instàncies de z
+            for x in random.sample([0, 2, 4], 2):
+                fila[x] = ""
+            # deixo màssic o neutrons
+            fila[random.choice([3, 5])] = ""
+            # deixo càrrega o electrons
+            fila[random.choice([-1, -2])] = ""
+    return fila
+
+
 def finorg(tipus, nivell=1, descn=[6, 14]):
     """Treu exercicis de formulació inorgànica
 
@@ -821,5 +965,4 @@ def finorg(tipus, nivell=1, descn=[6, 14]):
     return fila
 
 
-for _ in range(6):
-    print(lleisgasos(4))
+elemstats()
