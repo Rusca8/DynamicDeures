@@ -781,11 +781,13 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
 
     if "sistemes" in opcions:
         sistemes = True
+        qgsist = quantesson(opcions["qgsist"], "gsistemes")
         qsist = quantesson(opcions["qsist"], "sistemes")
         nocoef = quantesvariant(opcions["nocoef"])
         qnsist = quantesson(opcions["qnsist"], "nsistemes")
     else:
         sistemes = False
+        qgsist = 0
         qsist = 0
         qnsist = 0
     print(f"Ax+By=C i Dx+Ey=F {qsist}")
@@ -821,7 +823,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         if any([qidvseq,
                 qsimples, qdsimples, q1polis, q1racios,
                 qincomps, qcompletes, qpolis,
-                qsist, qsist3]):
+                qgsist, qsist, qnsist, qsist3]):
             begin(doc, 'questions')
 
             if base:
@@ -1044,11 +1046,33 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 needspace(doc, 12)
                 bloctitle(doc, "Sistemes d'equacions de dues incògnites")
 
+            if qgsist != 0:  # pels sistemes (per la clau de l'esquerra) cal msmath
+                n = qgsist
+                needspace(doc, 10)
+                question(doc, f"{n * 3}")
+                doc.append("Resol gràficament els següents sistemes lineals de dues incògnites.")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                sols = []
+                for x in range(0, n):
+                    part(doc)
+                    if x < (n // 2):
+                        text, sol = gen.sisteq(2, 1, solucions=True)
+                    else:
+                        text, sol = gen.sisteq(2, 2, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    sols.append(sol)
+                    space(doc, "0.5cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "0.5cm")
+                blocsolus(doc, solucions, sols, mates=True)
+
             if qsist != 0:  # pels sistemes (per la clau de l'esquerra) cal msmath
                 n = qsist
                 needspace(doc, 10)
                 question(doc, f"{n * 2}")
-                doc.append("Resol els següents sistemes d'equacions lineals de dues incògnites.")
+                doc.append("Resol analíticament aquests sistemes lineals de dues incògnites.")
                 var = (n * nocoef) // 4
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
@@ -3764,7 +3788,9 @@ def quantesson(value, op):
     elif op == "1racios":
         quantitats = [0, 2, 4, 8, 10, 20, 41]
     elif op in ["sistemes", "nsistemes"]:
-        quantitats = [0, 3, 6, 9, 12, 21, 45]
+        quantitats = [0, 3, 6, 9, 12, 29, 45]
+    elif op == "gsistemes":
+        quantitats = [0, 2, 3, 6, 12, 29, 45]
     elif op == "sistemes3":
         quantitats = [0, 3, 6, 9, 12, 27, 56]
     # proporcionalitat

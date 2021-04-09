@@ -3300,7 +3300,53 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
             text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
             solus = f"({x},~{y})"
 
-    elif tipus == 11:  # Ax+By=C, Dx*y=E (sense coef / un coef / dos dels tres coefs)
+    elif tipus == 2:  # lineals 2D gràficament (coef control per dibuix fàcil)
+        """Trio el punt solució (prop de OY per pendents fàcils) i trio talls amb OY
+           Punt solució: (x0, y0) :: pondero sobre tot x0 entre -1 i 1 (pendents enters), 
+                                     accepto -2 a 2 (pendents múltiples de 1/2)
+           Tall OY primera: (x1, y1) :: n = y1
+           Tall OY segona: (x2, y2)  :: n = y2
+           
+           :: Muntatge ::
+           Pendent: my/mx
+           Equació:  -(my)x + (mx)y = (mx)*n
+        """
+        x0 = y0 = 0
+
+        if nivell in [1, 2]:
+            # resultat
+            y0 = random.randint(-5, 5)
+            if random.randint(0, 3):  # 1/4 de vegades cau a {-2, 2}
+                if random.randint(0, 3):  # més a {-1, 1} que al 0
+                    x0 = random.choice([-1, 1])
+                else:
+                    x0 = 0
+            else:
+                x0 = random.choice([-2, 2])
+            # coef control
+            if x0 in [-2, 2] and nivell == 1:  # nivell 1 sense meitats al pendent
+                y1, y2 = random.sample([y0 + 2*i for i in range(-2, 2) if i != 0], 2)
+            else:
+                y1, y2 = random.sample([y0 + i for i in range(-4, 4) if i != 0], 2)
+            # càlcul
+            coefs = [[42, 42, 42], [42, 42, 42]]
+            ys = [y1, y2]
+            for eq in [0, 1]:
+                if x0:
+                    my = y0 - ys[eq]
+                    mx = x0
+                    n = ys[eq]
+                else:
+                    mx = 1
+                    my = random.randint(1, 4) * random.choice([-1, 1])
+                    n = y0
+                coefs[eq] = [-my, mx, mx*n]
+            eq1 = systeq_text(coefs[0][0], coefs[0][1], coefs[0][2])
+            eq2 = systeq_text(coefs[1][0], coefs[1][1], coefs[1][2])
+            text = r"\begin{cases} " + eq1 + r" \\ " + eq2 + r" \end{cases}"
+            solus = f"({x0},~{y0})"
+
+    elif tipus == 11:  # NO LINEALS: Ax+By=C, Dx*y=E (sense coef / un coef / dos dels tres coefs)
         # solucions
         x, y = [random.randint(1, 10) * random.choice([1, -1]) for _ in range(2)]
         # coefs
@@ -3339,7 +3385,8 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
                 solus = f"({x},~{y})"
             else:
                 solus = f"({x},~{y}),~({x2},~{y2})"
-    elif tipus == 12:  # estil Ax^2+By^2=C, Dx+Ey=F
+
+    elif tipus == 12:  # NO LINEALS: estil Ax^2+By^2=C, Dx+Ey=F
         """
         Ax^2+By^2=C, Dx+Ey=F
         - Hi ha segona solució si A*E^2+B*D^2 (és el coef del terme de segon grau)
@@ -3459,6 +3506,7 @@ def sisteq(tipus, nivell=1, nums=1, solucions=False):
 
 
 def systeq_text(a, b, c):
+    """Retorna el text d'una equació tipus ax+by=c"""
     if a == 1:
         ax = 'x'
     elif a == -1:
@@ -4632,4 +4680,4 @@ for x in range(12):
     print("\\\\")"""
 
 for x in range(10):
-    print(eq_base(10, 3, fid=1))
+    print(sisteq(2, 1, solucions=True))
