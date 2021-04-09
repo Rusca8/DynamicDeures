@@ -742,6 +742,13 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
+    if "base" in opcions:
+        base = True
+        qidvseq = quantesson(opcions["qidvseq"], "idvseq")
+    else:
+        base = False
+        qidvseq = 0
+
     if "primer" in opcions:
         primer = True
         qsimples = quantesson(opcions["qsimples"], "simples")
@@ -810,11 +817,44 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
     # preguntes
-    if primer or segon or sistemes or sistemes3:
-        if any([qsimples, qdsimples, q1polis, q1racios,
+    if base or primer or segon or sistemes or sistemes3:
+        if any([qidvseq,
+                qsimples, qdsimples, q1polis, q1racios,
                 qincomps, qcompletes, qpolis,
                 qsist, qsist3]):
             begin(doc, 'questions')
+
+            if base:
+                needspace(doc, 8)
+                bloctitle(doc, "Base")
+
+            if qidvseq != 0:
+                n = qidvseq
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append("Digues si les següents igualtats són identitats o equacions")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "2")
+                sols = []
+                for x in range(n):
+                    part(doc)
+                    if x < n // 2 or x == 0:
+                        if x == 0:
+                            nivell = 1
+                        else:
+                            nivell = random.choice([1, 2])
+                    elif x < 3*n // 4:
+                        nivell = random.choice([1, 2, 3])
+                    else:
+                        nivell = 3
+                    text, sol = gen.eq_base(10, nivell, solucions=True)
+                    doc.append(NoEscape(r'$%s$' % text))
+                    space(doc, "0.7cm")
+                    sols.append(sol)
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "0.2cm")
+                blocsolus(doc, solucions, sols)
 
             if primer:
                 needspace(doc, 8)
@@ -3709,6 +3749,8 @@ def quantesson(value, op):
     elif op == "nc_muldiv":
         quantitats = [0, 2, 4, 8, 12, 26, 56]
     # equacions
+    elif op == "idvseq":
+        quantitats = [0, 2, 4, 8, 15, 33, 66]
     elif op == "simples":
         quantitats = [0, 4, 10, 12, 20, 50, 100]  # arrodonit avall (2) per evitar migpunts
     elif op == "dsimples":

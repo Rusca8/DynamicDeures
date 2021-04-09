@@ -31,8 +31,11 @@
     </div>
 
   <div class="form-group">
-    <label for="formQuinsTipus">Quins tipus d'exercici vols?</label><br>
+    <label>Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opBase" aria-expanded="false" aria-controls="opBase">
+          <input type="checkbox" name="base" autocomplete="off" id="base" value="Base"> Base ✨
+        </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq1" aria-expanded="true" aria-controls="opEq1">
           <input type="checkbox" name="primer" autocomplete="off" id="primer" value="Primer grau" checked> Primer grau
         </label>
@@ -40,7 +43,7 @@
           <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" checked> Segon grau
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist">
-          <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes ✨
+          <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes
         </label>
         <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opSist3" aria-expanded="false" aria-controls="opSist">
           <input type="checkbox" name="sistemes3" autocomplete="off" id="div" value="Sistemes 3D"> Sistemes 3D
@@ -67,7 +70,36 @@
     {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
     {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
     {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
-<div class="collapse show" id="opEq1">
+<div class="collapse mb-1" id="opBase">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Base</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupRacios"><b>Identitat vs Equació</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qidvseq" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<div class="collapse show mb-1" id="opEq1">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Equacions de primer grau</h5>
@@ -215,7 +247,7 @@
 </div>
 
 
-<div class="collapse show mt-1" id="opEq2">
+<div class="collapse show mb-1" id="opEq2">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Equacions de segon grau</h5>
@@ -353,7 +385,7 @@
 </div>
 
 
-<div class="collapse show mt-1" id="opSist">
+<div class="collapse show mb-1" id="opSist">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Sistemes de dues incògnites</h5>
@@ -410,7 +442,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupSistemesQuants"><b>No lineals ✨</b></label>
+            <label><b>No lineals</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qnsist" id="qsn0" value="no" autocomplete="off"> no
@@ -443,7 +475,7 @@
     </div>
 </div>
 
-<div class="collapse mt-1" id="opSist3">
+<div class="collapse mt-b" id="opSist3">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Sistemes de tres incògnites</h5>

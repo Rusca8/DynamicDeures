@@ -2302,6 +2302,138 @@ def poli_aval(rufipx, x):
     return suma
 
 
+def eq_base(tipus, nivell=1, solucions=False, fid=0):
+    """genera exercicis de base d'equacions (de moment, eq vs id)
+
+    :param tipus: 10 eq vs id
+    :param nivell: dificultat (estil d'equació) dins el tipus
+    :param solucions: incloure solucions (si en té)
+    :param fid: forçar identitat (0 no, 1 id, 2 eq)
+    :return: text de l'exercici
+    """
+    text = "42+x=x+42"
+    solu = "NI IDEA, NEN"
+
+    if tipus == 10:  # equació vs identitat
+        if fid == 1 or (fid == 0 and moneda()):
+            ident = True
+        else:
+            ident = False
+
+        if nivell == 1:
+            # Ax+B = C(x+D)  ->   Ax+B = Cx+CD
+            """ident: A=C, B=CD"""
+            a, d = [random.randint(1, 7) * random.choice([1, -1]) for _ in range(2)]
+            # coef control (ident)
+            c = a
+            b = c*d
+            if not ident:
+                c = random.randint(1, 7) * random.choice([1, -1])
+            # muntatge
+            if moneda():  # B amb A
+                text1 = f"{polinomitza([a, b], False)}"
+                text2 = f"{c}({polinomitza([1, d], False)})"
+            else:
+                if moneda():  # Ax sola
+                    text1 = f"{monomi(a, 1)}"
+                    if moneda():
+                        text2 = f"{ncoef(c)}({polinomitza([1, d], False)}){signe(-b)}"
+                    else:
+                        text2 = f"{-b}{signe(c)}({polinomitza([1, d], False)})"
+                else:  # B sola
+                    text1 = f"{b}"
+                    if moneda():
+                        text2 = f"{ncoef(c)}({polinomitza([1, d], False)}){monomi(-a, 1, True)}"
+                    else:
+                        text2 = f"{monomi(-a, 1)}{signe(c)}({polinomitza([1, d], False)})"
+            # solució
+            if a == c and b == c*d:
+                solu = "id"
+            else:
+                solu = "eq"
+
+            text = random.choice([f"{text1}={text2}", f"{text2}={text1}"])
+
+        elif nivell == 2:
+            # A(x+B)+Cx = D(x+E)+Fx  ->  (A+C)x+AB = (D+F)x+DE
+            """ident: C=D+F-A, AB=DE"""
+            d, e, f = [random.randint(1, 7) * random.choice([1, -1]) for _ in range(3)]
+            # coef control
+            a = random.choice(divisors(d*e, True)) * random.choice([1, -1])
+            if not a:
+                a = 1
+                print("OJUT")
+            b = d*e // a
+            c = d+f-a
+            if not c:
+                offset = random.choice([-1, 1, -2, 2])
+                c += offset
+                f += offset
+            if not ident:
+                aux = random.randint(1, 7) * random.choice([1, -1])
+                if not random.randint(0, 2):
+                    a = aux
+                elif moneda():
+                    b = aux
+                else:
+                    c = aux
+            # muntatge
+            if moneda():  # bloc+cx
+                text1 = f"{ncoef(a)}({polinomitza([1, b], False)}){monomi(c, 1, True)}"
+            else:  # cx+bloc
+                text1 = f"{monomi(c, 1)}{ncoef(a, True)}({polinomitza([1, b], False)})"
+            if moneda():  # bloc+fx
+                text2 = f"{ncoef(d)}({polinomitza([1, e], False)}){monomi(f, 1, True)}"
+            else:  # fx+bloc
+                text2 = f"{monomi(f, 1)}{ncoef(d, True)}({polinomitza([1, e], False)})"
+            # solució
+            if c == d+f-a and a*b == d*e:
+                solu = "id"
+            else:
+                solu = "eq"
+
+            text = random.choice([f"{text1}={text2}", f"{text2}={text1}"])
+
+        elif nivell == 3:
+            # (x+A)(x-A)+B = x^2+C  ->   x^2-A^2+B=x^2+C
+            """ident: C=B-A^2"""
+            a = random.randint(1, 5) * random.choice([1, -1])
+            b = random.randint(1, 7) * random.choice([1, -1])
+            # coef control
+            c = b - a*a
+            if not ident:
+                c += random.randint(1, 4) * random.choice([1, -1])
+            if not c:
+                offset = random.choice([-1, 1, -2, 2])
+                c += offset
+                b += offset
+            # muntatge
+            text1 = f"(x{signe(a)})(x{signe(-a)})"
+            if moneda():
+                text1 += f"{signe(b)}"
+            else:
+                text1 = f"{b}+{text1}"
+            if moneda():
+                text2 = f"x^2{signe(c)}"
+            else:
+                text2 = f"{c}+x^2"
+            # solució
+            if c == b - a*a:
+                solu = "id"
+            else:
+                solu = "eq"
+
+            text = random.choice([f"{text1}={text2}", f"{text2}={text1}"])
+
+        elif nivell == 4:
+            # (x+A)(x+B) = x^2+Cx+D  ->  x^2+(A+B)x+AB = x^2+Cx+D
+            """ident: A+B=C, D=AB"""
+            pass
+    if solucions:
+        return text, solu
+    return text
+
+
 def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
     """
     :param tipus: 1, 2... lineals / 101, 102... quadràtiques / 201, 202... irracionals
@@ -3919,6 +4051,11 @@ def signe(num):
         return f"{num}"
 
 
+def ncoef(coef, signe=False):
+    """Retorna el número com a coeficient d'alguna cosa (evita escriure 1 i -1)"""
+    return monomi(coef, 1, signe=signe, var="")
+
+
 def monomi(coef, exp, signe=False, allexps=False, var="x"):
     """Retorna el monomi muntat
 
@@ -4494,5 +4631,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(1):
-    pass
+for x in range(10):
+    print(eq_base(10, 3, fid=1))
