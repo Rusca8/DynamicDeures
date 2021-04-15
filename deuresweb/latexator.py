@@ -3235,6 +3235,8 @@ def q_formul(opcions, solucions=False):
     curs = opcions["curs"]
     print("Generant pdf: {} ({})".format(temallarg(tema), curs))
 
+    estil = opcions["estil"]
+
     if "inorg" in opcions:
         inorg = True
         qsimples = quantesson(opcions["qsimples"], "q_simples")
@@ -3242,6 +3244,11 @@ def q_formul(opcions, solucions=False):
         qoxids = quantesson(opcions["qoxids"], "q_oxids")
         qsbin = quantesson(opcions["qsbin"], "q_sbin")
         qhidroxids = quantesson(opcions["qhidroxids"], "q_hidroxids")
+        qbarreja = quantesson(opcions["qbarreja"], "q_f_barreja")
+        opsbarreja = []
+        for x in range(0, 5):  # 0-4
+            if f"barr{x}" in opcions:
+                opsbarreja.append(x)
         # ...
         #print(f"Exercici 1 {qexercici1}, Exercici 2 {qexercici2} ...")
     else:
@@ -3251,6 +3258,7 @@ def q_formul(opcions, solucions=False):
         qoxids = 0
         qsbin = 0
         qhidroxids = 0
+        qbarreja = 0
         # ...
 
     if "org" in opcions:
@@ -3282,7 +3290,7 @@ def q_formul(opcions, solucions=False):
 
     # preguntes
     if any([inorg, org]):  # aquí tots els botons grossos
-        if any([qsimples, qhidrurs, qoxids, qsbin, qhidroxids]):  # aquí tots els tipus d'exercici
+        if any([qsimples, qhidrurs, qoxids, qsbin, qhidroxids, qbarreja]):  # aquí tots els tipus d'exercici
             begin(doc, 'questions')
 
             if inorg:
@@ -3304,11 +3312,11 @@ def q_formul(opcions, solucions=False):
                 n = qhidrurs
                 needspace(doc, 8)
                 question(doc, f"{n}")
-                doc.append(r"Omple aquesta taula d'hidrurs.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                doc.append(r"Omple aquesta taula de compostos binaris d'hidrogen.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 1), py=10)
+                    filataula(doc, qgen.finorg(10, 1, estil=estil), py=10)
                 tancataula(doc)
 
             if qoxids:
@@ -3342,6 +3350,21 @@ def q_formul(opcions, solucions=False):
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
                     filataula(doc, qgen.finorg(10, 4), py=10)
+                tancataula(doc)
+
+            if qbarreja:
+                n = qbarreja
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append(r"Omple aquesta taula de tot de coses barrejades.")
+                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
+                obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                for x in range(n):
+                    tipus = random.choice(opsbarreja)
+                    if tipus == 0:
+                        filataula(doc, qgen.finorg(1), py=10)
+                    else:
+                        filataula(doc, qgen.finorg(10, tipus), py=10)
                 tancataula(doc)
 
             if org:

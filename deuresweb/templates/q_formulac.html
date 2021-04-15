@@ -43,6 +43,18 @@
 
     </div>
   </div>
+
+<br>
+<hr>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text">Model</label>
+  </div>
+  <select class="custom-select custom-select-sm" name="estil">
+    <option value="general" selected>Genèric</option>
+    <option value="salle">Salle Girona 3ESO</option>
+  </select>
+</div>
 {% endblock %}
 
 {% block extres %}
@@ -75,7 +87,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label><b>Hidrurs</b></label>
+            <label><b>Binaris d'hidrogen</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% set name = "qhidrurs" %}
               {% for n in range(7) %}
@@ -153,6 +165,58 @@
               </label>
             </div>
         </div>
+
+        <hr>
+
+        <div class="form-group mb-0 ml-2">
+            <label><b>Barreja</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% set name = "qbarreja" %}
+              {% for n in range(7) %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label for="formGroupFuncions"><i>Quines?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-2" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-4 active">
+                          <input type="checkbox" name="barr0" autocomplete="off" id="barr0" value="barr0" checked> Simples
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="barr1" autocomplete="off" id="barr1" value="barr1" checked> Òxids
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="barr2" autocomplete="off" id="barr2" value="barr2" checked> Hidrogen
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="barr3" autocomplete="off" id="barr3" value="barr3" checked> Binàries
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="barr4" autocomplete="off" id="barr4" value="barr4" checked> Hidròxids
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+         </div>
 
       </div>
     </div>

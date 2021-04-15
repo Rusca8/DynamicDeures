@@ -794,12 +794,13 @@ def molec(elems=[], charge=0):
     return "$" + "".join(text) + "^{" + charge + "}$"
 
 
-def nommolec(elems=[], valens=[], nomencs=[1, 2, 3]):
+def nommolec(elems=[], valens=[], nomencs=[1, 2, 3], estil="general"):
     """Anomena el compost a partir de llista d'elements i estats.
 
     :param elems: llista d'elements de la molècula [[elem, qtat], [elem, qtat]]
     :param valens: llista de valències dels elements anteriors
     :param nomencs: llista de nomenclatures a extreure (1 stock, 2 sistem, 3 comú)
+    :param estil: per distingir la manera com ho fan en diferents instituts (noms comuns i caselles tapades)
     """
     try:  # comprovo que dins la llista hi ha llistes (que és una llista d'elements i no un sol element)
         len(elems[0])
@@ -816,16 +817,9 @@ def nommolec(elems=[], valens=[], nomencs=[1, 2, 3]):
     if 2 in nomencs:
         sistem = nomsistem(elems, valens)
     # llista comuns
-    comu = "-"
+    comu = ""
     if 3 in nomencs:
-        if elems == [[1, 2], [8, 1]]:
-            comu = "Aigua"
-        elif elems == [[7, 1], [1, 3]]:
-            comu = "Amoníac"
-        elif elems == [[6, 1], [1, 4]]:
-            comu = "Metà"
-        elif elems == [[11, 1], [17, 1]]:
-            comu = "Sal Comuna"
+        comu = nomcomu(elems, estil="general")
     noms = []
     for n in nomencs:
         if n == 1:
@@ -838,6 +832,89 @@ def nommolec(elems=[], valens=[], nomencs=[1, 2, 3]):
             noms.append("?")
     print(noms)
     return noms
+
+
+def nomcomu(elems=[], estil="general"):
+    try:  # comprovo que dins la llista hi ha llistes (que és una llista d'elements i no un sol element)
+        len(elems[0])
+    except:  # si només era un, el converteixo en llista
+        elems = [elems]
+    comu = "-"
+    alt = ""
+    if len(elems) == 2:  # binaris
+        if elems[1][0] == 1:  # hidrurs
+            if elems == [[5, 1], [1, 3]]:  # BH3
+                comu = "Borà"
+            elif elems == [[6, 1], [1, 4]]:  # CH4
+                comu = "Metà"
+            elif elems == [[7, 1], [1, 3]]:  # NH3
+                comu = "Amoníac (Azà)"
+            elif elems == [[13, 1], [1, 3]]:  # AlH3
+                comu = "Alumà"
+            elif elems == [[14, 1], [1, 4]]:  # SiH4
+                comu = "Silà"
+            elif elems == [[15, 1], [1, 3]]:  # PH3
+                comu = "Fosfà"
+                alt = "Fosfina"
+            elif elems == [[31, 1], [1, 3]]:  # GaH3
+                comu = "Ga\lgem à"
+            elif elems == [[32, 1], [1, 4]]:  # GeH4
+                comu = "Germà"
+            elif elems == [[33, 1], [1, 3]]:  # AsH3
+                comu = "Arsà"
+                alt = "Arsina"
+            elif elems == [[49, 1], [1, 3]]:  # InH3
+                comu = "Indigà"
+            elif elems == [[50, 1], [1, 4]]:  # SnH4
+                comu = "Estannà"
+            elif elems == [[51, 1], [1, 3]]:  # SbH3
+                comu = "Estibà"
+                alt = "Estibina"
+            elif elems == [[81, 1], [1, 3]]:  # BiH3
+                comu = "Ta\lgem à"
+            elif elems == [[82, 1], [1, 4]]:  # PbH4
+                comu = "Plumbà"
+            elif elems == [[83, 1], [1, 3]]:  # BiH3
+                comu = "Bismutà"
+            # suprimeixo els que no facin TODO afegir elements nom salle
+            if estil == "salle":
+                if elems[0][0] not in [5, 6, 7, 14, 15, 33, 51]:
+                    comu = "-"
+                elif alt:  # poso el nom antic (alt), que és el que hi fan
+                    comu = alt + f" ({comu})"
+            elif estil == "general":
+                if elems[0][0] not in [5, 6, 7, 14, 15, 33, 51]:
+                    comu = "-"
+        elif elems[0][0] == 1:  # urs d'hidrogen
+            hidracid = ""
+            # hidràcids
+            if elems == [[1, 1], [9, 1]]:  # HF
+                hidracid = "Fluorhídric"
+            elif elems == [[1, 1], [17, 1]]:  # HCl
+                hidracid = "Clorhídric"
+            elif elems == [[1, 1], [35, 1]]:  # HBr
+                hidracid = "Bromhídric"
+            elif elems == [[1, 1], [53, 1]]:  # HI
+                hidracid = "Iodhídric"
+            elif elems == [[1, 2], [16, 1]]:  # H2S
+                hidracid = "Sulfhídric"
+            elif elems == [[1, 2], [34, 1]]:  # H2Se
+                hidracid = "Selenhídric"
+            elif elems == [[1, 2], [52, 1]]:  # H2Te
+                hidracid = "Te\lgem urhídric"
+            # altres comuns d'hidrogen
+            elif elems == [[1, 2], [8, 1]]:  # H2O
+                comu = "Aigua"
+            elif elems == [[1, 2], [8, 2]]:  # H2O2
+                comu = "Aigua oxigenada"
+            elif elems == [[1, 2], [8, 1]]:  # H2O
+                comu = "Aigua"
+            if hidracid:
+                comu = "Àcid " + hidracid.lower()
+        else:  # altres
+            if elems == [[11, 1], [17, 1]]:  # NaCl
+                comu = "Sal comuna"
+    return comu
 
 
 def fisotops(tipus, nivell=1, prez=0):
@@ -895,7 +972,7 @@ def fisotops(tipus, nivell=1, prez=0):
     return fila
 
 
-def finorg(tipus, nivell=1, descn=[6, 14]):
+def finorg(tipus, nivell=1, descn=[6, 14], estil="general"):
     """Treu exercicis de formulació inorgànica
 
     :param tipus: 1 ions/diat, 10 molèc
@@ -906,12 +983,11 @@ def finorg(tipus, nivell=1, descn=[6, 14]):
     if tipus == 1:  # ions, diatòmics i ozó
         if not random.randint(0, 20):  # ozó (i/o si se m'acudeix algun altre així friqui)
             fila = [molec([8, 3]), "-", "Trioxigen", "Ozó"]
-            fila[random.choice([0, 2, 3])] = ""
         elif not random.randint(0, 3):  # diatòmic
             z = random.choice(diatomics)
             fila = [molec([z, 2]), "-", iprefix[2] + f"{elements[z]['nom']}".lower(), elements[z]['nom']]
-            # buidat
-            fila[random.choice([0, 2, 3])] = ""
+            if z != 8 and not estil == "salle":  # iupac només accepta òxid i ozó (i fòsfor blanc). La resta sistemàtica
+                fila[3] = "-"
         else:  # ió normal
             stock = ""
             if moneda():  # positiu
@@ -921,12 +997,13 @@ def finorg(tipus, nivell=1, descn=[6, 14]):
                 z = random.choice(els_nneg)
                 estat = random.choice(elements[z]["vn"])
             fila = [symio(z, estat), nomio(z, estat, True), "-", "-"]
-            # buidat
-            fila[random.choice([0, 1])] = ""
+        # buidat
+        deixo = random.choice([i for i, c in enumerate(fila) if c != "-"])  # trio conservar una de les plenes
+        fila = [c if i == deixo or c == "-" else " " for i, c in enumerate(fila)]  # esborro tots menys el que deixo
     elif tipus == 10:  # molècules
         # TODO random molèc comuns (com ozó al cas anterior)
         # tria
-        if nivell == 1:  # binaris hidrogen (hidrur, però canviarà si agafa halògens, crec)
+        if nivell == 1:  # binaris hidrogen (hidrur, però canviarà si agafa halògens o calcògens)
             zn = 1
         elif nivell == 2:  # òxids
             zn = 8
@@ -954,13 +1031,14 @@ def finorg(tipus, nivell=1, descn=[6, 14]):
         qtatp, qtatn = fracsimple(qtatp, qtatn)
         # muntatge (molec | stock | sistem | comú)
         m = [[zp, qtatp], [zn, qtatn]]
-        noms = nommolec(m, [vp, vn])
+        noms = nommolec(m, [vp, vn], estil=estil)
+        if estil == "salle":  # correccions per fer-ho com ho fan a la salle de girona (3ESO, 2021)
+            if zn == 1 and noms[2] != "-":  # hidrurs amb nom propi (borà, etc)
+                noms[0] = "-"  # esborro, perquè ells no ho pregunten
+                noms[1] = "-"
         fila = [molec(m)] + noms
         # buidat
-        if fila[3] == "-":
-            deixo = random.randint(0, 2)
-        else:
-            deixo = random.randint(0, 3)
+        deixo = random.choice([i for i, c in enumerate(fila) if c != "-"])  # trio conservar una de les plenes
         fila = [c if i == deixo or c == "-" else " " for i, c in enumerate(fila)]  # esborro tots menys el que deixo
     return fila
 
