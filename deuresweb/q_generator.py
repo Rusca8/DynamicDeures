@@ -876,7 +876,7 @@ def nomcomu(elems=[], estil="general"):
                 comu = "Plumbà"
             elif elems == [[83, 1], [1, 3]]:  # BiH3
                 comu = "Bismutà"
-            # suprimeixo els que no facin TODO afegir elements nom salle
+            # suprimeixo els que no fan
             if estil == "salle":
                 if elems[0][0] not in [5, 6, 7, 14, 15, 33, 51]:
                     comu = "-"

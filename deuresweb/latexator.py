@@ -3305,7 +3305,7 @@ def q_formul(opcions, solucions=False):
                 header = ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(1), py=10)
+                    filataula(doc, qgen.finorg(1, estil=estil), py=10)
                 tancataula(doc)
 
             if qhidrurs:
@@ -3327,7 +3327,7 @@ def q_formul(opcions, solucions=False):
                 header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 2), py=10)
+                    filataula(doc, qgen.finorg(10, 2, estil=estil), py=10)
                 tancataula(doc)
 
             if qsbin:
@@ -3338,7 +3338,7 @@ def q_formul(opcions, solucions=False):
                 header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 3), py=10)
+                    filataula(doc, qgen.finorg(10, 3, estil=estil), py=10)
                 tancataula(doc)
 
             if qhidroxids:
@@ -3349,7 +3349,7 @@ def q_formul(opcions, solucions=False):
                 header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 4), py=10)
+                    filataula(doc, qgen.finorg(10, 4, estil=estil), py=10)
                 tancataula(doc)
 
             if qbarreja:
@@ -3362,9 +3362,9 @@ def q_formul(opcions, solucions=False):
                 for x in range(n):
                     tipus = random.choice(opsbarreja)
                     if tipus == 0:
-                        filataula(doc, qgen.finorg(1), py=10)
+                        filataula(doc, qgen.finorg(1, estil=estil), py=10)
                     else:
-                        filataula(doc, qgen.finorg(10, tipus), py=10)
+                        filataula(doc, qgen.finorg(10, tipus, estil=estil), py=10)
                 tancataula(doc)
 
             if org:
