@@ -54,7 +54,7 @@
   <hr>
 
   <div class="form-group mb-0">
-    <label class="mb-0"><i>Incloure les solucions? (excepte racionals i les més directes)</i></label>
+    <label class="mb-0"><i>Incloure les solucions? (excepte denominador i les més directes)</i></label>
       <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
           <label class="btn btn-outline-info btn-sm py-0 btn-mini">
             <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
@@ -223,7 +223,7 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupRacios"><b>Racionals</b></label>
+            <label for="formGroupRacios"><b>Amb denominadors</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               {% for n in range(7) %}
               {% set name = "q1racios" %}

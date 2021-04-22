@@ -972,30 +972,89 @@ def fisotops(tipus, nivell=1, prez=0):
     return fila
 
 
-def finorg(tipus, nivell=1, descn=[6, 14], estil="general"):
+def n_finorg(n, tipus, nivell=1, descn=[]):
+    """pregenera random sample de n elements (diferents) de finorg
+
+    :param n: quantes files pregenera
+    :param tipus: 1 simples, ...
+    :param descn: negatius descartats (p.ex. silicur i carbur)
+    """
+    llista = []
+    if tipus == 1:
+        comuns = []
+        if n > 10 or not random.randint(0, 3):
+            comuns = [["c", "O3"]]  # de moment ozó ["c", "O3"] (la "c" marca comuns)
+        diat = random.sample(diatomics, min(len(diatomics), n // 2))
+        ionsgastats = {}  # z: []         # càrregues gastades
+        elemsgastats = []  #
+        ions = []
+        zvps = els_vp
+        zvns = [el for el in els_vn if el not in descn]  # evito elements amb valència negativa que hagi descartat
+        for x in range(n-len(comuns)-len(diat)):
+            elops = [el for el in zvps + zvns if el not in elemsgastats]
+            if not elops:  # els he gastat tots, faig reset
+                ionsgastats = {}
+                elemsgastats = []
+                elops = zvps + zvns
+            z = random.choice(elops)
+            if z not in ionsgastats:
+                ionsgastats[z] = []
+            qops = []
+            if "vp" in elements[z]:
+                qops += elements[z]["vp"]
+            if "vn" in elements[z] and z not in descn:  # només entro les negatives si no les he descomptat
+                qops += elements[z]["vn"]
+            q = 0
+            q = random.choice([v for v in qops if v not in ionsgastats[z]])
+            if not q:
+                q = random.choice(qops)
+            else:
+                ionsgastats[z].append(q)
+                if all([v in ionsgastats[z] for v in qops]):
+                    elemsgastats.append(z)
+            ions.append(["i", [z, q]])
+        llista = comuns + diat + ions
+        random.shuffle(llista)
+    return llista
+
+
+def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
     """Treu exercicis de formulació inorgànica
 
     :param tipus: 1 ions/diat, 10 molèc
     :param nivell: dificultat interna del tipus
-    :param descn: descartats negatius (evito "carbur i silicur")
+    :param descn: descartats negatius (per donar opció a evitar "carbur i silicur": descn=[6, 14])
+    :param ffila: per forçar des de fora ["c", num] comuns, ["d", z] diatòmic, ["i", [z, q]] ió, ["m", elems] molèc.
     """
+    try:  # evito errors llegint un primer element inexistent
+        ffila[0]
+    except:
+        ffila = n_finorg(1, tipus, nivell, descn=descn)
+
     fila = []
     if tipus == 1:  # ions, diatòmics i ozó
-        if not random.randint(0, 20):  # ozó (i/o si se m'acudeix algun altre així friqui)
+        if ffila[0] == "c":  # ozó (i/o si se m'acudeix algun altre així friqui)
             fila = [molec([8, 3]), "-", "Trioxigen", "Ozó"]
-        elif not random.randint(0, 3):  # diatòmic
-            z = random.choice(diatomics)
+        elif ffila[0] == "d":
+            if ffila[0] == "d":  # diatòmic triat des de fora: ffila == ["d", z]
+                z = ffila[1]
+            else:
+                z = random.choice(diatomics)
             fila = [molec([z, 2]), "-", iprefix[2] + f"{elements[z]['nom']}".lower(), elements[z]['nom']]
             if z != 8 and not estil == "salle":  # iupac només accepta òxid i ozó (i fòsfor blanc). La resta sistemàtica
                 fila[3] = "-"
         else:  # ió normal
             stock = ""
-            if moneda():  # positiu
-                z = random.choice(els_vp)
-                estat = random.choice(elements[z]["vp"])
-            else:  # negatiu (ur)
-                z = random.choice(els_nneg)
-                estat = random.choice(elements[z]["vn"])
+            if ffila[0] == "i":  # ió triat des de fora: ffila == ["i", [z, q]]
+                z = ffila[1][0]
+                estat = ffila[1][1]
+            else:
+                if moneda():  # positiu
+                    z = random.choice(els_vp)
+                    estat = random.choice(elements[z]["vp"])
+                else:  # negatiu (ur)
+                    z = random.choice(els_nneg)
+                    estat = random.choice(elements[z]["vn"])
             fila = [symio(z, estat), nomio(z, estat, True), "-", "-"]
         # buidat
         deixo = random.choice([i for i, c in enumerate(fila) if c != "-"])  # trio conservar una de les plenes
@@ -1043,4 +1102,4 @@ def finorg(tipus, nivell=1, descn=[6, 14], estil="general"):
     return fila
 
 
-elemstats()
+# elemstats()

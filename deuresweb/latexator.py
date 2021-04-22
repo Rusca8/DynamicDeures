@@ -834,7 +834,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = qidvseq
                 needspace(doc, 8)
                 question(doc, f"{n}")
-                doc.append("Digues si les següents igualtats són identitats o equacions")
+                doc.append("Digues si les següents igualtats són identitats o equacions.")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "2")
                 sols = []
@@ -934,7 +934,7 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 n = q1racios
                 needspace(doc, 10)
                 question(doc, f"{2 * n}")
-                doc.append("Resol les següents equacions racionals (no totes tenen resultat bonic!).")
+                doc.append("Resol les següents equacions amb denominadors (no totes tenen resultat bonic!).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "2")
                 scale = 1.3
@@ -3304,8 +3304,9 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula de substàncies simples")
                 header = ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                ffiles = qgen.n_finorg(n, 1)  # TODO afegir descn=descn si poses opció de descartar negatives al form
                 for x in range(n):
-                    filataula(doc, qgen.finorg(1, estil=estil), py=10)
+                    filataula(doc, qgen.finorg(1, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
 
             if qhidrurs:
@@ -3359,10 +3360,11 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula de tot de coses barrejades.")
                 header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                ffsimples = qgen.n_finorg(n, 1)  # TODO descn=descn
                 for x in range(n):
                     tipus = random.choice(opsbarreja)
                     if tipus == 0:
-                        filataula(doc, qgen.finorg(1, estil=estil), py=10)
+                        filataula(doc, qgen.finorg(1, estil=estil, ffila=ffsimples.pop()), py=10)
                     else:
                         filataula(doc, qgen.finorg(10, tipus, estil=estil), py=10)
                 tancataula(doc)
@@ -3862,7 +3864,7 @@ def quantesson(value, op):
         quantitats = [0, 3, 5, 8, 11, 22, 52]
     else:
         quantitats = [0, 8, 20, 32, 48, 112, 200]
-        print("no he trobat el codi")
+        print("no he trobat el codi " f"{op}")
     return quantitats[n]
 
 
