@@ -1160,6 +1160,8 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
             zn = 8
         elif nivell == 4:  # hidròxids
             zn = 119
+        elif nivell == 3:  # sals binàries
+            zn = random.choice([z for z in els_vn if z not in descn and z not in [1, 8]])  # evito hidros i òxids
         else:
             zn = random.choice([z for z in els_vn if z not in descn])
 
@@ -1178,6 +1180,8 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
                 zp = ffila[1][0]
             else:
                 zp = random.choice([z for z in els_vp if z != zn and z not in els_vn])
+        elif nivell == 3:  # sals binàries
+            zp =  random.choice([z for z in els_vp if z != zn and z not in [1, 8]])  # evito hidros i òxids
         else:
             zp = random.choice([z for z in els_vp if z != zn])
         # ordre segons iupac

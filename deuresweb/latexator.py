@@ -3366,7 +3366,7 @@ def q_formul(opcions, solucions=False):
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 # pregenero les quantitats
                 ltipus = []  # llista d'on trauré el tipus de cada exercici
-                ntipus = {}  # llista de qtats per tipus
+                ntipus = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}  # llista de qtats per tipus
                 for t in opsbarreja:  # omplo a parts iguals (+1 per arrodonir la divisió entera amunt)
                     ntipus[t] = n // len(opsbarreja) + 1
                     ltipus += [t for _ in range(ntipus[t])]
