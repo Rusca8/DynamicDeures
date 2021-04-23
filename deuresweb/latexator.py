@@ -3239,6 +3239,7 @@ def q_formul(opcions, solucions=False):
 
     if "inorg" in opcions:
         inorg = True
+        descn = []  # TODO implementar tria de descartats negatius (almenys carbur i silicur)
         qsimples = quantesson(opcions["qsimples"], "q_simples")
         qhidrurs = quantesson(opcions["qhidrurs"], "q_hidrurs")
         qoxids = quantesson(opcions["qoxids"], "q_oxids")
@@ -3302,9 +3303,9 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")  # puntuació de l'exercici
                 doc.append(r"Omple aquesta taula de substàncies simples")
-                header = ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                header = [envt("Símbol"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffiles = qgen.n_finorg(n, 1)  # TODO afegir descn=descn si poses opció de descartar negatives al form
+                ffiles = qgen.n_finorg(n, 1, descn=descn)
                 for x in range(n):
                     filataula(doc, qgen.finorg(1, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
@@ -3314,10 +3315,11 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append(r"Omple aquesta taula de compostos binaris d'hidrogen.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
+                header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                ffiles = qgen.n_finorg(n, 10, 1, descn=descn)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 1, estil=estil), py=10)
+                    filataula(doc, qgen.finorg(10, 1, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
 
             if qoxids:
@@ -3325,10 +3327,11 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append(r"Omple aquesta taula d'òxids.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                ffiles = qgen.n_finorg(n, 10, 2, descn=descn)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 2, estil=estil), py=10)
+                    filataula(doc, qgen.finorg(10, 2, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
 
             if qsbin:
@@ -3336,7 +3339,7 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append(r"Omple aquesta taula de compostos binaris.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
                 for x in range(n):
                     filataula(doc, qgen.finorg(10, 3, estil=estil), py=10)
@@ -3347,10 +3350,11 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append(r"Omple aquesta taula d'hidròxids.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú"]
+                header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
+                ffiles = qgen.n_finorg(n, 10, 4, descn=descn)
                 for x in range(n):
-                    filataula(doc, qgen.finorg(10, 4, estil=estil), py=10)
+                    filataula(doc, qgen.finorg(10, 4, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
 
             if qbarreja:
@@ -3358,15 +3362,40 @@ def q_formul(opcions, solucions=False):
                 needspace(doc, 8)
                 question(doc, f"{n}")
                 doc.append(r"Omple aquesta taula de tot de coses barrejades.")
-                header = ["Molècula", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
+                header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffsimples = qgen.n_finorg(n, 1)  # TODO descn=descn
+                # pregenero les quantitats
+                ltipus = []  # llista d'on trauré el tipus de cada exercici
+                ntipus = {}  # llista de qtats per tipus
+                for t in opsbarreja:  # omplo a parts iguals (+1 per arrodonir la divisió entera amunt)
+                    ntipus[t] = n // len(opsbarreja) + 1
+                    ltipus += [t for _ in range(ntipus[t])]
+                random.shuffle(ltipus)
+                # pregenero les files (per evitar repeticions)
+                ffsimples = qgen.n_finorg(ntipus[0], 1, descn=descn)
+                ffhidro = qgen.n_finorg(ntipus[1], 10, 1, descn=descn)
+                ffoxids = qgen.n_finorg(ntipus[2], 10, 2, descn=descn)
+                ffhidroxids = qgen.n_finorg(ntipus[4], 10, 4, descn=descn)
+
                 for x in range(n):
-                    tipus = random.choice(opsbarreja)
-                    if tipus == 0:
+                    # trio tipus (l'agafo de la llista o l'invento si no quedés llista per motius estranys)
+                    if not ltipus:
+                        print("compte: opsbarreja")
+                        tipus = random.choice(opsbarreja)
+                    else:
+                        tipus = ltipus.pop()
+                    # genero la fila
+                    if tipus == 0:  # simples
                         filataula(doc, qgen.finorg(1, estil=estil, ffila=ffsimples.pop()), py=10)
                     else:
-                        filataula(doc, qgen.finorg(10, tipus, estil=estil), py=10)
+                        ffila = []
+                        if tipus == 1:  # hidrogen
+                            ffila = ffhidro.pop()
+                        elif tipus == 2:  # òxids
+                            ffila = ffoxids.pop()
+                        elif tipus == 4:  # hidròxids
+                            ffila = ffhidroxids.pop()
+                        filataula(doc, qgen.finorg(10, tipus, estil=estil, ffila=ffila), py=10)
                 tancataula(doc)
 
             if org:
@@ -3860,6 +3889,8 @@ def quantesson(value, op):
     # formulació inorgànica
     elif op in ["q_simples", "q_hidrurs", "q_oxids", "q_sbin", "q_hidroxids"]:
         quantitats = [0, 3, 5, 8, 11, 22, 52]
+    elif op in ["q_f_barreja"]:
+        quantitats = [0, 5, 8, 10, 11, 22, 52]
     elif op in ["q_zapne"]:
         quantitats = [0, 3, 5, 8, 11, 22, 52]
     else:

@@ -52,6 +52,7 @@ def lleisgasos(tipus, cunit=True, sabemt=False, simples=True, solucions=False):
 romans = ["", "I", "II", "III", "IV", "V", "VI", "VII"]
 iprefix = ["", "Mono", "Di", "Tri", "Tetra", "Penta", "Hexa", "Hepta", "Octa", "Nona", "Deca"]
 diatomics = [1, 7, 8, 9, 17, 35, 53]
+hidracids = [9, 17, 35, 53, 16, 34, 52]
 
 
 def ioprefix(z, qtat, estat=0, zp=0, qtatp=0):
@@ -671,6 +672,7 @@ elements = [
 
 # amb elements només dic "mono" si són diatòmics. Amb binaris només òxids 1:1 ambigus.
 # fosfina, arsina i estibina ja no estan acceptats IUPAC
+# IUPAC05 considera que els òxids d'halogens són halogenurs d'oxigen (però fan valència positiva, wtf).
 
 
 def elemstats():
@@ -767,7 +769,6 @@ def nomsistem(elems=[], estats=[2, -2]):
         # els "mono" ens els estalviem excepte amb els òxids 1:1 ambigus
         nomp = ioprefix(elems[0][0], elems[0][1], estats[0])
         nomn = ioprefix(elems[1][0], elems[1][1], estats[1], elems[0][0], elems[0][1])
-        print(nomn, elems)
         nom = nomn + dde(elems[0][0], elems[0][1]) + nomp.lower()
     else:
         return "No faig tan grans encara"
@@ -830,7 +831,6 @@ def nommolec(elems=[], valens=[], nomencs=[1, 2, 3], estil="general"):
             noms.append(comu)
         else:
             noms.append("?")
-    print(noms)
     return noms
 
 
@@ -979,14 +979,21 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
     :param tipus: 1 simples, ...
     :param descn: negatius descartats (p.ex. silicur i carbur)
     """
+    if n < 0:
+        return []
+
     llista = []
     if tipus == 1:
+        # comuns
         comuns = []
-        if n > 10 or not random.randint(0, 3):
+        if n > 8 or not random.randint(0, 2):
             comuns = [["c", "O3"]]  # de moment ozó ["c", "O3"] (la "c" marca comuns)
+        # diatòmics
         diat = random.sample(diatomics, min(len(diatomics), n // 2))
+        diat = [["d", z] for z in diat]
+        # ions
         ionsgastats = {}  # z: []         # càrregues gastades
-        elemsgastats = []  #
+        elemsgastats = []  # elements que ja no els queda cap càrrega
         ions = []
         zvps = els_vp
         zvns = [el for el in els_vn if el not in descn]  # evito elements amb valència negativa que hagi descartat
@@ -1005,16 +1012,98 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
             if "vn" in elements[z] and z not in descn:  # només entro les negatives si no les he descomptat
                 qops += elements[z]["vn"]
             q = 0
-            q = random.choice([v for v in qops if v not in ionsgastats[z]])
-            if not q:
+            qopsqueden = [v for v in qops if v not in ionsgastats[z]]  # elimino les valències gastades
+            qnops = [v for v in qopsqueden if v < 0]  # extrec les opcions negatives
+            if qnops and moneda():  # afavoreixo les negatives si n'hi ha (que si no per estadística surt molt més +)
+                q = random.choice(qnops)
+            else:
+                q = random.choice(qopsqueden)
+
+            if not q:  # just in case...
                 q = random.choice(qops)
             else:
                 ionsgastats[z].append(q)
                 if all([v in ionsgastats[z] for v in qops]):
                     elemsgastats.append(z)
             ions.append(["i", [z, q]])
+        # muntatge
         llista = comuns + diat + ions
         random.shuffle(llista)
+    elif tipus == 10:
+        if nivell == 1:  # hidrurs i -urs d'hidrogen
+            # hidracids
+            hidrac = random.sample(hidracids, min(len(hidracids), n // 3))  # hidràcids
+            # hidrurs orgànics
+            hidrorgcom = [5, 6, 7, 14, 15, 33, 51]
+            hidrorgextra = [13, 50, 82, 83]  # els altres [31, 32, 49, 81] en realitat no tenen valència que coneguem
+            hidrorg = random.sample(hidrorgcom, min(len(hidrorgcom), n // 3))  # poso els típics
+            if len(hidrorg) < n//3:  # i si no faig prou afegeixo extres
+                hidrorg += random.sample(hidrorgextra, min(len(hidrorgextra), n // 3 - len(hidrorg)))
+            # hidrurs inorgànics  TODO predefinir la càrrega per evitar encara més repeticions
+            hidrursops = [z for z in els_vp if z not in hidrac + hidrorg and z != 1]  # + evito hidrur d'hidrogen
+            hidrurs = random.sample(hidrursops, min(len(hidrursops), n - len(hidrorg) - len(hidrac)))
+            # muntatge
+            llista = hidrac + hidrorg + hidrurs
+            llista = [["h", z] for z in llista]  # compostos amb hidrogen ["h", altra_z]
+            random.shuffle(llista)
+            if len(llista) < n:  # si no fa prou torna a començar
+                llista += n_finorg(n-len(llista), tipus, nivell, descn)
+        elif nivell == 2:  # òxids
+            # comuns TODO oxigenada aquí? (o fer categoria peròxids)
+            comuns = []
+            # òxids normals
+            ionsgastats = {}  # z: []      # càrregues gastades de cada element
+            elemsgastats = []  # elements que ja no els queda cap càrrega
+            oxids = []
+            zvps = [z for z in els_vp if elements[z]["oen"] > elements[8]["oen"]]  # evito halògens pq IUPAC05 (i O)
+            for x in range(n-len(comuns)):
+                elops = [el for el in zvps if el not in elemsgastats]
+                if not elops:  # els he gastat tots, faig reset
+                    print("reset òxids")
+                    ionsgastats = {}
+                    elemsgastats = []
+                    elops = zvps
+                z = random.choice(elops)
+                if z not in ionsgastats:
+                    ionsgastats[z] = []
+                q = random.choice([v for v in elements[z]["vp"] if v not in ionsgastats[z]])
+                if not q:  # just in case...
+                    q = random.choice(elements[z]["vp"])
+                else:
+                    ionsgastats[z].append(q)
+                    if all([v in ionsgastats[z] for v in elements[z]["vp"]]):
+                        elemsgastats.append(z)
+                oxids.append(["o", [z, q]])
+            # muntatge
+            llista = comuns + oxids
+            random.shuffle(llista)
+            # TODO gestionar nous òxids d'halogen Iupac05
+        elif nivell == 4:  # hidroxids
+            ionsgastats = {}  # z: []       # càrregues gastades de cada element
+            elemsgastats = []  # elementas que ja no tenen càrregues pendents
+            hidroxids = []
+            zvps = [z for z in els_vp if z not in els_vn]  # no sé si filtra exacte, però si fa no fa són els possibles
+            for x in range(n):
+                elops = [el for el in zvps if el not in elemsgastats]
+                if not elops:  # els he gastat tots, faig reset
+                    print("reset hidròxids")
+                    ionsgastats = {}
+                    elemsgastats = []
+                    elops = zvps
+                z = random.choice(elops)
+                if z not in ionsgastats:
+                    ionsgastats[z] = []
+                q = random.choice([v for v in elements[z]["vp"] if v not in ionsgastats[z]])
+                if not q:  # just in case...
+                    q = random.choice(elements[z]["vp"])
+                else:
+                    ionsgastats[z].append(q)
+                    if all([v in ionsgastats[z] for v in elements[z]["vp"]]):
+                        elemsgastats.append(z)
+                hidroxids.append(["oh", [z, q]])
+            # muntatge
+            llista = hidroxids
+            random.shuffle(llista)
     return llista
 
 
@@ -1022,24 +1111,27 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
     """Treu exercicis de formulació inorgànica
 
     :param tipus: 1 ions/diat, 10 molèc
-    :param nivell: dificultat interna del tipus
+    :param nivell: subtipus, en realitat (però com tots els exs són així ja no ho he tocat)
     :param descn: descartats negatius (per donar opció a evitar "carbur i silicur": descn=[6, 14])
     :param ffila: per forçar des de fora ["c", num] comuns, ["d", z] diatòmic, ["i", [z, q]] ió, ["m", elems] molèc.
     """
+    if not ffila:  # si no he forçat res, genero 1 exercici del tipus demanat
+        if nivell != 3:
+            print(f"no tinc ffila ({tipus}-{nivell}), n'invento una...")
+        ffila = n_finorg(1, tipus, nivell, descn=descn)
+        if ffila:  # extrec l'element (n_finorg genera llistes)
+            ffila = ffila[0]
     try:  # evito errors llegint un primer element inexistent
         ffila[0]
     except:
-        ffila = n_finorg(1, tipus, nivell, descn=descn)
+        ffila = ["no", "sé", "pas"]
 
     fila = []
     if tipus == 1:  # ions, diatòmics i ozó
         if ffila[0] == "c":  # ozó (i/o si se m'acudeix algun altre així friqui)
             fila = [molec([8, 3]), "-", "Trioxigen", "Ozó"]
-        elif ffila[0] == "d":
-            if ffila[0] == "d":  # diatòmic triat des de fora: ffila == ["d", z]
-                z = ffila[1]
-            else:
-                z = random.choice(diatomics)
+        elif ffila[0] == "d":  # diatòmic triat des de fora: ffila == ["d", z]
+            z = ffila[1]
             fila = [molec([z, 2]), "-", iprefix[2] + f"{elements[z]['nom']}".lower(), elements[z]['nom']]
             if z != 8 and not estil == "salle":  # iupac només accepta òxid i ozó (i fòsfor blanc). La resta sistemàtica
                 fila[3] = "-"
@@ -1048,7 +1140,7 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
             if ffila[0] == "i":  # ió triat des de fora: ffila == ["i", [z, q]]
                 z = ffila[1][0]
                 estat = ffila[1][1]
-            else:
+            else:  # TODO corregir, que això diria que no aplica mai, ara que ho he extret a fora
                 if moneda():  # positiu
                     z = random.choice(els_vp)
                     estat = random.choice(elements[z]["vp"])
@@ -1071,18 +1163,35 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
         else:
             zn = random.choice([z for z in els_vn if z not in descn])
 
-        if nivell == 1 and not random.randint(0, 4):
-            zp = random.choice([z for z in els_vn if z != zn and z in els_vp])  # elementurs d'hidrogen
+        if nivell == 1:
+            if ffila[0] == "h":
+                zp = ffila[1]
+            else:  # elementurs d'hidrogen  TODO veure si es pot treure (cr q ja no fa res) o posar quelcom més genèric
+                zp = random.choice([z for z in els_vn if z != zn and z in els_vp])
+        elif nivell == 2:
+            if ffila[0] == "o":  # ffila == ["o", [z, q]]
+                zp = ffila[1][0]
+            else:
+                zp = random.choice([z for z in els_vp if z if elements[z]["oen"] > elements[8]["oen"]])
         elif nivell == 4:  # hidròxids (evito els que tenen negativa)
-            zp = random.choice([z for z in els_vp if z != zn and z not in els_vn])
+            if ffila[0] == "oh":  # ffila == ["oh", [z, q]]
+                zp = ffila[1][0]
+            else:
+                zp = random.choice([z for z in els_vp if z != zn and z not in els_vn])
         else:
             zp = random.choice([z for z in els_vp if z != zn])
         # ordre segons iupac
         if all([all([x in l for x in ["vn", "vp", "oen"]]) for l in [elements[zn], elements[zp]]]):  # els dos tenen tot
             if elements[zn]["oen"] > elements[zp]["oen"]:
                 zn, zp = zp, zn
+        elif (zp not in els_vp and zn in els_vp) or (zn not in els_vn and zp in els_vn):  # per si arriben girats pobres
+            print("INTERCANVI: ", zp, zn)
+            zn, zp = zp, zn
         # estats d'oxidació
-        vp = random.choice(elements[zp]["vp"])
+        if ffila[0] in ["o", "oh"]:  # ["o", [z, q]] / ["oh", [z, q]]
+            vp = ffila[1][1]
+        else:
+            vp = random.choice(elements[zp]["vp"])
         vn = random.choice(elements[zn]["vn"])
         # càlcul quantitats
         qtatp = abs(vn)
@@ -1093,7 +1202,7 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
         noms = nommolec(m, [vp, vn], estil=estil)
         if estil == "salle":  # correccions per fer-ho com ho fan a la salle de girona (3ESO, 2021)
             if zn == 1 and noms[2] != "-":  # hidrurs amb nom propi (borà, etc)
-                noms[0] = "-"  # esborro, perquè ells no ho pregunten
+                noms[0] = "-"  # esborro les del mig quan té propi, perquè ells no ho pregunten
                 noms[1] = "-"
         fila = [molec(m)] + noms
         # buidat
