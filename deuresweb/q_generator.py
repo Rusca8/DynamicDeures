@@ -820,7 +820,7 @@ def nommolec(elems=[], valens=[], nomencs=[1, 2, 3], estil="general"):
     # llista comuns
     comu = ""
     if 3 in nomencs:
-        comu = nomcomu(elems, estil="general")
+        comu = nomcomu(elems, estil=estil)
     noms = []
     for n in nomencs:
         if n == 1:
@@ -972,13 +972,14 @@ def fisotops(tipus, nivell=1, prez=0):
     return fila
 
 
-def n_finorg(n, tipus, nivell=1, descn=[]):
+def n_finorg(n, tipus, nivell=1, descn=[], estil="general"):
     """pregenera random sample de n elements (diferents) de finorg
 
     :param n: quantes files pregenera
     :param tipus: 1 simples, ...
     :param descn: negatius descartats (p.ex. silicur i carbur)
     """
+    znosalle = [42, 74]  # elements que no fan servir a la salle [Mo, W]
     if n < 0:
         return []
 
@@ -995,7 +996,10 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
         ionsgastats = {}  # z: []         # càrregues gastades
         elemsgastats = []  # elements que ja no els queda cap càrrega
         ions = []
-        zvps = els_vp
+        if estil == "salle":
+            zvps = [el for el in els_vp if el not in znosalle]  # descarto els que no fan
+        else:
+            zvps = els_vp
         zvns = [el for el in els_vn if el not in descn]  # evito elements amb valència negativa que hagi descartat
         for x in range(n-len(comuns)-len(diat)):
             elops = [el for el in zvps + zvns if el not in elemsgastats]
@@ -1041,6 +1045,8 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
                 hidrorg += random.sample(hidrorgextra, min(len(hidrorgextra), n // 3 - len(hidrorg)))
             # hidrurs inorgànics  TODO predefinir la càrrega per evitar encara més repeticions
             hidrursops = [z for z in els_vp if z not in hidrac + hidrorg and z != 1]  # + evito hidrur d'hidrogen
+            if estil == "salle":
+                hidrursops = [z for z in hidrursops if z not in znosalle]  # evito els que no fan
             hidrurs = random.sample(hidrursops, min(len(hidrursops), n - len(hidrorg) - len(hidrac)))
             # muntatge
             llista = hidrac + hidrorg + hidrurs
@@ -1051,11 +1057,17 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
         elif nivell == 2:  # òxids
             # comuns TODO oxigenada aquí? (o fer categoria peròxids)
             comuns = []
+            if (n > 8 and moneda()) or not random.randint(0, 4):  # aquests no entraven de normal (valències extra de N)
+                comuns = [["o", [7, 2]]]
+            if (n > 8 and not comuns) or not random.randint(0, 4):
+                comuns = [["c", [7, 4]]]
             # òxids normals
             ionsgastats = {}  # z: []      # càrregues gastades de cada element
             elemsgastats = []  # elements que ja no els queda cap càrrega
             oxids = []
             zvps = [z for z in els_vp if elements[z]["oen"] > elements[8]["oen"]]  # evito halògens pq IUPAC05 (i O)
+            if estil == "salle":
+                zvps = [z for z in zvps if z not in znosalle]  # filtro els que no fan
             for x in range(n-len(comuns)):
                 elops = [el for el in zvps if el not in elemsgastats]
                 if not elops:  # els he gastat tots, faig reset
@@ -1083,6 +1095,8 @@ def n_finorg(n, tipus, nivell=1, descn=[]):
             elemsgastats = []  # elementas que ja no tenen càrregues pendents
             hidroxids = []
             zvps = [z for z in els_vp if z not in els_vn]  # no sé si filtra exacte, però si fa no fa són els possibles
+            if estil == "salle":
+                zvps = [z for z in zvps if z not in znosalle]  # filtro els que no fan
             for x in range(n):
                 elops = [el for el in zvps if el not in elemsgastats]
                 if not elops:  # els he gastat tots, faig reset
@@ -1115,6 +1129,7 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
     :param descn: descartats negatius (per donar opció a evitar "carbur i silicur": descn=[6, 14])
     :param ffila: per forçar des de fora ["c", num] comuns, ["d", z] diatòmic, ["i", [z, q]] ió, ["m", elems] molèc.
     """
+    znosalle = [42, 74]  # elements que no fan servir a la salle [Mo, W] *està també a n_finorg
     if not ffila:  # si no he forçat res, genero 1 exercici del tipus demanat
         if nivell != 3:
             print(f"no tinc ffila ({tipus}-{nivell}), n'invento una...")
@@ -1181,7 +1196,10 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
             else:
                 zp = random.choice([z for z in els_vp if z != zn and z not in els_vn])
         elif nivell == 3:  # sals binàries
-            zp =  random.choice([z for z in els_vp if z != zn and z not in [1, 8]])  # evito hidros i òxids
+            zpops = [z for z in els_vp if z != zn and z not in [1, 8]]  # evito hidros i òxids
+            if estil == "salle":
+                zpops = [z for z in zpops if z not in znosalle]  # evito els que no fan
+            zp = random.choice(zpops)
         else:
             zp = random.choice([z for z in els_vp if z != zn])
         # ordre segons iupac

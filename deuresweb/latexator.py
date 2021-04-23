@@ -3250,6 +3250,8 @@ def q_formul(opcions, solucions=False):
         for x in range(0, 5):  # 0-4
             if f"barr{x}" in opcions:
                 opsbarreja.append(x)
+        if not opsbarreja:  # si ha deixat buit, poso tot
+            opsbarreja = [x for _ in range(0, 5)]
         # ...
         #print(f"Exercici 1 {qexercici1}, Exercici 2 {qexercici2} ...")
     else:
@@ -3305,7 +3307,7 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula de substàncies simples")
                 header = [envt("Símbol"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffiles = qgen.n_finorg(n, 1, descn=descn)
+                ffiles = qgen.n_finorg(n, 1, descn=descn, estil=estil)
                 for x in range(n):
                     filataula(doc, qgen.finorg(1, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
@@ -3317,7 +3319,7 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula de compostos binaris d'hidrogen.")
                 header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", "Nom comú / Hidràcid"]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffiles = qgen.n_finorg(n, 10, 1, descn=descn)
+                ffiles = qgen.n_finorg(n, 10, 1, descn=descn, estil=estil)
                 for x in range(n):
                     filataula(doc, qgen.finorg(10, 1, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
@@ -3329,7 +3331,7 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula d'òxids.")
                 header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffiles = qgen.n_finorg(n, 10, 2, descn=descn)
+                ffiles = qgen.n_finorg(n, 10, 2, descn=descn, estil=estil)
                 for x in range(n):
                     filataula(doc, qgen.finorg(10, 2, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
@@ -3352,7 +3354,7 @@ def q_formul(opcions, solucions=False):
                 doc.append(r"Omple aquesta taula d'hidròxids.")
                 header = [envt("Molècula"), envt("Nomenclatura Stock"), "Nomenclatura Sistemàtica", envt("Nom comú")]
                 obretaula(doc, taulaconfig(4, "c", [0, 1, -1]), header=header)
-                ffiles = qgen.n_finorg(n, 10, 4, descn=descn)
+                ffiles = qgen.n_finorg(n, 10, 4, descn=descn, estil=estil)
                 for x in range(n):
                     filataula(doc, qgen.finorg(10, 4, estil=estil, ffila=ffiles.pop()), py=10)
                 tancataula(doc)
@@ -3372,10 +3374,10 @@ def q_formul(opcions, solucions=False):
                     ltipus += [t for _ in range(ntipus[t])]
                 random.shuffle(ltipus)
                 # pregenero les files (per evitar repeticions)
-                ffsimples = qgen.n_finorg(ntipus[0], 1, descn=descn)
-                ffhidro = qgen.n_finorg(ntipus[1], 10, 1, descn=descn)
-                ffoxids = qgen.n_finorg(ntipus[2], 10, 2, descn=descn)
-                ffhidroxids = qgen.n_finorg(ntipus[4], 10, 4, descn=descn)
+                ffsimples = qgen.n_finorg(ntipus[0], 1, descn=descn, estil=estil)
+                ffhidro = qgen.n_finorg(ntipus[1], 10, 1, descn=descn, estil=estil)
+                ffoxids = qgen.n_finorg(ntipus[2], 10, 2, descn=descn, estil=estil)
+                ffhidroxids = qgen.n_finorg(ntipus[4], 10, 4, descn=descn, estil=estil)
 
                 for x in range(n):
                     # trio tipus (l'agafo de la llista o l'invento si no quedés llista per motius estranys)
