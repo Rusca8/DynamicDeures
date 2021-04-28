@@ -1121,7 +1121,7 @@ def n_finorg(n, tipus, nivell=1, descn=[], estil="general"):
     return llista
 
 
-def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
+def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[], solucions=False):
     """Treu exercicis de formulació inorgànica
 
     :param tipus: 1 ions/diat, 10 molèc
@@ -1163,6 +1163,8 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
                     z = random.choice(els_nneg)
                     estat = random.choice(elements[z]["vn"])
             fila = [symio(z, estat), nomio(z, estat, True), "-", "-"]
+        # solu
+        fsolu = fila[:]  # copio
         # buidat
         deixo = random.choice([i for i, c in enumerate(fila) if c != "-"])  # trio conservar una de les plenes
         fila = [c if i == deixo or c == "-" else " " for i, c in enumerate(fila)]  # esborro tots menys el que deixo
@@ -1227,9 +1229,13 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[]):
                 noms[0] = "-"  # esborro les del mig quan té propi, perquè ells no ho pregunten
                 noms[1] = "-"
         fila = [molec(m)] + noms
+        # solu
+        fsolu = fila[:]  # copio
         # buidat
         deixo = random.choice([i for i, c in enumerate(fila) if c != "-"])  # trio conservar una de les plenes
         fila = [c if i == deixo or c == "-" else " " for i, c in enumerate(fila)]  # esborro tots menys el que deixo
+    if solucions:
+        return fila, fsolu
     return fila
 
 
