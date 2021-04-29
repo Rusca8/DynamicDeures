@@ -40,3 +40,25 @@
 .link-a-la-web:hover:after {
     content: " - Altres recursos..."
 }
+
+
+/* popover */
+.popover {
+    background: rgb(245, 241, 211);
+}
+
+.bs-popover-top .arrow:after {
+    border-top-color: rgb(245, 241, 211);
+}
+
+.bs-popover-bottom .arrow:after {
+    border-bottom-color: rgb(245, 241, 211);
+}
+
+.bs-popover-right .arrow:after {
+    border-right-color: rgb(245, 241, 211);
+}
+
+.bs-popover-left .arrow:after {
+    border-left-color: rgb(245, 241, 211);
+}

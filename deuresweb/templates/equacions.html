@@ -33,21 +33,22 @@
   <div class="form-group">
     <label>Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opBase" aria-expanded="false" aria-controls="opBase">
+        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opBase" aria-expanded="false" aria-controls="opBase"    tabindex="0" data-trigger="manual" id="pop_base" type="button" rel="popover" data-placement="top" data-content="">
           <input type="checkbox" name="base" autocomplete="off" id="base" value="Base"> Base ✨
         </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq1" aria-expanded="true" aria-controls="opEq1">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq1" aria-expanded="true" aria-controls="opEq1"    tabindex="1" data-trigger="manual" id="pop_primer" type="button" rel="popover" data-placement="top" data-content="">
           <input type="checkbox" name="primer" autocomplete="off" id="primer" value="Primer grau" checked> Primer grau
         </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq2" aria-expanded="true" aria-controls="opEq2">
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq2" aria-expanded="true" aria-controls="opEq2"    tabindex="2" data-trigger="manual" id="pop_segon" type="button" rel="popover" data-placement="top" data-content="">
           <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" checked> Segon grau
         </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist">
-          <input type="checkbox" name="sistemes" autocomplete="off" id="div" value="Sistemes" checked> Sistemes ✨
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist"    tabindex="3" data-trigger="manual" id="pop_sistemes" type="button" rel="popover" data-placement="top" data-content="">
+          <input type="checkbox" name="sistemes" autocomplete="off" id="sistemes" value="Sistemes" checked> Sistemes ✨
         </label>
-        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opSist3" aria-expanded="false" aria-controls="opSist">
-          <input type="checkbox" name="sistemes3" autocomplete="off" id="div" value="Sistemes 3D"> Sistemes 3D
+        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opSist3" aria-expanded="false" aria-controls="opSist"    tabindex="4" data-trigger="manual" id="pop_sistemes3" type="button" rel="popover" data-placement="top" data-content="">
+          <input type="checkbox" name="sistemes3" autocomplete="off" id="sistemes3" value="Sistemes 3D"> Sistemes 3D
         </label>
+        <label ></label>
     </div>
   </div>
   <br>
@@ -76,8 +77,8 @@
         <h5 class="card-title">Base</h5>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupRacios"><b>Identitat vs Equació</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <label><b>Identitat vs Equació</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('base');">
               {% for n in range(7) %}
               {% set name = "qidvseq" %}
               {% if n == 2 %}
@@ -106,7 +107,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label for="formGroupSimplesQuantes"><b>Simples sense dividir</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qsimples" id="qs0" value="no" autocomplete="off"> no
               </label>
@@ -136,7 +137,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label for="formGroupSimplesDivQuantes"><b>Simples divisió entera</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qdsimples" id="qds0" value="no" autocomplete="off"> no
               </label>
@@ -187,7 +188,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>Opera i resol</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
               {% for n in range(7) %}
               {% set name = "q1polis" %}
               {% if n == 2 %}
@@ -224,7 +225,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label for="formGroupRacios"><b>Amb denominadors</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
               {% for n in range(7) %}
               {% set name = "q1racios" %}
               {% if n == 2 %}
@@ -254,7 +255,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>Incompletes</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qincomps" id="qi0" value="no" autocomplete="off"> no
               </label>
@@ -301,7 +302,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>Simples completes</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qcompletes" id="qc0" value="no" autocomplete="off"> no
               </label>
@@ -352,7 +353,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label for="formGroupPolinomic"><b>Opera i resol</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qpolis" id="poli0" value="no" autocomplete="off"> no
               </label>
@@ -392,7 +393,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>Lineals (gràficament) ✨</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
               {% for n in range(7) %}
               {% set name = "qgsist" %}
               {% if n == 2 %}
@@ -412,7 +413,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>Lineals (analíticament)</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
               {% for n in range(7) %}
               {% set name = "qsist" %}
               {% if n == 2 %}
@@ -453,7 +454,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label><b>No lineals</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
               {% for n in range(7) %}
               {% set name = "qnsist" %}
               {% if n == 2 %}
@@ -482,7 +483,7 @@
 
         <div class="form-group mb-0 ml-2">
             <label for="formGroupSistemes3Quants"><b>Lineals</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes3');">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qsist3" id="qs30" value="no" autocomplete="off"> no
               </label>
@@ -537,6 +538,70 @@
 {% endblock %}
 {% block jsextra %}
 <script>
+    /* JQuery que activaria els tooltips (està pensat per seleccionar-los tots de cop si tenen rel="tooltip" a les dades)
+    $(document).ready(function() {
+        $('[rel="tooltip"]').tooltip();
+    }); (el tooltip és  */
+
+    // JQuery pels popovers
+    $(function () {
+        $('[rel="popover"]').popover()
+    })
+
+    $('.popover-dismiss').popover({  // amb això marxa si cliques a qualsevol lloc (però cal tabindex i data-trigger i que sigui a)
+        trigger: 'focus'
+    })
+
+    function pop_mostra(quin){
+        $("#" + quin).attr("data-content", "Aquí pots desactivar l'apartat sencer");
+        $("#" + quin).attr("data-placement", "top");
+        $("#" + quin).popover("show");
+        setTimeout(function() {pop_hide(quin);}, 3000);
+    }
+
+    function pop_hide(quin){
+        $("#" + quin).popover("hide");
+    }
+
+    function avisa_tot_no(apartat){
+        switch(apartat){
+            case "base":
+                exs = ["qidvseq"];
+                break;
+            case "primer":
+                exs = ["qsimples", "qdsimples", "q1polis", "q1racios"];
+                break;
+            case "segon":
+                exs = ["qincomps", "qcompletes", "qpolis"];
+                break;
+            case "sistemes":
+                exs = ["qgsist", "qsist", "qnsist"];
+                break;
+            case "sistemes3":
+                exs = ["qsist3"];
+            default:
+                exs = [];
+                break;
+        }
+
+        if (exs.length == 0 || exs.length < 2) {
+            return;  // no val la pena avisar si n'ha tret un i prou (o si el switch ha caigut a default)
+        }
+
+        sense_exs = true;
+        for(let ex of exs){
+            quantes = document.querySelector('input[name="' + ex + '"]:checked').value;
+            //prompt(apartat + " " + ex + " :: " + quantes);
+            if(quantes != "no"){
+                sense_exs = false;
+            }
+        }
+        if(sense_exs){
+            pop_mostra(apartat);
+        }
+        return;
+    }
+
     //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
 </script>
 {% endblock %}

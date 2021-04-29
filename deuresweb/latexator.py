@@ -745,6 +745,8 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
     if "base" in opcions:
         base = True
         qidvseq = quantesson(opcions["qidvseq"], "idvseq")
+        if not any([qidvseq]):  # totes les de l'apartat
+            base = False
     else:
         base = False
         qidvseq = 0
@@ -757,13 +759,15 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         q1polis = quantesson(opcions["q1polis"], "1polis")
         sparent = quantesvariant(opcions["sparent"])
         q1racios = quantesson(opcions["q1racios"], "1racios")
+        if not any([qsimples, qdsimples, q1polis, q1racios]):  # si no hi ha apartats, fora
+            primer = False
+        print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}, Ax+Bx+Cx+D+E+F=0 {q1polis}, (Ax+B)/C=0 {q1racios}")
     else:
         primer = False
         qsimples = 0
         qdsimples = 0
         q1polis = 0
         q1racios = 0
-    print(f"x+B=C {qsimples}, Ax+b=C {qdsimples}, Ax+Bx+Cx+D+E+F=0 {q1polis}, (Ax+B)/C=0 {q1racios}")
 
     if "segon" in opcions:
         segon = True
@@ -772,6 +776,8 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         qcompletes = quantesson(opcions["qcompletes"], "completes")
         noa = quantesvariant(opcions["noa"])
         qpolis = quantesson(opcions["qpolis"], "polis")
+        if not any([qincomps, qcompletes, qpolis]):  # si no hi ha apartats, fora
+            segon = False
     else:
         segon = False
         qincomps = 0
@@ -785,6 +791,8 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         qsist = quantesson(opcions["qsist"], "sistemes")
         nocoef = quantesvariant(opcions["nocoef"])
         qnsist = quantesson(opcions["qnsist"], "nsistemes")
+        if not any([qgsist, qsist, qnsist]):  # si no hi ha apartats, fora
+            sistemes = False
     else:
         sistemes = False
         qgsist = 0
@@ -796,6 +804,8 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
         sistemes3 = True
         qsist3 = quantesson(opcions["qsist3"], "sistemes3")
         nocoef3 = quantesvariant(opcions["nocoef3"])
+        if not any([qsist3]):  # si no hi ha apartats, fora
+            sistemes3 = False
     else:
         sistemes3 = False
         qsist3 = 0
@@ -1689,9 +1699,9 @@ def powsqr(opcions, solucions=False):
 
             end(doc, 'questions')
         else:
-            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
+            doc.append("Calia tirar-se tanta estona per no posar res? Potser no...")
     else:
-        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+        doc.append("Amb la fitxa buida jo també trec un 10 si vols...")
 
     doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
     print("PDF generat.")
