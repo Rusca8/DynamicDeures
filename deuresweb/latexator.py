@@ -879,13 +879,23 @@ def equacions(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - 
                 doc.append("Resol les següents equacions de primer grau (sense coeficient a la x).")
                 begin(doc, 'parts')
                 begin(doc, "multicols", "3")
-                for x in range(0, n // 2):
+                simples_ops = random.sample([x for x in range(-10, 11)], min(n+1, 21))
+                x = 11
+                simples_extres = []
+                while len(simples_ops) + len(simples_extres) < n+1:  # si no feia prou amplio
+                    simples_extres += [x, -x]
+                    x += 1
+                random.shuffle(simples_ops)
+                random.shuffle(simples_extres)
+                simples_ops += simples_extres
+                simples_ops.reverse()  # ...que el pop extreu del final!
+                for x in range(n):
                     part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.eq(1, 1)))  # faig meitat de cada
-                    space(doc, "0.7cm")
-                for x in range(0, n // 2):
-                    part(doc)
-                    doc.append(NoEscape(r'$%s$' % gen.eq(1, 2)))  # faig meitat de cada
+                    if x <= n//2:
+                        text = gen.eq(1, 1, x=simples_ops.pop())
+                    else:
+                        text = gen.eq(1, 2, x=simples_ops.pop())
+                    doc.append(NoEscape(r'$%s$' % text))  # faig meitat de cada
                     space(doc, "0.7cm")
                 end(doc, "multicols")
                 end(doc, 'parts')

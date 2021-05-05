@@ -106,61 +106,41 @@
         <h5 class="card-title">Equacions de primer grau</h5>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupSimplesQuantes"><b>Simples sense dividir</b></label>
+            <label><b>Simples sense dividir</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs0" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qsimples" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs1" value="poques" autocomplete="off"> poques
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qsimples" id="qs2" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs3" value="moltes" autocomplete="off"> moltes
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs4" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs5" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsimples" id="qs6" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qsimples" id="qs9" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupSimplesDivQuantes"><b>Simples divisió entera</b></label>
+            <label><b>Simples divisió entera</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds0" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qdsimples" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds1" value="poques" autocomplete="off"> poques
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qdsimples" id="qds2" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds3" value="moltes" autocomplete="off"> moltes
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds4" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds5" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qdsimples" id="qds6" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qdsimples" id="qps9" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>
@@ -256,29 +236,19 @@
         <div class="form-group mb-0 ml-2">
             <label><b>Incompletes</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi0" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qincomps" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi1" value="poques" autocomplete="off"> poques
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qincomps" id="qi2" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi3" value="moltes" autocomplete="off"> moltes
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi4" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi5" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qincomps" id="qi6" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qincomps" id="qi9" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>
@@ -303,29 +273,19 @@
         <div class="form-group mb-0 ml-2">
             <label><b>Simples completes</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc0" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qcompletes" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc1" value="poques" autocomplete="off"> poques
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qcompletes" id="qc2" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc3" value="moltes" autocomplete="off"> moltes
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc4" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc5" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qcompletes" id="qc6" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qcompletes" id="qc9" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>
@@ -352,31 +312,21 @@
         </div>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupPolinomic"><b>Opera i resol</b></label>
+            <label><b>Opera i resol</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli0" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qpolis" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli1" value="poques" autocomplete="off"> poques
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qpolis" id="poli2" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli3" value="moltes" autocomplete="off"> moltes
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli4" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli5" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qpolis" id="poli6" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qpolis" id="poli9" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>
@@ -482,31 +432,21 @@
         <h5 class="card-title">Sistemes de tres incògnites</h5>
 
         <div class="form-group mb-0 ml-2">
-            <label for="formGroupSistemes3Quants"><b>Lineals</b></label>
+            <label><b>Lineals</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes3');">
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qs30" value="no" autocomplete="off"> no
+              {% for n in range(7) %}
+              {% set name = "qsist3" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
               </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qsi31" value="poques" autocomplete="off"> pocs
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                <input type="radio" name="qsist3" id="qsi32" value="normal" autocomplete="off" checked> normal
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qsi33" value="moltes" autocomplete="off"> molts
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qsi34" value="mitja" autocomplete="off"> mitja
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qsi35" value="plana" autocomplete="off"> plana
-              </label>
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qsist3" id="qsi36" value="doble" autocomplete="off"> doble
-              </label>
+              {% endfor %}
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="qsist3" id="qsi39" value="tria" autocomplete="off" disabled> tria
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
             </div>
         </div>

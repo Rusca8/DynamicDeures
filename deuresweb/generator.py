@@ -2448,10 +2448,14 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
 
     if tipus == 1:  # TIPUS x+B=C
         if nivell == 1 or nivell == 2:  # x esquerra (números petits) || x on sigui, (números petits)
+            if x == -42:  # no en venia una de fora
+                x = random.randint(-10, 10)
             b = random.randint(1, 5)
-            if moneda():
+            print(x, b, "//", x+b, x-b)
+            if (abs(x+b) < 11 and abs(x-b) < 11 and moneda()) or abs(x-b) < abs(x+b):
                 b = -b
-            c = random.randint(-5, 5)
+                print("canvi")
+            c = x+b
             # muntatge
             if moneda():
                 if nivell == 1 or moneda():
@@ -2932,7 +2936,6 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
             text = etext + "=" + dtext
 
     elif tipus == 101:  # x^2-C (treure l'arrel)
-        print(x)
         nexist = False
         if nivell == 1:  # quadrat perfecte, x2 sense coef
             if x == -42:  # si no l'he definit des de fora la trio aquí
