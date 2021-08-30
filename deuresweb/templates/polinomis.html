@@ -37,10 +37,10 @@
           <input type="checkbox" name="base" autocomplete="off" id="base" value="base" checked> Base
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opID" aria-expanded="true" aria-controls="opID">
-          <input type="checkbox" name="idnot" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables ✨
+          <input type="checkbox" name="idnot" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opOps" aria-expanded="true" aria-controls="opOps">
-          <input type="checkbox" name="ops" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis
+          <input type="checkbox" name="ops" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis ✨
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opAlgs" aria-expanded="true" aria-controls="opAlgs">
           <input type="checkbox" name="alges" autocomplete="off" id="alges" value="ops" checked> Algebraiques
@@ -225,7 +225,7 @@
               <div class="row no-gutters">
 
                 <div class="col-sm-auto">
-                    <label><i>Triar quins tipus? ✨</i></label>
+                    <label><i>Triar quins tipus?</i></label>
                 </div>
                 <div class="col">
                     <div class="btn-group-toggle ml-2" data-toggle="buttons">
@@ -287,7 +287,7 @@
               <div class="row no-gutters">
 
                 <div class="col-sm-auto">
-                    <label for="formGroupPropietats"><i>Triar quins tipus? ✨</i></label>
+                    <label for="formGroupPropietats"><i>Triar quins tipus?</i></label>
                 </div>
                 <div class="col">
                     <div class="btn-group-toggle ml-2" data-toggle="buttons">
@@ -342,7 +342,7 @@
         </div>
 
         <div class="form-group mb-1 ml-5">
-            <label><i>...què vol dir ordenat? ✨</i></label>
+            <label><i>...què vol dir ordenat?</i></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
                   <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
                     <input type="radio" name="ordre2" id="ordre1" value="ordre1" autocomplete="off" checked> a²+2ab+b²
@@ -566,6 +566,51 @@
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
                 <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
               </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 ml-2">
+            <label><b>Paràmetre sabent residu ✨</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              {% for n in range(7) %}
+              {% set name = "qpresidu" %}
+              {% if n == 2 %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+              {% else %}
+                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+              {% endif %}
+              </label>
+              {% endfor %}
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0"> <!-- columnes -->
+              <div class="row no-gutters">
+
+                <div class="col-sm-auto">
+                    <label><i>Triar el paràmetre?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-2" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini ml-1 active">
+                          <input type="checkbox" name="presk" autocomplete="off" id="presk" value="presk" checked> k
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="presm" autocomplete="off" id="presm" value="presm" checked> m
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                          <input type="checkbox" name="presa" autocomplete="off" id="presa" value="presa" checked> a
+                        </label>
+                    </div>
+                </div>
+
+              </div>
             </div>
         </div>
 

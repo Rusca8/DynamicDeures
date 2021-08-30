@@ -2078,8 +2078,8 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
             solu = ("\\frac{" + num + "}{" + den + "}")
 
     elif tipus == 106:  # paràmetre(s) tal que residu
-        if nivell in [1, 2, 3]:  # k tal que divi exacta
-            # (Ax^2+Bx+C)*(x-D): un coef k / un coef ka / multi coefs / incl coefs suma (k+1) etc
+        if nivell in [1, 2, 3, 4, 5, 6]:  # k tal que divi exacta
+            # (Ax^2+Bx+C)*(x-D): un coef k / un coef ka / multi coefs / amb una suma (k+a)
             # coefs pre-multi
             a = random.randint(1, 2) * random.choice([-1, 1])
             b = random.randint(1, 3) * random.choice([-1, 1])
@@ -2093,8 +2093,9 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                     b = d * random.choice([1, 2, 3])
                     if a*d < 0:
                         b = -b
-
+            # construeixo el polinomi (multiplicant)
             rufipx = poli_op(3, [a, b, c], [1, -d])
+
             if nivell == 1:  # subs pel num sencer
                 i = random.randint(0, len(rufipx)-1)
                 if moneda():
@@ -2103,13 +2104,15 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                     k, rufipx[i] = -rufipx[i], f"-{par}"  # substitueixo per -k
 
             elif nivell == 2:  # subs una part del num
-                i = random.choice([x for x in range(len(rufipx)) if rufipx[x]])
+                try:  # intento agafar un major que 1 si n'hi ha
+                    i = random.choice([x for x in range(len(rufipx)) if abs(rufipx[x]) > 1])
+                except:
+                    i = random.choice([x for x in range(len(rufipx)) if rufipx[x]])
                 divs = divisors(rufipx[i], True)
-                ca = random.choice(divs) * random.choice([-1, 1])  # coef a que deixo davant la k
-                if ca:
-                    k = rufipx[i] // ca  # per la solu
-                else:
-                    k = random.choice([1, -1])
+                ca = random.choice(divs) * random.choice([-1, 1])  # coef "a" que deixo davant la k
+                if not ca:
+                    ca = random.choice([-1, 1])
+                k = rufipx[i] // ca  # per la solu
                 if abs(ca) != 1:
                     rufipx[i] = f"{ca}{par}"
                 elif ca > 0:
@@ -2117,12 +2120,14 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 else:
                     rufipx[i] = f"-{par}"
 
-            elif nivell == 3:
+            elif nivell == 3:  # multi coefs
                 m2 = []
                 m3 = []
                 m4 = []
                 m5 = []
                 for i, x in enumerate(rufipx):
+                    if not x:
+                        continue
                     if not x % 4:  # múltiple de 4
                         m4.append(i)
                         m2.append(i)
@@ -2141,27 +2146,80 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 elif len(mn) > 2:  # si en tinc molts en deixo 2 (que així també dissimulem una mica)
                     mn = random.sample(mn, 2)
                 print(rufipx)
-                i += 2  # adapto que i=0 era m2, etc
+                i += 2  # adapto, que es deia i=0 però era m2 i per tant ha de ser i=2, etc
                 k = random.choice([i, -i])
+                totalk = 0
                 for i in mn:
                     ca = rufipx[i] // k  # coeficient davant la k
-                    if abs(ca) != 1:
-                        rufipx[i] = f"{ca}{par}"
-                    elif ca > 0:
-                        rufipx[i] = f"{par}"
+                    if ca:
+                        if abs(ca) != 1:
+                            rufipx[i] = f"{ca}{par}"
+                        elif ca > 0:
+                            rufipx[i] = f"{par}"
+                        else:
+                            rufipx[i] = f"-{par}"
                     else:
-                        rufipx[i] = f"-{par}"
-            elif nivell == 4:  # TODO subs un per sumes (k+1)
+                        rufipx[i] = 0
+                    totalk += k*ca * d**(len(rufipx)-i-1)
+                if not totalk:
+                    k = r"${\rm I\!R}$"
 
-                pass
-            elif nivell == 5:  # TODO subs més d'un per sumes o multis
-                pass
-            elif nivell == 10:  # TODO subs multivar (comparant amb residu)
+            elif nivell == 4:  # subs un per sumes (k+1)
+                i = random.randint(0, len(rufipx)-1)
+                sa = random.randint(1, 2) * random.choice([-1, 1])  # sumand "a" (k+a)
+                k, rufipx[i] = (rufipx[i]-sa), f"({par}{amb_signe(sa)})"
+
+            elif nivell == 5:  # multisumes (k+a), (k+b)
+                if d != -1:  # esquivo els indeterminats més obvis
+                    i, j = random.sample(range(len(rufipx)), 2)
+                else:
+                    i, j = random.sample(range(len(rufipx))[random.choice([0, 1])::2], 2)  # agafa 2 imparells o parells
+                if j < i:  # asseguro el sumand petit al grau gran (la i el porta escollit, la j calculat)
+                    j, i = i, j
+                sa = random.randint(1, 2) * random.choice([-1, 1])  # sumand "a" [i] = (k+a)
+                k, rufipx[i] = (rufipx[i]-sa), f"({par}{amb_signe(sa)})"
+                sb = rufipx[j] - k
+                if sb:
+                    rufipx[j] = f"({par}{amb_signe(sb)})"
+                else:
+                    rufipx[j] = par
+
+                if not d**(len(rufipx)-i-1) + d**(len(rufipx)-j-1):
+                    k = r"${\rm I\!R}$"
+
+            elif nivell == 6:  # sumes i multis alhora
+                i = random.choice([x for x in range(len(rufipx)) if rufipx[x]])
+                j = random.choice([x for x in [len(rufipx)-1, len(rufipx)-2] if x != i])
+                divs = divisors(rufipx[i], True)
+                ca = random.choice(divs) * random.choice([-1, 1])  # coef "a" que deixo davant la k
+                if not ca:
+                    ca = random.choice([-1, 1])
+                k = rufipx[i] // ca
+                if abs(ca) != 1:
+                    rufipx[i] = f"{ca}{par}"
+                elif ca > 0:
+                    rufipx[i] = f"{par}"
+                else:
+                    rufipx[i] = f"-{par}"
+
+                if not ca * d**(len(rufipx)-1-i) + d**(len(rufipx)-1-j):  # em carrego la majoria d'indefinits
+                    j = random.choice([x for x in range(len(rufipx)) if x != i and x%2 == i%2])
+                sb = rufipx[j] - k
+                if sb:
+                    rufipx[j] = f"({par}{amb_signe(sb)})"
+                else:
+                    rufipx[j] = par
+
+                if not ca * d**(len(rufipx)-1-i) + d**(len(rufipx)-1-j):
+                    print("indef")
+                    k = r"${\rm I\!R}$"
+
+            elif nivell == 10:  # TODO subs multivar (comparant amb residu ...de fet això amb rufini no es pot, no?)
                 pass
             px = polinomitza(rufipx)
             dx = polinomitza([1, -d])
 
-            text = px + " : " + dx
+            text = squarebracketer(f"({px})\div ({dx})")
             solu = f"{k}"
 
     if solucions:
@@ -4682,5 +4740,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(10):
-    print(sisteq(2, 1, solucions=True))
+for x in range(30):
+    print(px(106, 6, par="k"))

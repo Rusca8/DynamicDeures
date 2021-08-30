@@ -2107,8 +2107,16 @@ def polinomis(opcions, solucions=False):
         qdivis = quantesson(opcions["qdivis"], "px_divis")
         fodivis = quantesvariant(opcions["fodivis"])
         qresidu = quantesson(opcions["qresidu"], "px_residu")
+        qpresidu = quantesson(opcions["qpresidu"], "px_residu")
+        pres_par = []
+        for p in ["k", "m", "a"]:
+            if "pres"+p in opcions:
+                pres_par.append(p)
+        if not pres_par:
+            pres_par = ["k", "k", "m", "a"]
+
         print(f"Sum {qsumes} [{fosumes}], Rest {qrestes} [{forestes}], Multi {qmultis} [{fomultis}]," +
-              f" Rufi {qrufis} [{forufis}], Divi {qdivis} [{fodivis}], Resi {qresidu}")
+              f" Rufi {qrufis} [{forufis}], Divi {qdivis} [{fodivis}], Resi {qresidu}, P.Resi [{qpresidu}]")
     else:
         ops = False
         qsumes = 0
@@ -2117,6 +2125,7 @@ def polinomis(opcions, solucions=False):
         qrufis = 0
         qdivis = 0
         qresidu = 0
+        qpresidu = 0
 
     if "alges" in opcions:
         alges = True
@@ -2149,7 +2158,7 @@ def polinomis(opcions, solucions=False):
     if any([base, idnot, ops, alges]):  # aquí tots els botons grossos
         if any([qmonomi, qinvent, qaval, qfcomu, qcryp,
                 qidnot, qeidnot,
-                qsumes, qrestes, qmultis, qdivis, qrufis, qresidu,
+                qsumes, qrestes, qmultis, qdivis, qrufis, qresidu, qpresidu,
                 qfactor, qalgeb]):  # aquí tots els tipus d'exercici
 
             begin(doc, 'questions')
@@ -2489,6 +2498,25 @@ def polinomis(opcions, solucions=False):
                     doc.append(NoEscape(r"%s" % text))
                     sols.append(sol)
                     space(doc, "1cm")
+                end(doc, 'parts')
+                blocsolus(doc, solucions, sols)
+
+            if qpresidu:
+                n = qpresidu
+                needspace(doc, 8)
+                question(doc, f"{n}")  # puntuació de l'exercici
+                doc.append("Calcula en cada cas el valor del paràmetre que fa que la divisió sigui exacta.")
+                begin(doc, 'parts')
+                begin(doc, 'multicols', 2)
+                sols = []
+                for x in range(0, n):
+                    part(doc)
+                    par = random.choice(pres_par)
+                    text, sol = gen.px(106, min(x // max(n//6, 1) + 1, 6), solucions=True, par=par)  # una mica de cada tipus
+                    doc.append(NoEscape(r"$%s$" % text))
+                    sols.append(sol)
+                    space(doc, "1cm")
+                end(doc, 'multicols')
                 end(doc, 'parts')
                 blocsolus(doc, solucions, sols)
 
