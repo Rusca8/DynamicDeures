@@ -1,0 +1,24 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis ENDEVINAIDENTITAT
+ #    Endevinar identitats notables a partir de la forma desenvolupada.
+ #}
+
+{% with title="Endevinar la identitat", name="qeidnot" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with name="eidnt", labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Una sola variable?", name="eid1var" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Forçar ordenat?", name="eidord", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="...què vol dir ordenat?", name="ordre", labels=["a²+2ab+b²", "a²+b²+2ab"], subordina=true %}
+        {% include 'parts/triauna.html' %}
+    {% endwith %}

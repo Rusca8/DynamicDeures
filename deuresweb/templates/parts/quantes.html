@@ -1,0 +1,27 @@
+{# Secció de formulari per escollir QUANTS APARTATS VOLS
+#}
+
+{# title és el text del títol de l'exercici #}
+{# name és el nom de la variable (i.e. qexercici) #}
+{# triat és el botó que vull seleccionar #}
+{# TODO faltarà masculí vs femení a les paraules de quantes #}
+
+{% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+<div class="form-group mb-0 ml-2">
+    <label><b>{{title|default("Exercici 42")}}</b></label>
+    <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+      {% for n in range(7) %}
+      {% if n == triat|default(2, true) %}
+        <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+      {% else %}
+        <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+      {% endif %}
+      </label>
+      {% endfor %}
+      <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+        <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+      </label>
+    </div>
+</div>

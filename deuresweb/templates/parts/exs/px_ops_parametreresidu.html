@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis PARAMETRERESIDU
+ #    Calcular un paràmetre sabent el residu d'una divisió.
+ #}
+
+{% with title="Paràmetre sabent residu ✨", name="qpresidu" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+        {% with title="Quines lletres fem servir?", labels=["k", "m", "a"], altnames=["presk", "presm", "presa"] %}
+          {% include '/parts/triaquines.html' %}
+        {% endwith %}

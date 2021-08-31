@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis FACTORCOMU
+ #    Extreu factor comú dels polinomis.
+ #}
+
+{% with title="Extreure factor comú", name="qfcomu" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Una sola variable?", name="fc1var" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

@@ -1,0 +1,20 @@
+{# title és el títol de la opció #}
+{# name és el nom de la variable (e.g. nosignes) #}
+
+{% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
+{% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+<div class="form-group mb-1 ml-4">
+    <label><i>{{ title|default("Opció 42?", true) }}</i></label>
+    <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+      {% for n in range(5) %}
+        {% if n == triat|default(2, true) %}
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+        {% else %}
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+        {% endif %}
+          </label>
+      {% endfor %}
+    </div>
+</div>

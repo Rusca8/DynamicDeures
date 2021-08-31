@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis MULTIPLICA
+ #    Multiplicació de dos polinomis.
+ #}
+
+{% with title="Multiplicar", name="qmultis" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar ordenats?", name="fomultis" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

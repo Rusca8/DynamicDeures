@@ -1,0 +1,29 @@
+{# title és el títol de la opció #}
+{# name és el nom de la variable (e.g. "taula" crearà els valors "taula1", "taula2", "taula3", ...) #}
+{# labels són els textos de la llista de botons que generaré #}
+{# triats és una llista del les opcions actives (comença per 1; si no n'hi ha ho activa tot) #}
+{# altnames és una llista per si vull personalitzar els noms de variable en lloc de fer-ho seqüencial #}
+
+{% set ch = "checked" %}
+<div class="form-group mb-1 ml-4">
+    <div class="container-fluid pl-0">
+      <div class="row no-gutters">
+
+        <div class="col-sm-auto">
+            <label><i>{{ title|default("Triar quins tipus?", true) }}</i></label>
+        </div>
+        <div class="col">
+            <div class="btn-group-toggle ml-2" data-toggle="buttons">
+                {% for b in labels|default(["Opció 1", "Opció 2"], true) %}
+                    {% set activa = not triats|default("", true) or loop.index in triats %}
+                    {% set nom = name+loop.index|string if not altnames|default("", true) else altnames[loop.index0] %}
+                    <label class="btn btn-sm btn-outline-info py-0 btn-mini {{'ml-2' if not loop.index0}} {{'active' if activa}}">
+                      <input type="checkbox" name="{{nom}}" autocomplete="off" id="{{nom}}" value="{{nom}}" {{ch if activa}}> {{b}}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>

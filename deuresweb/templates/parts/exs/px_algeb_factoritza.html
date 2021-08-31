@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis FACTORITZA
+ #    Factoritza un polinomi donat.
+ #}
+
+{% with title="Factoritzar polinomis", name="qfactor" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar constant?", name="fnok" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

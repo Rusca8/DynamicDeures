@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici de polinomis IDENTITAT
+ #    Desenvolupar identitats notables.
+ #}
+
+{% with title="Calcular la identitat", name="qidnot" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with name="idnt", labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Una sola variable?", name="id1var" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
