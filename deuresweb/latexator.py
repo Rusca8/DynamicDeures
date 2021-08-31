@@ -2083,7 +2083,7 @@ def polinomis(opcions, solucions=False):
         if not eidnums:
             eidnums = [1, 2, 3]
 
-        if opcions["ordre2"] == "ordre2":
+        if opcions["ordre"] == "ordre2":
             ordre2 = True
         else:
             ordre2 = False
