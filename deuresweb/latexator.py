@@ -2,9 +2,14 @@ import random
 
 from pylatex import Document, Section
 from pylatex import Command, NoEscape, Math, Tabular, Package
+from rpylatex import (begin, end, part, space, lines, br, needspace, bloctitle, question, choice,
+                      taulaconfig, obretaula, obrellarga, filataula, tancataula, envt,
+                      escriusolus, blocsolus, metasolucions)
+import rpylatex as rpy
 
 import generator as gen
 import q_generator as qgen
+import exercicitator as mexs  # modular exercicis
 import enunciats as en
 import cryptolator as crypt
 import wolframator as w
@@ -2033,15 +2038,23 @@ def ncient(opcions, solucions=False):
 
 
 def polinomis(opcions, solucions=False):
-    tema = "polis"
+    if "temafitxa" in opcions:
+        temafitxa = opcions["temafitxa"]
+    else:
+        temafitxa = "misteri"
 
     # getting opcions
     curs = opcions["curs"]
-    print("Generant pdf: {} ({})".format(temallarg(tema), curs))
+    print("Generant pdf: {} ({})".format(temallarg(temafitxa), curs))
 
     if opcions["solucions"] == "sí":
         solucions = True
+    if "solulloc" in opcions:
+        solulloc = opcions["solulloc"]
+    else:
+        solulloc = ""
 
+    """
     if "base" in opcions:
         base = True
         qmonomi = quantesson(opcions["qmonomi"], "px_monomi")
@@ -2137,23 +2150,101 @@ def polinomis(opcions, solucions=False):
         alges = False
         qfactor = 0
         qalgeb = 0
+    """
 
     # PyLaTeX code
     geometry = margins()
     doc = Document(documentclass="exam", geometry_options=geometry)
-    doc.packages.append(Package('multicol'))
+    doc.packages.append(Package('multicol'))  # TODO integrar a cada exercici quins necessita per triar-los automàtic
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('needspace'))
     doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
     # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
 
-    headfoot(doc, opcions, tema)
+    headfoot(doc, opcions, temafitxa)
     myconfig(doc, solucions)
 
     doc.append(NoEscape(
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
+    # *************** DEBUGGING **************** #
+
+    opcions = parse_multi_form(opcions)  # converteix la patranya que m'arriba del post en un dict com cal
+    print(opcions)
+    for t in opcions["temes"]:
+        print(f"****** {t} *******".upper())
+        for apartat in opcions["temes"][t]:
+            print(f"{apartat}".upper())
+            for exercici in opcions["temes"][t][apartat]:
+                print(f"- {exercici} : {opcions['temes'][t][apartat][exercici]}")
+    print("..::ROOT::..")
+    for apartat in opcions:
+        if apartat != "temes":
+            print(f"- {apartat} : {opcions[apartat]}")
+
+    # ************** PREPROCESSING ************** #
+
+    tbuits = []  # temes per eliminar
+    for tema in opcions["temes"]:
+        apbuits = []  # apartats per eliminar
+        for apartat in opcions["temes"][tema]:
+            if "apartats" not in opcions or apartat not in opcions["apartats"][tema]:
+                apbuits.append(apartat)
+            else:
+                exbuits = []  # exercicis per eliminar
+                for exercici in opcions["temes"][tema][apartat]:
+                    if opcions["temes"][tema][apartat][exercici]["quantes"] == "no":  # elimino exercicis buits
+                        exbuits.append(exercici)
+                    else:  # entro el nom de l'exercici i la tria de solus dins de sí mateix (per després)
+                        opcions["temes"][tema][apartat][exercici]["exnom"] = exercici
+                        opcions["temes"][tema][apartat][exercici]["solucions"] = solucions
+                        opcions["temes"][tema][apartat][exercici]["solulloc"] = solulloc
+
+                for exercici in exbuits:
+                    opcions["temes"][tema][apartat].pop(exercici, None)
+                if not len(opcions["temes"][tema][apartat]):
+                    apbuits.append(apartat)
+        for apartat in apbuits:
+            opcions["temes"][tema].pop(apartat, None)
+        if not len(opcions["temes"][tema]):
+            tbuits.append(tema)
+    for tema in tbuits:
+        opcions["temes"].pop(tema, None)
+
+    # ************** FITXA EN SÍ ************** #
+
+    if not len(opcions["temes"]):
+        doc.append("Doncs res, tu, fem una fitxa buida. Si jo estic aquí per complir ordres... "
+                   "però vaja, jo hauria agafat un paper en blanc, no? No sé... sembla més pràctic.")
+    else:
+        qnum = 1  # num d'exercici
+        sols_final = []
+        begin(doc, "questions")
+        for tema in opcions["temes"]:
+            if len(opcions["temes"]) > 1:  # si hi ha més d'un tema, poso títols dels temes TODO hr potser
+                needspace(doc, 12)
+                bloctitle(doc, temallarg(tema).upper())
+            for apartat in opcions["temes"][tema]:
+                needspace(doc, 12)
+                bloctitle(doc, apartat)
+                for exercici in opcions["temes"][tema][apartat]:
+                    g = mexs.constructor_de(exercici)
+                    sols = g(doc, opcions["temes"][tema][apartat][exercici])
+                    if sols and sols[1]:  # l'exercici ha retornat solució pel final (pq el formulari ho demanava)
+                        sols_final.append([qnum, sols])
+                    qnum += 1
+        if sols_final:  # si no n'hi ha no les escric
+            if opcions["solulloc"] == "final":
+                breakpage = False
+            else:
+                breakpage = True
+            metasolucions(doc, sols_final, breakpage=breakpage)
+            pass
+        end(doc, "questions")
+
+
+    """
     # preguntes
     if any([base, idnot, ops, alges]):  # aquí tots els botons grossos
         if any([qmonomi, qinvent, qaval, qfcomu, qcryp,
@@ -2572,11 +2663,14 @@ def polinomis(opcions, solucions=False):
             doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
     else:
         doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
+    """
 
-    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(tema))
+    print(temafitxa)
+
+    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(temafitxa))
     print("PDF generat.")
 
-    return
+    return "/static/pdfs/" + temallarg(temafitxa) + ".pdf"
 
 
 def successions(opcions, solucions=False):
@@ -3788,7 +3882,7 @@ def playground(opcions, solucions=False):
                 else:
                     io = "(Anió " + qgen.elements[x]["nom"] + ")"
 
-        if not all([x == "-" for x in [vp, vn]]):
+        if not all([v == "-" for v in [vp, vn]]):
             filataula(doc, [f"{x}", qgen.elements[x]["sym"], qgen.elements[x]["nom"], vp, vn, ime, io])
     #filataula(doc, ["Símbol", "Nomenclatura Stock", "Nomenclatura Sistemàtica", "Nom Comú"])
     tancataula(doc)
@@ -3859,7 +3953,7 @@ def temallarg(tema="no"):
         return "ncient"
     elif tema == "prop":
         return "proporcionalitat"
-    elif tema == "polis":
+    elif tema == "px":
         return "polinomis"
     elif tema == "succ":
         return "successions"
@@ -3891,7 +3985,7 @@ def tematitol(tema="no"):
         return "de Notació Científica i Errors"
     elif tema == "prop":
         return "de Proporcionalitat"
-    elif tema == "polis":
+    elif tema == "px":
         return "de Polinomis"
     elif tema == "succ":
         return "de Successions"
@@ -3906,11 +4000,15 @@ def tematitol(tema="no"):
     elif tema == "no":
         return "de Qui sap què"
     else:
-        return "de " + tema
+        return "de " + tema.title()
 
 
 def quantesson(value, op):
     n = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"].index(value)
+    return quantes_son(n, op)
+
+
+def quantes_son(n, op):
     # enters
     if op == "sumes":
         quantitats = [0, 8, 20, 32, 48, 112, 200]
@@ -4086,86 +4184,9 @@ def myconfig(doc, solucions=False):
     return
 
 
-# ********************* Aliases PyLaTeX **********************#
+# ********************* Aliases PyLaTeX **********************# TODO quitar de aquí y dejar sólo rpy.
 
-
-def begin(doc, tag, extra=""):  # TODO canviar per Command (una instrucció genèrica LaTeX que ja existeix), boig
-    if tag == "solution" and not extra == "":
-        doc.append(NoEscape(r'\begin{%s}[%s]' % (tag, extra)))
-    elif tag == "multicols":
-        doc.append(NoEscape(r'\begin{%s}{%s}' % (tag, extra)))
-    else:
-        doc.append(NoEscape(r'\begin{%s}' % (tag,)))
-    return
-
-
-def end(doc, tag):
-    doc.append(NoEscape(r'\end{%s}' % (tag,)))
-    return
-
-
-def space(doc, size):
-    doc.append(NoEscape(r'\vspace{%s}' % (size,)))
-    return
-
-
-def stretch(doc, relsize):
-    doc.append(NoEscape(r'\vspace{\stretch{%s}}' % (relsize,)))
-
-
-def lines(doc, size):
-    doc.append(NoEscape(r'\fillwithlines{%s}' % (size,)))
-    return
-
-
-def br(doc):
-    doc.append(NoEscape(r'\newline'))
-
-
-def pagebreak(doc, priority="4"):
-    doc.append(NoEscape(r'\pagebreak[%s]' % priority))
-
-
-def needspace(doc, height=8, cms=0):
-    """uses needspace package to force page break if not enough space
-
-    :param doc: current doc
-    :param height: height of the needed space (approx, and measured in lines of text)
-    """
-    if cms:
-        doc.append(NoEscape(r'\needspace{%scm}' % cms))
-    else:
-        doc.append(NoEscape(r'\needspace{%s\baselineskip}' % height))
-
-
-def bloctitle(doc, text):
-    doc.append(Command("fullwidth", NoEscape(r"\bfseries \large %s" % (text,))))
-
-
-def part(doc, punts=""):
-    if punts == "":
-        doc.append(NoEscape(r'\part'))
-    else:
-        doc.append(NoEscape(r'\part[%s]' % (punts,)))
-    return
-
-
-def question(doc, punts=""):
-    if punts == "":
-        doc.append(NoEscape(r'\question'))
-    else:
-        doc.append(NoEscape(r'\question[%s]' % (punts,)))
-    return
-
-
-def choice(doc, text, corregir=False):
-    if corregir:
-        doc.append(NoEscape(r'\CorrectChoice %s' % (text,)))
-    else:
-        doc.append(NoEscape(r'\choice %s' % (text,)))
-    return
-
-
+# ésta en concreto no la he pasado a rpy, porque es como raruna
 def uncalcul(doc, quin=[1, 1], sp="0.7cm"):  # op és llista d'opcions del generador
     part(doc)
     doc.append(NoEscape(r'$%s$' % gen.comb(*quin)))  # asterisc separa la llista i els envia individualment
@@ -4173,111 +4194,42 @@ def uncalcul(doc, quin=[1, 1], sp="0.7cm"):  # op és llista d'opcions del gener
     return
 
 
-def taulaconfig(ncols, align, dobles=[]):
-    if align == "m":  # compte a tenir el paquet array
-        align = r"m{5cm}"
-    config = ['|']
-    for c in range(ncols):
-        if c in dobles:
-            config.append('|')
-        config.append(fr"{align}|")
-    if c+1 in dobles or -1 in dobles:
-        config.append('|')
-    return "".join(config)
+# *********************************** EXTERNAL FUNCTIONS *********************************** #
 
 
-def obretaula(doc, estructura, vorasobre=True, header=[], longtable=True):
-    if longtable:
-        obrellarga(doc, estructura, vorasobre, header=header)
-    else:
-        doc.append(NoEscape(r"\begin{tabular}[b]{" + estructura + "}"))  # la b ajuda amb l'espai sota l'enunciat (o no...)
-        if vorasobre:
-            doc.append(NoEscape(r"\hline"))
+def parse_multi_form(form):
+    """ Gets fake array (dict) from an html form and converts it to a proper dict (seems to work)
 
-
-def obrellarga(doc, estructura, vorasobre=True, header=[]):
-    """inicia taula multipaginable (cal 'longtable' package)"""
-    # estructura de la taula
-    doc.append(NoEscape(r"\begin{longtable}[b]{" + estructura + "}"))
-    if vorasobre:
-        doc.append(NoEscape(r"\hline"))
-    # capçalera inici
-    filataula(doc, header)
-    doc.append(NoEscape(r"\endfirsthead"))
-    if vorasobre:
-        doc.append(NoEscape(r"\hline"))
-    # capçalera cont
-    filataula(doc, header)
-    doc.append(NoEscape(r"\endhead"))
-    # peu trencat
-    filataula(doc, ["..." for _ in header], False)
-    doc.append(NoEscape(r"\hline"))
-    doc.append(NoEscape(r"\endfoot"))
-    # últim peu
-    doc.append(NoEscape(r"\hline"))
-    doc.append(NoEscape(r"\endlastfoot"))
-
-
-def filataula(doc, caselles, vorasota=True, py=0):
-    """afegeix una fila a la taula, donades les caselles
-
-    :param doc: document al qual afegir la taula
-    :param caselles: llista amb les caselles de la taula
-    :param vorasota: marcar la vora sota cada fila
-    :param py: padding vertical (en desenes d'alçada de la x minúscula: py=35 és padding de '3.5ex')
+    Got it from Stack Overflow https://stackoverflow.com/a/49819417/5093220
     """
-    # càlculs padding
-    if py:
-        pt = py + 22  # corregeixo la pròpia alçada del text (la implementació de pt que tinc compta des de baseline)
-        pt = r" \rule{0pt}{" + f"{pt // 10}.{pt % 10}ex" + "} "
-        pb = f"[{py // 10}.{py % 10}ex]"
-    else:
-        pt = ""
-        pb = ""
-    # muntatge
-    doc.append(NoEscape(pt + r" & ".join(caselles) + rf"\\" + pb))  # \\[3ex] fa espai a sota
-    if vorasota:
-        doc.append(NoEscape(r"\hline"))
+    data = {}
+    for url_k in form:
+        v = form[url_k]
+        ks = []
+        while url_k:
+            if '[' in url_k:
+                k, r = url_k.split('[', 1)
+                ks.append(k)
+                if r[0] == ']':
+                    ks.append('')
+                url_k = r.replace(']', '', 1)
+            else:
+                ks.append(url_k)
+                break
+        sub_data = data
+        for i, k in enumerate(ks):
+            if k.isdigit():
+                k = int(k)
+            if i+1 < len(ks):
+                if not isinstance(sub_data, dict):
+                    break
+                if k in sub_data:
+                    sub_data = sub_data[k]
+                else:
+                    sub_data[k] = {}
+                    sub_data = sub_data[k]
+            else:
+                if isinstance(sub_data, dict):
+                    sub_data[k] = v
 
-
-def tancataula(doc, longtable=True):
-    if longtable:
-        end(doc, "longtable")
-    else:
-        end(doc, "tabular")
-
-
-def envt(text, qtat=4):
-    return "".join(['\\ ' for _ in range(qtat)] + [text] + ['\\ ' for _ in range(qtat+1)])
-
-
-def escriusolus(llista, mates=False):
-    """fa una llista numerada amb totes les solucions de la llista"""
-    for x in range(len(llista)):
-        if x < 26:
-            apartat = f"{chr(x+97)}"  # a-z
-        else:
-            apartat = f"{chr(x//26+96)+chr(x%26+97)}"  # aa-zz
-        if mates:
-            llista[x] = r"\textbf{" + apartat + ":}~" f"${llista[x]}$"
-        else:
-            llista[x] = r"\textbf{" + apartat + ":}~" f"{llista[x]}"
-    return r"; \penalty-300 ".join(llista)
-
-
-def blocsolus(doc, solucions, llista, mates=False, stretch=False):  # stretch necessita package
-    """Escriu les solucions al document en cas que s'hagi escollit que n'hi hagi
-
-    :param doc: document LaTeX on escriure-ho.
-    :param solucions: bool, diu si hi ha d'haver o no solucions al document.
-    :param llista: llista de solucions de l'exercici.
-    :param mates: true si cal posar $$ a cada apartat / false si és text pla
-    """
-    if solucions:
-        doc.append(NoEscape(r'\begin{solution}'))
-        if stretch:
-            doc.append(NoEscape(r'\setstretch{' f"{stretch}" '}'))
-        doc.append(NoEscape(r'%s\par' % escriusolus(llista, mates)))
-        doc.append(NoEscape(r'\end{solution}'))
-    return
-
+    return data

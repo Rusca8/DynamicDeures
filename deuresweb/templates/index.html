@@ -1,832 +1,838 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="form-group mb-0 ml-0">
-    <div class="container-fluid pl-0"> <!-- columnes -->
-      <div class="row no-gutters">
-        <div class="col-sm-10"> <!-- novetats -->
-            <div class="alert alert-info alert-thin mb-1 mr-3 py-1" role="alert">
-                <small>
-                    <b>Nou:</b> Exercicis d'identitat vs equació (plana d'equacions).<br>
-                    <b>Nou:</b> Sistemes d'equacions optimitzats per a resoldre gràficament.<br>
-                </small>
+<div class="ml-2">
+    <div class="form-group mb-0 ml-0">
+        <div class="container-fluid pl-0"> <!-- columnes -->
+          <div class="row no-gutters">
+            <div class="col-sm-10"> <!-- novetats -->
+                <div class="alert alert-info alert-thin mb-1 mr-3 py-1" role="alert">
+                    <small>
+                        <b>Nou:</b> Exercicis d'identitat vs equació (plana d'equacions).<br>
+                        <b>Nou:</b> Sistemes d'equacions optimitzats per a resoldre gràficament.<br>
+                    </small>
+                </div>
             </div>
+            <div class="col-sm-2"> <!-- botó quím -->
+                <a class="btn btn-block btn-outline-success alert-success py-3" href="/q/" role="button">DD Química</a>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-2"> <!-- botó quím -->
-            <a class="btn btn-block btn-outline-success py-3" href="/q/" role="button">DD Química</a>
-        </div>
-      </div>
     </div>
-</div>
-<!--
-<div class="alert alert-warning alert-thin mb-3 mr-3 py-1" role="alert">
-    <small>
-        <b>Corregit:</b> Va caure tot perquè fallava la fitxa d'enters. En principi està arreglat.
-    </small>
-</div>
--->
-<h5 class="mt-3">Benvinguda!</h5>
-<p class="mb-3" id="debugscreen">Escull un tema i ens inventarem una fitxa única...<br>
-    <small><i>...o pots xafardejar quins tipus d'exercicis hi ha, als exemples d'aquí baix.</i></small>
-</p>
-<p class="mb-2">
-    {% set mtemes = 2 %}
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/enters/" role="button">Operacions amb Enters</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#en" role="button">Ex</a>
+    <!--
+    <div class="alert alert-warning alert-thin mb-3 mr-3 py-1" role="alert">
+        <small>
+            <b>Corregit:</b> Va caure tot perquè fallava la fitxa d'enters. En principi està arreglat.
+        </small>
     </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#omx" role="button">Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#frac" role="button">Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/powsqr/" role="button">Potències i Arrels</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pow" role="button">Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/ncient/" role="button">Notació Científica</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary disabled" href="#ncient" role="button" disabled>Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pp" role="button">Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/polis/" role="button">Polinomis</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#px" role="button">Ex</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions ✨</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#eq" role="button">Ex</a>
-    </div>
-</p>
-<p class="mb-2">
-    <div class="btn-group" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/success/" role="button">Successions</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#succ" role="button">Ex</a>
-    </div>
-    <div class="btn-group" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/derivades/" role="button">Derivades</a>
-        <a class="btn btn-sm btn-mini btn-outline-secondary" href="#dx" role="button">Ex</a>
-    </div>
-</p>
-<div class="heighter">
-<div class="card-columns fantasma collapse mr-3 mt-4">
-
-    <div class="card text-center"> <!-- corregit $$ per $ (MJ en display trepitja els botons) -->
-    <h5 class="card-header">Equacions <b id="eq"></b></h5>
+    -->
+    <div class="card mt-3 mr-3" id="maincard">
         <div class="card-body">
-            <p class="card-text mb-3">
-                Equacions de primer grau senzilles
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["simple"] }}$
-                </div>
-              </div>
-            </div><br>
-            <p class="card-text">
-                Equacions de primer grau (opera i resol)
-            </p>
-            <div>
-                ${{ ex["eq"]["1poli"] }}$
+            <h5 class="mt-1">Benvinguda!</h5>
+            <div class="mb-3" id="debugscreen">Escull un tema i ens inventarem una fitxa única...<br>
+                <small><i>...o pots xafardejar quins tipus d'exercicis hi ha, als exemples d'aquí baix.</i></small>
             </div>
-            <br>
-            <p class="card-text">
-                Equacions racionals de primer grau
-            </p>
-            <div style="font-size:1.1em; line-height:0%">
-                ${{ ex["eq"]["racio"] }}$
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Equacions de segon grau incompletes
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["segoni1"] }}$
+            <div class="mb-2">
+                {% set mtemes = 0 %}
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/enters/" role="button">Operacions amb Enters</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#en" role="button">Ex</a>
                 </div>
-                <div class="col-sm">
-                  ${{ ex["eq"]["segoni2"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/apilades/" role="button">Operacions amb Més Xifres</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#omx" role="button">Ex</a>
                 </div>
-              </div>
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Equacions de segon grau completes
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["segonc1"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/fraccions/" role="button">Fraccions</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#frac" role="button">Ex</a>
                 </div>
-              </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Equacions de segon grau (opera i resol)
-            </p>
-            <div>
-                ${{ ex["eq"]["poli"] }}$
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Sistemes lineals de 2 variables
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["sis2d"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/powsqr/" role="button">Potències i Arrels</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pow" role="button">Ex</a>
                 </div>
-              </div>
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Sistemes no lineals de 2 variables
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["sisnl1"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/ncient/" role="button">Notació Científica</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary disabled" href="#ncient" role="button" disabled>Ex</a>
                 </div>
-                <div class="col-sm">
-                  ${{ ex["eq"]["sisnl2"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/proporcionalitat/" role="button">Proporcionalitat</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#pp" role="button">Ex</a>
                 </div>
-              </div>
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Sistemes lineals de 3 variables
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["eq"]["sis3d"] }}$
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/polis/" role="button">Polinomis</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#px" role="button">Ex</a>
                 </div>
-              </div>
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/equacions/" role="button">Equacions ✨</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#eq" role="button">Ex</a>
+                </div>
             </div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/equacions/" role="button">Crea una fitxa d'Equacions</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('eq');">Canvia els exemples</button>
+            <div class="mb-1">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/success/" role="button">Successions</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#succ" role="button">Ex</a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/derivades/" role="button">Derivades</a>
+                    <a class="btn btn-sm btn-mini btn-outline-secondary" href="#dx" role="button">Ex</a>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="heighter">
+    <div class="card-columns fantasma collapse mr-3 mt-4">
 
-    <div class="card text-center">
-    <h5 class="card-header">Operacions amb Enters <b id="en"></b></h5>
-        <div class="card-body">
-            <p class="card-text mb-3">
-                Sumes i restes
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["en"]["suma1"] }}$
+        <div class="card text-center"> <!-- corregit $$ per $ (MJ en display trepitja els botons) -->
+        <h5 class="card-header">Equacions <b id="eq"></b></h5>
+            <div class="card-body">
+                <p class="card-text mb-3">
+                    Equacions de primer grau senzilles
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["simple"] }}$
+                    </div>
+                  </div>
+                </div><br>
+                <p class="card-text">
+                    Equacions de primer grau (opera i resol)
+                </p>
+                <div>
+                    ${{ ex["eq"]["1poli"] }}$
                 </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["suma2"] }}$
+                <br>
+                <p class="card-text">
+                    Equacions racionals de primer grau
+                </p>
+                <div style="font-size:1.1em; line-height:0%">
+                    ${{ ex["eq"]["racio"] }}$
                 </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["suma3"] }}$
+                <p  class="card-text mt-4 mb-3">
+                    Equacions de segon grau incompletes
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["segoni1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["eq"]["segoni2"] }}$
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <p  class="card-text mt-4 mb-3">
+                    Equacions de segon grau completes
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["segonc1"] }}$
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Equacions de segon grau (opera i resol)
+                </p>
+                <div>
+                    ${{ ex["eq"]["poli"] }}$
+                </div>
+                <p  class="card-text mt-4 mb-3">
+                    Sistemes lineals de 2 variables
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["sis2d"] }}$
+                    </div>
+                  </div>
+                </div>
+                <p  class="card-text mt-4 mb-3">
+                    Sistemes no lineals de 2 variables
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["sisnl1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["eq"]["sisnl2"] }}$
+                    </div>
+                  </div>
+                </div>
+                <p  class="card-text mt-4 mb-3">
+                    Sistemes lineals de 3 variables
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["eq"]["sis3d"] }}$
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/equacions/" role="button">Crea una fitxa d'Equacions</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('eq');">Canvia els exemples</button>
             </div>
-            <p  class="card-text mt-4 mb-3">
-                Multiplicacions
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["en"]["multi1"] }}$
-                </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["multi2"] }}$
-                </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["multi3"] }}$
-                </div>
-              </div>
-            </div>
-            <p  class="card-text mt-4 mb-3">
-                Divisions (enteres)
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["en"]["divi1"] }}$
-                </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["divi2"] }}$
-                </div>
-                <div class="col-sm">
-                  ${{ ex["en"]["divi3"] }}$
-                </div>
-              </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Operacions combinades
-            </p>
-            <div class="font-weight-light mt-3 mb-4"><i>${{ ex["en"]["combi1"] }}$</i></div>
-            <div class="font-weight-light mt-3 mb-4"><i>${{ ex["en"]["combi2"] }}$</i></div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/enters/" role="button">Crea una fitxa d'Operacions amb Enters</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('en');">Canvia els exemples</button>
         </div>
-    </div>
 
-    <div class="card text-center">
-    <h5 class="card-header">Operacions amb Més Xifres <b id="omx"></b></h5>
-        <div class="card-body">
-            <p class="card-text mb-3">
-                Sumes (enteres i amb decimals)
-            </p>
+        <div class="card text-center">
+        <h5 class="card-header">Operacions amb Enters <b id="en"></b></h5>
+            <div class="card-body">
+                <p class="card-text mb-3">
+                    Sumes i restes
+                </p>
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
-                      ${{ ex["omx"]["suma"] }}$
+                      ${{ ex["en"]["suma1"] }}$
                     </div>
                     <div class="col-sm">
-                      ${{ ex["omx"]["sumad"] }}$
+                      ${{ ex["en"]["suma2"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["en"]["suma3"] }}$
                     </div>
                   </div>
                 </div>
-            <p class="card-text mt-4 mb-3">
-                Restes (enteres i amb decimals)
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["omx"]["resta"] }}$
+                <p  class="card-text mt-4 mb-3">
+                    Multiplicacions
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["en"]["multi1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["en"]["multi2"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["en"]["multi3"] }}$
+                    </div>
+                  </div>
                 </div>
-                <div class="col-sm">
-                  ${{ ex["omx"]["restad"] }}$
+                <p  class="card-text mt-4 mb-3">
+                    Divisions (enteres)
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["en"]["divi1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["en"]["divi2"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["en"]["divi3"] }}$
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <br>
+                <p class="card-text">
+                    Operacions combinades
+                </p>
+                <div class="font-weight-light mt-3 mb-4"><i>${{ ex["en"]["combi1"] }}$</i></div>
+                <div class="font-weight-light mt-3 mb-4"><i>${{ ex["en"]["combi2"] }}$</i></div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/enters/" role="button">Crea una fitxa d'Operacions amb Enters</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('en');">Canvia els exemples</button>
             </div>
-            <p class="card-text mt-4 mb-3">
-                Multiplicacions (enteres i amb decimals)
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["omx"]["multi"] }}$
-                </div>
-                <div class="col-sm">
-                  ${{ ex["omx"]["multid"] }}$
-                </div>
-              </div>
-            </div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/apilades/" role="button">Crea una fitxa d'Operacions amb Més Xifres</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('omx');">Canvia els exemples</button>
         </div>
-    </div>
 
-    <div class="card text-center">
-    <h5 class="card-header">Potències i Arrels<b id="pow"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Potències amb el mateix exponent
-            </p>
-            <div class="font-weight-light mt-3 mb-4">
+        <div class="card text-center">
+        <h5 class="card-header">Operacions amb Més Xifres <b id="omx"></b></h5>
+            <div class="card-body">
+                <p class="card-text mb-3">
+                    Sumes (enteres i amb decimals)
+                </p>
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["omx"]["suma"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["omx"]["sumad"] }}$
+                        </div>
+                      </div>
+                    </div>
+                <p class="card-text mt-4 mb-3">
+                    Restes (enteres i amb decimals)
+                </p>
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
-                      ${{ ex["pow"]["mexp1"] }}$
+                      ${{ ex["omx"]["resta"] }}$
                     </div>
                     <div class="col-sm">
-                      ${{ ex["pow"]["mexp2"] }}$
+                      ${{ ex["omx"]["restad"] }}$
                     </div>
                   </div>
                 </div>
-             </div>
-            <p class="card-text">
-                Potències amb la mateixa base
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
+                <p class="card-text mt-4 mb-3">
+                    Multiplicacions (enteres i amb decimals)
+                </p>
                 <div class="container">
                   <div class="row">
                     <div class="col-sm">
-                      ${{ ex["pow"]["mbase1"] }}$
+                      ${{ ex["omx"]["multi"] }}$
                     </div>
                     <div class="col-sm">
-                      ${{ ex["pow"]["mbase2"] }}$
+                      ${{ ex["omx"]["multid"] }}$
                     </div>
                   </div>
                 </div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/apilades/" role="button">Crea una fitxa d'Operacions amb Més Xifres</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('omx');">Canvia els exemples</button>
             </div>
-            <br>
-            <p class="card-text">
-                Simplificar fraccions
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["frac1"] }}$
-                    </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["frac2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Factoritzar i simplificar
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["ffrac1"] }}$
-                    </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["ffrac2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Factoritzar i simplificar amb decimals
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["dfrac1"] }}$
-                    </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["dfrac2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <hr class="mt-6">
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/powsqr/" role="button">Crea una fitxa de Potències i Arrels</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pow');">Canvia els exemples</button>
-            <hr>
-            <p class="card-text">
-                Arrels amb i sense exponents
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["sq1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["pow"]["sqp2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Combinar radicals
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["comb1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["pow"]["comb2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Extreure factors
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["extr1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["pow"]["extr2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Introduir factors
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["intro1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["pow"]["intro2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Factoritzar i extreure
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["fext1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["pow"]["fext2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Sumes i restes d'arrels
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["pow"]["asum"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Racionalitzar
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["racio1"] }}$
-                    </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["pow"]["racio2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/powsqr/" role="button">Crea una fitxa de Potències i Arrels</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pow');">Canvia els exemples</button>
         </div>
-    </div>
 
-    <div class="card text-center">
-    <h5 class="card-header">Fraccions<b id="frac"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Fracció generatriu
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["frac"]["fgen1"] }}$
+        <div class="card text-center">
+        <h5 class="card-header">Potències i Arrels<b id="pow"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Potències amb el mateix exponent
+                </p>
+                <div class="font-weight-light mt-3 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["mexp1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["mexp2"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm">
-                      ${{ ex["frac"]["fgen2"] }}$
+                 </div>
+                <p class="card-text">
+                    Potències amb la mateixa base
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["mbase1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["mbase2"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm">
-                      ${{ ex["frac"]["fgen3"] }}$
-                    </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Sumes i restes
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["frac"]["suma1"] }}$
+                <br>
+                <p class="card-text">
+                    Simplificar fraccions
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["frac1"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["frac2"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["frac"]["suma2"] }}$
-                    </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Multiplicacions i divisions
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["frac"]["multi"] }}$
+                <br>
+                <p class="card-text">
+                    Factoritzar i simplificar
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["ffrac1"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["ffrac2"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["frac"]["divi"] }}$
-                    </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Operacions combinades
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["frac"]["combi"] }}$
+                <br>
+                <p class="card-text">
+                    Factoritzar i simplificar amb decimals
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["dfrac1"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["dfrac2"] }}$
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <br>
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["frac"]["combi2"] }}$
-                    </div>
-                  </div>
                 </div>
+                <hr class="mt-6">
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/powsqr/" role="button">Crea una fitxa de Potències i Arrels</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pow');">Canvia els exemples</button>
+                <hr>
+                <p class="card-text">
+                    Arrels amb i sense exponents
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["sq1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["sqp2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Combinar radicals
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["comb1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["comb2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Extreure factors
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["extr1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["extr2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Introduir factors
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["intro1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["intro2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Factoritzar i extreure
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["fext1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["pow"]["fext2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Sumes i restes d'arrels
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["pow"]["asum"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Racionalitzar
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["racio1"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["pow"]["racio2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/powsqr/" role="button">Crea una fitxa de Potències i Arrels</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pow');">Canvia els exemples</button>
             </div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/fraccions/" role="button">Crea una fitxa de Fraccions</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('frac');">Canvia els exemples</button>
         </div>
-    </div>
 
-    <div class="card text-center">
-    <h5 class="card-header">Polinomis<b id="px"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Indicar coeficient, part literal, grau... de monomis.
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                        <i>${{ ex["px"]["monom1"] }}$</i>
+        <div class="card text-center">
+        <h5 class="card-header">Fraccions<b id="frac"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Fracció generatriu
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["frac"]["fgen1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["frac"]["fgen2"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["frac"]["fgen3"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm">
-                        <i>${{ ex["px"]["monom2"] }}$</i>
-                    </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Inventar polinomis segons descripció
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                        <i>{{ ex["px"]["inv"] }}</i>
+                <br>
+                <p class="card-text">
+                    Sumes i restes
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["frac"]["suma1"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["frac"]["suma2"] }}$
+                        </div>
+                      </div>
                     </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Avaluar polinomis en un punt
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                        <i>{{ ex["px"]["aval"] }}</i>
+                <br>
+                <p class="card-text">
+                    Multiplicacions i divisions
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["frac"]["multi"] }}$
+                        </div>
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["frac"]["divi"] }}$
+                        </div>
+                      </div>
                     </div>
-                  </div>
                 </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Extreure factor comú
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["px"]["fcom1"] }}$
+                <br>
+                <p class="card-text">
+                    Operacions combinades
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["frac"]["combi"] }}$
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["frac"]["combi2"] }}$
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm">
-                      ${{ ex["px"]["fcom2"] }}$
-                    </div>
-                  </div>
                 </div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/fraccions/" role="button">Crea una fitxa de Fraccions</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('frac');">Canvia els exemples</button>
             </div>
-            <br>
-            <p class="card-text">
-                Extreure la frase amagada
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:0.8em; line-height:150%">
-                      {{ ex["px"]["cryp"] }}
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <hr class="mt-6">
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
-            <hr>
-            <p class="card-text">
-                Calcular identitats notables
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["px"]["idnot1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["px"]["idnot2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Endevinar identitats notables
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["px"]["eidnot1"] }}$
-                    </div>
-                    <div class="col-sm">
-                      ${{ ex["px"]["eidnot2"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Sumes i restes de polinomis
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
-                      ${{ ex["px"]["sumrest"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Multiplicacions de polinomis
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
-                      ${{ ex["px"]["multi"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Divisions de polinomis
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
-                      ${{ ex["px"]["rufi"] }}$
-                    </div>
-                  </div>
-                  <br>
-                  <div class="row">
-                    <div class="col-sm" style="font-size:0.9em; line-height:0%">
-                      ${{ ex["px"]["divi"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Teorema del residu
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                        <i>{{ ex["px"]["tres"] }}</i>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Factoritzar polinomis
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm">
-                      ${{ ex["px"]["fact"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <p class="card-text">
-                Simplificar fraccions algebraiques
-            </p>
-            <div class="font-weight-light mt-3 mb-2">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-sm" style="font-size:1.3em; line-height:0%">
-                      ${{ ex["px"]["alg"] }}$
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
         </div>
-    </div>
 
-    <div class="card text-center">
-    <h5 class="card-header">Proporcionalitat<b id="pp"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Problemes de proporcionalitat simple directa
-            </p>
-            <div class="font-weight-light mt-3 mb-4"><i>{{ ex["pp"]["directa"] }}</i></div>
-            <p class="card-text">
-                Problemes de proporcionalitat simple inversa
-            </p>
-            <div class="font-weight-light mt-3 mb-2"><i>{{ ex["pp"]["inversa"] }}</i></div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/proporcionalitat/" role="button">Crea una fitxa de Proporcionalitat</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pp');">Canvia els exemples</button>
-        </div>
-    </div>
-
-    <div class="card text-center">
-    <h5 class="card-header">Successions<b id="succ"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Trobar terme n (aritmètiques i geomètriques)
-            </p>
-            <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["termen"] }}</i></div>
-            <p class="card-text">
-                Trobar el que falti (aritmètiques i geomètriques)
-            </p>
-            <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["dades"] }}</i></div>
-            <p class="card-text">
-                Extreure dades a partir dels primers termes.
-            </p>
-            <div class="font-weight-light mt-3 mb-2"><i>${{ ex["succ"]["extreure"] }}$</i></div>
-            <div class="font-weight-light mt-3 mb-4"><i>${{ ex["succ"]["gextreure"] }}$</i></div>
-
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/success/" role="button">Crea una fitxa de Successions</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('succ');">Canvia els exemples</button>
-        </div>
-    </div>
-
-    <div class="card text-center">
-    <h5 class="card-header">Derivades<b id="dx"></b></h5>
-        <div class="card-body">
-            <p class="card-text">
-                Sense regla de la cadena
-            </p>
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  ${{ ex["dx"]["simple1"] }}$
+        <div class="card text-center">
+        <h5 class="card-header">Polinomis<b id="px"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Indicar coeficient, part literal, grau... de monomis.
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                            <i>${{ ex["px"]["monom1"] }}$</i>
+                        </div>
+                        <div class="col-sm">
+                            <i>${{ ex["px"]["monom2"] }}$</i>
+                        </div>
+                      </div>
+                    </div>
                 </div>
-                <div class="col-sm">
-                  ${{ ex["dx"]["simple2"] }}$
+                <br>
+                <p class="card-text">
+                    Inventar polinomis segons descripció
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                            <i>{{ ex["px"]["inv"] }}</i>
+                        </div>
+                      </div>
+                    </div>
                 </div>
-              </div>
+                <br>
+                <p class="card-text">
+                    Avaluar polinomis en un punt
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                            <i>{{ ex["px"]["aval"] }}</i>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Extreure factor comú
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["px"]["fcom1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["px"]["fcom2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Extreure la frase amagada
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:0.8em; line-height:150%">
+                          {{ ex["px"]["cryp"] }}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <hr class="mt-6">
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
+                <hr>
+                <p class="card-text">
+                    Calcular identitats notables
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["px"]["idnot1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["px"]["idnot2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Endevinar identitats notables
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["px"]["eidnot1"] }}$
+                        </div>
+                        <div class="col-sm">
+                          ${{ ex["px"]["eidnot2"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Sumes i restes de polinomis
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                          ${{ ex["px"]["sumrest"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Multiplicacions de polinomis
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                          ${{ ex["px"]["multi"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Divisions de polinomis
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                          ${{ ex["px"]["rufi"] }}$
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-sm" style="font-size:0.9em; line-height:0%">
+                          ${{ ex["px"]["divi"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Teorema del residu
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                            <i>{{ ex["px"]["tres"] }}</i>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Factoritzar polinomis
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm">
+                          ${{ ex["px"]["fact"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Simplificar fraccions algebraiques
+                </p>
+                <div class="font-weight-light mt-3 mb-2">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm" style="font-size:1.3em; line-height:0%">
+                          ${{ ex["px"]["alg"] }}$
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/polis/" role="button">Crea una fitxa de Polinomis</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('px');">Canvia els exemples</button>
             </div>
-            <br>
-            <p class="card-text">
-                Amb regla de la cadena
-            </p>
-            <div>
-                ${{ ex["dx"]["cadena"] }}$
-            </div>
-            <br>
-            <a class="btn btn-sm btn-outline-primary btn-block" href="/derivades/" role="button">Crea una fitxa de Derivades</a>
-            <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('dx');">Canvia els exemples</button>
         </div>
-    </div>
 
-</div>
+        <div class="card text-center">
+        <h5 class="card-header">Proporcionalitat<b id="pp"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Problemes de proporcionalitat simple directa
+                </p>
+                <div class="font-weight-light mt-3 mb-4"><i>{{ ex["pp"]["directa"] }}</i></div>
+                <p class="card-text">
+                    Problemes de proporcionalitat simple inversa
+                </p>
+                <div class="font-weight-light mt-3 mb-2"><i>{{ ex["pp"]["inversa"] }}</i></div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/proporcionalitat/" role="button">Crea una fitxa de Proporcionalitat</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('pp');">Canvia els exemples</button>
+            </div>
+        </div>
+
+        <div class="card text-center">
+        <h5 class="card-header">Successions<b id="succ"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Trobar terme n (aritmètiques i geomètriques)
+                </p>
+                <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["termen"] }}</i></div>
+                <p class="card-text">
+                    Trobar el que falti (aritmètiques i geomètriques)
+                </p>
+                <div class="font-weight-light mt-3 mb-4"><i>{{ ex["succ"]["dades"] }}</i></div>
+                <p class="card-text">
+                    Extreure dades a partir dels primers termes.
+                </p>
+                <div class="font-weight-light mt-3 mb-2"><i>${{ ex["succ"]["extreure"] }}$</i></div>
+                <div class="font-weight-light mt-3 mb-4"><i>${{ ex["succ"]["gextreure"] }}$</i></div>
+
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/success/" role="button">Crea una fitxa de Successions</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('succ');">Canvia els exemples</button>
+            </div>
+        </div>
+
+        <div class="card text-center">
+        <h5 class="card-header">Derivades<b id="dx"></b></h5>
+            <div class="card-body">
+                <p class="card-text">
+                    Sense regla de la cadena
+                </p>
+                <div class="container">
+                  <div class="row">
+                    <div class="col-sm">
+                      ${{ ex["dx"]["simple1"] }}$
+                    </div>
+                    <div class="col-sm">
+                      ${{ ex["dx"]["simple2"] }}$
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <p class="card-text">
+                    Amb regla de la cadena
+                </p>
+                <div>
+                    ${{ ex["dx"]["cadena"] }}$
+                </div>
+                <br>
+                <a class="btn btn-sm btn-outline-primary btn-block" href="/derivades/" role="button">Crea una fitxa de Derivades</a>
+                <button type="button" class="btn btn-sm btn-mini btn-outline-secondary btn-block mt-2" onclick="refresca('dx');">Canvia els exemples</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
 </div>
 {% endblock %}
 {% block js %}

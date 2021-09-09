@@ -1,19 +1,33 @@
 /* SI FAS CANVIS I NO VAN, PROVA CMD+SHIFT+R AL NAVEGADOR */
 
+body {
+    background-color: #dddddd;
+}
+
 .btn {
     white-space:normal; /* Evita overflow del text (permet salt de línia) */
 }
 
 .btn-outline-secondary:hover {
     color: #6e757c;
-    background-color: #fff; /* new color goes her */
-    border-color: #6e757c;
+    background-color: #f0f1f2; /* new color goes here */
+    /*border-color: #6e757c;*/
 }
 
 .btn-outline-info:hover {
-    color: #5bc0de;
-    background-color: #fff; /* new color goes her */
-    border-color: #5bc0de;
+    color: #499fb5;
+    background-color: #f2fafc; /* new color goes here */
+    /*border-color: #5bc0de;*/
+}
+
+.btn-outline-success:hover {
+    color: #68a15a;
+    background-color: #e8f0e6; /* new color goes here */
+    /*border-color: #5bc0de;*/
+}
+
+.disabled:hover {
+    background-color: white;
 }
 
 .btn-mini {
@@ -61,4 +75,49 @@
 
 .bs-popover-left .arrow:after {
     border-left-color: rgb(245, 241, 211);
+}
+
+/* SWITCHES */
+label.custom-control-label::after {
+    border-radius: 5px;
+}
+
+.input-mini {
+    font-size: 0.8em !important;
+}
+
+/* BARRA TITOL */
+
+.barra-titol {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid grey;
+}
+
+/* VORES I ESTIL TARGETES */
+
+.card {
+    border: 1px solid grey;
+}
+
+.border-soft {
+    border: 1px solid #aaaaaa;
+}
+
+.card-soft {
+    border: 1px solid #aaaaaa;
+    background: #eeeeee;
+}
+
+.alert-info {
+    border: 1px solid #79b8c7;
+}
+
+.alert-success {
+    border: 1px solid #79c779;
+}
+
+/* PARÀGRAFS MINI */
+.text-small {
+    font-size: 0.7em;
+    line-height: 1.38;
 }

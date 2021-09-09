@@ -1,3 +1,5 @@
+{% set ns = namespace() %} <!-- Variable global, per guardar el que sigui que vulguis que propagui -->
+
 {% extends "base.html" %}
 {% block content %}
 <!-- formulari -->
@@ -5,21 +7,40 @@
     <form action="#" target="_blank" method="post" id="formulari">
 
         <div class="container-fluid"> <!-- columnes -->
-          <div id="generat"></div>
-            <div class="card mb-2 py-0">
-                <div class="card-body py-1">
-                    <i><small>Si crees una fitxa que t'agrada, descarrega-la! <span class="text-secondary">(el proper cop que obris l'enllaç potser ja no hi serà...)</span></small></i>
-                </div>
-            </div>
+          <!-- Alertes (són aquí dins pq així s'adapten a l'amplada) -->
+          <div class="collapse" id="generat">
+              <div class="alert alert-success mb-2 py-1">
+                  <i><small id="generat-text"></small></i>
+              </div>
+          </div>
+          <div class="card card-soft mb-2 py-0">
+              <div class="card-body py-1">
+                  <i><small>Si crees una fitxa que t'agrada, descarrega-la! <span class="text-secondary">(el proper cop que obris l'enllaç potser ja no hi serà...)</span></small></i>
+              </div>
+          </div>
           {% block alertatop %}{% endblock %}
           <div class="row">
-            <div class="col-sm-auto mb-2">
+            <div class="col-sm-auto mb-2 pr-1">
                 <div class="card">
+                  <h5 class="card-header text-center">{% block titolfitxa %} {% endblock %}</h5>
                   <div class="card-body">
                     {% block principals %}{% endblock %}
                     <br>
-                    <button type="submit" class="btn btn-{% block gencolor %}primary{% endblock %}" onclick="pdfgenerat();">Genera!</button>
+                    <!-- Prevent implicit submission of the form (https://stackoverflow.com/a/51507806/5093220) -->
+                    <button type="submit" disabled style="display: none"></button>
+                    <!-- Real submission button -->
+                    <button type="submit" class="btn btn-block btn-{% block gencolor %}primary{% endblock %}" onclick="pdfgenerat();">Genera!</button>
                   </div>
+                </div>
+
+                <div class="collapse" id="solusinfo">
+                    <div class="card border-soft bg-light mt-2">
+                        <div class="card-body py-2 px-3 text-small text-secondary">
+                            <b>Nota: </b>De moment no tots els exercicis tenen les solucions disponibles.<br>
+                            D'altra banda, algunes solucions que convertirien els exercicis en trivials només es mostren quan <br>
+                            les solucions s'escriuen en una pàgina a part. No volem spoilers!
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
@@ -35,11 +56,9 @@
     <script>
         function pdfgenerat(){
             curs = document.getElementById('formulari').elements['curs'].value;
-            //sumes = document.getElementById('formulari').elements['curs'].value;
-            //console.log(sumes)
+            document.getElementById('generat-text').innerHTML = "S'han generat exercicis de " + curs;
+            $('#generat').collapse('show');
 
-            document.getElementById('generat').innerHTML = "S'han generat exercicis de " + curs;
-            document.getElementById('generat').className = "alert alert-success";
         };
     </script>
     {% block jsextra %}

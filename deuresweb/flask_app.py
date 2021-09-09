@@ -7,7 +7,15 @@ import latexator as g
 import telegramor as tele
 import exemplesindex as e
 
+from puntuacions import punts_de
+from quantitats import quantitats_de
+
 app = Flask(__name__, template_folder="templates/")
+
+
+@app.context_processor
+def ctx():
+    return dict(punts=punts_de, quantitats=quantitats_de)
 
 
 @app.route('/')
@@ -170,16 +178,17 @@ def success():
 @app.route("/polis/", methods=["GET", "POST"])
 def polinomis():
     if request.method == "POST":
-        """g.polinomis(request.form)
-        """
-        try:
-            g.polinomis(request.form)
-        except:
-            print("Error Polinomis")
-            tele.error("polis")
-            return redirect("/latex_error/polinomis")
-        tele.feedback("polis", request.form)
-        return redirect("/pdf/polinomis")
+        if app.debug:
+            url = g.polinomis(request.form)
+        else:
+            try:
+                url = g.polinomis(request.form)
+            except:
+                print("Error Polinomis")
+                tele.error("polis")
+                return redirect("/latex_error/polinomis")
+            tele.feedback("polis", request.form)
+        return redirect(url)
     else:
         return render_template("polinomis.html")
 
@@ -272,7 +281,7 @@ def provaforms():
         return render_template("provaforms.html")
 
 
-@app.route('/pdf/<tema>')
+@app.route('/pdf/<tema>')  # TODO això acabarà desapareixent amb el generador LaTeX únic (pq ja retorna la url)
 def pdfviewer(tema):
     print(f"Visualitzant pdf: {tema}.")
     if tema == "eq":

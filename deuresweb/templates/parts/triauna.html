@@ -3,6 +3,13 @@
 {# labels són els textos de la llista d'opcions que generaré #}
 {# triat és quina opció has escollit (comença per 1; per defecte la primera) #}
 
+{% set name = name|default("varname", true)%}
+
+{% set tema = ns.tema|default("tema", true) %}
+{% set apartat = apartat|default("apartat", true) %}
+
+{% set exercici = ns.exercici|default("exercici", true) %}
+
 {% set ch = "checked" %}
 <div class="form-group mb-1 {{'ml-5' if subordina|default(false, true) else 'ml-4'}}">
     <label><i>...què vol dir ordenat?</i></label>
@@ -10,7 +17,7 @@
         {% for b in labels|default(["Opció 1", "Opció 2"], true) %}
           {% set activa = loop.index == triat|default(1, true) %}
           <label class="btn btn-outline-info btn-sm py-0 btn-mini {{'active' if activa}}">
-            <input type="radio" name="{{name}}" id="{{name}}{{loop.index}}" value="{{name}}{{loop.index}}" autocomplete="off" {{ch if activa}}> {{b}}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{name}}{{loop.index}}" value="{{name}}{{loop.index}}" autocomplete="off" {{ch if activa}}> {{b}}
           </label>
         {% endfor %}
     </div>

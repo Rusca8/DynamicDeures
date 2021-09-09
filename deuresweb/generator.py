@@ -368,7 +368,7 @@ def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
                 talls.append(f"{ncient(2, 3)}")
             text = "".join(talls) + ")"
         elif nivell == 2:  # fracció
-            pass
+            ...
 
     return text
 
@@ -1294,9 +1294,9 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
 
             text = "\\frac{" + fracn + "}{" + fracd + "}"
     elif tipus == 101:  # arrels, mateix exponent
-        pass
+        ...
     elif tipus == 102:  # arrels, mateixa base (té sentit?)
-        pass
+        ...
     elif tipus == 103:  # arrels, índex comú
         if nivell == 1:  # multiplicant, sense exponent
             text = ""
@@ -1626,10 +1626,6 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
             text = "\\frac{" + num + "}{" + den + "}"
 
     return text
-
-
-def fcomu():  # TODO crear fcomú amb polinomis i tb amb frases generades i encriptades
-    pass
 
 
 def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, ordre2=False, solucions=False):
@@ -2215,7 +2211,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                     k = r"${\rm I\!R}$"
 
             elif nivell == 10:  # TODO subs multivar (comparant amb residu ...de fet això amb rufini no es pot, no?)
-                pass
+                ...
             px = polinomitza(rufipx)
             dx = polinomitza([1, -d])
 
@@ -2347,7 +2343,7 @@ def poli_op(op, px, qx):
                     sol[-(x+y)-1] += px[-x-1] * qx[-y-1]
 
     elif op == 4:  # divi
-        pass
+        ...
 
     return sol
 
@@ -2486,7 +2482,7 @@ def eq_base(tipus, nivell=1, solucions=False, fid=0):
         elif nivell == 4:
             # (x+A)(x+B) = x^2+Cx+D  ->  x^2+(A+B)x+AB = x^2+Cx+D
             """ident: A+B=C, D=AB"""
-            pass
+            ...
     if solucions:
         return text, solu
     return text
@@ -2694,7 +2690,7 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
 
     elif tipus == 5:  # lineals amb fraccions
         if nivell == 1:  # alguna cosa més senzilla
-            pass
+            ...
         elif nivell == 2:  # fraccions (resultat fracció) TODO entendre per què no surt enter
             x = random.randint(-10, 10)
             # coefs
@@ -3304,7 +3300,7 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
         elif tipus in [2, 3, 4]:  # primer
             solus = f"{x}"
         elif tipus == 5:  # fracs
-            pass  # no tinc el resultat, crec, i no sé per què
+            ...  # no tinc el resultat, crec, i no sé per què
         elif tipus == 101:  # treure l'arrel
             if nexist:
                 solus = r"$\nexists$"

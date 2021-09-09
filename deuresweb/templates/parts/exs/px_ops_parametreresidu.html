@@ -1,12 +1,12 @@
 {#
- # Formulari d'opcions per l'exercici de polinomis PARAMETRERESIDU
+ # Formulari d'opcions per l'exercici PX_OPS_PARAMETRERESIDU
  #    Calcular un paràmetre sabent el residu d'una divisió.
  #}
 
-{% with title="Paràmetre sabent residu ✨", name="qpresidu" %}
+{% with title="Paràmetre sabent residu", name="PX_OPS_PARAMETRERESIDU" %}
     {% include '/parts/quantes.html' %}
 {% endwith %}
 
-        {% with title="Quines lletres fem servir?", labels=["k", "m", "a"], altnames=["presk", "presm", "presa"] %}
+        {% with title="Quines lletres fem servir?", labels=["k", "m", "a"], name="pres", altnames=["k", "m", "a"] %}
           {% include '/parts/triaquines.html' %}
         {% endwith %}

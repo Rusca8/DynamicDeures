@@ -42,21 +42,21 @@
                 <a class="nav-link {% block navbardonar %}{% endblock %}" href="/donar">Donar</a>
               </li>
             </ul>
-            <a class="navbar-text nav-link pr-1 link-a-la-web" href="https://www.davidrusca.com/docents/" title="davidrusca.com/docents">Rusca 2020</a>
+            <a class="navbar-text nav-link pr-1 link-a-la-web" href="https://www.davidrusca.com/docents/" title="davidrusca.com/docents">Rusca, 2020-2021</a>
           </div>
         </nav>
-        <div class="pl-3 font-italic align-top" style="background-color: #f5f1d0;"><small>http://bit.ly/DynamicDeures</small></div>
+        <div class="pl-3 font-italic align-top" style="background-color: #f5f1d0; border-bottom: 1px solid grey;"><small>http://bit.ly/DynamicDeures</small></div>
         <hr class="mt-0 mb-0">
-        <div class="pt-3">
-            <div>
+        <div>
+            <div class="py-3 barra-titol">
                 <h1 class="text-center">Dynamic Deures: Generador de Fitxes de {{ self.assignatura() }}</h1>
                 <h3 class="text-center">Cortesia de David Ruscalleda</h3>
                 <!--  passa'l a sota per treure l'avís
                 <div class="alert alert-warning ml-4 mr-4" role="alert">Ei. Estic fent proves en aquests moments. Si us falla alguna cosa és normal! (espereu una mica i ja en trauré l'entrellat)</div>
                 -->
             </div>
-            <hr>
-            <div class="pl-3">
+            <hr class="mt-0">
+            <div class="pl-1">
                 {% block content %}{% endblock %}
             </div>
         </div>

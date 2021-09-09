@@ -1,6 +1,6 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
-<div class="alert alert-info alert-sm py-1 mb-1" role="alert">
+<div class="alert alert-info alert-sm py-1 mb-2" role="alert">
     <small><b>Corregit:</b> ja no farà equacions repetides al l'exercici de simples sense dividir!</small>
 </div>
 {% endblock %}
@@ -74,6 +74,9 @@
     {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
     {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
     {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+
+    <!-- TODO NO ET PETIS AIXÒ AMB LES NOVETATS DE POLINOMIS, QUE FALTA AFEGIR-HI L'AVÍS (avisa_tot_no) -->
+
 <div class="collapse mb-1" id="opBase">
     <div class="card">
       <div class="card-body">

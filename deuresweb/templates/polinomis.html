@@ -1,8 +1,11 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
 {% endblock %}
+{% block titolfitxa %}Fitxa de Polinomis{% endblock %}
 {% block principals %}
-    <h4 id="titolTema">Fitxa de Polinomis...</h4>
+    <input type="hidden" name="temafitxa" value="px" />  <!-- Tema de la fitxa (pel títol i tal) -->
+    {% set ns.tema = "px" %}  <!-- Tema dels exercicis (podria canviar a mitja fitxa) -->
+
     <div class="form-group">
         <label>En quin curs estàs pensant?</label><br>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -34,86 +37,121 @@
     <label>Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opBase" aria-expanded="true" aria-controls="opBase">
-          <input type="checkbox" name="base" autocomplete="off" id="base" value="base" checked> Base
+          <input type="checkbox" name="apartats[{{ns.tema}}][base]" autocomplete="off" id="base" value="base" checked> Base
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opID" aria-expanded="true" aria-controls="opID">
-          <input type="checkbox" name="idnot" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables
+          <input type="checkbox" name="apartats[{{ns.tema}}][idnot]" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opOps" aria-expanded="true" aria-controls="opOps">
-          <input type="checkbox" name="ops" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis ✨
+          <input type="checkbox" name="apartats[{{ns.tema}}][ops]" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis
         </label>
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opAlgs" aria-expanded="true" aria-controls="opAlgs">
-          <input type="checkbox" name="alges" autocomplete="off" id="alges" value="ops" checked> Algebraiques
+          <input type="checkbox" name="apartats[{{ns.tema}}][algeb]" autocomplete="off" id="algeb" value="algeb" checked> Algebraiques
         </label>
     </div>
   </div>
-  <br>
+
+  <div class="btn-group-toggle mt-2" data-toggle="buttons">
+    <label class="btn btn-sm btn-block btn-outline-info py-0 btn-mini" data-toggle="collapse" data-target=".punts-collapse">
+      <input type="checkbox" name="punts" autocomplete="off" id="punts" value="punts"> Escollir les puntuacions dels exercicis
+    </label>
+  </div>
+
   <hr>
 
-  <div class="form-group mb-0">
-    <label class="mb-0"><i>Incloure les solucions? (encara no les fa totes)</i></label>
-      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+  <div class="form-group mb-1">
+    <label class="mb-0">Incloure les solucions?</label>
+      <div class="btn-group btn-group-toggle ml-1" data-toggle="buttons">
+          <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
             <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
           </label>
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+          <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
             <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
           </label>
       </div>
   </div>
+
+  <div class="form-group mb-0 ml-4">
+    <label class="mb-0"><i>...on les posem?</i></label>
+      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+            <input type="radio" name="solulloc" id="solulloc1" value="intercalat" autocomplete="off" checked> intercalat
+          </label>
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+            <input type="radio" name="solulloc" id="solulloc2" value="final" autocomplete="off"> al final
+          </label>
+          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+            <input type="radio" name="solulloc" id="solulloc3" value="apart" autocomplete="off"> a part
+          </label>
+      </div>
+  </div>
+  <!-- Faig que l'avís sobre les solucions aparegui només en aquests que tenen solució. -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+       $('#solusinfo').addClass('show');
+    });
+  </script>
 {% endblock %}
 
 {% block extres %}
-<div class="collapse show mb-2" id="opBase">
-    <div class="card">
+<div class="collapse show" id="opBase">
+    <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">Base</h5>
-        {% include '/parts/exs/px_base_partsmonomi.html' %}
-        {% include '/parts/exs/px_base_inventa.html' %}
-        {% include '/parts/exs/px_base_avalua.html' %}
-        {% include '/parts/exs/px_base_factorcomu.html' %}
-        {% include '/parts/exs/px_base_desxifra.html' %}
+          {% with apartat = "base" %}
+            {% include '/parts/exs/px_base_partsmonomi.html' %}
+            {% include '/parts/exs/px_base_inventa.html' %}
+            {% include '/parts/exs/px_base_avalua.html' %}
+            {% include '/parts/exs/px_base_factorcomu.html' %}
+            {% include '/parts/exs/px_base_desxifra.html' %}
+          {% endwith %}
       </div>
     </div>
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - ID NOTABLES - - - - - - - - - - - - - - - - - - - - -->
 
-<div class="collapse show mb-2" id="opID">
-    <div class="card">
+<div class="collapse show" id="opID">
+    <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">Identitats Notables</h5>
-        {% include '/parts/exs/px_idnot_identitat.html' %}
-        {% include '/parts/exs/px_idnot_endevinaidentitat.html' %}
+        {% with apartat = "idnot" %}
+            {% include '/parts/exs/px_idnot_identitat.html' %}
+            {% include '/parts/exs/px_idnot_endevinaidentitat.html' %}
+        {% endwith %}
       </div>
     </div>
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - OPERAR - - - - - - - - - - - - - - - - - - - - -->
 
-<div class="collapse show mb-2" id="opOps">
-    <div class="card">
+<div class="collapse show" id="opOps">
+    <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">Operar amb polinomis</h5>
-        {% include '/parts/exs/px_ops_suma.html' %}
-        {% include '/parts/exs/px_ops_resta.html' %}
-        {% include '/parts/exs/px_ops_multiplica.html' %}
-        {% include '/parts/exs/px_ops_divideixruffini.html' %}
-        {% include '/parts/exs/px_ops_divideix.html' %}
-        {% include '/parts/exs/px_ops_teoremaresidu.html' %}
-        {% include '/parts/exs/px_ops_parametreresidu.html' %}
+        {% with apartat = "ops" %}
+            {% include '/parts/exs/px_ops_suma.html' %}
+            {% include '/parts/exs/px_ops_resta.html' %}
+            {% include '/parts/exs/px_ops_multiplica.html' %}
+            {% include '/parts/exs/px_ops_divideixruffini.html' %}
+            {% include '/parts/exs/px_ops_divideix.html' %}
+            {% include '/parts/exs/px_ops_teoremaresidu.html' %}
+            {% include '/parts/exs/px_ops_parametreresidu.html' %}
+        {% endwith %}
       </div>
     </div>
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - ALGEBRAIQUES - - - - - - - - - - - - - - - - - - - - -->
 
-<div class="collapse show mb-2" id="opAlgs">
-    <div class="card">
+<div class="collapse show" id="opAlgs">
+    <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">Fraccions Algebraiques</h5>
-        {% include '/parts/exs/px_algeb_factoritza.html' %}
-        {% include '/parts/exs/px_algeb_simplifica.html' %}
+        {% with apartat = "algeb" %}
+            {% include '/parts/exs/px_algeb_factoritza.html' %}
+            {% include '/parts/exs/px_algeb_simplifica.html' %}
+        {% endwith %}
       </div>
     </div>
 </div>

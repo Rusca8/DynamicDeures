@@ -1,45 +1,51 @@
 {% extends "base.html" %}
 {% block assignatura %} Química {% endblock %}
 {% block content %}
-<div class="form-group mb-0 ml-0">
-    <div class="container-fluid pl-0"> <!-- columnes -->
-      <div class="row no-gutters">
-        <div class="col-sm-10"> <!-- novetats -->
-            <div class="alert alert-success alert-thin mb-1 mr-3 py-1" role="alert">
-                <small>
-                    <b>Nou:</b> Control de repetits per les taules d'òxids, hidrurs, simples i hidròxids (i zapne).<br>
-                    <b>Nou:</b> Solucions a les taules de formulació (al final del pdf).
-                </small>
+<div class="ml-2">
+    <div class="form-group mb-0 ml-0">
+        <div class="container-fluid pl-0"> <!-- columnes -->
+          <div class="row no-gutters">
+            <div class="col-sm-10"> <!-- novetats -->
+                <div class="alert alert-success alert-thin mb-1 mr-3 py-1" role="alert">
+                    <small>
+                        <b>Nou:</b> Control de repetits per les taules d'òxids, hidrurs, simples i hidròxids (i zapne).<br>
+                        <b>Nou:</b> Solucions a les taules de formulació (al final del pdf).
+                    </small>
+                </div>
+            </div>
+            <div class="col-sm-2"> <!-- botó quím -->
+                <a class="btn btn-block btn-outline-info alert-info py-3" href="/" role="button">DD Mates</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--
+    <div class="alert alert-warning alert-thin mb-3 mr-3 py-1" role="alert">
+        <small>
+            <b>Corregit:</b> Va caure tot perquè fallava la fitxa d'enters. En principi està arreglat.
+        </small>
+    </div>
+    -->
+    <div class="card mt-3 mr-3" id="maincard">
+        <div class="card-body">
+            <h5 class="mt-1">Benvinguda!</h5>
+            <div class="mb-3" id="debugscreen">Escull un tema i ens inventarem una fitxa única...<br>
+            </div>
+            <div class="mb-0">
+                {% set mtemes = 2 %}
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/q/iso/" role="button">Isòtops</a>
+                </div>
+                <div class="btn-group mb-{{mtemes}}" role="group">
+                    <a class="btn btn-sm btn-mini btn-secondary" href="/q/formul/" role="button">Formulació</a>
+                </div>
             </div>
         </div>
-        <div class="col-sm-2"> <!-- botó quím -->
-            <a class="btn btn-block btn-outline-info py-3" href="/" role="button">DD Mates</a>
-        </div>
-      </div>
     </div>
-</div>
-<!--
-<div class="alert alert-warning alert-thin mb-3 mr-3 py-1" role="alert">
-    <small>
-        <b>Corregit:</b> Va caure tot perquè fallava la fitxa d'enters. En principi està arreglat.
-    </small>
-</div>
--->
-<h5 class="mt-3">Benvinguda!</h5>
-<p class="mb-3" id="debugscreen">Escull un tema i ens inventarem una fitxa única...<br>
-</p>
-<p class="mb-2">
-    {% set mtemes = 2 %}
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/q/iso/" role="button">Isòtops</a>
-    </div>
-    <div class="btn-group mb-{{mtemes}}" role="group">
-        <a class="btn btn-sm btn-mini btn-secondary" href="/q/formul/" role="button">Formulació</a>
-    </div>
-</p>
 
-<div class="heighter">
-    <!-- aquí aniran els exemples i tal -->
+    <div class="heighter">
+        <!-- aquí aniran els exemples i tal -->
+    </div>
 </div>
 {% endblock %}
 {% block js %}

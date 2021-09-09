@@ -7,21 +7,87 @@
 {# TODO faltarà masculí vs femení a les paraules de quantes #}
 
 {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
+
+{% set ns.exercici = name %}  <!-- el namespace "ns" s'inicialitza a "formulari.html" -->
+{% set ns.exnum = ns.exnum|default(0, true) + 1 %}  <!-- Incremento comptador d'exercicis -->
+
+{% set tema = ns.tema|default("tema", true) %}
+{% set apartat = apartat|default("apartat", true) %}
+{% set triat = triat|default(2, true) %}
+<input type="hidden" name="temes[{{tema}}][{{apartat}}][{{name}}][exnum]" value="{{ns.exnum}}" />
 <div class="form-group mb-0 ml-2">
-    <label><b>{{title|default("Exercici 42")}}</b></label>
-    <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+    <label><b>{{title|default("Exercici 42")}}</b></label> {{hola}}
+    <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons"
+         onchange="if(document.getElementById('{{name}}-qtria').checked){
+                        $('#tria-collapse-{{name}}').collapse('show')
+                      }else{
+                        $('#tria-collapse-{{name}}').collapse('hide')
+                      }">
       {% for n in range(7) %}
-      {% if n == triat|default(2, true) %}
+      {% if n == triat %}
         <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
       {% else %}
         <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-            <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
       {% endif %}
       </label>
       {% endfor %}
-      <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-        <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
+      <!-- Botó extra per triar la quantitat concreta tu mateix -->
+      <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+        <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-qtria" value="tria" autocomplete="off"> #
       </label>
     </div>
 </div>
+
+<!-- QUANTITAT TRIADA -->
+<div class="collapse" id="tria-collapse-{{name}}">
+
+    <div class="form-group mb-1 ml-4">
+        <div class="container-fluid pl-0">
+          <div class="row no-gutters">
+
+            <div class="col-sm-auto">
+                <label><i>Quants apartats?</i></label>
+            </div>
+            <div class="col-sm-auto ml-3">
+                <div class="input-group input-group-sm mt-1">
+                  <input type="number" step="1" class="form-control input-mini py-0" name="temes[{{tema}}][{{apartat}}][{{name}}][qtriada]"
+                         value="{{ quantitats(name)[triat] }}"
+                         onchange="this.value = Math.max(1, Math.min({{quantitats(name)[-1]}}, parseInt(this.value)));"> <!-- (Mateixos límits a exercicitator.py) -->
+                </div>
+            </div>
+
+          </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- PUNTUACIÓ -->
+<div class="collapse punts-collapse">
+
+    <div class="form-group mb-1 ml-4">
+        <div class="container-fluid pl-0">
+          <div class="row no-gutters">
+
+            <div class="col-sm-auto">
+                <label><i>Punts per apartat</i></label>
+            </div>
+            <div class="col-sm-auto ml-3">
+                <div class="input-group input-group-sm mt-1">
+                  <input type="number" step="1" class="form-control input-mini py-0" name="temes[{{tema}}][{{apartat}}][{{name}}][punts]"
+                         value="{{ punts(name) }}"
+                         onchange="this.value = Math.max(0, Math.min(1000000, parseInt(this.value)));"> <!-- (Mateixos límits a exercicitator.py) -->
+                </div>
+            </div>
+
+          </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- TODO ajustar ids de tot per evitar col·lisions (posar-hi els parents i tal) -->
