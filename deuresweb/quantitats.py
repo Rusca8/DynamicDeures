@@ -25,4 +25,20 @@ def quantitats_de(nom):
         "PX_OPS_SUMA": [0, 2, 3, 4, 5, 12, 24],
         "PX_OPS_TEOREMARESIDU": [0, 1, 3, 5, 6, 12, 26],
     }
-    return [0, 2, 3, 4, 5, 12, 24] if nom not in exercicis else exercicis[nom]
+    return exercicis.get(nom, [0, 2, 3, 4, 5, 12, 24])  # .get(key, default)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

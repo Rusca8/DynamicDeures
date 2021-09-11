@@ -1847,7 +1847,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
         if not termes:
             termes = [3, 2]
 
-        if nivell in [1, 2, 3, 4]:  # complets / incomplets // amb independent / pot sense
+        if nivell in [1, 2, 3, 4, 5]:  # ord complets / ord incomplets // desord independent / pot sense
             # opcions
             if nivell > 2:
                 ordenat = False
@@ -1862,10 +1862,10 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 gq += random.randint(0, random.randint(1, 2))
 
             # control (vigilo que hi hagi terme independent)
-            if nivell < 3:
+            if nivell < 4:
                 obligap = [0]
                 obligaq = [0]
-            elif nivell < 4:
+            elif nivell == 4:
                 if moneda():
                     obligap = [0]
                     obligaq = []
@@ -2206,8 +2206,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 else:
                     rufipx[j] = par
 
-                if not ca * d**(len(rufipx)-1-i) + d**(len(rufipx)-1-j):
-                    print("indef")
+                if not ca * d**(len(rufipx)-1-i) + d**(len(rufipx)-1-j):  # indefinit (perdo les k)
                     k = r"${\rm I\!R}$"
 
             elif nivell == 10:  # TODO subs multivar (comparant amb residu ...de fet això amb rufini no es pot, no?)
@@ -2248,19 +2247,19 @@ def polinomi(grau, termes=0, ordenat=True, cmax=15, obliga=[], negatius=1, suavi
     # opcions
     po = []
     for x in obliga:
-        if x < grau:  # no incloc el grau en sí pq ja era obligat (si no, no seria del grau adequat)
+        if x < grau:  # no incloc el grau del P(x) en sí pq ja era obligat (si no el tingués, no seria del grau adequat)
             po.append(x)  # graus obligats del polinomi
 
     if not termes:  # per defecte el faig complet
         termes = grau + 1
 
     # càlculs
-    px = list(range(grau+1))
-    for x in po:
-        if x in px:
-            px.remove(x)
-
-    px = px[-1:] + random.sample(px[:-1], termes-1-len(po)) + po
+    px = [x for x in range(grau+1) if x not in po and x != grau]
+    try:
+        px = [grau] + random.sample(px, termes-1-len(po)) + po  # agafo el grau màx, uns random, i els obligats
+    except:
+        print("S'han obligat massa coses.")
+        px = [x for x in range(grau+1)]
 
     if ordenat:
         px.sort()

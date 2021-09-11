@@ -2243,6 +2243,8 @@ def polinomis(opcions, solucions=False):
             pass
         end(doc, "questions")
 
+        print(doc.packages)
+
 
     """
     # preguntes
