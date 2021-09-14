@@ -8,6 +8,12 @@ body {
     white-space:normal; /* Evita overflow del text (permet salt de línia) */
 }
 
+.btn-outline-primary:hover {
+    color: #2d7df6;
+    background-color: #f2f4f7; /* new color goes here */
+    /*border-color: #6e757c;*/
+}
+
 .btn-outline-secondary:hover {
     color: #6e757c;
     background-color: #f0f1f2; /* new color goes here */
@@ -120,4 +126,25 @@ label.custom-control-label::after {
 .text-small {
     font-size: 0.7em;
     line-height: 1.38;
+}
+
+/* PLACEHOLDER TEXTAREA COLOR */
+textarea::-webkit-input-placeholder {
+  color: #bacbcf !important;
+}
+
+textarea:-moz-placeholder { /* Firefox 18- */
+  color: #bacbcf !important;
+}
+
+textarea::-moz-placeholder {  /* Firefox 19+ */
+  color: #bacbcf !important;
+}
+
+textarea:-ms-input-placeholder {
+  color: #bacbcf !important;
+}
+
+textarea::placeholder {
+  color: #bacbcf !important;
 }

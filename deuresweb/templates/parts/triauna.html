@@ -2,6 +2,7 @@
 {# name és el nom de la variable (e.g. ordre1) #}
 {# labels són els textos de la llista d'opcions que generaré #}
 {# triat és quina opció has escollit (comença per 1; per defecte la primera) #}
+{# altvalues són els valors que vull donar a les opcions (si no n'hi ha, fa 1, 2, 3, 4...) #}
 
 {% set name = name|default("varname", true)%}
 
@@ -16,8 +17,9 @@
     <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
         {% for b in labels|default(["Opció 1", "Opció 2"], true) %}
           {% set activa = loop.index == triat|default(1, true) %}
+          {% set nom = loop.index|string if not altvalues|default("", true) else altvalues[loop.index0] %}
           <label class="btn btn-outline-info btn-sm py-0 btn-mini {{'active' if activa}}">
-            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{name}}{{loop.index}}" value="{{name}}{{loop.index}}" autocomplete="off" {{ch if activa}}> {{b}}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{exercici}}-{{name}}-{{loop.index}}" value="{{nom}}" autocomplete="off" {{ch if activa}}> {{b}}
           </label>
         {% endfor %}
     </div>

@@ -694,7 +694,7 @@ def elemstats():
             ve.append(x)
         if "nneg" in elements[x]:
             nneg.append(x)
-        if any([v in ["vp", "vn"] for v in elements[x]]):
+        if any([vi in ["vp", "vn"] for vi in elements[x]]):
             v.append(x)
     print(f"els_ist = {ist}")
     print(f"els_v = {v}")
@@ -1127,6 +1127,7 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[], solucions=False
     :param tipus: 1 ions/diat, 10 molèc
     :param nivell: subtipus, en realitat (però com tots els exs són així ja no ho he tocat)
     :param descn: descartats negatius (per donar opció a evitar "carbur i silicur": descn=[6, 14])
+    :param estil: estil de la fitxa (permet distingir la manera de preguntar de diferents coles)
     :param ffila: per forçar des de fora ["c", num] comuns, ["d", z] diatòmic, ["i", [z, q]] ió, ["m", elems] molèc.
     """
     znosalle = [42, 74]  # elements que no fan servir a la salle [Mo, W] *està també a n_finorg

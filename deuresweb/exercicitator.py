@@ -13,7 +13,8 @@ import cryptolator as crypt
 from pylatex import NoEscape
 from rpylatex import (begin, end, part, space, lines, br, needspace, bloctitle, question, choice,
                       taulaconfig, obretaula, obrellarga, filataula, tancataula, envt,
-                      escriusolus, blocsolus, blocsolucions, textsolucions)
+                      escriusolus, blocsolus, blocsolucions, textsolucions,
+                      prepkgs as pkgs)
 
 import quantitats as qtats
 
@@ -51,7 +52,7 @@ def px_algeb_factoritza(doc, opcions):
         lambda: gen.px(7, 3, solucions=True),  # pot tenir de tot
         ]
     pvar = quantilvar(opcions["var"]["sense_constant"])
-    p = p_flex([25, 50, 100], pvar, 1)
+    p = P([1, 1, 2]).flex(1, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -66,8 +67,9 @@ def px_algeb_factoritza(doc, opcions):
 
 
 def px_algeb_simplifica(doc, opcions):
-    enunciat = "Factoritza els polinomis següents."
-    enunsols = "Factoritzar polinomis."
+    pkgs(doc, ['graphicx'])
+    enunciat = "Factoritza i simplifica les següents fraccions algebraiques."
+    enunsols = "Simplificar fraccions algebraiques."
     tsols = crea_exercici(doc, opcions,
                           lambda: gen.px(8, solucions=True),
                           enunciat=enunciat,
@@ -94,13 +96,20 @@ def px_base_desxifra(doc, opcions):
     enunciat = "Extreu factor comú per desxifrar el missatge amagat."
     enunsols = "Desxifrar per factor comú."
 
-    def g():
-        sol = en.factorcomu()
+    pregen = get_var(opcions, "frases_triades", "")
+    pregen = [f.strip() for f in pregen.split("/") if len(f) > 40]  # mínim 50 chars
+
+    seeds = with_default(x for x in pregen)
+
+    def f(seed=""):
+        sol = seed if seed else en.factorcomu()
         text = r"\ \ \penalty-200".join([f" ${x}$ " for x in crypt.fc_frase(sol)])
-        sol = f"{sol}."
+        if not seed:
+            sol = f"{sol}."
         return text, sol
+
     tsols = crea_exercici(doc, opcions,
-                          g,
+                          lambda: f(next(seeds)),
                           enunciat=enunciat,
                           espai_apartat=20,
                           mates=False,
@@ -119,7 +128,7 @@ def px_base_factorcomu(doc, opcions):
          lambda: gen.px(0, 2, termes=3),  # més variables, 3 termes
         ]
     pvar = quantilvar(opcions["var"]["una_variable"])
-    p = p_flex([25, 50, 75, 100], pvar, 1)
+    p = P([1, 1, 1, 1]).flex(1, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -158,21 +167,93 @@ def px_base_partsmonomi(doc, opcions):
 
 
 def px_idnot_endevinaidentitat(doc, opcions):
-    return exercici_no_trobat(doc, opcions)
+    enunciat = "Esbrina quines identitats notables ens han donat els següents resultats."
+    enunsols = "Endevinar identitats notables."
+
+    tipus = [x for x in [1, 2, 3] if x in get_var(opcions, "tipus", [1, 2, 3])]  # 1: (a+b), 2: (a-b), 3: (a+b)(a-b)
+    inici = [x for x in [1, 2] if x in tipus]
+    if len(inici) > 1:
+        inici = random.sample(inici, 1)  # si tinc 1 i 2, me'n quedo només un per començar
+
+    ng1 = regenerable([2, 3], 2)  # per anar alternant aleatori pels nivells 2 i 3 a la g[1]
+    ng2 = regenerable([4, 5])  # per anar alternant aleatori pels nivells 4 i 5 a la g[2]
+    idnum = regenerable(tipus, inici)  # començo per 1 o 2
+    s0_1, s0_2, s0_3 = [ampliable([x + 1 for x in range(10)]) for _ in range(3)]
+
+    pvar2 = quantilvar(opcions["var"]["ordenat"])
+    s_ord = alt_var(opcions, pvar2)
+    o2 = opcions["var"]["ordre"] == "2"
+
+    def f0():
+        t = next(idnum)  # trio quin tipus toca
+        seed = next([s0_1, s0_2, s0_3][t - 1])  # agafo una llavor del tipus que ha tocat
+        return gen.idnotable(2, 1, idnums=t, fcoefb=seed, ordenat=next(s_ord), ordre2=o2, solucions=True)
+
+    g = [
+        f0,  # g[0]: (x+B)   //   g[1]: (Ax+B) i (x^n+B)   //   g[2]: multivar (Axy+B) i (Ax+By)
+        lambda: gen.idnotable(2, next(ng1), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2, solucions=True),
+        lambda: gen.idnotable(2, next(ng2), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2, solucions=True),
+        ]
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([1, 1, 2]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=4,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("polis"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
 
 
 def px_idnot_identitat(doc, opcions):
-    # TODO que crea_exercici rebi la funció que faré servir per generar la llista de gs (per defecte és g_list)
-    # (canviar-li el nom a la g_list normal tq quadri amb la nomenclatura de "funcions generadores d'apartats")
-    # ...tècnicament, fet així puc pregenerar els exercicis com ho feia amb finorg
-    #  (els exercicis especialets que necessiten pregenerar, tindran la seva pròpia funció pregeneradora alternativa)
-    # ...i això serveix també per control de repetits. Sembla que hem trobat la manera.
-    return exercici_no_trobat(doc, opcions)
+    enunciat = "Desenvolupa les següents identitats notables."
+    enunsols = "Identitats notables."
+
+    tipus = [x for x in [1, 2, 3] if x in get_var(opcions, "tipus", [1, 2, 3])]  # 1: (a+b), 2: (a-b), 3: (a+b)(a-b)
+    inici = [x for x in [1, 2] if x in tipus]
+    if len(inici) > 1:
+        inici = random.sample(inici, 1)  # si tinc 1 i 2, me'n quedo només un per començar
+
+    ng1 = regenerable([2, 3], 2)  # per anar alternant aleatori pels nivells 2 i 3 a la g[1]
+    ng2 = regenerable([4, 5])     # per anar alternant aleatori pels nivells 4 i 5 a la g[2]
+    idnum = regenerable(tipus, inici)  # començo per 1 o 2
+    s0_1, s0_2, s0_3 = [ampliable([x+1 for x in range(10)]) for _ in range(3)]
+
+    def f0():
+        t = next(idnum)  # trio quin tipus toca
+        seed = next([s0_1, s0_2, s0_3][t-1])  # agafo una llavor del tipus que ha tocat
+        return gen.idnotable(1, 1, idnums=t, fcoefb=seed, solucions=True)
+
+    g = [
+        f0,                                                                       # (x+B)
+        lambda: gen.idnotable(1, next(ng1), idnums=next(idnum), solucions=True),  # (Ax+B) i (x^n+B)
+        lambda: gen.idnotable(1, next(ng2), idnums=next(idnum), solucions=True),  # multivar (Axy+B) i (Ax+By)
+        lambda: gen.idnotable(1, 6, idnums=next(idnum), solucions=True),          # doble multimonomi
+        ]
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([1, 1, 1, 1]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=4,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("polis"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
 
 
 def px_ops_divideix(doc, opcions):
-    enunciat = "Fes les següents divisions aplicant la regla de Ruffini."
-    enunsols = "Divisions per Ruffini."
+    enunciat = "Fes les següents divisions de polinomis."
+    enunsols = "Divisions de polinomis."
     g = [
         lambda: gen.px(5, 1, solucions=True),  # ordenat complet exacte
         lambda: gen.px(5, 2, solucions=True),  # ordenat complet
@@ -180,7 +261,7 @@ def px_ops_divideix(doc, opcions):
         lambda: gen.px(5, 4, solucions=True),  # desordenat
     ]
     pvar = quantilvar(opcions["var"]["ordenat"])
-    p = p_flex([15, 30, 60, 100], pvar, 2)
+    p = P([1, 1, 2, 4]).flex(2, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -201,7 +282,7 @@ def px_ops_divideixruffini(doc, opcions):
         lambda: gen.px(4, 4, solucions=True),  # desordenat
     ]
     pvar = quantilvar(opcions["var"]["ordenat"])
-    p = p_flex([15, 30, 60, 100], pvar, 2)
+    p = P([1, 1, 2, 4]).flex(2, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -223,7 +304,7 @@ def px_ops_multiplica(doc, opcions):
         lambda: gen.px(3, 5, solucions=True),  # desordenat pot sense t-indep
     ]
     pvar = quantilvar(opcions["var"]["ordenat"])
-    p = p_flex([25, 50, 60, 70, 100], pvar, 1)
+    p = P([2, 2, 1, 1, 3]).flex(1, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -239,10 +320,9 @@ def px_ops_parametreresidu(doc, opcions):
     enunciat = "Calcula en cada cas el valor del paràmetre que fa que la divisió sigui exacta."
     enunsols = "Paràmetre sabent residu."
 
-    if opcions["var"]["parametres"]:  # filtro només lletres normals, per si algú canvia l'html amb inspect o què sé jo
-        parametres = [re.sub("[^a-yzA-YZ]+", "", c) for c in opcions["var"]["parametres"] if len(c) == 1] or ["k"]
-    else:
-        parametres = ["k", "m", "a"]
+    # filtro només lletres normals, per si algú canvia l'html amb inspect o què sé jo
+    parametres = [re.sub("[^a-yzA-YZ]+", "", c) for c in get_var(opcions, "parametres", ["k", "m", "a"])
+                  if len(c) == 1] or ["k"]
 
     g = [
         lambda: gen.px(106, 1, par=random.choice(parametres), solucions=True),  # k = coef sencer
@@ -252,7 +332,7 @@ def px_ops_parametreresidu(doc, opcions):
         lambda: gen.px(106, 5, par=random.choice(parametres), solucions=True),  # k = sumand de més d'un coef
         lambda: gen.px(106, 6, par=random.choice(parametres), solucions=True),  # k = factors i sumands barrejats
         ]
-    p = [16.67, 33.33, 50.0, 66.67, 83.33, 100.0]  # [round((x+1)*100/6, 2) for x in range(6)]  # !! round(,2), pas //
+    p = P([1, 1, 1, 1, 1, 1])
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -273,7 +353,7 @@ def px_ops_resta(doc, opcions):
         lambda: gen.px(2, 3, solucions=True),               # desordenat
         ]
     pvar = quantilvar(opcions["var"]["ordenat"])
-    p = p_flex([[15, {"max": 3}], 30, 60, 100], pvar, 2)
+    p = P([[1, {"max": 3}], 1, 2, 2]).flex(2, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -294,7 +374,7 @@ def px_ops_suma(doc, opcions):
         lambda: gen.px(1, 3, solucions=True),  # desordenat
         ]
     pvar = quantilvar(opcions["var"]["ordenat"])
-    p = p_flex([25, 50, 100], pvar, 1)
+    p = P([1, 1, 2]).flex(1, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
@@ -331,14 +411,15 @@ def exercici_no_trobat(doc, opcions):
 
 
 # ******************************* Esquelets ********************************* #
-def crea_exercici(doc, opcions, g, p="", enunciat="EM FALTA L'ENUNCIAT, NEN", cols=1, scale=1,
-                  espai_apartat=4, espai_final=0, mates=True, mates_solus=False, es_spoiler=False):
+def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", cols=1, scale=1,
+                  espai_apartat=4, espai_final=0, mates=True,
+                  mates_solus=False, stretch_solus=None, es_spoiler=False):
     """Munta un exercici LaTeX (exercici sense varietat interna) a partir de les seves dades.
 
     :param doc: document on posarem l'exercici
     :param opcions: opcions que ens passa el formulari de l'exercici
     :param g: llista de funcions generadores (lambdes passades des de fora)
-    :param p: llista de quantils on vull que s'acabi cada funció generadora (amb opcions o el que sigui, per g_list)
+    :param p: llista de quantils (objecte P)
     :param enunciat: l'enunciat que vols
     :param cols: quantitat de columnes que tindrà l'exercici
     :param scale: coeficient d'ampliació del text (per fer llegibles les fraccions, i tal)
@@ -346,6 +427,7 @@ def crea_exercici(doc, opcions, g, p="", enunciat="EM FALTA L'ENUNCIAT, NEN", co
     :param espai_final: espai després del multicol (mm)
     :param mates: l'apartat és tot notació matemàtica (cal fer '$text$' en lloc de 'text')
     :param mates_solus: les solucions són notació matemàtica (cal fer '$solu$' en lloc de 'solu')
+    :param stretch_solus: ampliació de l'interlineat de les solucions (1 = normal)
     :param es_spoiler: si és True, només escriuré la solució si és en una plana a part
 
     :return: res (només afegeix l'exercici al doc)
@@ -375,6 +457,9 @@ def crea_exercici(doc, opcions, g, p="", enunciat="EM FALTA L'ENUNCIAT, NEN", co
 
     if varietat:  # poliexercici (diferents generadors al llarg dels apartats)
         # precàlculs
+        if not p:
+            print("COMPTE: no li has passat els percentatges a crea_exercici")
+            p = P([100])
         gs = g_list(n, g, p)
     else:  # monoexercici (mateix generador tots els apartats)
         gs = (g for _ in range(n))
@@ -402,9 +487,9 @@ def crea_exercici(doc, opcions, g, p="", enunciat="EM FALTA L'ENUNCIAT, NEN", co
     if sols:
         if not es_spoiler or opcions["solulloc"] == "apart":
             if opcions["solulloc"] == "intercalat":
-                blocsolucions(doc, sols, mates=mates_solus)
+                blocsolucions(doc, sols, mates=mates_solus, stretch=stretch_solus)
             else:
-                tsols = textsolucions(sols, mates=mates_solus)
+                tsols = textsolucions(doc, sols, mates=mates_solus, stretch=stretch_solus)
                 return tsols  # retorna les solucions que posaria si faig llista de solucions al final
     return
 
@@ -434,41 +519,73 @@ def quantilvar(var):
     return v*100//4
 
 
-def p_flex(p, pvar, nvar):
-    """estira els quartils (de la llista de percentatges) per ajustar-los al % de variant que han demanat
+class P:
+    """Llista de quins percentatges ha d'ocupar cada variant de l'exercici (cada g).
+    Té la següent forma: [[%1, {opcions1}], [%2, {opcions2}], [%3, {opcions3}], ...]
 
-    :param p: percentatges (quartils) ...pot incloure opcions [25, [50, {"max": 3}], 75, 100]
-    :param pvar: percentatge de variant que han demanat
-    :param nvar: posició (dins la llista g) de l'última funció abans del canvi de variant
+    Opcions:
+        "max": quantitat d'apartats màxima que puc posar (independentment del percentatge)
     """
-    # separo les opcions dels percentatges
-    opcions = []
-    for i, pi in enumerate(p):
-        try:  # assumeixo que té opcions
-            opcions.append(pi[1])
-            p[i] = pi[0]
-        except:  # no en tenia (entro un dict buit per poder tractar a tothom igual)
-            opcions.append({})
+    def __init__(self, pesos, en_percentatge=False):
+        """Construeix la llista de percentatges a partir dels pesos.
 
-    if p[-1] != 100:  # si ve sense l'últim (perquè se sobreentén) l'afegeixo.
-        p.append(100)
-    pre = p[:nvar+1]
-    post = p[nvar+1:]
-    frontera = pre[-1]
-    pre = [round(q*pvar/frontera, 2) for q in pre]  # sense round(, 2) pots acabar amb parts tipus [1, 3, 3, 4, 5, 6, 6]
-    post = [pvar + round((q-frontera)*(100-pvar)/(post[-1]-frontera), 2) for q in post]
+        :param pesos: pesos relatius de cada variant (p.ex. [1, 2, 2] == del 2n doble que del 1r, del 3r com del 2n)
+        :param en_percentatge: True = he passat els percentatges ja fets en lloc dels pesos
+        """
+        self.p = []
+        # els passo a la interna assegurant que hi ha màxim
+        for q in pesos:
+            try:
+                self.p.append([q[0], q[1]])  # assegura llista [a, b]
+                self.p[-1][1]["max"] = self.p[-1][1].get("max", 100000)  # és prou pq LaTeX limita a unes 700 (a-zz)
+            except TypeError:
+                self.p.append([q, {"max": 100000}])
+        if not en_percentatge:
+            # faig els pesos acumulats
+            acc = 0
+            for q in self.p:
+                q[0] += acc
+                acc = q[0]
+            # converteixo en percentatges
+            total = self.p[-1][0]
+            self.p = [[round(q[0]*100/total, 3), q[1]] for q in self.p]  # divisió entera no conserva prou precisió
 
-    p = pre + post
-    return [[pi, opcions[i]] for i, pi in enumerate(p)]  # recombino amb els dicts
+    def flex(self, nvar, pvar):  # TODO optimitzar amb map()
+        """Estira i arronsa els percentatges de manera que l'índex escollit tingui el percentatge escollit
+
+        :param nvar: índex escollit
+        :param pvar: percentatge que ha de tenir l'índex escollit
+        """
+        print("vas canviar els paràmetres d'ordre, gamarús") if pvar < 10 else None
+        # retallo per la frontera
+        pre = self.p[:nvar + 1]
+        post = self.p[nvar + 1:]
+        frontera = pre[-1][0]
+        # deformo cada tros
+        pre = [[round(q[0]*pvar / frontera, 2), q[1]] for q in pre]  # sense round pot sortir tipus [1, 3, 3, 4, 6]
+        post = [[pvar + round((q[0]-frontera)*(100-pvar) / (post[-1][0]-frontera), 2), q[1]] for q in post]
+        # muntatge
+        self.p = pre + post
+        return self
+
+    def get(self):
+        return self.p
 
 
-def g_list(n, g, p):
+def get_var(opcions, key, default=None):
+    """Agafa la variable demanada de la secció de variables de l'exercici (o retorna default si no la troba)."""
+    return opcions.get("var", {}).get(key, default)
+
+
+def g_list(n, g, p, amb_index=False):
     """Retorna un generador amb 'quina funció de g cal fer servir per cada apartat'
 
     :param n: quants apartats hi haurà
     :param g: llista de funcions que faré servir
-    :param p: llista de quantils de les funcions (pot incloure opcions tipus: [25, [50, {max: 3}], 75, 100])
+    :param p: objecte de percentatges P
+    :param amb_index: per si cal retornar l'índex - TODO crec que no caldrà, pq li passo generador a la lambda
     """
+    p = p.get()  # extrec els percentatges
     # preprocessing
     maxs = []
     for i, pi in enumerate(p):
@@ -482,7 +599,10 @@ def g_list(n, g, p):
         p.append(100)
     if len(p) != len(g):  # si no quadra, malament
         for _ in range(n):
-            yield lambda: "no em quadren els quantils"
+            if amb_index:
+                yield 0, lambda: "no em quadren els quantils"
+            else:
+                yield lambda: "no em quadren els quantils"
     elif p[-1] != 100:
         p[-1] = 100
 
@@ -494,14 +614,106 @@ def g_list(n, g, p):
                 if i != count[0]:  # comença una nova g (reset comptador)
                     count = [i, 0]
                 if count[1] < maxs[i]:  # encara puc fer servir aquesta g
-                    yield g[i]
+                    if amb_index:
+                        yield i, g[i]
+                    else:
+                        yield g[i]
                     count[1] += 1
                     break
                 else:  # ja tinc el màxim (baixo la p actual per forçar la g següent)
                     p[i] = 0
 
         else:  # si no break (si no li toca res, li toca l'últim)
-            yield g[-1]
+            if amb_index:
+                yield len(g)-1, g[-1]
+            else:
+                yield g[-1]
+
+    print("s'han acabat les pregenerades... (retorno l'última ja per sempre)")
+    if amb_index:
+        yield len(g)-1, g[-1]
+    else:
+        yield g[-1]
+
+
+def p_ns(n, p):
+    """Retorna les quantitats d'exercicis que hi haurà de cada tipus (...aprox?).
+          ...tq pregeneradors com el de finorg puguin decidir quantes (i quines)
+          coses incloure per a cadascuna de les gs (tl;dr: penso en n_finorg).
+
+    :param n: quantitat total d'apartats (100%).
+    :param p: objecte de percentatges P
+    """
+    p = p.get()  # extrec els percentatges
+    ns = [round(n*pi[0]/100) for pi in p]  # tradueixo les proporcions acumulades a absoluts acumulats
+    sum = 0
+    for i, q in enumerate(ns):  # converteixo a absoluts (no acumulats) i aplico els màxims
+        qmax = p[i][1]["max"]
+        q = min(q-sum, qmax)
+        sum += q
+        ns[i] = q
+    if sum < n:
+        ns[-1] += n-sum
+    return ns
+
+
+def alt_var(opcions, pvar):
+    """Generador (inf): True mentre estem dins la zona de 'sí' de la variant escollida, False la resta."""
+    return with_default((True for _ in range(round(pvar*quantes(opcions)/100))), False)
+
+
+def regenerable(llista, inici=None):
+    """Generador (inf): gasta aleatòriament els elements d'una llista, i quan la llista es gasta torna a començar.
+       (...compte, que no fa deep copy!)
+
+    :param llista: llista completa (tot el que hi vull quan reinicio)
+    :param inici: element o llista inicial (elements, ordenats, que vull posar abans de l'aleatori)
+    """
+    try:  # per si he entrat element sense llista
+        len(inici)
+    except TypeError:
+        inici = [inici]
+
+    inici = [x for x in inici if x in llista]  # filtro per si de cas he demanat inicis que no tenia
+
+    if inici:
+        for x in inici:  # començo amb les de la llista inicial
+            yield x
+        opcions = [x for x in llista if x not in inici]  # continuo amb les que encara no he fet servir
+    else:
+        opcions = []
+
+    while True:
+        if not opcions:
+            opcions = llista[:]  # copia la llista completa (si només faig referència, alteraré la original amb el pop)
+            random.shuffle(opcions)
+        yield opcions.pop()
+
+
+def ampliable(llista, n=3):
+    """Generador (inf): retorna aleatori de la llista, i quan es gasta amplia amb números (abs) més grans
+
+    :param llista: llista inicial, que retornaré en ordre aleatori
+    :param n: quantitat de números (a banda i banda, si s'escau) a afegir amb cada ampliació
+    """
+    maxim = max(llista)
+    minim = min(llista)
+    while True:
+        random.shuffle(llista)
+        for x in llista:
+            yield x
+        llista = [x+maxim+1 for x in range(n)]
+        maxim += n
+        if minim < 0:
+            llista += [minim-1-x for x in range(n)]
+            minim -= n
+
+
+def with_default(seeds, default=None):
+    """Afegeix al generador un valor per defecte per tornar alguna cosa quan el generador s'hagi gastat."""
+    yield from seeds  # mentre hi hagi pregenerats, els agafo
+    while True:
+        yield default  # quan es gasten, retorno res (deixo llibertat a l'exercici)
 
 
 def espai_per(tal):
@@ -511,6 +723,15 @@ def espai_per(tal):
         "una": 10,  # una línia de resposta
     }
     return 42 if tal not in espais else espais[tal]
+
+
+def stretch_per(tal):
+    stretches = {
+        "polis": 1.2,
+        "fracs": 1.3,
+        "fraccions": 1.3,
+    }
+    return 1 if tal not in stretches else stretches[tal]
 
 
 def cm(mm):

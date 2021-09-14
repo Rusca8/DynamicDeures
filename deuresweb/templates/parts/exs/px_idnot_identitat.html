@@ -7,10 +7,10 @@
     {% include '/parts/quantes.html' %}
 {% endwith %}
 
-    {% with name="idnt", labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
+    {% with name="tipus", altnames=[1, 2, 3], labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
         {% include '/parts/triaquines.html' %}
     {% endwith %}
 
-    {% with title="Una sola variable?", name="id1var" %}
+    {% with title="Una sola variable?", name="una_variable" %}
         {% include '/parts/quantesvariant.html' %}
     {% endwith %}

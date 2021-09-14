@@ -1628,22 +1628,25 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
     return text
 
 
-def idnotable(tipus, nivell=1, idnums=[1, 2, 3], fcoefb=0, ordenat=True, ordre2=False, solucions=False):
+def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False, solucions=False):
     """genera exercicis d'identitats notables
 
     :param tipus: 1 calcular, 2 endevinar
     :param nivell: 1 (x+B) / 2 (Ax+B) / 3 (x^n+B) / 4 (Axy+B) / 5 (Ax+By) / 6 (Axy^n+Byz^m)
-    :param idnums: 1 (a+b)^2 / 2 (a-b)^2 / 3 (a+b)(a-b)
+    :param idnums: llista de tipus possibles (o tipus demanat) ::  1 (a+b)^2 / 2 (a-b)^2 / 3 (a+b)(a-b)
     :param fcoefb: forçar coeficient b (número que tindrà el coeficient si el vull triar)
     :param ordenat: False permet desordre als tipus 2
     :param ordre2: Considera que "ordenat" vol dir a^2+b^2+2ab
     :param solucions: retornar també les solucions
     """
+    if not idnums:  # si no venia res, poso [1, 2, 3]
+        idnums = [1, 2, 3]
+
     text = "(x+42)^2"
     solu = ""
     try:
         idnum = random.choice(idnums)
-    except:  # per quan només n'hi ha un però no està dins una llista
+    except TypeError:  # per quan només n'hi ha un però no està dins una llista
         idnum = idnums
     varops = random.choice([["x", "y", "z"], ["a", "b", "c"]])
     if tipus in [1, 2]:  # calcula la idnot / endevina enunciat
@@ -1749,6 +1752,7 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
     :param termes: quants termes té cada polinomi (a les ops) / quants polinomis (al de factoritzar)
     :param noneg: evita doble negatiu restant
     :param solucions: incloure solució a l'exercici
+    :param par: lletra que faré servir com a paràmetre (e.g. als exercicis de paràmetre tq residu)
     """
     text = "P(x)=42"
     solu = "(R: 42)"

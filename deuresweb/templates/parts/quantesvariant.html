@@ -14,10 +14,10 @@
       {% for n in range(5) %}
         {% if n == triat|default(2, true) %}
           <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{exercici}}-{{name}}-{{n}}" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
         {% else %}
           <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{exercici}}-{{name}}-{{n}}" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
         {% endif %}
           </label>
       {% endfor %}

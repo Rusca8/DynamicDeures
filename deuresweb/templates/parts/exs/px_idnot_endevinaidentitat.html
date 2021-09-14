@@ -7,15 +7,15 @@
     {% include '/parts/quantes.html' %}
 {% endwith %}
 
-    {% with name="eidnt", labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
+    {% with name="tipus", altnames=[1, 2, 3], labels=["(a+b)²", "(a-b)²", "(a+b)(a-b)"] %}
         {% include '/parts/triaquines.html' %}
     {% endwith %}
 
-    {% with title="Una sola variable?", name="eid1var" %}
+    {% with title="Una sola variable?", name="una_variable" %}
         {% include '/parts/quantesvariant.html' %}
     {% endwith %}
 
-    {% with title="Forçar ordenat?", name="eidord", triat=1 %}
+    {% with title="Forçar ordenat?", name="ordenat", triat=1 %}
         {% include '/parts/quantesvariant.html' %}
     {% endwith %}
 

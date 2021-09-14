@@ -4,14 +4,14 @@ from pylatex import Document, Section
 from pylatex import Command, NoEscape, Math, Tabular, Package
 from rpylatex import (begin, end, part, space, lines, br, needspace, bloctitle, question, choice,
                       taulaconfig, obretaula, obrellarga, filataula, tancataula, envt,
-                      escriusolus, blocsolus, metasolucions)
+                      escriusolus, blocsolus, metasolucions,
+                      pre2pkg)
 import rpylatex as rpy
 
 import generator as gen
 import q_generator as qgen
 import exercicitator as mexs  # modular exercicis
-import enunciats as en
-import cryptolator as crypt
+from noms_apartats import nom_apartat as apartatllarg
 import wolframator as w
 
 
@@ -2159,7 +2159,6 @@ def polinomis(opcions, solucions=False):
     doc.packages.append(Package('amsmath'))
     doc.packages.append(Package('alphalph'))
     doc.packages.append(Package('needspace'))
-    doc.packages.append(Package('graphicx'))  # això és per scalebox (fer les mates més grans)
     # doc.packages.append(Package('hyperref'))  # això és per links (ha de ser l'últim paquet)
 
     headfoot(doc, opcions, temafitxa)
@@ -2227,7 +2226,7 @@ def polinomis(opcions, solucions=False):
                 bloctitle(doc, temallarg(tema).upper())
             for apartat in opcions["temes"][tema]:
                 needspace(doc, 12)
-                bloctitle(doc, apartat)
+                bloctitle(doc, apartatllarg(tema, apartat))
                 for exercici in opcions["temes"][tema][apartat]:
                     g = mexs.constructor_de(exercici)
                     sols = g(doc, opcions["temes"][tema][apartat][exercici])
@@ -2242,8 +2241,7 @@ def polinomis(opcions, solucions=False):
             metasolucions(doc, sols_final, breakpage=breakpage)
             pass
         end(doc, "questions")
-
-        print(doc.packages)
+        pre2pkg(doc)
 
 
     """
@@ -4176,6 +4174,7 @@ def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
 
 
 def myconfig(doc, solucions=False):
+    doc.append(NoEscape(r'\raggedcolumns'))  # permís per columnes desiguals (arregla una mica l'espaiat de l'última)
     doc.append(NoEscape(r'\pointpoints{punt}{punts}'))
     doc.append(NoEscape(r'\bracketedpoints'))
     doc.append(NoEscape(r'\addpoints'))

@@ -996,7 +996,7 @@ def factorcomu():
                             " barreja nocilla i nutella",
                             " entona cants gregorians"])
         t4 = random.choice([" cada cop que en té la oportunitat",
-                            random.choice([" quan hi ha lluna plena", "els dies de lluna plena"]),
+                            random.choice([" quan hi ha lluna plena", " els dies de lluna plena"]),
                             " un dia sí i altre també",
                             random.choice([" quan no mira ningú", " quan estem tots despistats"]),
                             " perquè li agrada que no vegis"])
@@ -1012,6 +1012,7 @@ def sp(num):  # hauràs d'afegir un d'allò per incontable, pero bueno
         return 0
     else:
         return 1
+
 
 def ordinal(num):
     if num in [1, 3]:

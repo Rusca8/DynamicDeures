@@ -3,7 +3,7 @@ La meva pròpia implementació d'algunes funcions LaTeX que jo necessitava i PyL
 (...o que eren molt difícils de trobar perquè la documentació de PyLaTeX és bastant pèssima)
 """
 
-from pylatex import NoEscape, Command
+from pylatex import NoEscape, Command, Package
 
 
 # ***************************************** ESTRUCTURA BÀSICA ******************************************** #
@@ -14,6 +14,7 @@ def begin(doc, tag, extra=""):  # TODO canviar per Command (una instrucció gen�
     if tag == "solution" and not extra == "":
         doc.append(NoEscape(r'\begin{%s}[%s]' % (tag, extra)))
     elif tag == "multicols":
+        doc.append(NoEscape(r'\setlength{\parskip}{0pt}'))  # elimina la flexibilitat entre punts (espaiat molt millor)
         doc.append(NoEscape(r'\begin{%s}{%s}' % (tag, extra)))
     else:
         doc.append(NoEscape(r'\begin{%s}' % (tag,)))
@@ -101,6 +102,40 @@ def choice(doc, text, corregir=False):  # ?
         doc.append(NoEscape(r'\choice %s' % (text,)))
     return
 
+
+def prepkg(doc, pkg):
+    """Afegeix un paquet a la llista de paquets que calen pels exercicis escullits"""
+    try:
+        doc.prepkg.add(pkg)
+    except AttributeError:
+        doc.prepkg = set()
+        doc.prepkg.add(pkg)
+    return
+
+
+def prepkgs(doc, pkgs):
+    """Afegeix múltiples paquets a la llista de paquets que calen pels exercicis escollits"""
+    for pkg in pkgs:
+        prepkg(doc, pkg)
+    return
+
+
+def pre2pkg(doc):
+    """Afegeix al document els paquets especials que he demanat des dels exercicis.
+        ...això que diu llista de pkgs estranys vull dir els que necessiten opcions i tal (e.g. babel)
+
+        Packages:
+            'graphicx' - Per fer més grans o petits els textos de mates (scalebox)
+    """
+    try:
+        for pkg in doc.prepkg:
+            print(f"PER EXEMPLE {pkg}")
+            if pkg in ["llista_de_pkgs_estranys"]:
+                ...
+            else:
+                doc.packages.append(Package(f'{pkg}'))
+    except AttributeError:  # cap exercici necessitava coses extra
+        pass
 
 # ***************************************** TAULES ******************************************** #
 
@@ -246,6 +281,7 @@ def blocsolus(doc, solucions, llista, mates=False, stretch=False):  # stretch ne
     if solucions:
         doc.append(NoEscape(r'\begin{solution}'))
         if stretch:
+            prepkg(doc, "setspace")
             doc.append(NoEscape(r'\setstretch{' f"{stretch}" '}'))
         doc.append(NoEscape(r'%s\par' % escriusolus(llista, mates)))
         doc.append(NoEscape(r'\end{solution}'))
@@ -254,20 +290,24 @@ def blocsolus(doc, solucions, llista, mates=False, stretch=False):  # stretch ne
 
 def blocsolucions(doc, llista, mates=False, stretch=False):
     """Versió nova de blocsolus (no demana el bool solucions, perquè sempre serà sí).
-
-    [[[[[[[[[[[[[[[[ stretch necessita setspace package ]]]]]]]]]]]]]]]]]
     """
     blocsolus(doc, solucions=True, llista=llista, mates=mates, stretch=stretch)
     return
 
 
-def textsolucions(llista, mates=False, stretch=False):
+def textsolucions(doc, llista, mates=False, stretch=False):
     """Prepara el text per una solució (sense generar el bloc de solucions de LaTeX)
 
     [[[[[[[[[[ stretch necesssita setspace package ]]]]]]]]]]
+
+    :param doc: cal el doc per passar-li el setspace si faig stretch
+    :param llista: llista de solus
+    :param mates: True si cal fer '$text$' en lloc de 'text'
+    :param stretch: estirar l'interlineat del text
     """
     text = ["\\begin{quote} {"]
     if stretch:
+        prepkg(doc, "setspace")
         text.append(r'\setstretch{' f"{stretch}" '} ')
     text.append(r'%s\par' % escriusolus(llista, mates))
     text.append("} \\end{quote}")

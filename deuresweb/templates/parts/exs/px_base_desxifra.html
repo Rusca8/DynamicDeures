@@ -7,3 +7,32 @@
 {% with title="Desxifra el missatge (fc)", name="PX_BASE_DESXIFRA", triat=1 %}
     {% include '/parts/quantes.html' %}
 {% endwith %}
+
+<!-- TRIAR FRASE -->
+{% set exercici = ns.exercici|default("exercici", true) %}
+{% set name = "triar_frase" %}
+{% set tema = ns.tema|default("tema", true) %}
+<div class="form-group mb-2 ml-4">
+    <label class="mb-0"><i>Triar la frase amagada?</i></label>
+    <div class="btn-group btn-group-toggle ml-1" data-toggle="buttons"
+         onchange="if(document.getElementById('{{exercici}}-{{name}}-2').checked){
+                        $('#{{exercici}}-{{name}}-collapse').collapse('show')
+                      }else{
+                        $('#{{exercici}}-{{name}}-collapse').collapse('hide')
+                      }">
+      <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+        <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{exercici}}-{{name}}-1" value="no" autocomplete="off" checked> no
+      </label>
+      <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+        <input type="radio" name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][{{name}}]" id="{{exercici}}-{{name}}-2" value="sí" autocomplete="off"> sí
+      </label>
+    </div>
+</div>
+
+<div class="collapse" id="{{exercici}}-{{name}}-collapse">
+    <div class="form-group ml-5">
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" maxlength="1500"
+                  name="temes[{{tema}}][{{apartat}}][{{exercici}}][var][frases_triades]"
+        placeholder="Intenta que sigui una frase una mica llarga, amb poques paraules de dues lletres seguides. / Si has demanat més d'un apartat, pots posar més d'una frase separant-les així amb les barres. / Si hi ha més apartats que frases teves, la resta de frases me les inventaré jo."></textarea>
+    </div>
+</div>
