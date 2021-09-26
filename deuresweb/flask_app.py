@@ -9,13 +9,14 @@ import exemplesindex as e
 
 from puntuacions import punts_de
 from quantitats import quantitats_de
+from noms import nom_apartat, nom_tema
 
 app = Flask(__name__, template_folder="templates/")
 
 
 @app.context_processor
 def ctx():
-    return dict(punts=punts_de, quantitats=quantitats_de)
+    return dict(punts=punts_de, quantitats=quantitats_de, nom_apartat=nom_apartat, nom_tema=nom_tema)
 
 
 @app.route('/')
@@ -179,12 +180,13 @@ def success():
 def polinomis():
     if request.method == "POST":
         if app.debug:
-            url = g.polinomis(request.form)
+            print("(Debug mode on...)")
+            url = g.crea_fitxa(request.form)
         else:
             try:
-                url = g.polinomis(request.form)
-            except:
-                print("Error Polinomis")
+                url = g.crea_fitxa(request.form)
+            except Exception as exc:
+                print(f"Error Polinomis ({exc})")
                 tele.error("polis")
                 return redirect("/latex_error/polinomis")
             tele.feedback("polis", request.form)

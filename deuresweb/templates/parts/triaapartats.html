@@ -1,0 +1,18 @@
+{# Secció del formulari per triar QUINS APARTATS VOLS
+#}
+
+{% set tema = ns.tema|default("tema", true) %}
+{% set apartats = apartats|default(["Falten", "Els", "Apartats"], true) %}
+
+<div class="form-group">
+    <label>Quins tipus d'exercici vols?</label><br>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        {% for apartat in apartats %}
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" data-target="#opcions-{{tema}}-{{apartat}}"
+               id="pop-{{tema}}-{{apartat}}" rel="popover" data-placement="top" data-content="">
+          <input type="checkbox" name="apartats[{{tema}}][{{apartat}}]" autocomplete="off" id="{{tema}}-{{apartat}}" value="{{apartat}}" checked>
+            {{ nom_apartat(tema, apartat, btn=True) }}
+        </label>
+        {% endfor %}
+    </div>
+</div>

@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 {% block navbardonar %}active{% endblock %}
 {% block content %}
-<h2 class="text-center mb-3">Recolzar el projecte :)</h2>
-<p class="text-center">
-    Dynamic Deures és un projecte personal que vaig ampliant quan tinc estones lliures.<br><br>
+<div class="card ml-2 mr-3 mb-4">
+    <div class="card-body">
+        <h2 class="text-center mb-3">Recolzar el projecte :)</h2>
+        <p class="text-center">
+            Dynamic Deures és un projecte personal que vaig ampliant quan tinc estones lliures.<br><br>
 
-    En bona mesura ho faig perquè treballo a l'acadèmia <a href="http://www.academiaaxioma.com/">axioma</a>, i tenir aquesta mena de fitxes a mà<br>
-    m'agilitza molt la feina de trobar exercicis pels alumnes en funció del que han de practicar.<br><br>
+            En bona mesura ho faig perquè treballo a l'acadèmia <a href="http://www.academiaaxioma.com/">axioma</a>, i tenir aquesta mena de fitxes a mà<br>
+            m'agilitza molt la feina de trobar exercicis pels alumnes en funció del que han de practicar.<br><br>
 
-    Sóc conscient que com més complet vagi estant més útil serà pels altres docents,<br>
-    però vull deixar dit ja des d'ara que <b>ho mantindré sempre gratuït i de codi obert</b>,<br>
-    perquè em sembla valuós que tothom que vulgui ho pugui aprofitar.<br><br>
+            Sóc conscient que com més complet vagi estant més útil serà pels altres docents,<br>
+            però vull deixar dit ja des d'ara que <b>ho mantindré sempre gratuït i de codi obert</b>,<br>
+            perquè em sembla valuós que tothom que vulgui ho pugui aprofitar.<br><br>
 
-    Tot i això, si consideres que és útil i et fa il·lusió contribuir als meus esforços per ampliar-ho,<br>
-    ara ja tens la opció de fer un donatiu al botó aquest d'aquí baix!<br><br>
-</p>
+            Tot i això, si consideres que és útil i et fa il·lusió contribuir als meus esforços per ampliar-ho,<br>
+            ara ja tens la opció de fer un donatiu al botó aquest d'aquí baix!<br><br>
+        </p>
 
-<form action="https://www.paypal.com/donate" method="post" target="_top" class="text-center">
-<input type="hidden" name="hosted_button_id" value="73T2QJBPU9X3J" />
-<input type="image" src="https://www.paypalobjects.com/en_US/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-<img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1" />
-</form>
+        <form action="https://www.paypal.com/donate" method="post" target="_top" class="text-center">
+        <input type="hidden" name="hosted_button_id" value="73T2QJBPU9X3J" />
+        <input type="image" src="https://www.paypalobjects.com/en_US/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+        <img alt="" border="0" src="https://www.paypal.com/en_ES/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+    </div>
+</div>
+
 {% endblock %}

@@ -489,25 +489,9 @@
         $('[rel="tooltip"]').tooltip();
     }); (el tooltip és  */
 
-    // JQuery pels popovers
-    $(function () {
-        $('[rel="popover"]').popover()
-    })
-
     $('.popover-dismiss').popover({  // amb això marxa si cliques a qualsevol lloc (però cal tabindex i data-trigger i que sigui a)
         trigger: 'focus'
     })
-
-    function pop_mostra(quin){
-        $("#" + quin).attr("data-content", "Aquí pots desactivar l'apartat sencer");
-        $("#" + quin).attr("data-placement", "top");
-        $("#" + quin).popover("show");
-        setTimeout(function() {pop_hide(quin);}, 3000);
-    }
-
-    function pop_hide(quin){
-        $("#" + quin).popover("hide");
-    }
 
     function avisa_tot_no(apartat){
         switch(apartat){

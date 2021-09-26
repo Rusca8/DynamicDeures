@@ -56,10 +56,40 @@
     <script>
         function pdfgenerat(){
             curs = document.getElementById('formulari').elements['curs'].value;
-            document.getElementById('generat-text').innerHTML = "S'han generat exercicis de " + curs;
+            document.getElementById('generat-text').innerHTML = "S'han generat els exercicis de {{ns.tema|default("(tema?)", true)}}.";
             $('#generat').collapse('show');
-
         };
+
+        function avisa_apartat_buit(apartat){
+            exercicis = document.querySelectorAll("[id^='" + apartat + "'][id$='-q0']")
+            for(let ex of exercicis){
+                if(!ex.checked){
+                    return
+                }
+            }
+            //console.log("Ha desactivat tots els exercicis de l'apartat, aviso amb el popover.");
+            pop_mostra("pop-" + apartat);  // TODO passar la cosa d'afegir "pop-" a dins de pop_mostra
+        }
+
+        /* *************** POPOVERS ***************** */
+
+        // Això en fa el setup (només carregar la pàgina)
+        $(function () {
+            $('[rel="popover"]').popover()
+        })
+
+        // Això mostra el popover que jo demani
+        function pop_mostra(quin){
+            $("#" + quin).attr("data-content", "Aquí pots desactivar l'apartat sencer :)");
+            $("#" + quin).attr("data-placement", "top");
+            $("#" + quin).popover("show");
+            setTimeout(function() {pop_hide(quin);}, 3000);
+        }
+
+        // ...i això l'amaga (ho crido després de cert temps)
+        function pop_hide(quin){
+            $("#" + quin).popover("hide");
+        }
     </script>
     {% block jsextra %}
     {% endblock %}

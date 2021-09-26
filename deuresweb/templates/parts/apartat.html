@@ -1,0 +1,19 @@
+{# Secció del formulari corresponent a un APARTAT d'un tema
+   (la targeta amb tots els exercicis d'aquell apartat)
+#}
+
+{% set tema = ns.tema|default("tema", true) %}
+{% set apartat = apartat|default("apartat", true) %}
+{% set exercicis = exercicis|default([], true) %}
+
+<div class="collapse show" id="opcions-{{tema}}-{{apartat}}">
+    <div class="card mb-2">
+      <div class="card-body pt-3 pb-2">
+        <h5 class="card-title">{{ nom_apartat(ns.tema, apartat) }}</h5>
+          <hr class="mt-1">
+          {% for ex in exercicis %}
+            {% include '/parts/exs/' + ex + '.html' %}
+          {% endfor %}
+      </div>
+    </div>
+</div>

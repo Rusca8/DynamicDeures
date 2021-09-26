@@ -1,0 +1,49 @@
+{# Secció de formulari per escollir el CURS
+#}
+
+{% set ep = ep|default([0, 0, 0, 0, 0, 0], true) %}
+{% set eso = eso|default([1, 1, 1, 1], true) %}
+{% set bat = bat|default([1, 1], true) %}
+
+{% set ep_actius = ep_actius|default([0, 0, 0, 0, 0, 0], true) %}
+{% set eso_actius = eso_actius|default([0, 0, 0, 0], true) %}
+{% set bat_actius = bat_actius|default([0, 0], true) %}
+
+{% set amaga = amaga|default(0, true) %}
+
+{% set ordinals = ["1r", "2n", "3r", "4t", "5è", "6è"] %}
+<div class="form-group {{'collapse' if amaga else ''}}">
+      <label>En quin curs estàs pensant?</label><br>
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        {% if not amaga %}
+          {% for curs in ep %}
+            {% if curs %}
+              <label class="btn btn-outline-secondary {{'' if ep_actius[loop.index0] else 'disabled'}}">
+                <input type="radio" name="curs" id="curs-ep-{{loop.index}}" value="{{ordinals[loop.index0]}} de Primària" autocomplete="off" {{'' if ep_actius[loop.index0] else 'disabled'}}> {{loop.index}}EP
+              </label>
+            {% endif %}
+          {% endfor %}
+
+          {% for curs in eso %}
+            {% if curs %}
+              <label class="btn btn-outline-secondary {{'' if eso_actius[loop.index0] else 'disabled'}}">
+                <input type="radio" name="curs" id="curs-eso-{{loop.index}}" value="{{ordinals[loop.index0]}} d'ESO" autocomplete="off" {{'' if eso_actius[loop.index0] else 'disabled'}}> {{loop.index}}ESO
+              </label>
+            {% endif %}
+          {% endfor %}
+          {% if bat[0] %}
+            <label class="btn btn-outline-secondary {{'' if bat_actius[0] else 'disabled'}}">
+              <input type="radio" name="curs" id="curs-bat-s" value="Batxillerat Social" autocomplete="off" {{'' if bat_actius[0] else 'disabled'}}> BAT-S
+            </label>
+          {% endif %}
+          {% if bat[1] %}
+            <label class="btn btn-outline-secondary {{'' if bat_actius[0] else 'disabled'}}">
+              <input type="radio" name="curs" id="curs-bat-c" value="Batxillerat Científic" autocomplete="off" {{'' if bat_actius[0] else 'disabled'}}> BAT-C
+            </label>
+          {% endif %}
+        {% endif %}
+        <label class="btn btn-outline-secondary active">
+          <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
+        </label>
+      </div>
+</div>

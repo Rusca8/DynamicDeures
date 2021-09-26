@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 {% block navbarcodi %}active{% endblock %}
 {% block content %}
-<h2>Com l'has fet?</h2>
-<p>Dynamic Deures és una web app feta amb <b>Flask</b>, que corre sobre un virtualenv de python3 a <b>PythonAnywhere</b>.<br>
-L'estructura de les pàgines està feta amb <b>HTML</b> i <b>Jinja2</b>.<br>
-L'estil principalment l'he agafat de <b>Bootstrap</b>, tot i que he canviat alguna coseta amb <b>CSS</b>.<br>
-Les coses interactives que no són botons (p.ex. activar l'avís de pdf generat) funcionen amb <b>javascript</b>.<br>
-Els pdf estan fets amb <b>LaTeX</b> (que és com el Word dels científics),<br>
-i els genero programant en <b>python</b> mitjançant la llibreria <b>PyLaTeX</b>.<br>
-Els exemples d'equacions de la pàgina d'inici els renderitza <b>MathJax</b>.<br>
-I el control de versions el faig amb <b>Git</b>, sincronitzant l'ordinador i el web a través de <b>GitHub</b>.</p>
-<a class="btn btn-outline-secondary" href="https://github.com/Rusca8/DynamicDeures" role="button">Veure el codi a GitHub <svg version=1.1 width=16 height=16 viewBox="0 0 16 16" class="octicon octicon-mark-github" aria-hidden=true><path fill-rule=evenodd d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
-<br><br>
-<h4>I no t'has tornat boig?</h4>
-<p>Sí, la veritat. 😂<br><br>
-Quan vaig començar sabia python, una mica d'html i css, i poc javascript.<br>
-Sí que havia vist el flask des de la distància (he fet bots de Telegram que hi viuen), però ni l'entenia ni el remenava.<br>
-També havia escrit equacions en LaTeX, però no sabia res sobre fer documents sencers, i encara menys amb PyLaTeX<br>
-I ni sabia què és el Bootstrap.<br>
-D'altra banda, Git i MathJax els he après un cop el projecte ja estava encaminat.<br><br>
-...vaja, que la gran majoria del que he fet em venia de nou i ho he hagut d'aprendre quasi de zero.
-<br>
-Per sort aquests dies de confinament tinc moolt de temps lliure per investigar i remenar. :) </p>
+<div class="card ml-2 mr-3 mb-4">
+    <div class="card-body">
+        <h2>Com l'has fet?</h2>
+        <p>Dynamic Deures és una web app feta amb <b>Flask</b>, que corre sobre un virtualenv de python3 a <b>PythonAnywhere</b>.<br>
+        L'estructura de les pàgines està feta amb <b>HTML</b> i <b>Jinja2</b>.<br>
+        L'estil principalment l'he agafat de <b>Bootstrap</b>, tot i que he canviat alguna coseta amb <b>CSS</b>.<br>
+        Les coses interactives que no són botons (p.ex. activar l'avís de pdf generat) funcionen amb <b>javascript</b>.<br>
+        Els pdf estan fets amb <b>LaTeX</b> (que és com el Word dels científics),<br>
+        i els genero programant en <b>python</b> mitjançant la llibreria <b>PyLaTeX</b>.<br>
+        Els exemples d'equacions de la pàgina d'inici els renderitza <b>MathJax</b>.<br>
+        I el control de versions el faig amb <b>Git</b>, sincronitzant l'ordinador i el web a través de <b>GitHub</b>.</p>
+        <a class="btn btn-outline-secondary" href="https://github.com/Rusca8/DynamicDeures" role="button">Veure el codi a GitHub <svg version=1.1 width=16 height=16 viewBox="0 0 16 16" class="octicon octicon-mark-github" aria-hidden=true><path fill-rule=evenodd d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+        <br><br>
+        <h4>I no t'has tornat boig?</h4>
+        <p>Sí, la veritat. 😂<br><br>
+        Quan vaig començar sabia python, una mica d'html i css, i poc javascript.<br>
+        Sí que havia vist el flask des de la distància (he fet bots de Telegram que hi viuen), però ni l'entenia ni el remenava.<br>
+        També havia escrit equacions en LaTeX, però no sabia res sobre fer documents sencers, i encara menys amb PyLaTeX<br>
+        I ni sabia què és el Bootstrap.<br>
+        D'altra banda, Git i MathJax els he après un cop el projecte ja estava encaminat.<br><br>
+        ...vaja, que la gran majoria del que he fet em venia de nou i ho he hagut d'aprendre quasi de zero.
+        <br>
+        Per sort aquests dies de confinament tinc moolt de temps lliure per investigar i remenar. :) </p>
+    </div>
+</div>
 {% endblock %}

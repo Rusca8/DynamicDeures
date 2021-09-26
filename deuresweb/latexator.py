@@ -11,7 +11,8 @@ import rpylatex as rpy
 import generator as gen
 import q_generator as qgen
 import exercicitator as mexs  # modular exercicis
-from noms_apartats import nom_apartat as apartatllarg
+import picturator as pic  # imatges
+from noms import nom_apartat, nom_tema
 import wolframator as w
 
 
@@ -2037,15 +2038,16 @@ def ncient(opcions, solucions=False):
     return
 
 
-def polinomis(opcions, solucions=False):
+def crea_fitxa(opcions, solucions=False):
+    opcions = parse_multi_form(opcions)  # converteix la patranya que m'arriba del post en un dict com cal
+
     if "temafitxa" in opcions:
         temafitxa = opcions["temafitxa"]
     else:
         temafitxa = "misteri"
-
-    # getting opcions
     curs = opcions["curs"]
-    print("Generant pdf: {} ({})".format(temallarg(temafitxa), curs))
+
+    print(f"Generant pdf {nom_tema(temafitxa, prep=True)} ({curs})")
 
     if opcions["solucions"] == "sí":
         solucions = True
@@ -2054,105 +2056,7 @@ def polinomis(opcions, solucions=False):
     else:
         solulloc = ""
 
-    """
-    if "base" in opcions:
-        base = True
-        qmonomi = quantesson(opcions["qmonomi"], "px_monomi")
-        qinvent = quantesson(opcions["qinvent"], "px_invent")
-        qaval = quantesson(opcions["qaval"], "px_aval")
-        qfcomu = quantesson(opcions["qfcomu"], "px_fcomu")
-        fc1var = quantesvariant(opcions["fc1var"])
-        qcryp = quantesson(opcions["qcryp"], "px_cryp")
-        # ...
-        print(f"Monomis {qmonomi}, Inventar {qinvent}, Avaluar {qaval}, Fcomu {qfcomu}")
-    else:
-        base = False
-        qmonomi = 0
-        qinvent = 0
-        qaval = 0
-        qfcomu = 0
-        qcryp = 0
-        # ...
-
-    if "idnot" in opcions:
-        idnot = True
-        qidnot = quantesson(opcions["qidnot"], "px_idnot")
-        id1var = quantesvariant(opcions["id1var"])
-        qeidnot = quantesson(opcions["qeidnot"], "px_eidnot")
-        eid1var = quantesvariant(opcions["eid1var"])
-        eidord = quantesvariant(opcions["eidord"])
-
-        idnums = []
-        for x in range(3):
-            if f"idnt{x+1}" in opcions:
-                idnums.append(x+1)
-        if not idnums:
-            idnums = [1, 2, 3]
-
-        eidnums = []
-        for x in range(3):
-            if f"eidnt{x+1}" in opcions:
-                eidnums.append(x+1)
-        if not eidnums:
-            eidnums = [1, 2, 3]
-
-        if opcions["ordre"] == "ordre2":
-            ordre2 = True
-        else:
-            ordre2 = False
-        # ...
-        print(f"Id Notables {qidnot}, Endevinar {qeidnot}")
-    else:
-        idnot = False
-        qidnot = 0
-        qeidnot = 0
-
-    if "ops" in opcions:
-        ops = True
-        qsumes = quantesson(opcions["qsumes"], "px_sumes")
-        fosumes = quantesvariant(opcions["fosumes"])
-        qrestes = quantesson(opcions["qrestes"], "px_restes")
-        forestes = quantesvariant(opcions["forestes"])
-        qmultis = quantesson(opcions["qmultis"], "px_multis")
-        fomultis = quantesvariant(opcions["fomultis"])
-        qrufis = quantesson(opcions["qrufis"], "px_rufis")
-        forufis = quantesvariant(opcions["forufis"])
-        qdivis = quantesson(opcions["qdivis"], "px_divis")
-        fodivis = quantesvariant(opcions["fodivis"])
-        qresidu = quantesson(opcions["qresidu"], "px_residu")
-        qpresidu = quantesson(opcions["qpresidu"], "px_residu")
-        pres_par = []
-        for p in ["k", "m", "a"]:
-            if "pres"+p in opcions:
-                pres_par.append(p)
-        if not pres_par:
-            pres_par = ["k", "k", "m", "a"]
-
-        print(f"Sum {qsumes} [{fosumes}], Rest {qrestes} [{forestes}], Multi {qmultis} [{fomultis}]," +
-              f" Rufi {qrufis} [{forufis}], Divi {qdivis} [{fodivis}], Resi {qresidu}, P.Resi [{qpresidu}]")
-    else:
-        ops = False
-        qsumes = 0
-        qrestes = 0
-        qmultis = 0
-        qrufis = 0
-        qdivis = 0
-        qresidu = 0
-        qpresidu = 0
-
-    if "alges" in opcions:
-        alges = True
-        qfactor = quantesson(opcions["qfactor"], "px_factor")
-        fnok = quantesvariant(opcions["fnok"])
-        qalgeb = quantesson(opcions["qalgeb"], "px_algeb")
-        print(f"Factor {qfactor} [{fnok}], Algeb {qalgeb}")
-    else:
-        alges = False
-        qfactor = 0
-        qalgeb = 0
-    """
-
-    # PyLaTeX code
+    # ----- Setup PyLaTeX ----- #
     geometry = margins()
     doc = Document(documentclass="exam", geometry_options=geometry)
     doc.packages.append(Package('multicol'))  # TODO integrar a cada exercici quins necessita per triar-los automàtic
@@ -2167,11 +2071,8 @@ def polinomis(opcions, solucions=False):
     doc.append(NoEscape(
         r'\renewcommand{\thepartno}{\alphalph{\value{partno}}}'))  # per permetre doble lletra, 26*26 = 676 apartats max
 
-    # *************** DEBUGGING **************** #
-
-    opcions = parse_multi_form(opcions)  # converteix la patranya que m'arriba del post en un dict com cal
-    print(opcions)
-    for t in opcions["temes"]:
+    # ----- Si et cal veure l'arbre d'opcions, activa això: ----- #
+    """for t in opcions["temes"]:
         print(f"****** {t} *******".upper())
         for apartat in opcions["temes"][t]:
             print(f"{apartat}".upper())
@@ -2180,13 +2081,13 @@ def polinomis(opcions, solucions=False):
     print("..::ROOT::..")
     for apartat in opcions:
         if apartat != "temes":
-            print(f"- {apartat} : {opcions[apartat]}")
+            print(f"- {apartat} : {opcions[apartat]}")"""
 
-    # ************** PREPROCESSING ************** #
+    # ------ PREPROCESSING ----- #
 
-    tbuits = []  # temes per eliminar
+    tbuits = []  # temes per eliminar (perquè no tenen res dins)
     for tema in opcions["temes"]:
-        apbuits = []  # apartats per eliminar
+        apbuits = []  # apartats per eliminar (perquè no tenen res dins)
         for apartat in opcions["temes"][tema]:
             if "apartats" not in opcions or apartat not in opcions["apartats"][tema]:
                 apbuits.append(apartat)
@@ -2211,11 +2112,11 @@ def polinomis(opcions, solucions=False):
     for tema in tbuits:
         opcions["temes"].pop(tema, None)
 
-    # ************** FITXA EN SÍ ************** #
+    # ---------- FITXA EN SÍ --------- #
 
     if not len(opcions["temes"]):
-        doc.append("Doncs res, tu, fem una fitxa buida. Si jo estic aquí per complir ordres... "
-                   "però vaja, jo hauria agafat un paper en blanc, no? No sé... sembla més pràctic.")
+        doc.append("Doncs res, tu, fem una fitxa buida. Si jo estic aquí per complir ordres, no passa res.")
+        doc.append("...però vaja, jo potser hauria agafat un paper en blanc, no? No sé... sembla més pràctic.")
     else:
         qnum = 1  # num d'exercici
         sols_final = []
@@ -2226,7 +2127,7 @@ def polinomis(opcions, solucions=False):
                 bloctitle(doc, temallarg(tema).upper())
             for apartat in opcions["temes"][tema]:
                 needspace(doc, 12)
-                bloctitle(doc, apartatllarg(tema, apartat))
+                bloctitle(doc, nom_apartat(tema, apartat))
                 for exercici in opcions["temes"][tema][apartat]:
                     g = mexs.constructor_de(exercici)
                     sols = g(doc, opcions["temes"][tema][apartat][exercici])
@@ -2241,436 +2142,12 @@ def polinomis(opcions, solucions=False):
             metasolucions(doc, sols_final, breakpage=breakpage)
             pass
         end(doc, "questions")
-        pre2pkg(doc)
+        pre2pkg(doc)  # afegeix al doc els paquets especials que els exercicis hagin demanat
 
-
-    """
-    # preguntes
-    if any([base, idnot, ops, alges]):  # aquí tots els botons grossos
-        if any([qmonomi, qinvent, qaval, qfcomu, qcryp,
-                qidnot, qeidnot,
-                qsumes, qrestes, qmultis, qdivis, qrufis, qresidu, qpresidu,
-                qfactor, qalgeb]):  # aquí tots els tipus d'exercici
-
-            begin(doc, 'questions')
-
-            if base:
-                needspace(doc, 12)
-                bloctitle(doc, "Base")
-
-            if qmonomi:
-                n = qmonomi
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Indica el coeficient, la part literal, les variables i el grau dels següents monomis.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 4)  # columnes
-                for x in range(0, n):
-                    part(doc)
-                    text = gen.rand_multimon(random.choice([2, 2, 3]))
-                    doc.append(NoEscape(r"$%s$" % text))
-                    space(doc, "1cm")
-                end(doc, 'multicols')
-                space(doc, "0.2cm")
-                end(doc, 'parts')
-
-            if qinvent:
-                n = qinvent
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Inventa't un polinomi que compleixi cadascuna de les descripcions següents.")
-                begin(doc, 'parts')
-                for x in range(0, n):
-                    part(doc)
-                    text = en.px_invent()
-                    doc.append(NoEscape(r"%s" % text))
-                    space(doc, "1cm")
-                end(doc, 'parts')
-
-            if qaval:  # TODO merge a sense parts si les parts són només 1
-                n = qaval
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Avalua en el punt demanat.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    text, sol = gen.px(6, 1, solucions=True)
-                    doc.append(NoEscape(r"%s" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols)
-
-            if qfcomu:
-                n = qfcomu
-                needspace(doc, 8)
-                var = (n * fc1var) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Extreu factor comú de les expressions següents.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 2)  # columnes
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x==0):
-                            text = gen.px(0, 1, termes=2)  # una variable
-                        else:
-                            text = gen.px(0, 1, termes=3)
-                    else:
-                        if x < (var + n) // 2:
-                            text = gen.px(0, 2, termes=2)  # més variables
-                        else:
-                            text = gen.px(0, 2, termes=3)
-                    doc.append(NoEscape(r"$%s$" % text))
-                    space(doc, "1cm")
-                end(doc, 'multicols')
-                space(doc, "0.4cm")
-                end(doc, 'parts')
-
-            if qcryp:
-                n = qcryp
-                needspace(doc, 8)
-                question(doc, f"{4*n}")  # puntuació de l'exercici
-                doc.append("Extreu factor comú per desxifrar el missatge amagat.")
-                begin(doc, 'parts')
-                for x in range(0, n):
-                    part(doc)
-                    sol = en.factorcomu()
-                    # penalty negativa ajuda a saltar de línia entre paraules (si no sovint tallava pel signe)
-                    text = r"\ \ \penalty-200".join([f" ${x}$ " for x in crypt.fc_frase(sol)])
-                    doc.append(NoEscape(r"%s" % text))
-                    space(doc, "2cm")
-                end(doc, 'parts')
-
-            if idnot:
-                needspace(doc, 12)
-                bloctitle(doc, "Identitats notables")
-
-            if qidnot:
-                n = qidnot
-                needspace(doc, 8)
-                var = (n * id1var) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Desenvolupa les següents identitats notables.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 2)
-                n1ops = []  # opcions de coef b per les de nivell 1
-                idnumops = []
-                for x in [1, 2]:  # forço que el primer sigui (a±b)
-                    if x in idnums:
-                        idnumops.append(x)
-                        break
-                if n < 4 and 3 in idnums:  # obligo que surti almenys un tipus (a+b)(a-b)
-                    idnumops.append(3)
-                idnumops.reverse()
-                for x in range(0, n):
-                    # control de tipus (a+b) / (a-b) / (a+b)(a-b)
-                    if not idnumops:
-                        idnumops = idnums[:]
-                        random.shuffle(idnumops)
-                    idnum = [idnumops.pop()]  # la funció demana llista
-                    # control de repetits
-                    coefb = 0  # forçar el coeficient b
-                    if not n1ops:
-                        n1ops = [x+1 for x in range(10)]
-                        random.shuffle(n1ops)
-                    # càlculs
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):  # primer quart, fàcils (x+B)
-                            nivell = 1
-                            coefb = n1ops.pop()
-                        else:  # segon quart, (Ax+B) / (x^n+B)
-                            nivell = random.choice([2, 3])
-                    else:
-                        if x <= (n + var) // 2:  # tercer quart, multivariable (Axy+B) / (Ax+By)
-                            nivell = random.choice([4, 5])
-                        else:  # últim quart, doble multimonomi
-                            nivell = 6
-                    text = gen.idnotable(1, nivell, idnums=idnum, fcoefb=coefb)
-                    doc.append(NoEscape(r"$%s$" % text))
-                    space(doc, "0.4cm")
-                end(doc, 'multicols')
-                end(doc, 'parts')
-
-            if qeidnot:
-                n = qeidnot
-                needspace(doc, 8)
-                var = (n * eid1var) // 4
-                var2 = (n * eidord) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Esbrina quines identitats ens ha donat els següents resultats.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 2)
-                n1ops = []  # opcions de coef b per les de nivell 1
-                idnumops = []
-                for x in [1, 2]:  # forço que el primer sigui (a±b)
-                    if x in eidnums:
-                        idnumops.append(x)
-                        break
-                if n < 4 and 3 in eidnums:  # forço fer almenys un tipus (a+b)(a-b)
-                    idnumops.append(3)
-                idnumops.reverse()
-                ordenat = True
-
-                for x in range(0, n):
-                    # control de tipus (a+b) / (a-b) / (a+b)(a-b)
-                    if not idnumops:
-                        idnumops = eidnums[:]
-                        random.shuffle(idnumops)
-                    idnum = [idnumops.pop()]  # la funció demana llista
-                    # control de repetits
-                    coefb = 0  # forçar el coeficient b
-                    if not n1ops:
-                        n1ops = [x + 1 for x in range(10)]
-                        random.shuffle(n1ops)
-                    # càlculs
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):  # primer 'quart', fàcils (x+B)
-                            nivell = 1
-                            coefb = n1ops.pop()
-                        else:  # segon 'quart', (Ax+B) / (x^n+B)
-                            nivell = random.choice([2, 3])
-                    else:  # la resta, multivariable (Axy+B) / (Ax+By)
-                        nivell = random.choice([4, 5])
-                    if x > var2:
-                        ordenat = False
-                    text = gen.idnotable(2, nivell, idnums=idnum, fcoefb=coefb, ordenat=ordenat, ordre2=ordre2)
-                    doc.append(NoEscape(r"$%s$" % text))
-                    space(doc, "0.4cm")
-                end(doc, 'multicols')
-                end(doc, 'parts')
-
-            if ops:
-                needspace(doc, 12)
-                bloctitle(doc, "Operacions amb polinomis")
-
-            if qsumes:
-                n = qsumes
-                needspace(doc, 8)
-                var = (n * fosumes) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Fes les següents sumes de polinomis.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            text, sol = gen.px(1, 1, solucions=True)  # ordenat complet
-                        else:
-                            text, sol = gen.px(1, 2, solucions=True)  # ordenat incomplet
-                    else:
-                        text, sol = gen.px(1, 3, solucions=True)  # desordenat
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols, mates=True)
-
-            if qrestes:
-                n = qrestes
-                needspace(doc, 8)
-                var = (n * forestes) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Fes les següents restes de polinomis.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            if x < 3:
-                                noneg = True
-                            else:
-                                noneg = False
-                            text, sol = gen.px(2, 1, noneg=noneg, solucions=True)  # ordenat complet
-                        else:
-                            text, sol = gen.px(2, 2, solucions=True)  # ordenat incomplet
-                    else:
-                        text, sol = gen.px(2, 3, solucions=True)  # desordenat
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols, mates=True)
-
-            if qmultis:
-                n = qmultis
-                needspace(doc, 8)
-                var = (n * fomultis) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Fes les següents multiplicacions de polinomis.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            text, sol = gen.px(3, 1, solucions=True)  # ordenat complet
-                        else:
-                            text, sol = gen.px(3, 2, solucions=True)  # ordenat
-                    else:
-                        if x < (n + var) // 2:
-                            text, sol = gen.px(3, 3, solucions=True)  # amb t-indep
-                        else:
-                            text, sol = gen.px(3, 4, solucions=True)  # pot sense t-indep
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols, mates=True)
-
-            if qrufis:
-                n = qrufis
-                needspace(doc, 8)
-                var = (n * forufis) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Fes les següents divisions aplicant la regla de Ruffini.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            if x == 0:
-                                text, sol = gen.px(4, 1, solucions=True)  # ordenat complet exacte
-                            else:
-                                text, sol = gen.px(4, 2, solucions=True)  # ordenat complet
-                        else:
-                            text, sol = gen.px(4, 3, solucions=True)  # ordenat
-                    else:
-                        text, sol = gen.px(4, 4, solucions=True)  # desordenat
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols)
-
-            if qdivis:
-                n = qdivis
-                needspace(doc, 8)
-                var = (n * fodivis) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Fes les següents divisions de polinomis.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            if x == 0:
-                                text, sol = text, sol = gen.px(5, 1, solucions=True)  # ordenat complet exacte
-                            else:
-                                text, sol = gen.px(5, 2, solucions=True)  # ordenat complet
-                        else:
-                            text, sol = gen.px(5, 3, solucions=True)  # ordenat
-                    else:
-                        text, sol = gen.px(5, 4, solucions=True)  # desordenat
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols)
-
-            if qresidu:  # TODO merge sense parts si n=1
-                n = qresidu
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Calcula el residu.")
-                begin(doc, 'parts')
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    text, sol = gen.px(6, 2, solucions=True)
-                    doc.append(NoEscape(r"%s" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols)
-
-            if qpresidu:
-                n = qpresidu
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Calcula en cada cas el valor del paràmetre que fa que la divisió sigui exacta.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 2)
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    par = random.choice(pres_par)
-                    text, sol = gen.px(106, min(x // max(n//6, 1) + 1, 6), solucions=True, par=par)  # una mica de cada tipus
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'multicols')
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols)
-
-            if alges:
-                needspace(doc, 12)
-                bloctitle(doc, "Factoritzar i fraccions algebraiques")
-
-            if qfactor:
-                n = qfactor
-                needspace(doc, 8)
-                var = (n * fnok) // 4
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Factoritza els polinomis següents.")
-                begin(doc, 'parts')
-                begin(doc, 'multicols', 2)
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    if x < var or (var and x == 0):
-                        if x < var // 2 or (var and x == 0):
-                            text, sol = gen.px(7, 1, solucions=True)  # sense fcomú ni K
-                        else:
-                            text, sol = gen.px(7, 2, solucions=True)  # sense K
-                    else:
-                        text, sol = gen.px(7, 3, solucions=True)  # amb tot
-                    doc.append(NoEscape(r"$%s$" % text))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'multicols')
-                end(doc, 'parts')
-                space(doc, "1cm")
-                blocsolus(doc, solucions, sols, mates=True)
-
-            if qalgeb:
-                n = qalgeb
-                needspace(doc, 8)
-                question(doc, f"{n}")  # puntuació de l'exercici
-                doc.append("Factoritza i simplifica les següents fraccions algebraiques.")
-                begin(doc, 'parts')
-                scale = 1.3
-                sols = []
-                for x in range(0, n):
-                    part(doc)
-                    text, sol = gen.px(8, solucions=True)
-                    doc.append(NoEscape(r"\scalebox{%s}{$%s$}" % (scale, text)))
-                    sols.append(sol)
-                    space(doc, "1cm")
-                end(doc, 'parts')
-                blocsolus(doc, solucions, sols, mates=True)
-
-            end(doc, 'questions')
-        else:
-            doc.append("Calia tirar-se tanta estona per no posar res? Potser no")
-    else:
-        doc.append("haha.. quina gràcia.. has fet un pdf sense res, que original...")
-    """
-
-    print(temafitxa)
-
-    doc.generate_pdf("deuresweb/static/pdfs/" + temallarg(temafitxa))
+    doc.generate_pdf("deuresweb/static/pdfs/" + nom_tema(temafitxa, pdf=True))
     print("PDF generat.")
 
-    return "/static/pdfs/" + temallarg(temafitxa) + ".pdf"
+    return "/static/pdfs/" + nom_tema(temafitxa, pdf=True) + ".pdf"
 
 
 def successions(opcions, solucions=False):
@@ -3664,6 +3141,7 @@ def playground(opcions, solucions=False):
     doc.packages.append(Package('isotope'))  # paquet per escriure isòtops
     doc.packages.append(Package('longtable'))
     doc.packages.append(Package('array'))
+    doc.packages.append(Package('tikz'))  # dibuixos
     doc.packages.append(NoEscape(r"\usepackage[catalan]{babel}"))  # ela geminada
 
     # header and footer
@@ -3752,6 +3230,22 @@ def playground(opcions, solucions=False):
     end(doc, "multicols")
     end(doc, 'parts')
 
+    # tikz
+    question(doc, "42")
+    doc.append("Bon dia, aquí tenim una pregunta dibuixada amb tikz.")
+    begin(doc, "multicols", 2)
+    begin(doc, "parts")
+    for _ in range(4):
+        part(doc)
+        a = random.randint(-5, 2)
+        b = a + random.randint(2, 8)
+        at, bt = (random.choice([True, False]) for _ in range(2))
+        tikz = pic.recta_interval(a, b, at, bt)
+        doc.append(NoEscape(tikz))
+    end(doc, "parts")
+    end(doc, "multicols")
+
+    # coses antigues
     question(doc, "20")  # pels sistemes (per la clau de l'esquerra) cal msmath
     doc.append("Resol aquests sistemes d'equacions de dues incògnites.")
     begin(doc, 'parts')
@@ -4153,11 +3647,15 @@ def quantesvariant(valor):
 # *************************** Common Blocks ******************************* #
 
 def margins():
-    return {"tmargin": "40mm", "lmargin": "15mm", "bmargin": "20mm", "rmargin": "15mm"}
+    return {"tmargin": "39mm", "lmargin": "15mm", "bmargin": "20mm", "rmargin": "15mm"}
 
 
 def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
     tema = tematitol(tema)
+    if 'curs' in opcions and opcions['curs'] != "Dificultat al Gust":
+        curs = f" - {opcions['curs']}"
+    else:
+        curs = ""
     # header and footer
     doc.preamble.append(Command('pagestyle', "headandfoot"))
     doc.preamble.append(Command('runningheadrule'))
@@ -4165,8 +3663,9 @@ def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
     doc.preamble.append(Command('firstpageheadrule'))
     doc.preamble.append(NoEscape(r"\SolutionEmphasis{\raggedright}"))  # (esto me lo sugirió uno en TeX.StackExchange)
     doc.preamble.append(NoEscape(
-        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa " + tema + r"\\ \large " + assig
-        + f" - {opcions['curs']} " r"\scriptsize \\ \hrulefill \\  \small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}"))
+        r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa " + tema + r"\\ \vspace*{1mm} \large " + assig
+        + f"{curs} " r"\scriptsize \\ \hrulefill \\  "
+        + r"\small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}"))
     doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
     doc.preamble.append(NoEscape(r"\footer{Total: \numpoints\ punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
 

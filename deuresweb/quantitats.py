@@ -37,8 +37,3 @@ def quantitats_de(nom):
 
 
 
-
-
-
-
-

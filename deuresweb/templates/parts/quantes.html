@@ -18,24 +18,26 @@
 <div class="form-group mb-0 ml-2">
     <label><b>{{title|default("Exercici 42")}}</b></label> {{hola}}
     <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons"
-         onchange="if(document.getElementById('{{name}}-qtria').checked){
+         onchange="if(document.getElementById('{{tema}}-{{apartat}}-{{name}}-qtria').checked){
                         $('#tria-collapse-{{name}}').collapse('show')
                       }else{
                         $('#tria-collapse-{{name}}').collapse('hide')
-                      }">
+                      };
+                   avisa_apartat_buit('{{tema}}-{{apartat}}');
+                    ">
       {% for n in range(7) %}
       {% if n == triat %}
         <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{tema}}-{{apartat}}-{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
       {% else %}
         <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
+            <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{tema}}-{{apartat}}-{{name}}-q{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
       {% endif %}
       </label>
       {% endfor %}
       <!-- Botó extra per triar la quantitat concreta tu mateix -->
       <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-        <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{name}}-qtria" value="tria" autocomplete="off"> #
+        <input type="radio" name="temes[{{tema}}][{{apartat}}][{{name}}][quantes]" id="{{tema}}-{{apartat}}-{{name}}-qtria" value="tria" autocomplete="off"> #
       </label>
     </div>
 </div>

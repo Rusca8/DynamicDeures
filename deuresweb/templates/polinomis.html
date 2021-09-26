@@ -9,158 +9,68 @@
     <input type="hidden" name="temafitxa" value="px" />  <!-- Tema de la fitxa (pel títol i tal) -->
     {% set ns.tema = "px" %}  <!-- Tema dels exercicis (podria canviar a mitja fitxa) -->
 
-    <div class="form-group">
-        <label>En quin curs estàs pensant?</label><br>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso1" value="1r d'ESO" autocomplete="off" disabled> 1ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso2" value="2n d'ESO" autocomplete="off" disabled> 2ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso3" value="3r d'ESO" autocomplete="off" disabled> 3ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso4" value="4t d'ESO" autocomplete="off" disabled> 4ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
-          </label>
-          <label class="btn btn-outline-secondary active">
-            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
-          </label>
-        </div>
-    </div>
+    <!-- Tria CURS -->
+    {% with amaga = true %}
+        {% include '/parts/triacurs.html' %}
+    {% endwith %}
 
-  <div class="form-group">
-    <label>Quins tipus d'exercici vols?</label><br>
-    <div class="btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opBase" aria-expanded="true" aria-controls="opBase">
-          <input type="checkbox" name="apartats[{{ns.tema}}][base]" autocomplete="off" id="base" value="base" checked> Base
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opID" aria-expanded="true" aria-controls="opID">
-          <input type="checkbox" name="apartats[{{ns.tema}}][idnot]" autocomplete="off" id="idnot" value="idnot" checked> Id. Notables
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opOps" aria-expanded="true" aria-controls="opOps">
-          <input type="checkbox" name="apartats[{{ns.tema}}][ops]" autocomplete="off" id="ops" value="ops" checked> Operar Polinomis
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opAlgs" aria-expanded="true" aria-controls="opAlgs">
-          <input type="checkbox" name="apartats[{{ns.tema}}][algeb]" autocomplete="off" id="algeb" value="algeb" checked> Algebraiques
-        </label>
-    </div>
-  </div>
+    <!-- Tria APARTATS -->
+    {% with apartats = ["base", "idnot", "ops", "algeb"] %}
+        {% include '/parts/triaapartats.html' %}
+    {% endwith %}
 
-  <div class="btn-group-toggle mt-2" data-toggle="buttons">
-    <label class="btn btn-sm btn-block btn-outline-info py-0 btn-mini" data-toggle="collapse" data-target=".punts-collapse">
-      <input type="checkbox" name="punts" autocomplete="off" id="punts" value="punts"> Escollir les puntuacions dels exercicis
-    </label>
-  </div>
+    <!-- Toggle PUNTUACIONS -->
+    {% include '/parts/togglepuntuacions.html' %}
+    <hr>
+    <!-- Tria SOLUCIONS -->
+    {% include '/parts/solucions.html' %}
 
-  <hr>
-
-  <div class="form-group mb-1">
-    <label class="mb-0">Incloure les solucions?</label>
-      <div class="btn-group btn-group-toggle ml-1" data-toggle="buttons">
-          <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-            <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
-          </label>
-          <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-            <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
-          </label>
-      </div>
-  </div>
-
-  <div class="form-group mb-0 ml-4">
-    <label class="mb-0"><i>...on les posem?</i></label>
-      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-            <input type="radio" name="solulloc" id="solulloc1" value="intercalat" autocomplete="off" checked> intercalat
-          </label>
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-            <input type="radio" name="solulloc" id="solulloc2" value="final" autocomplete="off"> al final
-          </label>
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-            <input type="radio" name="solulloc" id="solulloc3" value="apart" autocomplete="off"> a part
-          </label>
-      </div>
-  </div>
-  <!-- Faig que l'avís sobre les solucions aparegui només en aquests que tenen solució. -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-       $('#solusinfo').addClass('show');
-    });
-  </script>
 {% endblock %}
-
 {% block extres %}
-<div class="collapse show" id="opBase">
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">Base</h5>
-          {% with apartat = "base" %}
-            {% include '/parts/exs/px_base_partsmonomi.html' %}
-            {% include '/parts/exs/px_base_inventa.html' %}
-            {% include '/parts/exs/px_base_avalua.html' %}
-            {% include '/parts/exs/px_base_factorcomu.html' %}
-            {% include '/parts/exs/px_base_desxifra.html' %}
-          {% endwith %}
-      </div>
-    </div>
-</div>
 
-<!-- - - - - - - - - - - - - - - - - - - - ID NOTABLES - - - - - - - - - - - - - - - - - - - - -->
+    {% with apartat = "base",
+            exercicis = [
+                'px_base_partsmonomi',
+                'px_base_inventa',
+                'px_base_avalua',
+                'px_base_factorcomu',
+                'px_base_desxifra',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<div class="collapse show" id="opID">
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">Identitats Notables</h5>
-        {% with apartat = "idnot" %}
-            {% include '/parts/exs/px_idnot_identitat.html' %}
-            {% include '/parts/exs/px_idnot_endevinaidentitat.html' %}
-        {% endwith %}
-      </div>
-    </div>
-</div>
+    {% with apartat = "idnot",
+            exercicis = [
+                'px_idnot_identitat',
+                'px_idnot_endevinaidentitat',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<!-- - - - - - - - - - - - - - - - - - - - OPERAR - - - - - - - - - - - - - - - - - - - - -->
+    {% with apartat = "ops",
+            exercicis = [
+                'px_ops_suma',
+                'px_ops_resta',
+                'px_ops_multiplica',
+                'px_ops_divideixruffini',
+                'px_ops_divideix',
+                'px_ops_teoremaresidu',
+                'px_ops_parametreresidu',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<div class="collapse show" id="opOps">
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">Operar amb polinomis</h5>
-        {% with apartat = "ops" %}
-            {% include '/parts/exs/px_ops_suma.html' %}
-            {% include '/parts/exs/px_ops_resta.html' %}
-            {% include '/parts/exs/px_ops_multiplica.html' %}
-            {% include '/parts/exs/px_ops_divideixruffini.html' %}
-            {% include '/parts/exs/px_ops_divideix.html' %}
-            {% include '/parts/exs/px_ops_teoremaresidu.html' %}
-            {% include '/parts/exs/px_ops_parametreresidu.html' %}
-        {% endwith %}
-      </div>
-    </div>
-</div>
+    {% with apartat = "algeb",
+            exercicis = [
+                'px_algeb_factoritza',
+                'px_algeb_simplifica',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<!-- - - - - - - - - - - - - - - - - - - - ALGEBRAIQUES - - - - - - - - - - - - - - - - - - - - -->
-
-<div class="collapse show" id="opAlgs">
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">Fraccions Algebraiques</h5>
-        {% with apartat = "algeb" %}
-            {% include '/parts/exs/px_algeb_factoritza.html' %}
-            {% include '/parts/exs/px_algeb_simplifica.html' %}
-        {% endwith %}
-      </div>
-    </div>
-</div>
 {% endblock %}
 {% block jsextra %}
-<script>
-    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
-</script>
+    <script>
+        //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+    </script>
 {% endblock %}

@@ -1,0 +1,33 @@
+<div class="form-group mb-1">
+  <label class="mb-0">Incloure les solucions?</label>
+  <div class="btn-group btn-group-toggle ml-1" data-toggle="buttons">
+      <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+        <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
+      </label>
+      <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+        <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
+      </label>
+  </div>
+</div>
+
+<div class="form-group mb-0 ml-4">
+  <label class="mb-0"><i>...on les posem?</i></label>
+  <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+      <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
+        <input type="radio" name="solulloc" id="solulloc1" value="intercalat" autocomplete="off" checked> intercalat
+      </label>
+      <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+        <input type="radio" name="solulloc" id="solulloc2" value="final" autocomplete="off"> al final
+      </label>
+      <label class="btn btn-outline-info btn-sm py-0 btn-mini">
+        <input type="radio" name="solulloc" id="solulloc3" value="apart" autocomplete="off"> a part
+      </label>
+  </div>
+</div>
+
+<!-- Si hi ha solucions, mostro l'avís -->
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+       $('#solusinfo').addClass('show');
+    });
+</script>
