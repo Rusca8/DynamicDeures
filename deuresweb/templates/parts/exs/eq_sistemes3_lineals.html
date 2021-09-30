@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SISTEMES3_LINEALS
+ #    Sistemes d'equacions lineals amb tres incògnites
+ #}
+
+{% with title="Lineals", name="EQ_SISTEMES3_LINEALS" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar un coeficient unitat?", name="coef_unitari" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

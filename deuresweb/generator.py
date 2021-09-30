@@ -4739,5 +4739,5 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(5):
+for x in range(0):
     print(px(106, 6, par="k"))

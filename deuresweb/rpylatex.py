@@ -126,10 +126,11 @@ def pre2pkg(doc):
 
         Packages:
             'graphicx' - Per fer més grans o petits els textos de mates (scalebox)
+            'amssymb' - Per tenir el símbol \nexists
     """
     try:
         for pkg in doc.prepkg:
-            print(f"PER EXEMPLE {pkg}")
+            print(f"Adding pkg... ({pkg})")
             if pkg in ["llista_de_pkgs_estranys"]:
                 ...
             else:
@@ -320,6 +321,7 @@ def metasolucions(doc, llista, breakpage=True):
 
     :param doc: Document on afegirem les coses
     :param llista: Llista de solucions. Cada solució de la llista té l'estructura [qnum, [enunciat, solu<text>]]
+    :param breakpage: True = començar les solucions en plana nova
     """
     if breakpage:
         doc.append(NoEscape(r"\newpage"))
@@ -327,7 +329,7 @@ def metasolucions(doc, llista, breakpage=True):
 
     for ex in llista:
         if ex[1][1]:
-            doc.append(f"{ex[0]}. {ex[1][0]}")
+            doc.append(NoEscape(f"{ex[0]}. {ex[1][0]}"))
             doc.append(NoEscape(r"\par"))
             doc.append(NoEscape(f"{ex[1][1]}"))
             doc.append(NoEscape(r"\par"))

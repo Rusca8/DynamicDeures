@@ -3,14 +3,19 @@
 
 {% set tema = ns.tema|default("tema", true) %}
 {% set apartats = apartats|default(["Falten", "Els", "Apartats"], true) %}
+{% set desmarcats = desmarcats|default([], true) %}
+
+{% set ns.apartats_desmarcats = ns.apartats_desmarcats|default({}, true) %}
+{% do ns.apartats_desmarcats.update({tema: desmarcats}) %}
 
 <div class="form-group">
     <label>Quins tipus d'exercici vols?</label><br>
     <div class="btn-group-toggle" data-toggle="buttons">
         {% for apartat in apartats %}
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" data-target="#opcions-{{tema}}-{{apartat}}"
+            {% set actiu = apartat not in desmarcats %}
+            <label class="btn btn-sm btn-outline-secondary {{'active' if actiu}}" data-toggle="collapse" data-target="#opcions-{{tema}}-{{apartat}}"
                id="pop-{{tema}}-{{apartat}}" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="apartats[{{tema}}][{{apartat}}]" autocomplete="off" id="{{tema}}-{{apartat}}" value="{{apartat}}" checked>
+            <input type="checkbox" name="apartats[{{tema}}][{{apartat}}]" autocomplete="off" id="{{tema}}-{{apartat}}" value="{{apartat}}" {{'checked' if actiu}}>
             {{ nom_apartat(tema, apartat, btn=True) }}
         </label>
         {% endfor %}

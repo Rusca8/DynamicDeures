@@ -6,7 +6,9 @@
 {% set apartat = apartat|default("apartat", true) %}
 {% set exercicis = exercicis|default([], true) %}
 
-<div class="collapse show" id="opcions-{{tema}}-{{apartat}}">
+{% set desmarcat = tema in ns.apartats_desmarcats|default([], true) and apartat in ns.apartats_desmarcats[tema] %}
+
+<div class="collapse {{'show' if not desmarcat}}" id="opcions-{{tema}}-{{apartat}}">
     <div class="card mb-2">
       <div class="card-body pt-3 pb-2">
         <h5 class="card-title">{{ nom_apartat(ns.tema, apartat) }}</h5>

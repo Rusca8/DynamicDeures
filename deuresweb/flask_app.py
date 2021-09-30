@@ -12,6 +12,7 @@ from quantitats import quantitats_de
 from noms import nom_apartat, nom_tema
 
 app = Flask(__name__, template_folder="templates/")
+app.jinja_env.add_extension('jinja2.ext.do')
 
 
 @app.context_processor
@@ -51,18 +52,20 @@ def indexvar():
 @app.route("/equacions/", methods=["GET", "POST"])
 def equacions():
     if request.method == "POST":
-        """g.equacions(request.form)
-        """
-        try:
-            g.equacions(request.form)  # genera el pdf amb latex
-        except:
-            print("Error Equacions")
-            tele.error("eq")
-            return redirect("/latex_error/equacions")
-        tele.feedback("eq", request.form)
-        return redirect("/pdf/eq")
+        if app.debug:
+            print("(Debug mode on...)")
+            url = g.crea_fitxa(request.form)
+        else:
+            try:
+                url = g.crea_fitxa(request.form)
+            except Exception as exc:
+                print(f"Error Equacions ({exc})")
+                tele.error("eq")
+                return redirect("/latex_error/polinomis")
+            tele.feedback("eq", request.form)
+        return redirect(url)
     else:
-        return render_template("equacions.html", textbotgen="Generar fitxa!")
+        return render_template("equacions.html")
 
 
 @app.route("/enters/", methods=["GET", "POST"])

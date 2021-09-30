@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_PRIMER_SIMPLESENTERA
+ #    Equacions simples de primer grau amb divisió entera
+ #}
+
+{% with title="Simples divisió entera", name="EQ_PRIMER_SIMPLESENTERA" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar coeficient positiu?", name="coeficient_positiu" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

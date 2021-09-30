@@ -22,6 +22,19 @@ import quantitats as qtats
 def constructor_de(nom):
     """Retorna la funció que cal fer servir per construir l'exercici donat."""
     exercicis = {
+        # ********** EQ ********** #
+        "EQ_BASE_IDENTITATOEQUACIO": eq_base_identitatoequacio,
+        "EQ_PRIMER_DENOMINADORS": eq_primer_denominadors,
+        "EQ_PRIMER_OPERAIRESOL": eq_primer_operairesol,
+        "EQ_PRIMER_SIMPLESENTERA": eq_primer_simplesentera,
+        "EQ_PRIMER_SIMPLESNODIVIDIR": eq_primer_simplesnodividir,
+        "EQ_SEGON_COMPLETES": eq_segon_completes,
+        "EQ_SEGON_INCOMPLETES": eq_segon_incompletes,
+        "EQ_SEGON_OPERAIRESOL": eq_segon_operairesol,
+        "EQ_SISTEMES3_LINEALS": eq_sistemes3_lineals,
+        "EQ_SISTEMES_LINEALS": eq_sistemes_lineals,
+        "EQ_SISTEMES_LINEALSGRAFIC": eq_sistemes_linealsgrafic,
+        "EQ_SISTEMES_NOLINEALS": eq_sistemes_nolineals,
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": px_algeb_factoritza,
         "PX_ALGEB_SIMPLIFICA": px_algeb_simplifica,
@@ -42,6 +55,290 @@ def constructor_de(nom):
     }
     return exercicis.get(nom, exercici_no_trobat)  # .get(key, default)
 
+
+# ************************ EQ ************************** #
+
+def eq_base_identitatoequacio(doc, opcions):
+    enunciat = "Digues si les següents igualtats són identitats o equacions."
+    enunsols = "Identitat vs equació."
+    g = [
+        lambda: gen.eq_base(10, 1, solucions=True),                         # Ax+B = C(x+D)
+        lambda: gen.eq_base(10, random.choice([1, 2]), solucions=True),     # A(x+B)+Cx = D(x+E)+Fx
+        lambda: gen.eq_base(10, random.choice([1, 2, 3]), solucions=True),  # (x+A)(x-A)+B = x^2+C
+        lambda: gen.eq_base(10, 3, solucions=True),                         # (x+A)(x+B) = x^2+Cx+D
+        ]
+    p = P([[1, {"max": 1}], 1, 1, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=7,
+                          espai_final=2,
+                          mates_solus=True,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_primer_denominadors(doc, opcions):
+    enunciat = "Resol les següents equacions amb denominadors (no totes tenen resultat bonic!)."
+    enunsols = "Primer grau, amb denominadors."
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.eq(5, 2),  # no porta respostes perquè no quadra la solu llavor amb el generat
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=1.3,
+                          espai_min=10,
+                          espai_apartat=14,
+                          espai_final=4,
+                          mates_solus=True,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_primer_operairesol(doc, opcions):
+    enunciat = "Opera i resol les següents equacions de primer grau."
+    enunsols = "Primer grau, opera i resol."
+    g = [
+        lambda: gen.eq(3, 1, solucions=True),  # Sense parèntesis (6 termes)
+        lambda: gen.eq(4, 1, solucions=True),  # Ax+B = F(Cx+D)
+        lambda: gen.eq(4, 2, solucions=True),  # E(Ax+B) = F(Cx+D) + G
+        ]
+    pvar = quantilvar(opcions["var"]["sense_parentesis"])
+    p = P([2, 1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=14,
+                          espai_final=1,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_primer_simplesentera(doc, opcions):
+    enunciat = "Resol les següents equacions de primer grau (amb coeficient a la x)."
+    enunsols = "Primer grau, amb coeficient."
+    g = [
+        lambda: gen.eq(2, 2, solucions=True),  # A positiu
+        lambda: gen.eq(2, 3, solucions=True),  # qualsevol signe
+        ]
+    pvar = quantilvar(opcions["var"]["coeficient_positiu"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=14,
+                          espai_final=1,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_primer_simplesnodividir(doc, opcions):
+    enunciat = "Resol les següents equacions de primer grau (sense coeficient a la x)."
+    enunsols = "Primer grau, sense coeficient."
+    seeds = ampliable([x for x in range(-10, 11)])
+    g = [
+        lambda: gen.eq(1, 1, x=next(seeds), solucions=True),  # x a l'esquerra
+        lambda: gen.eq(1, 2, x=next(seeds), solucions=True),  # x on sigui
+        ]
+    p = P([1, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=7,
+                          espai_final=2,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_segon_completes(doc, opcions):
+    enunciat = "Resol les següents equacions de segon grau."
+    enunsols = "Segon grau, completes."
+
+    g = [
+        lambda: gen.eq(103, 1, solucions=True),  # A = 1, ordenada
+        lambda: gen.eq(103, 2, solucions=True),  # A = ±1
+        lambda: gen.eq(103, 3, solucions=True),  # normal
+        ]
+
+    pvar = quantilvar(opcions["var"]["a_unitari"])
+    p = P([1, 1, 2]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=14,
+                          espai_final=9,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_segon_incompletes(doc, opcions):
+    pkgs(doc, ['amssymb'])  # \nexists
+    enunciat = "Resol les següents equacions de segon grau incompletes."
+    enunsols = "Segon grau, incompletes."
+
+    s101, s102 = (ampliable([x for x in range(-10, 11) if x]) for _ in range(2))
+    s3_tipus = regenerable([0, 1])  # per anar alternant tipus pseudoaleatori quan són barrejades
+
+    var1 = quantilvar(opcions["var"]["existeix"])
+    s_exist = alt_var(opcions, var1)  # el porten totes les funcions per gastar del next (102 no el fa servir)
+
+    def f3():
+        if next(s3_tipus):
+            return gen.eq(101, 3, solucions=True, totexist=next(s_exist), x=next(s101))
+        else:
+            return gen.eq(102, 3, solucions=True, totexist=next(s_exist), x=next(s102))
+
+    g = [
+        lambda: gen.eq(101, 1, solucions=True, totexist=next(s_exist), x=next(s101)),  # fer arrel, zero dreta, exists
+        lambda: gen.eq(101, random.choice([2, 3]), solucions=True, totexist=next(s_exist), x=next(s101)),  # x on sigui
+        lambda: gen.eq(102, random.choice([2, 3]), solucions=True, totexist=next(s_exist), x=next(s102)),  # desacoblar
+        f3,
+        ]
+    p = P([[3, {"max": 2}], 0, 5, 4])  # 3/12, 8/12, 4
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=14,
+                          espai_final=8,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_segon_operairesol(doc, opcions):
+    enunciat = "Opera i resol les següents equacions de segon grau."
+    enunsols = "Segon grau, opera i resol."
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.eq(104, solucions=True),
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=14,
+                          espai_final=4,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_sistemes3_lineals(doc, opcions):
+    enunciat = "Resol aquests sistemes d'equacions lineals amb tres incògnites."
+    enunsols = "Sistemes 3D."
+
+    g = [
+        lambda: gen.sisteq(101, 1, solucions=True),  # reducció escalonada, coef x unitari a la primera eq
+        lambda: gen.sisteq(101, 2, solucions=True),  # reducció escalonada, coef x unitari en alguna eq
+        lambda: gen.sisteq(101, 3, solucions=True),  # algun coef unitari
+        lambda: gen.sisteq(101, 4, solucions=True),  # coef qualssevol
+        ]
+
+    pvar = quantilvar(opcions["var"]["coef_unitari"])
+    p = P([[1, {"max": 3}], 1, 1, 3]).flex(2, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_min=10,
+                          espai_apartat=5,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_sistemes_lineals(doc, opcions):
+    enunciat = "Resol aquests sistemes lineals fent servir algun mètode analític."
+    enunsols = "Sistemes lineals, analíticament."
+
+    g = [
+        lambda: gen.sisteq(1, 1, solucions=True),  # la primera x coeficient 1
+        lambda: gen.sisteq(1, 2, solucions=True),  # algun coeficient ±1
+        lambda: gen.sisteq(1, 3, solucions=True),  # reducció qualsevol
+        ]
+
+    pvar = quantilvar(opcions["var"]["coef_unitari"])
+    p = P([[1, {"max": 3}], 2, 3]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_min=10,
+                          espai_apartat=5,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_sistemes_linealsgrafic(doc, opcions):
+    enunciat = "Resol gràficament els següents sistemes lineals de dues incògnites."
+    enunsols = "Sistemes lineals, gràficament."
+
+    g = [
+        lambda: gen.sisteq(2, 1, solucions=True),  # pendent enter
+        lambda: gen.sisteq(2, 2, solucions=True),  # pendent múltiple de 1/2
+        ]
+    p = P([1, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_min=10,
+                          espai_apartat=5,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_sistemes_nolineals(doc, opcions):
+    enunciat = "Resol els següents sistemes d'equacions no lineals."
+    enunsols = "Sistemes no lineals."
+
+    g = [
+        lambda: gen.sisteq(11, 1, solucions=True),  # x+y=C, x*y=E      (cap dels tres coefs)
+        lambda: gen.sisteq(11, 2, solucions=True),  # Ax+By=C, Dx*y=E    (un dels tres coefs)
+        lambda: gen.sisteq(11, 3, solucions=True),  # Ax+By=C, Dx*y=E   (dos dels tres coefs)
+        lambda: gen.sisteq(12, 1, solucions=True),  # x^2-y^2=C, x+y=F               (eq primer grau)
+        lambda: gen.sisteq(12, 2, solucions=True),  # Ax^2+By^2=C, Dx+Ey=F            (eq segon grau)
+        lambda: gen.sisteq(12, 3, solucions=True),  # Ax^2-By^2=C, Dx+Ey=F       (coefs "qualssevol")
+        ]
+    p = P([1, 1, 1, 1, 1, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_min=10,
+                          espai_apartat=5,
+                          espai_final=5,
+                          mates_solus=True,
+                          stretch_solus="1.3",
+                          )
+    return [enunsols, tsols]
+
+
+# ************************ PX ************************** #
 
 def px_algeb_factoritza(doc, opcions):
     enunciat = "Factoritza els polinomis següents."
@@ -67,12 +364,12 @@ def px_algeb_factoritza(doc, opcions):
 
 
 def px_algeb_simplifica(doc, opcions):
-    pkgs(doc, ['graphicx'])
     enunciat = "Factoritza i simplifica les següents fraccions algebraiques."
     enunsols = "Simplificar fraccions algebraiques."
     tsols = crea_exercici(doc, opcions,
                           lambda: gen.px(8, solucions=True),
                           enunciat=enunciat,
+                          cols=2,
                           scale=scale_per("fraccions"),
                           espai_apartat=10,
                           mates_solus=True,
@@ -189,8 +486,8 @@ def px_idnot_endevinaidentitat(doc, opcions):
         seed = next([s0_1, s0_2, s0_3][t - 1])  # agafo una llavor del tipus que ha tocat
         return gen.idnotable(2, 1, idnums=t, fcoefb=seed, ordenat=next(s_ord), ordre2=o2, solucions=True)
 
-    g = [
-        f0,  # g[0]: (x+B)   //   g[1]: (Ax+B) i (x^n+B)   //   g[2]: multivar (Axy+B) i (Ax+By)
+    g = [  # g[0]: (x+B)   //   g[1]: (Ax+B) i (x^n+B)   //   g[2]: multivar (Axy+B) i (Ax+By)
+        f0,
         lambda: gen.idnotable(2, next(ng1), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2, solucions=True),
         lambda: gen.idnotable(2, next(ng2), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2, solucions=True),
         ]
@@ -259,7 +556,7 @@ def px_ops_divideix(doc, opcions):
         lambda: gen.px(5, 2, solucions=True),  # ordenat complet
         lambda: gen.px(5, 3, solucions=True),  # ordenat
         lambda: gen.px(5, 4, solucions=True),  # desordenat
-    ]
+        ]
     pvar = quantilvar(opcions["var"]["ordenat"])
     p = P([1, 1, 2, 4]).flex(2, pvar)
 
@@ -280,7 +577,7 @@ def px_ops_divideixruffini(doc, opcions):
         lambda: gen.px(4, 2, solucions=True),  # ordenat complet
         lambda: gen.px(4, 3, solucions=True),  # ordenat
         lambda: gen.px(4, 4, solucions=True),  # desordenat
-    ]
+        ]
     pvar = quantilvar(opcions["var"]["ordenat"])
     p = P([1, 1, 2, 4]).flex(2, pvar)
 
@@ -302,7 +599,7 @@ def px_ops_multiplica(doc, opcions):
         lambda: gen.px(3, 3, solucions=True),  # desordenat amb tots els t-indep
         lambda: gen.px(3, 4, solucions=True),  # desordenat amb mínim un t-indep
         lambda: gen.px(3, 5, solucions=True),  # desordenat pot sense t-indep
-    ]
+        ]
     pvar = quantilvar(opcions["var"]["ordenat"])
     p = P([2, 2, 1, 1, 3]).flex(1, pvar)
 
@@ -412,7 +709,7 @@ def exercici_no_trobat(doc, opcions):
 
 # ******************************* Esquelets ********************************* #
 def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", cols=1, scale=1,
-                  espai_apartat=4, espai_final=0, mates=True,
+                  espai_min=8, espai_apartat=4, espai_final=0, mates=True,
                   mates_solus=False, stretch_solus=None, es_spoiler=False):
     """Munta un exercici LaTeX (exercici sense varietat interna) a partir de les seves dades.
 
@@ -423,6 +720,7 @@ def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", 
     :param enunciat: l'enunciat que vols
     :param cols: quantitat de columnes que tindrà l'exercici
     :param scale: coeficient d'ampliació del text (per fer llegibles les fraccions, i tal)
+    :param espai_min: espai que necessito (i que si no el tinc vull saltar de pàgina)
     :param espai_apartat: espai vertical entre elements (mm) - per defecte 0.4 (una mica d'interlineat)
     :param espai_final: espai després del multicol (mm)
     :param mates: l'apartat és tot notació matemàtica (cal fer '$text$' en lloc de 'text')
@@ -446,7 +744,7 @@ def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", 
     except:
         punts = 0
 
-    needspace(doc, 8)
+    needspace(doc, espai_min)
     question(doc, f"{n*punts}")
     doc.append(enunciat)
 
@@ -476,6 +774,7 @@ def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", 
         if mates:
             text = f"${text}$"
         if scale != 1:
+            pkgs(doc, ['graphicx'])  # entro el pkg que cal per fer scale
             text = r"\scalebox{%s}{%s}" % (scale, text)
 
         doc.append(NoEscape(f"{text}"))

@@ -1,537 +1,82 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
 <div class="alert alert-info alert-sm py-1 mb-2" role="alert">
-    <small><b>Corregit:</b> ja no farà equacions repetides al l'exercici de simples sense dividir!</small>
+    <small><b>Nou:</b> Quantitats exactes (botó #), triar puntuacions dels exercicis i posar solucions al final.</small>
 </div>
 {% endblock %}
+
+{% set temafitxa = "eq" %}
+{% block titolfitxa %}Fitxa {{ nom_tema(temafitxa, prep=true) }}{% endblock %}
+
 {% block principals %}
-    <h4 id="titolTema">Fitxa d'Equacions...</h4>
-    <div class="form-group">
-        <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso1" value="1r d'ESO" autocomplete="off" disabled> 1ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso2" value="2n d'ESO" autocomplete="off" disabled> 2ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso3" value="3r d'ESO" autocomplete="off" disabled> 3ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="eso4" value="4t d'ESO" autocomplete="off" disabled> 4ESO
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="batc" value="Batxillerat Científic" autocomplete="off" disabled> BAT-C
-          </label>
-          <label class="btn btn-outline-secondary disabled">
-            <input type="radio" name="curs" id="bats" value="Batxillerat Social" autocomplete="off" disabled> BAT-S
-          </label>
-          <label class="btn btn-outline-secondary active">
-            <input type="radio" name="curs" id="pers" value="Dificultat al Gust" autocomplete="off" checked> Personalitza
-          </label>
-        </div>
-    </div>
+    <input type="hidden" name="temafitxa" value="{{temafitxa}}" />  <!-- Tema de la fitxa (pel títol i tal) -->
+    {% set ns.tema = "eq" %}  <!-- Tema dels exercicis (podria canviar a mitja fitxa) -->
 
-  <div class="form-group">
-    <label>Quins tipus d'exercici vols?</label><br>
-    <div class="btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opBase" aria-expanded="false" aria-controls="opBase"    tabindex="0" data-trigger="manual" id="pop_base" type="button" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="base" autocomplete="off" id="base" value="Base"> Base ✨
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq1" aria-expanded="true" aria-controls="opEq1"    tabindex="1" data-trigger="manual" id="pop_primer" type="button" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="primer" autocomplete="off" id="primer" value="Primer grau" checked> Primer grau
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opEq2" aria-expanded="true" aria-controls="opEq2"    tabindex="2" data-trigger="manual" id="pop_segon" type="button" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="segon" autocomplete="off" id="segon" value="Segon grau" checked> Segon grau
-        </label>
-        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opSist" aria-expanded="true" aria-controls="opSist"    tabindex="3" data-trigger="manual" id="pop_sistemes" type="button" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="sistemes" autocomplete="off" id="sistemes" value="Sistemes" checked> Sistemes ✨
-        </label>
-        <label class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#opSist3" aria-expanded="false" aria-controls="opSist"    tabindex="4" data-trigger="manual" id="pop_sistemes3" type="button" rel="popover" data-placement="top" data-content="">
-          <input type="checkbox" name="sistemes3" autocomplete="off" id="sistemes3" value="Sistemes 3D"> Sistemes 3D
-        </label>
-        <label ></label>
-    </div>
-  </div>
-  <br>
-  <hr>
+    <!-- Tria CURS -->
+    {% with amaga = true %}
+        {% include '/parts/triacurs.html' %}
+    {% endwith %}
 
-  <div class="form-group mb-0">
-    <label class="mb-0"><i>Incloure les solucions? (excepte denominador i les més directes)</i></label>
-      <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-            <input type="radio" name="solucions" id="solus1" value="no" autocomplete="off"> no
-          </label>
-          <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-            <input type="radio" name="solucions" id="solus2" value="sí" autocomplete="off" checked> sí
-          </label>
-      </div>
-  </div>
+    <!-- Tria APARTATS -->
+    {% with apartats = ["base", "primer", "segon", "sistemes", "sistemes3"],
+            desmarcats = ["base", "sistemes3"] %}
+        {% include '/parts/triaapartats.html' %}
+    {% endwith %}
+
+    <!-- Toggle PUNTUACIONS -->
+    {% include '/parts/togglepuntuacions.html' %}
+    <hr>
+    <!-- Tria SOLUCIONS -->
+    {% include '/parts/solucions.html' %}
+
 {% endblock %}
-
 {% block extres %}
-    {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
-    {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
-    {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
 
-    <!-- TODO NO ET PETIS AIXÒ AMB LES NOVETATS DE POLINOMIS, QUE FALTA AFEGIR-HI L'AVÍS (avisa_tot_no) -->
+    {% with apartat = "base",
+            exercicis = [
+                'eq_base_identitatoequacio',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<div class="collapse mb-1" id="opBase">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Base</h5>
+    {% with apartat = "primer",
+            exercicis = [
+                'eq_primer_simplesnodividir',
+                'eq_primer_simplesentera',
+                'eq_primer_operairesol',
+                'eq_primer_denominadors',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-        <div class="form-group mb-0 ml-2">
-            <label><b>Identitat vs Equació</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('base');">
-              {% for n in range(7) %}
-              {% set name = "qidvseq" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
+    {% with apartat = "segon",
+            exercicis = [
+                'eq_segon_incompletes',
+                'eq_segon_completes',
+                'eq_segon_operairesol',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-      </div>
-    </div>
-</div>
+    {% with apartat = "sistemes",
+            exercicis = [
+                'eq_sistemes_linealsgrafic',
+                'eq_sistemes_lineals',
+                'eq_sistemes_nolineals',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-<div class="collapse show mb-1" id="opEq1">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Equacions de primer grau</h5>
+    {% with apartat = "sistemes3",
+            exercicis = [
+                'eq_sistemes3_lineals',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
 
-        <div class="form-group mb-0 ml-2">
-            <label><b>Simples sense dividir</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              {% for n in range(7) %}
-              {% set name = "qsimples" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Simples divisió entera</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              {% for n in range(7) %}
-              {% set name = "qdsimples" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar coeficient positiu?</i></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noneg" id="noneg0" value="no" autocomplete="off"> no
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noneg" id="noneg1" value="poques" autocomplete="off"> les primeres
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                <input type="radio" name="noneg" id="noneg2" value="meitat" autocomplete="off" checked> la meitat
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noneg" id="noneg3" value="moltes" autocomplete="off"> la majoria
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noneg" id="noneg4" value="totes" autocomplete="off"> totes
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Opera i resol</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              {% for n in range(7) %}
-              {% set name = "q1polis" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label for="formParentesis"><i>Sense parèntesis?</i></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              {% set name = "sparent" %}
-              {% for n in range(5) %}
-                {% if n == 1 %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
-                {% else %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
-                {% endif %}
-                  </label>
-              {% endfor %}
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label for="formGroupRacios"><b>Amb denominadors</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('primer');">
-              {% for n in range(7) %}
-              {% set name = "q1racios" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-      </div>
-    </div>
-</div>
-
-
-<div class="collapse show mb-1" id="opEq2">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Equacions de segon grau</h5>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Incompletes</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              {% for n in range(7) %}
-              {% set name = "qincomps" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label><i>Evitar arrels negatives?</i></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              {% set name = "totexist" %}
-              {% for n in range(5) %}
-                {% if n == 1 %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}1" value="{{textvarv[n]}}" autocomplete="off" checked> {{textvar[n]}}
-                {% else %}
-                  <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}0" value="{{textvarv[n]}}" autocomplete="off"> {{textvar[n]}}
-                {% endif %}
-                  </label>
-              {% endfor %}
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Simples completes</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              {% for n in range(7) %}
-              {% set name = "qcompletes" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label><i>Forçar coeficient A unitari?</i></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noa" id="noa0" value="no" autocomplete="off"> no
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noa" id="noa1" value="poques" autocomplete="off"> les primeres
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                <input type="radio" name="noa" id="noa2" value="meitat" autocomplete="off" checked> la meitat
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noa" id="noa3" value="moltes" autocomplete="off"> la majoria
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="noa" id="noa4" value="totes" autocomplete="off"> totes
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Opera i resol</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('segon');">
-              {% for n in range(7) %}
-              {% set name = "qpolis" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-      </div>
-    </div>
-</div>
-
-
-<div class="collapse show mb-1" id="opSist">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Sistemes de dues incògnites</h5>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Lineals (gràficament) ✨</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
-              {% for n in range(7) %}
-              {% set name = "qgsist" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Lineals (analíticament)</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
-              {% for n in range(7) %}
-              {% set name = "qsist" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar un coeficient unitat?</i></label> <!-- si força les primeres del forçat són x -->
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef" id="nocoef0" value="no" autocomplete="off"> no
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef" id="nocoef1" value="poques" autocomplete="off"> les primeres
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                <input type="radio" name="nocoef" id="nocoef2" value="meitat" autocomplete="off" checked> la meitat
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef" id="nocoef3" value="moltes" autocomplete="off"> la majoria
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef" id="nocoef4" value="totes" autocomplete="off"> totes
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>No lineals</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes');">
-              {% for n in range(7) %}
-              {% set name = "qnsist" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-      </div>
-    </div>
-</div>
-
-<div class="collapse mt-b" id="opSist3">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Sistemes de tres incògnites</h5>
-
-        <div class="form-group mb-0 ml-2">
-            <label><b>Lineals</b></label>
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons" onchange="avisa_tot_no('sistemes3');">
-              {% for n in range(7) %}
-              {% set name = "qsist3" %}
-              {% if n == 2 %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off" checked> {{ text[n] }}
-              {% else %}
-                <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                    <input type="radio" name="{{name}}" id="{{name}}{{n}}" value="{{text[n]}}" autocomplete="off"> {{ text[n] }}
-              {% endif %}
-              </label>
-              {% endfor %}
-              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
-                <input type="radio" name="{{name}}" id="{{name}}9" value="tria" autocomplete="off" disabled> tria
-              </label>
-            </div>
-        </div>
-
-        <div class="form-group mb-1 ml-4">
-            <label for="formDivNegativa"><i>Forçar un coeficient unitat?</i></label> <!-- si força les primeres del forçat són x -->
-            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef3" id="nocoef30" value="no" autocomplete="off"> no
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef3" id="nocoef31" value="poques" autocomplete="off"> les primeres
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef3" id="nocoef32" value="meitat" autocomplete="off"> la meitat
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini active">
-                <input type="radio" name="nocoef3" id="nocoef33" value="moltes" autocomplete="off" checked> la majoria
-              </label>
-              <label class="btn btn-outline-info btn-sm py-0 btn-mini">
-                <input type="radio" name="nocoef3" id="nocoef34" value="totes" autocomplete="off"> totes
-              </label>
-            </div>
-        </div>
-
-      </div>
-    </div>
-</div>
 {% endblock %}
 {% block jsextra %}
-<script>
-    /* JQuery que activaria els tooltips (està pensat per seleccionar-los tots de cop si tenen rel="tooltip" a les dades)
-    $(document).ready(function() {
-        $('[rel="tooltip"]').tooltip();
-    }); (el tooltip és  */
-
-    $('.popover-dismiss').popover({  // amb això marxa si cliques a qualsevol lloc (però cal tabindex i data-trigger i que sigui a)
-        trigger: 'focus'
-    })
-
-    function avisa_tot_no(apartat){
-        switch(apartat){
-            case "base":
-                exs = ["qidvseq"];
-                break;
-            case "primer":
-                exs = ["qsimples", "qdsimples", "q1polis", "q1racios"];
-                break;
-            case "segon":
-                exs = ["qincomps", "qcompletes", "qpolis"];
-                break;
-            case "sistemes":
-                exs = ["qgsist", "qsist", "qnsist"];
-                break;
-            case "sistemes3":
-                exs = ["qsist3"];
-            default:
-                exs = [];
-                break;
-        }
-
-        if (exs.length == 0 || exs.length < 2) {
-            return;  // no val la pena avisar si n'ha tret un i prou (o si el switch ha caigut a default)
-        }
-
-        sense_exs = true;
-        for(let ex of exs){
-            quantes = document.querySelector('input[name="' + ex + '"]:checked').value;
-            //prompt(apartat + " " + ex + " :: " + quantes);
-            if(quantes != "no"){
-                sense_exs = false;
-            }
-        }
-        if(sense_exs){
-            pop_mostra(apartat);
-        }
-        return;
-    }
-
-    //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
-</script>
+    <script>
+        //amb inputs millor onchange (onclick no funciona). Si s'empana i igualment no va, refrescar hard la web amb Cmd+Shift+R
+    </script>
 {% endblock %}

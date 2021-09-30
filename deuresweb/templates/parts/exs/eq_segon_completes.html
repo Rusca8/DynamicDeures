@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SEGON_COMPLETES
+ #    Equacions de segon grau completes
+ #}
+
+{% with title="Simples completes", name="EQ_SEGON_COMPLETES" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar coeficient A unitari?", name="a_unitari" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

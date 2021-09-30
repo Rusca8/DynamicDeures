@@ -14,6 +14,13 @@ def nom_apartat(tema, apartat, btn=False):
             "idnot": ["Identitats notables", "Id. Notables"],
             "ops": ["Operacions amb polinomis", "Operar polinomis"],
         },
+        "eq": {
+            "base": ["Base", "Base"],
+            "primer": ["Equacions de primer grau", "Primer grau"],
+            "segon": ["Equacions de segon grau", "Segon grau"],
+            "sistemes": ["Sistemes de dues incògnites", "Sistemes"],
+            "sistemes3": ["Sistemes de tres incògnites", "Sistemes 3D"],
+        },
     }
     i = 1 if btn else 0
     default = [f"FALTA EL NOM DE L'APARTAT ({apartat})", f"BOT ({apartat})"]
@@ -28,6 +35,7 @@ def nom_tema(tema, prep=False, pdf=False):
     """
     temes = {
         "px": ["Polinomis", "de Polinomis", "polinomis"],
+        "eq": ["Equacions", "d'Equacions", "equacions"],
     }
     if pdf:
         i = 2

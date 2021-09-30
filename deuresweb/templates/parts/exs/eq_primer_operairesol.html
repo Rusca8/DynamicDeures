@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_PRIMER_OPERAIRESOL
+ #    Equacions de primer grau per operar i resoldre
+ #}
+
+{% with title="Opera i resol", name="EQ_PRIMER_OPERAIRESOL" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Sense parèntesis?", name="sense_parentesis" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

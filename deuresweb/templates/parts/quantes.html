@@ -23,7 +23,7 @@
                       }else{
                         $('#tria-collapse-{{name}}').collapse('hide')
                       };
-                   avisa_apartat_buit('{{tema}}-{{apartat}}');
+                   setTimeout(function(){avisa_apartat_buit('{{tema}}-{{apartat}}');}, 3000);
                     ">
       {% for n in range(7) %}
       {% if n == triat %}

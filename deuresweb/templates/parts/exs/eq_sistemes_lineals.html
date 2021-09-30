@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SISTEMES_LINEALS
+ #    Sistemes d'equacions lineals per resoldre analíticament
+ #}
+
+{% with title="Lineals (analíticament)", name="EQ_SISTEMES_LINEALS" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar un coeficient unitat?", name="coef_unitari" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

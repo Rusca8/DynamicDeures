@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SEGON_INCOMPLETES
+ #    Equacions de segon grau incompletes
+ #}
+
+{% with title="Incompletes", name="EQ_SEGON_INCOMPLETES" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar arrels negatives?", name="existeix" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

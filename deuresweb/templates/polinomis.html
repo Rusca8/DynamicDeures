@@ -4,9 +4,12 @@
     <small><b>Nou:</b> Quantitats exactes (botó #), triar puntuacions dels exercicis, posar solucions al final, i triar la frase amagada!</small>
 </div>
 {% endblock %}
-{% block titolfitxa %}Fitxa de Polinomis{% endblock %}
+
+{% set temafitxa = "px" %}
+{% block titolfitxa %}Fitxa de {{ nom_tema(temafitxa, prep=true) }}{% endblock %}
+
 {% block principals %}
-    <input type="hidden" name="temafitxa" value="px" />  <!-- Tema de la fitxa (pel títol i tal) -->
+    <input type="hidden" name="temafitxa" value="{{temafitxa}}" />  <!-- Tema de la fitxa (pel títol i tal) -->
     {% set ns.tema = "px" %}  <!-- Tema dels exercicis (podria canviar a mitja fitxa) -->
 
     <!-- Tria CURS -->

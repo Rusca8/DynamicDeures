@@ -11,6 +11,20 @@ un dels dos temes sigui més o menys la meitat de la nota).
 def punts_de(nom):
     """Retorna la puntuació per defecte (punts/apartat) de l'exercici escollit"""
     exercicis = {
+        # ********** EQ ********** #
+        "EQ_BASE_IDENTITATOEQUACIO": 1,
+        "EQ_PRIMER_DENOMINADORS": 3,
+        "EQ_PRIMER_OPERAIRESOL": 2,
+        "EQ_PRIMER_SIMPLESENTERA": 1,
+        "EQ_PRIMER_SIMPLESNODIVIDIR": 1,
+        "EQ_SEGON_COMPLETES": 3,
+        "EQ_SEGON_INCOMPLETES": 2,
+        "EQ_SEGON_OPERAIRESOL": 3,
+        "EQ_SISTEMES3_LINEALS": 5,
+        "EQ_SISTEMES_LINEALS": 4,
+        "EQ_SISTEMES_LINEALSGRAFIC": 4,
+        "EQ_SISTEMES_NOLINEALS": 5,
+
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": 4,
         "PX_ALGEB_SIMPLIFICA": 5,

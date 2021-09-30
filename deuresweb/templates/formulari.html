@@ -29,7 +29,7 @@
                     <!-- Prevent implicit submission of the form (https://stackoverflow.com/a/51507806/5093220) -->
                     <button type="submit" disabled style="display: none"></button>
                     <!-- Real submission button -->
-                    <button type="submit" class="btn btn-block btn-{% block gencolor %}primary{% endblock %}" onclick="pdfgenerat();">Genera!</button>
+                    <button type="submit" class="btn btn-block btn-{% block gencolor %}primary{% endblock %}" onclick="pdfgenerat();">Generar fitxa!</button>
                   </div>
                 </div>
 
@@ -56,30 +56,35 @@
     <script>
         function pdfgenerat(){
             curs = document.getElementById('formulari').elements['curs'].value;
-            document.getElementById('generat-text').innerHTML = "S'han generat els exercicis de {{ns.tema|default("(tema?)", true)}}.";
+            document.getElementById('generat-text').innerHTML = "S'han generat els exercicis {{nom_tema(ns.tema|default("(tema?)", true), prep=true)}}.";
             $('#generat').collapse('show');
         };
 
         function avisa_apartat_buit(apartat){
-            exercicis = document.querySelectorAll("[id^='" + apartat + "'][id$='-q0']")
-            for(let ex of exercicis){
-                if(!ex.checked){
-                    return
+            for(i=0;i<2;i++){
+                exercicis = document.querySelectorAll("[id^='" + apartat + "'][id$='-q0']")
+                for(let ex of exercicis){
+                    if(!ex.checked){
+                        return
+                    }
                 }
             }
-            //console.log("Ha desactivat tots els exercicis de l'apartat, aviso amb el popover.");
-            pop_mostra("pop-" + apartat);  // TODO passar la cosa d'afegir "pop-" a dins de pop_mostra
+            if(exercicis.length > 2){
+                console.log("Ha desactivat un per un tots els exercicis de l'apartat, aviso amb el popover.");
+                pop_mostra("pop-" + apartat);  // TODO passar la cosa d'afegir "pop-" a dins de pop_mostra
+            }
         }
 
         /* *************** POPOVERS ***************** */
 
         // Això en fa el setup (només carregar la pàgina)
         $(function () {
-            $('[rel="popover"]').popover()
+            $('[rel="popover"]').popover({trigger: "manual"})
         })
 
         // Això mostra el popover que jo demani
         function pop_mostra(quin){
+            console.log("Mostrant popover: " + quin);
             $("#" + quin).attr("data-content", "Aquí pots desactivar l'apartat sencer :)");
             $("#" + quin).attr("data-placement", "top");
             $("#" + quin).popover("show");
@@ -88,6 +93,7 @@
 
         // ...i això l'amaga (ho crido després de cert temps)
         function pop_hide(quin){
+            console.log("Amagant popover: " + quin);
             $("#" + quin).popover("hide");
         }
     </script>

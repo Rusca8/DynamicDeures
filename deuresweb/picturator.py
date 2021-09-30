@@ -32,7 +32,7 @@ def recta_interval(a, b, at=False, bt=False, trepitja=False, w=4, h=2):
         b = div
     elif linf:
         a = b - div
-    else:
+    elif rinf:
         b = a + div
 
     # canvas i línia
