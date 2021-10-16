@@ -235,15 +235,24 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
         return text
 
 
-def decimals(tipus, notac=1):
+def decimals(tipus, notac=1, fsigne=0):
     """Retorna un número decimal del tipus escollit
 
-    : tipus: 1 exacte, 2 mixt, 3 pur, 4 aleatori
+    :param tipus: 1 exacte, 2 mixt, 3 pur, 4 aleatori
     :param notac: notació (1 barra, 2 suspensiu)
+    :param fsigne: forçar signe (exemple de num amb mateix signe que es vol obtenir; 0 = no forçat)
     """
+    text = "42.42424242..."
+
+    if (not fsigne and moneda()) or fsigne > 0:
+        s = ""
+    else:
+        s = "-"
+
     if tipus in [1, 2, 3]:  # exacte, mixt, pur
         # part entera
         e = random.randint(0, random.choice([9, 12]))
+
         # decimals no periòdics
         if tipus == 3:  # pur (no en té)
             n = ""
@@ -253,11 +262,36 @@ def decimals(tipus, notac=1):
                 n += 1
         else:  # mixt (fins a un o dos decimals, 50%/50%)
             n = random.randint(0, random.choice([9, 99]))
+
         # part periòdica
         if tipus == 1:  # exacte (no en té)
             p = ""
-        else:  # fins a un, dos o tres decimals (50%/25%/25%)
-            p = random.randint(1, random.choice([9, random.choice([99, 999])]))
+        else:  # fins a un, dos o tres decimals (50%/25%/25%, però evito molts si n és llarg)
+            pmax = 99 if n and n > 9 else random.choice([99, 999])
+            p = random.randint(1, random.choice([9, pmax]))
+
+        # control
+        if p:  # p té control complet de la divisibilitat per 9, perquè (enp-en)%9 = p%9
+            if p > 10:  # forço divisible per 3 o 9
+                m9 = p % 9
+                if m9 > 4:
+                    m9 = m9-9
+                if abs(m9) < 3:  # per 9
+                    p += -m9
+                else:  # per 3
+                    m3 = p % 3
+                    if m3 == 2:
+                        m3 = -1
+                    p += - p % 3
+            elif n:  # forço divisible per 3
+                p += -p % 3
+        else:
+            if n % 5 and n % 2 and not (n < 10 and not e):
+                if n % 10 == 9:
+                    n -= 1
+                else:
+                    n += 1
+
         # muntatge
         if notac == 1:
             if p:
@@ -267,11 +301,18 @@ def decimals(tipus, notac=1):
         elif notac == 2:
             if p:
                 if len(f"{p}") < 3:
-                    p = f"{p}{p}{p}..."
+                    text = f"{e}.{n}{p}{p}{p}..."
                 else:
-                    p = f"{p}{p}..."
-            text = f"{e}.{n}{p}"
-        return text
+                    text = f"{e}.{n}{p}{p}..."
+        text = s + text
+
+        # solus
+        num = int(f"{e}{n}{p}") - int(f"{e}{n}") or int(f"{e}{n}")
+        den = int("".join(["9" for _ in f"{p}"] or "1") + "".join("0" for _ in f"{n}"))
+        num, den = fracsimple(num, den)
+        solu = s + r"\frac{%s}{%s}" % (num, den)
+
+        return text, solu
 
     elif tipus == 4:  # barrejats
         return decimals(random.randint(1, 4), notac=notac)
@@ -373,20 +414,20 @@ def ncient(tipus, nivell=1, direc=0, signes=0, termes=3):
     return text
 
 
-def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
+def frac(tipus, nivell=1, termes=2, dmax=6, divis=0, solucions=False):
     """
     Exercicis de fraccions
 
-    tipus = 1 sum/rest, 2 mul/div
-
-    nivell = 1 positiu, 2 pos/neg, 3 pot doble neg
-
-    termes = quantes fraccions
-
-    dmax = màx denom. (sum/rest), màx número (mul/div)
-
-    divis = 0 no, 1 random, 2 sempre
+    :param tipus: 1 sum/rest, 2 mul/div
+    :param nivell: 1 positiu, 2 pos/neg, 3 pot doble neg
+    :param termes: quantes fraccions
+    :param dmax: màx denominador (sum/rest), màx número (mul/div)
+    :param divis: 0 no, 1 random, 2 sempre
+    :param solucions: retornar solució
     """
+    text = "42/42"
+    n_sol = 0
+    d_sol = 0
 
     if tipus == 1:  # sumes i restes (a/b + c/d)
         text = "6/42+7/42"
@@ -398,16 +439,21 @@ def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
                 if x != 0:
                     if nivell == 1 or moneda():
                         if nivell == 3 and moneda():  # doble neg
-                            text += "-"
+                            s = "-"
                             a = -a
                         else:
-                            text += "+"
+                            s = "+"
                     else:
                         if moneda():
-                            text += "-"
+                            s = "-"
                         else:
-                            text += "+"
+                            s = "+"
                             a = -a
+                    text += s
+                    n_sol, d_sol = frac_op(1 if s == "+" else 2, n_sol, d_sol, a, b)
+                else:  # primera frac
+                    n_sol = a
+                    d_sol = b
                 text += "\\frac{" + f"{a}" + "}{" + f"{b}" + "}"
 
     elif tipus == 2:  # multis i divis
@@ -419,8 +465,10 @@ def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
                 if x != 0:
                     if divis == 0 or (divis == 1 and moneda()):
                         text += "\\cdot "
+                        op = 3  # multi (per les solus)
                     else:
                         text += "\\div "
+                        op = 4  # divi (per les solus)
                     if nivell == 1 or moneda():
                         if nivell == 3 and moneda():  # doble neg
                             a = -a
@@ -430,13 +478,49 @@ def frac(tipus, nivell=1, termes=2, dmax=6, divis=0):
                             a = -a
                         else:
                             b = -b
+                    n_sol, d_sol = frac_op(op, n_sol, d_sol, a, b)
+                else:  # primera frac
+                    n_sol = a
+                    d_sol = b
+
                 text += "\\frac{" + f"{a}" + "}{" + f"{b}" + "}"
+    if solucions:
+        return text, fraconum(n_sol, d_sol)
     return text
 
 
-def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2], segona=False):
+def frac_op(op, n1, d1, n2, d2):
+    """fa la operació demanada amb les fraccions
+
+    :param op: 1 suma, 2 resta, 3 multi, 4 divi
+    :param n1: numerador primera fracció
+    :param d1: denominador primera fracció
+    :param n2: numerador segona fracció
+    :param d2: denominador segona fracció
     """
-    Genera un exercici de fraccions combinades
+    if op == 1:  # suma
+        return fracsimple(n1*d2+n2*d1, d1*d2)
+    elif op == 2:
+        return fracsimple(n1*d2-n2*d1, d1*d2)
+    elif op == 3:
+        return fracsimple(n1*n2, d1*d2)
+    else:
+        return fracsimple(n1*d2, d1*n2)
+
+
+def fracmix(num="?", den="?", inception=1, op=0, doblesigne=True, ops=[1, 2],
+            calpowsqr=False, solucions=False):
+    """
+    Genera un exercici de fraccions combinades (i.e. activa rfracmix deixant constància del nivell més alt)
+    """
+    return rfracmix(num, den, inception, op=op, doblesigne=doblesigne, out=True, ops=ops,
+                    calpowsqr=calpowsqr, solucions=solucions)
+
+
+def rfracmix(num="?", den="?", inception=1, op=0, previ=0, doblesigne=True, out=False, ops=[1, 2], fet=set(),
+            segona=False, calpowsqr=False, solucions=False):
+    """
+    Genera recursivament un exercici de fraccions combinades
 
     :param num: numerador del resultat
     :param den: denominador del resultat
@@ -444,19 +528,25 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1
     :param op: operació del nivell actual (en cas que vingui predefinida)
     :param previ: de quina operació vinc (per controlar cicles incòmodes i parèntesis)
     :param doblesigne: (sense ús actualment)
-    :param out: nivell d'abstracció més alt (per gestionar la sortida)
+    :param out: nivell d'abstracció més alt (per gestionar la sortida)  # TODO bool=false excepte la primera crida
     :param ops: 1 sumrest, 2 muldiv (3 div), 4 sqrt, 5 pow
+    :param fet: acumula les opcions escollides (per veure si hi ha mínim algun sqrt o pow)
     :param segona: marca les fraccions de la suma que no són la primera (per posar signe també si és +)
+    :param calpowsqr: True és que cal que hi hagi pow o sqr sí o sí
+    :param solucions: retornar solucions de l'exercici
     :return:
     """
+    num = num if num != "?" else randomfracnum(3)  # si no venien pretriats els trio
+    den = den if den != "?" else randomfracnum(3)
+
     ops = ops[:]  # operacions seleccionades al formulari
     quadrats = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144]
     text = "4/2+42/6*3/42"
-    if out == 0:
-        out = inception
+
+    if out:  # nivell més extern de la recursió (primera vegada)
+        fet = set()
 
     if inception < 1:  # tanca ja
-        inception = 0
         if den == 1:
             text = f"{num}"
             if previ in [2, 3] and num < 0 and segona:
@@ -465,29 +555,37 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1
             if 5 in ops and all([n in quadrats for n in [num, den]]) and num*den > 0:
                 # (no val la pena adaptar això per coses tipus -1/4, que sembla que no surten sovint)
                 text = "(\\frac{" + f"{isqrt(abs(num))}" + "}{" + f"{isqrt(abs(den))}" + "})^2"
+                fet.add(5)
             else:
                 if 5 in ops:  # si permeto quadrats, faig quadrats dels nums individuals
                     if num > 1 and num in quadrats:
                         num = f"{isqrt(abs(num))}^2"
+                        fet.add(5)
                     elif num < 1 and -num in quadrats:
                         num = f"-{isqrt(abs(num))}^2"
+                        fet.add(5)
                     elif den > 1 and den in quadrats:
                         den = f"{isqrt(abs(den))}^2"
+                        fet.add(5)
                     elif den < 1 and -den in quadrats:
                         den = f"-{isqrt(abs(den))}^2"
+                        fet.add(5)
                 text = "\\frac{" + f"{num}" + "}{" + f"{den}" + "}"
 
-    else:  # no tanca: trio operació
-        if op == 0:
-            if 5 in ops and previ != 4 and (all([n in quadrats for n in [num, den]])
-                                            or all([n in quadrats for n in [-num, -den]])):  # crec que això no aplica
+    else:  # no tanca
+        if op == 0:  # trio operació (no n'hi havia de triada)
+            if 5 in ops and previ != 4 and (all([abs(n) in quadrats for n in [num, den]])
+                                            and not num == den == 1
+                                            and (num*den > 0 or (out and not 4 in ops))):  # si és la de fora puc +/-
                 op = 5  # faig quadrat de tot
-            elif 4 in ops and previ not in [4, 5] and all([0 < n < 5 for n in [num, den]]):  # positius 1-4
+            elif 4 in ops and previ not in [4, 5] and all([0 < n < 8 for n in [num, den]]):  # positius 1-7
                 op = 4  # arrel (quan no deixa nums molt xungos)
             elif previ == 1 and 2 in ops:
                 op = 2
-            else:
+            if not op:
                 op = random.randint(1, 2)
+
+        fet.add(op)
 
         if op == 1:  # sum/rest  (a/b + c/d (+e/f)) -> N = ad+cb (+e), D = bd
             # denominador
@@ -561,17 +659,17 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1
                 b, d = d, b
 
             # muntatge
-            text = f"{fracmix(a, b, inception - 1, previ=op, out=out, ops=ops)}"
+            text = f"{rfracmix(a, b, inception - 1, previ=op, ops=ops, fet=fet)}"
             if c * d < 0:  # frac negativa
-                text += f"-{fracmix(-c, d, inception - 1, previ=op, out=out, ops=ops)}"
+                text += f"-{rfracmix(-c, d, inception - 1, previ=op, ops=ops, fet=fet)}"
             else:  # frac positiva
-                text += f"+{fracmix(c, d, inception - 1, previ=op, out=out, ops=ops)}"
+                text += f"+{rfracmix(c, d, inception - 1, previ=op, ops=ops, fet=fet)}"
 
             if diff:
                 if e * f < 0:
-                    text += f"-{fracmix(-e, f, 0, previ=op, out=out, ops=ops)}"
+                    text += f"-{rfracmix(-e, f, 0, previ=op, ops=ops, fet=fet)}"
                 else:
-                    text += f"+{fracmix(e, f, 0, previ=op, out=out, ops=ops)}"
+                    text += f"+{rfracmix(e, f, 0, previ=op, ops=ops, fet=fet)}"
             if previ in [2, 3]:
                 text = "(" + text + ")"
 
@@ -646,31 +744,51 @@ def fracmix(num, den, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1
             a, b = fracsimple(a, b)
             c, d = fracsimple(c, d)
 
-            text = f"{fracmix(a, b, inception - 1, previ=op, out=out, ops=ops)}"
+            text = f"{rfracmix(a, b, inception - 1, previ=op, ops=ops, fet=fet)}"
             if (moneda() or c in [0, 1]) and not d == 0:  # no volem dividir per zero (ni fer un enter a la divisió)
-                text += f"\\cdot {fracmix(c, d, inception - 1, previ=op, out=out, ops=ops, segona=True)}"
+                text += f"\\cdot {rfracmix(c, d, inception - 1, previ=op, ops=ops, fet=fet, segona=True)}"
             else:
-                text += f": {fracmix(d, c, inception - 1, previ=3, ops=ops, out=out, segona=True)}"
+                text += f": {rfracmix(d, c, inception - 1, previ=3, ops=ops, fet=fet, segona=True)}"
 
             if previ == 3:
                 text = "(" + text + ")"
 
         elif op == 4:  # sqrt (no gasta nivell)
-            text = "\\sqrt{" f"{fracmix(pow(num, 2), pow(den, 2), inception, previ=4, out=out, ops=ops)}" "}"
+            text = "\\sqrt{" f"{rfracmix(pow(num, 2), pow(den, 2), inception, previ=4, ops=ops, fet=fet)}" "}"
 
         elif op == 5:  # pow (no gasta nivell)
+            s = ""
             if num*den < 0:
-                print("Escolti que amb un signe de cada no en sé.")
-            text = f"({fracmix(isqrt(abs(num)), isqrt(abs(den)), inception, previ=5, out=out, ops=ops)})^2"
+                if not out:
+                    print("Escolti que amb un signe de cada no en sé.")
+                else:
+                    s = "-"
+            text = f"{s}({rfracmix(isqrt(abs(num)), isqrt(abs(den)), inception, previ=5, ops=ops, fet=fet)})^2"
 
-    if inception == out:
-        return squarebracketer(text)
+    if out:
+        if any([x in ops for x in [4, 5]]) and not any([x in fet for x in [4, 5]]):  # si volia powsqr i no hi ha powsqr
+            print("recalculant fracmix per assegurar powsqr...")
+            if 5 in ops:  # si hi ha quadrats forço quadrat a fora, que per defecte és menys comú que les arrless
+                num, den = [random.choice(quadrats) for _ in range(2)]
+                return fracmix(num, den, inception, op=5, doblesigne=doblesigne, ops=ops,
+                               calpowsqr=calpowsqr, solucions=solucions)
+            else:  # si només tinc arrles forço arrel
+                num, den = [random.randint(1, 7) for _ in range(2)]
+                return fracmix(num, den, inception, op=4, doblesigne=doblesigne, ops=ops,
+                               calpowsqr=calpowsqr, solucions=solucions)
+        text = squarebracketer(text)
+        solu = fraconum(num, den, True)
+        if solucions:
+            return text, solu
+        return text
     else:
         return text
 
 
 def randomfracnum(n):
-    """S'inventa un número per una fracció"""
+    """S'inventa un número per una fracció
+    :param n: quantitat de factors
+    """
     num = random.choice([2, 3, 5, 7])
     if not random.randint(0, 3):  # forço de tant en tant potències per ajudar a exercicis tipus [coses]^2
         num *= num

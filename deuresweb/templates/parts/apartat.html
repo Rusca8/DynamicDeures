@@ -14,7 +14,11 @@
         <h5 class="card-title">{{ nom_apartat(ns.tema, apartat) }}</h5>
           <hr class="mt-1">
           {% for ex in exercicis %}
-            {% include '/parts/exs/' + ex + '.html' %}
+            {% if os.path.exists('./deuresweb/templates/parts/exs/' + ex + '.html') %}
+                {% include '/parts/exs/' + ex + '.html' %}
+            {% else %}
+                Falta la plantilla de l'apartat {{ex|upper}}<br>
+            {% endif %}
           {% endfor %}
       </div>
     </div>

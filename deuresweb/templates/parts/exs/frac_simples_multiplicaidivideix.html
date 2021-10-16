@@ -1,0 +1,13 @@
+{#
+ # Formulari d'opcions per l'exercici FRAC_SIMPLES_MULTIPLICAIDIVIDEIX
+ #    Multiplicar i dividir fraccions
+ #}
+
+{% with title="Multiplicacions i divisions", name="FRAC_SIMPLES_MULTIPLICAIDIVIDEIX" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+        {% with title="Triar operacions?", name="tipus",
+                labels=["a·b", "a÷b"] %}
+          {% include '/parts/triaquines.html' %}
+        {% endwith %}

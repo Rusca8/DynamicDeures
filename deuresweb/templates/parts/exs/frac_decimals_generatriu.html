@@ -1,0 +1,23 @@
+{#
+ # Formulari d'opcions per l'exercici FRAC_DECIMALS_GENERATRIU
+ #    Trobar la fracció generatriu donat el nombre decimal
+ #}
+
+{% with title="Fracció generatriu", name="FRAC_DECIMALS_GENERATRIU" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+        {% with title="Triar tipus?", name="tipus",
+                labels=["exacte", "periòdic pur", "periòdic mixt"],
+                altnames=["1", "3", "2"] %}
+          {% include '/parts/triaquines.html' %}
+        {% endwith %}
+
+        {% with title="Triar notacions?", name="notacions",
+                labels=["1.2<span style='text-decoration:overline'>3</span>"|safe, "1.2333..."] %}
+          {% include '/parts/triaquines.html' %}
+        {% endwith %}
+
+        {% with title="Forçar positiu?", name="positiu" %}
+            {% include '/parts/quantesvariant.html' %}
+        {% endwith %}

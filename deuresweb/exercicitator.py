@@ -35,6 +35,12 @@ def constructor_de(nom):
         "EQ_SISTEMES_LINEALS": eq_sistemes_lineals,
         "EQ_SISTEMES_LINEALSGRAFIC": eq_sistemes_linealsgrafic,
         "EQ_SISTEMES_NOLINEALS": eq_sistemes_nolineals,
+        # ********* FRAC ********* #
+        "FRAC_COMBIS_NORMAL": frac_combis_normal,
+        "FRAC_COMBIS_POTENCIESIARRELS": frac_combis_potenciesiarrels,
+        "FRAC_DECIMALS_GENERATRIU": frac_decimals_generatriu,
+        "FRAC_SIMPLES_MULTIPLICAIDIVIDEIX": frac_simples_multiplicaidivideix,
+        "FRAC_SIMPLES_SUMAIRESTA": frac_simples_sumairesta,
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": px_algeb_factoritza,
         "PX_ALGEB_SIMPLIFICA": px_algeb_simplifica,
@@ -334,6 +340,154 @@ def eq_sistemes_nolineals(doc, opcions):
                           espai_final=5,
                           mates_solus=True,
                           stretch_solus="1.3",
+                          )
+    return [enunsols, tsols]
+
+
+# *********************** FRAC ************************* #
+def frac_combis_normal(doc, opcions):
+    enunciat = "Resol les següents operacions combinades amb fraccions."
+    enunsols = "Combinades sense exponents."
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.fracmix(inception=2, solucions=True),
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=1.3,
+                          espai_apartat=10,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("fracs"),
+                          )
+    return [enunsols, tsols]
+
+
+def frac_combis_potenciesiarrels(doc, opcions):
+    enunciat = "Resol les següents operacions combinades amb fraccions."
+    enunsols = "Combinades sense exponents."
+
+    ops = [x for x in [4, 5] if x in get_var(opcions, "tipus", [4, 5])]  # 4: sqrt, 5: pow
+    ops += [1, 2]  # 1: sumrest, 2: muldiv
+
+    def s_pow(ops):
+        if 4 in ops:  # hi ha arrels (i.e. no hi ha perill)
+            while True:
+                if not random.randint(0, 4) or 5 not in ops:
+                    yield gen.randomfracnum(3)
+                else:
+                    yield random.choice([1, 4, 9, 16, 25, 36])*random.choice([-1, 1])
+        else:  # només hi ha pow (agafo quadrats a tot arreu, intentant que surtin)
+            while True:
+                yield random.choice([1, 4, 9, 16, 25, 36])*random.choice([-1, 1])
+
+    s_num = s_pow(ops)
+    d_num = s_pow(ops)
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.fracmix(next(s_num), next(d_num), inception=2, ops=ops, solucions=True),
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=1.3,
+                          espai_apartat=10,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("fracs"),
+                          )
+    return [enunsols, tsols]
+
+
+def frac_decimals_generatriu(doc, opcions):
+    enunciat = "Troba la fracció generatriu d'aquests nombres decimals."
+    enunsols = "Fracció generatriu."
+
+    tipus = [x for x in [1, 2, 3] if x in get_var(opcions, "tipus", [1, 2, 3])]  # 1: exacte, 2: mixt, 3: pur
+    notacions = [x for x in [1, 2] if x in get_var(opcions, "notacions", [1, 2])]  # 1: barret, 2: suspensius
+
+    s_tipus = regenerable(tipus, inici=[1, 3, 2])  # començo de fàcil a difícil (regenerable filtrarà les no triades)
+    s_notac = regenerable(notacions)
+    s_fsigne = regenerable([1, -1], [-1])
+
+    var1 = quantilvar(opcions["var"]["positiu"])
+    s_fpositiu = alt_var(opcions, var1)  # positiu obligatori
+
+    def g():
+        tipus = next(s_tipus)
+        notac = next(s_notac) if tipus != 1 else 1
+        fpositiu = next(s_fpositiu)  # miro si toca obligatori
+        fsigne = next(s_fsigne) if not fpositiu else 1  # si toca obligatori, forço positiu, si no, aleatori
+        return gen.decimals(tipus, notac, fsigne=fsigne)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=10,
+                          espai_final=3,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("fracs"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def frac_simples_multiplicaidivideix(doc, opcions):
+    tipus = [x for x in [1, 2] if x in get_var(opcions, "tipus", [1, 2])]  # 1: multis, 2: divis
+
+    if len(tipus) == 2:
+        enunciat = "Resol les següents multiplicacions i divisions de fraccions."
+        enunsols = "Multiplicacions i divisions."
+        s0_divis = regenerable([0, 2], [0])  # forçar multi, forçar divi
+        f1_divis = 1  # random (pel multiterme)
+    elif 1 in tipus:
+        enunciat = "Resol les següents multiplicacions de fraccions."
+        enunsols = "Multiplicacions."
+        s0_divis = etern(0)  # forçar multi
+        f1_divis = 0
+    else:
+        enunciat = "Resol les següents divisions de fraccions."
+        enunsols = "Divisions."
+        s0_divis = etern(2)  # forçar divi
+        f1_divis = 2
+
+    g = [
+        lambda: gen.frac(2, 3, 2, divis=next(s0_divis), solucions=True),  # 2 termes
+        lambda: gen.frac(2, 3, 3, divis=f1_divis, solucions=True),        # 3 termes
+        ]
+
+    p = P([2, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=1.3,
+                          espai_apartat=10,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def frac_simples_sumairesta(doc, opcions):
+    enunciat = "Resol les següents sumes i restes de fraccions."
+    enunsols = "Sumes i restes."
+
+    g = [
+        lambda: gen.frac(1, 2, 2, solucions=True),  # 2 termes
+        lambda: gen.frac(1, 2, 3, solucions=True),  # 3 termes
+        ]
+
+    p = P([2, 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=1.3,
+                          espai_apartat=10,
+                          espai_final=3,
+                          mates_solus=True,
+                          es_spoiler=True,
                           )
     return [enunsols, tsols]
 
@@ -987,6 +1141,12 @@ def regenerable(llista, inici=None):
             opcions = llista[:]  # copia la llista completa (si només faig referència, alteraré la original amb el pop)
             random.shuffle(opcions)
         yield opcions.pop()
+
+
+def etern(x):
+    """Retorna el mateix valor per sempre"""
+    while True:
+        yield x
 
 
 def ampliable(llista, n=3):

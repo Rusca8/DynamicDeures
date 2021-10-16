@@ -23,6 +23,14 @@ def quantitats_de(nom):
         "EQ_SISTEMES_LINEALS": [0, 3, 6, 9, 12, 36, 77],
         "EQ_SISTEMES_LINEALSGRAFIC": [0, 2, 3, 6, 12, 36, 77],
         "EQ_SISTEMES_NOLINEALS": [0, 3, 6, 9, 12, 36, 77],
+
+        # ********* FRAC ********* #
+        "FRAC_COMBIS_NORMAL": [0, 2, 4, 8, 12, 24, 52],
+        "FRAC_COMBIS_POTENCIESIARRELS": [0, 2, 4, 8, 12, 20, 42],  # TODO nums diferents segons què trio de powsqr
+        "FRAC_DECIMALS_GENERATRIU": [0, 4, 8, 12, 24, 52, 112],
+        "FRAC_SIMPLES_MULTIPLICAIDIVIDEIX": [0, 3, 6, 12, 18, 37, 74],
+        "FRAC_SIMPLES_SUMAIRESTA": [0, 3, 6, 12, 18, 37, 74],
+
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": [0, 2, 4, 6, 12, 20, 46],
         "PX_ALGEB_SIMPLIFICA": [0, 1, 2, 4, 5, 10, 51],

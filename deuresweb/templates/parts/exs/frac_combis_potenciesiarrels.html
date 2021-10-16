@@ -1,0 +1,14 @@
+{#
+ # Formulari d'opcions per l'exercici FRAC_COMBIS_COMBINADES
+ #    Multiplicar i dividir fraccions
+ #}
+
+{% with title="Amb arrels i quadrats", name="FRAC_COMBIS_POTENCIESIARRELS" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Triar operacions?", name="tipus",
+            labels=["arrels", "quadrats"],
+            altnames=["4", "5"] %}
+      {% include '/parts/triaquines.html' %}
+    {% endwith %}

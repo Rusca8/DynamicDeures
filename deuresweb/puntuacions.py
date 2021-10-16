@@ -25,6 +25,13 @@ def punts_de(nom):
         "EQ_SISTEMES_LINEALSGRAFIC": 4,
         "EQ_SISTEMES_NOLINEALS": 5,
 
+        # ********* FRAC ********* #
+        "FRAC_COMBIS_NORMAL": 3,
+        "FRAC_COMBIS_POTENCIESIARRELS": 4,
+        "FRAC_DECIMALS_GENERATRIU": 1,
+        "FRAC_SIMPLES_MULTIPLICAIDIVIDEIX": 1,
+        "FRAC_SIMPLES_SUMAIRESTA": 1,
+
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": 4,
         "PX_ALGEB_SIMPLIFICA": 5,

@@ -325,6 +325,8 @@ def metasolucions(doc, llista, breakpage=True):
     """
     if breakpage:
         doc.append(NoEscape(r"\newpage"))
+    else:
+        needspace(doc, 8)
     bloctitle(doc, "Solucions dels exercicis")
 
     for ex in llista:

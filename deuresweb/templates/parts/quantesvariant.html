@@ -1,8 +1,14 @@
 {# title és el títol de la opció #}
 {# name és el nom de la variable (e.g. nosignes) #}
+{# quintext permet triar textos alternatius pels botons (seguiran representant mateixos valors) #}
 
 {% set textvar = ["no", "les primeres", "la meitat", "la majoria", "totes"] %}
 {% set textvarv = ["no", "poques", "meitat", "moltes", "totes"] %}
+
+{% if invertit %}
+    {% set textvar = ["no", "les últimes", "la meitat", "la majoria", "totes"] %}
+    {% set textvarv = textvarv|reverse %}
+{% endif %}
 
 {% set tema = ns.tema|default("tema", true) %}
 {% set apartat = apartat|default("apartat", true) %}

@@ -3,6 +3,9 @@
 
 from flask import Flask
 from flask import redirect, render_template, request
+
+import os
+
 import latexator as g
 import telegramor as tele
 import exemplesindex as e
@@ -17,7 +20,12 @@ app.jinja_env.add_extension('jinja2.ext.do')
 
 @app.context_processor
 def ctx():
-    return dict(punts=punts_de, quantitats=quantitats_de, nom_apartat=nom_apartat, nom_tema=nom_tema)
+    return dict(punts=punts_de,
+                quantitats=quantitats_de,
+                nom_apartat=nom_apartat,
+                nom_tema=nom_tema,
+                os=os,  # per saber si els fitxers existeixen des de jinja: os.path.exists('path')
+                )
 
 
 @app.route('/')
@@ -61,7 +69,7 @@ def equacions():
             except Exception as exc:
                 print(f"Error Equacions ({exc})")
                 tele.error("eq")
-                return redirect("/latex_error/polinomis")
+                return redirect("/latex_error/equacions")
             tele.feedback("eq", request.form)
         return redirect(url)
     else:
@@ -121,14 +129,18 @@ def powsqr():
 @app.route("/fraccions/", methods=["GET", "POST"])
 def fraccions():
     if request.method == "POST":
-        try:
-            g.fraccions(request.form)
-        except:
-            print("Error Fraccions")
-            tele.error("frac")
-            return redirect("/latex_error/fraccions")
-        tele.feedback("frac", request.form)
-        return redirect("/pdf/fraccions")
+        if app.debug:
+            print("(Debug mode on...)")
+            url = g.crea_fitxa(request.form)
+        else:
+            try:
+                url = g.crea_fitxa(request.form)
+            except Exception as exc:
+                print(f"Error Fraccions ({exc})")
+                tele.error("frac")
+                return redirect("/latex_error/fraccions")
+            tele.feedback("frac", request.form)
+        return redirect(url)
     else:
         return render_template("fraccions.html")
 
