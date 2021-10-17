@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_COMBINA
+ #    Combinar arrels fent índex comú
+ #}
+
+{% with title="Combinar radicals", name="POWSQR_SQR_COMBINA" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar intercalats?", name="sense_intercalats" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

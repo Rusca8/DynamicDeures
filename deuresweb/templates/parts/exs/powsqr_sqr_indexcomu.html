@@ -1,0 +1,17 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_INDEXCOMU
+ #    Combinar arrels fent índex comú
+ #}
+
+{% with title="Índex comú (multiplicant)", name="POWSQR_SQR_INDEXCOMU" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Quants termes?", name="termes", labels=[2, 3, 4],
+            altnames=[2, 3, 4], triats=[1, 2] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Sense exponents?", name="sense_exponents" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

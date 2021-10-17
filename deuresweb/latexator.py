@@ -1591,7 +1591,7 @@ def crea_fitxa(opcions, solucions=False):
 
     print(f"Generant pdf {nom_tema(temafitxa, prep=True)} ({curs})")
 
-    if opcions["solucions"] == "sí":
+    if "solucions" in opcions and opcions["solucions"] == "sí":
         solucions = True
     if "solulloc" in opcions:
         solulloc = opcions["solulloc"]

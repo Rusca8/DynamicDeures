@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_SUMAIRESTA
+ #    Sumes i restes amb arrels.
+ #}
+
+{% with title="Sumes i restes", name="POWSQR_SQR_SUMAIRESTA" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Sense coeficients?", name="sense_coeficients" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

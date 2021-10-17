@@ -1636,6 +1636,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     else:
                         text = "\\cdot " + text
                 text = f"{factors[x]}" + exp + text
+
     elif tipus == 107:  # sumes i restes simplificant primer
         if nivell in [1, 11, 2, 12]:  # sense coefs, mateix rad / pot dif // amb coef, mat / pdif
             seed = random.choice([2, 2, 2, 3, 3, 5])

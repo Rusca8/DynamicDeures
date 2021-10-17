@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_POW_SIMPLIFICAFRACCIO
+ #    Simplificar una fracció feta de potències de nombres primers.
+ #}
+
+{% with title="Simplificar fracció", name="POWSQR_POW_SIMPLIFICAFRACCIO" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar mateixa base?", name="mateixa_base", triat=2 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

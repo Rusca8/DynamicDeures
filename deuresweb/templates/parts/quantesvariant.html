@@ -14,7 +14,7 @@
 {% set apartat = apartat|default("apartat", true) %}
 
 {% set exercici = ns.exercici|default("exercici", true) %}
-<div class="form-group mb-1 ml-4">
+<div class="form-group mb-0 ml-4">
     <label><i>{{ title|default("Opció 42?", true) }}</i></label>
     <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
       {% for n in range(5) %}

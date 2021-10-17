@@ -15,7 +15,7 @@
 {% set apartat = apartat|default("apartat", true) %}
 {% set triat = triat|default(2, true) %}
 <input type="hidden" name="temes[{{tema}}][{{apartat}}][{{name}}][exnum]" value="{{ns.exnum}}" />
-<div class="form-group mb-0 ml-2">
+<div class="form-group mt-1 mb-0 ml-2">
     <label><b>{{title|default("Exercici 42")}}</b></label> {{hola}}
     <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons"
          onchange="if(document.getElementById('{{tema}}-{{apartat}}-{{name}}-qtria').checked){
@@ -45,7 +45,7 @@
 <!-- QUANTITAT TRIADA -->
 <div class="collapse" id="tria-collapse-{{name}}">
 
-    <div class="form-group mb-1 ml-4">
+    <div class="form-group mb-0 ml-4">
         <div class="container-fluid pl-0">
           <div class="row no-gutters">
 
@@ -69,7 +69,7 @@
 <!-- PUNTUACIÓ -->
 <div class="collapse punts-collapse">
 
-    <div class="form-group mb-1 ml-4">
+    <div class="form-group mb-0 ml-4">
         <div class="container-fluid pl-0">
           <div class="row no-gutters">
 

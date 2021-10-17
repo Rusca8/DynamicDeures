@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_EXTREU
+ #    Extreure factors de dins l'arrel
+ #}
+
+{% with title="Extreure factors", name="POWSQR_SQR_EXTREU" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with name="tipus", labels=["123", "abc"] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Només arrel quadrada?", name="sense_index" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

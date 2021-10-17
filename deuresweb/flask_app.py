@@ -113,15 +113,18 @@ def apilades():
 @app.route("/powsqr/", methods=["GET", "POST"])
 def powsqr():
     if request.method == "POST":
-        try:
-            g.powsqr(request.form, solucions=False)
-        except:
-            print("Error Potències")
-            tele.error("powsqr")
-            return redirect("/latex_error/powsqr")
-
-        tele.feedback("powsqr", request.form)
-        return redirect("/pdf/powsqr")
+        if app.debug:
+            print("(Debug mode on...)")
+            url = g.crea_fitxa(request.form)
+        else:
+            try:
+                url = g.crea_fitxa(request.form)
+            except Exception as exc:
+                print(f"Error Potències i Arrels ({exc})")
+                tele.error("powsqr")
+                return redirect("/latex_error/powsqr")
+            tele.feedback("powsqr", request.form)
+        return redirect(url)
     else:
         return render_template("powsqr.html")
 

@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_FACTORITZAIEXTREU
+ #    Factoritzar i extreure factors donada l'arrel d'un nombre enter.
+ #}
+
+{% with title="Factoritzar i extreure", name="POWSQR_SQR_FACTORITZAIEXTREU" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Només arrel quadrada?", name="sense_index" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

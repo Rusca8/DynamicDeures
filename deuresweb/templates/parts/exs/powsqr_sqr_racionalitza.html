@@ -1,0 +1,20 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_SQR_RACIONALITZA
+ #    Extreure factors de dins l'arrel
+ #}
+
+{% with title="Racionalitzar", name="POWSQR_SQR_RACIONALITZA" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with name="tipus", labels=["√a", "√a+b"], altnames=[0, 1] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Només arrel quadrada?", name="sense_index", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Evitar doble arrel?", name="sense_doble", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

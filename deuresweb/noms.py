@@ -8,12 +8,6 @@ def nom_apartat(tema, apartat, btn=False):
     :param btn: True = treure versió pel text dels botons (toggle) del formulari
     """
     apartats = {
-        "px": {
-            "algeb": ["Factoritzar i fraccions algebraiques", "Algebraiques"],
-            "base": ["Base", "Base"],
-            "idnot": ["Identitats notables", "Id. Notables"],
-            "ops": ["Operacions amb polinomis", "Operar polinomis"],
-        },
         "eq": {
             "base": ["Base", "Base"],
             "primer": ["Equacions de primer grau", "Primer grau"],
@@ -25,7 +19,17 @@ def nom_apartat(tema, apartat, btn=False):
             "decimals": ["Números decimals", "Decimals"],
             "simples": ["Operacions simples", "Op. Simples"],
             "combis": ["Operacions combinades", "Op. Combinades"],
-        }
+        },
+        "powsqr": {
+            "pow": ["Potències", "Potències"],
+            "sqr": ["Arrels", "Arrels"],
+        },
+        "px": {
+            "algeb": ["Factoritzar i fraccions algebraiques", "Algebraiques"],
+            "base": ["Base", "Base"],
+            "idnot": ["Identitats notables", "Id. Notables"],
+            "ops": ["Operacions amb polinomis", "Operar polinomis"],
+        },
     }
     i = 1 if btn else 0
     default = [f"FALTA EL NOM DE L'APARTAT ({apartat})", f"BOT ({apartat})"]
@@ -39,9 +43,10 @@ def nom_tema(tema, prep=False, pdf=False):
 
     """
     temes = {
-        "px": ["Polinomis", "de Polinomis", "polinomis"],
         "eq": ["Equacions", "d'Equacions", "equacions"],
-        "frac": ["Fraccions", "de Fraccions", "fraccions"]
+        "frac": ["Fraccions", "de Fraccions", "fraccions"],
+        "powsqr": ["Potències i Arrels", "de Potències i Arrels", "potenciesiarrels"],
+        "px": ["Polinomis", "de Polinomis", "polinomis"],
     }
     if pdf:
         i = 2

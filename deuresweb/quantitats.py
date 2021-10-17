@@ -4,11 +4,14 @@ en funció de l'exercici.
 """
 
 
-def quantitats_de(nom):
+def quantitats_de(nom, alt="def"):
     """Retorna la llista de quantitats corresponent a l'exercici escollit.
 
         "exercici": [no, poques, normal, moltes, mitja, plana, doble]
     """
+    default = [0, 2, 3, 4, 5, 12, 24]
+    alt = alt or "def"  # per si entra un "None" o alguna cosa per l'estil
+
     exercicis = {
         # ********** EQ ********** #
         "EQ_BASE_IDENTITATOEQUACIO": [0, 2, 4, 8, 14, 33, 70],
@@ -31,6 +34,26 @@ def quantitats_de(nom):
         "FRAC_SIMPLES_MULTIPLICAIDIVIDEIX": [0, 3, 6, 12, 18, 37, 74],
         "FRAC_SIMPLES_SUMAIRESTA": [0, 3, 6, 12, 18, 37, 74],
 
+        # ******** POWSQR ******** #
+        "POWSQR_POW_FACTORITZADECIMALS": [0, 2, 3, 6, 17, 35, 71],
+        "POWSQR_POW_FACTORITZAISIMPLIFICA": [0, 2, 3, 6, 17, 35, 71],
+        "POWSQR_POW_MATEIXABASE": {"def": [0, 3, 6, 12, 21, 51, 105],
+                                   "mc2":  [0, 4, 6, 8, 14, 32, 70],
+                                   }.get(alt, default),
+        "POWSQR_POW_MATEIXEXPONENT": {"def": [0, 3, 6, 12, 21, 51, 105],
+                                      "mc2":  [0, 4, 6, 8, 14, 32, 70],
+                                      }.get(alt, default),
+        "POWSQR_POW_SIMPLIFICAFRACCIO": [0, 3, 6, 9, 18, 42, 87],
+        "POWSQR_SQR_COMBINA": [0, 4, 7, 11, 24, 59, 124],
+        "POWSQR_SQR_EXTREU": [0, 4, 8, 12, 32, 66, 132],
+        "POWSQR_SQR_FACTORITZAIEXTREU": [0, 3, 6, 9, 21, 51, 105],
+        "POWSQR_SQR_INDEXCOMU": {"def": [0, 3, 6, 12, 21, 51, 105],
+                                 "mc2":  [0, 2, 4, 6, 14, 32, 70],
+                                 }.get(alt, default),
+        "POWSQR_SQR_INTRODUEIX": [0, 4, 8, 12, 32, 66, 132],
+        "POWSQR_SQR_RACIONALITZA": [0, 3, 6, 12, 18, 39, 86],
+        "POWSQR_SQR_SUMAIRESTA": [0, 2, 4, 8, 16, 34, 69],
+
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": [0, 2, 4, 6, 12, 20, 46],
         "PX_ALGEB_SIMPLIFICA": [0, 1, 2, 4, 5, 10, 51],
@@ -50,7 +73,7 @@ def quantitats_de(nom):
         "PX_OPS_TEOREMARESIDU": [0, 1, 3, 5, 6, 12, 26],
     }
     print(f"Quantitats de {nom} no disponibles") if nom not in exercicis else None
-    return exercicis.get(nom, [0, 2, 3, 4, 5, 12, 24])  # .get(key, default)
+    return exercicis.get(nom, default)  # .get(key, default)
 
 
 

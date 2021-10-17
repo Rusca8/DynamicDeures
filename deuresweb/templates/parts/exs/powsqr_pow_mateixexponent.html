@@ -1,0 +1,17 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_POW_MATEIXEXPONENT
+ #    Combinar potències amb el mateix exponent
+ #}
+
+{% with title="Mateix exponent", name="POWSQR_POW_MATEIXEXPONENT" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Quants termes?", name="termes", labels=[2, 3, 4, 5],
+            altnames=[2, 3, 4, 5], triats=[1, 2] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Evitar divisions?", name="sense_divisions" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

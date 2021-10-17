@@ -35,12 +35,28 @@ def constructor_de(nom):
         "EQ_SISTEMES_LINEALS": eq_sistemes_lineals,
         "EQ_SISTEMES_LINEALSGRAFIC": eq_sistemes_linealsgrafic,
         "EQ_SISTEMES_NOLINEALS": eq_sistemes_nolineals,
+
         # ********* FRAC ********* #
         "FRAC_COMBIS_NORMAL": frac_combis_normal,
         "FRAC_COMBIS_POTENCIESIARRELS": frac_combis_potenciesiarrels,
         "FRAC_DECIMALS_GENERATRIU": frac_decimals_generatriu,
         "FRAC_SIMPLES_MULTIPLICAIDIVIDEIX": frac_simples_multiplicaidivideix,
         "FRAC_SIMPLES_SUMAIRESTA": frac_simples_sumairesta,
+
+        # ******** POWSQR ******** #
+        "POWSQR_POW_FACTORITZADECIMALS": powsqr_pow_factoritzadecimals,
+        "POWSQR_POW_FACTORITZAISIMPLIFICA": powsqr_pow_factoritzaisimplifica,
+        "POWSQR_POW_MATEIXABASE": powsqr_pow_mateixabase,
+        "POWSQR_POW_MATEIXEXPONENT": powsqr_pow_mateixexponent,
+        "POWSQR_POW_SIMPLIFICAFRACCIO": powsqr_pow_simplificafraccio,
+        "POWSQR_SQR_COMBINA": powsqr_sqr_combina,
+        "POWSQR_SQR_EXTREU": powsqr_sqr_extreu,
+        "POWSQR_SQR_FACTORITZAIEXTREU": powsqr_sqr_factoritzaiextreu,
+        "POWSQR_SQR_INDEXCOMU": powsqr_sqr_indexcomu,
+        "POWSQR_SQR_INTRODUEIX": powsqr_sqr_introdueix,
+        "POWSQR_SQR_RACIONALITZA": powsqr_sqr_racionalitza,
+        "POWSQR_SQR_SUMAIRESTA": powsqr_sqr_sumairesta,
+
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": px_algeb_factoritza,
         "PX_ALGEB_SIMPLIFICA": px_algeb_simplifica,
@@ -60,6 +76,10 @@ def constructor_de(nom):
         "PX_OPS_TEOREMARESIDU": px_ops_teoremaresidu,
     }
     return exercicis.get(nom, exercici_no_trobat)  # .get(key, default)
+
+
+def tema_apartat_exemple(doc, opcions):
+    return exercici_no_trobat(doc, opcions)
 
 
 # ************************ EQ ************************** #
@@ -492,6 +512,358 @@ def frac_simples_sumairesta(doc, opcions):
     return [enunsols, tsols]
 
 
+# ********************** POWSQR ************************ #
+
+def powsqr_pow_factoritzadecimals(doc, opcions):
+    enunciat = "Factoritza i simplifica les següents fraccions amb decimals."
+    enunsols = "Simplificar amb decimals."
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.powsqr(10, 8, 3),
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=1.3,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_pow_factoritzaisimplifica(doc, opcions):  # TODO optimitzar el generador per fer més simplificable
+    enunciat = "Factoritza i simplifica les fraccions següents."
+    enunsols = "Factoritzar i simplificar."
+
+    g = [
+        lambda: gen.powsqr(10, 5, 3),  # sense exponent
+        lambda: gen.powsqr(10, 6, 3),  # amb exponents positius
+        lambda: gen.powsqr(10, 7, 3),  # amb exponents qualssevol
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_exponents"])
+    p = P([1, 1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=1.3,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_pow_mateixabase(doc, opcions):
+    enunciat = "Expressa com una sola potència (mateixa base)."
+    enunsols = "Potències, mateixa base."
+
+    termes = var_quines(opcions, "termes", [2, 3, 4, 5])
+    if any(x in termes for x in [4, 5]) and not all(x in termes for x in [2, 3]):  # (hi ha amples no diluits)
+        cols = 2
+    else:
+        cols = 3
+
+    opcions["q_alt"] = "mc2" if cols == 2 else None  # demano quantitats per només 2 columnes
+
+    s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
+
+    g = [
+        lambda: gen.powsqr(2, 1, termes=next(s_termes)),  # només multis
+        lambda: gen.powsqr(2, 2, termes=next(s_termes)),  # multis i divis
+        ]
+
+    pvar = quantilvar(opcions["var"]["sense_divisions"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=cols,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_pow_mateixexponent(doc, opcions):
+    enunciat = "Expressa com una sola potència (mateix exponent)."
+    enunsols = "Potències, mateix exponent."
+
+    termes = var_quines(opcions, "termes", [2, 3, 4, 5])
+    if any(x in termes for x in [4, 5]) and not all(x in termes for x in [2, 3]):  # (hi ha amples no diluits)
+        cols = 2
+    else:
+        cols = 3
+
+    opcions["q_alt"] = "mc2" if cols == 2 else None  # demano quantitats per només 2 columnes
+
+    s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
+
+    g = [
+        lambda: gen.powsqr(1, 1, termes=next(s_termes)),  # només multis
+        lambda: gen.powsqr(1, 2, termes=next(s_termes)),  # multis i divis
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_divisions"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=cols,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_pow_simplificafraccio(doc, opcions):
+    enunciat = "Simplifica les fraccions següents."
+    enunsols = "Simplificar fraccions."
+
+    g = [
+        lambda: gen.powsqr(10, 1, 5),  # un sol factor, exponents positius
+        lambda: gen.powsqr(10, 2, 5),  # un sol factor, exponents qualssevol
+        lambda: gen.powsqr(10, 3, 5),  # dos factors, sense exponents de grup
+        lambda: gen.powsqr(10, 4, 5),  # dos factors, amb exponents de grup
+    ]
+
+    pvar = quantilvar(opcions["var"]["mateixa_base"])
+    p = P([1, 1, 1, 1]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=1.3,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_combina(doc, opcions):
+    enunciat = "Expressa com una sola arrel."
+    enunsols = "Combinar radicals."
+
+    g = [
+        lambda: gen.powsqr(104, 1, 2),  # sense intercalats, dues arrels
+        lambda: gen.powsqr(104, 2, 2),  # pot posar intercalats, dues arrels
+        lambda: gen.powsqr(104, 2, 3),  # pot posar intercalats, tres arrels
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_intercalats"])
+    p = P([1, 1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_extreu(doc, opcions):
+    enunciat = "Extreu de l'arrel tants factors com puguis."
+    enunsols = "Extreure factors."
+
+    lletres = var_quines(opcions, "tipus", [1, 2])  # 1: nums, 2: lletres
+    if all(x in lletres for x in [1, 2]):  # tinc de tot
+        s_lletres = regenerable([0, 2], [0])  # 0: forçar nums, 2: forçar lletres
+    elif 1 in lletres:  # només nums
+        s_lletres = etern(0)
+    else:  # només lletres
+        s_lletres = etern(2)
+
+    g = [
+        lambda: gen.powsqr(105, 1, lletres=next(s_lletres)),  # només quadrades
+        lambda: gen.powsqr(105, 2, lletres=next(s_lletres)),  # qualsevol índex
+        ]
+    pvar = quantilvar(opcions["var"]["sense_index"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_factoritzaiextreu(doc, opcions):
+    enunciat = "Factoritza i extreu tants factors com puguis."
+    enunsols = "Factoritzar i extreure."
+
+    g = [
+        lambda: gen.powsqr(105, 11),  # arrel quadrada
+        lambda: gen.powsqr(105, 12),  # arrel qualsevol
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_index"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_indexcomu(doc, opcions):
+    enunciat = "Expressa com una sola arrel."
+    enunsols = "Arrels, índex comú."
+
+    termes = var_quines(opcions, "termes", [2, 3, 4])
+    if 4 in termes and not all(x in termes for x in [2, 3]):  # (hi ha amples no diluits)
+        cols = 2
+    else:
+        cols = 3
+
+    opcions["q_alt"] = "mc2" if cols == 2 else None  # demano quantitats per només 2 columnes
+
+    s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
+
+    g = [
+        lambda: gen.powsqr(103, 1, termes=next(s_termes)),  # Sense exponents
+        lambda: gen.powsqr(103, 2, termes=next(s_termes)),  # amb exponents
+        ]
+
+    pvar = quantilvar(opcions["var"]["sense_exponents"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=cols,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_introdueix(doc, opcions):
+    enunciat = "Introdueix tots els factors a dins l'arrel."
+    enunsols = "Introduir factors."
+
+    lletres = var_quines(opcions, "tipus", [1, 2])  # 1: nums, 2: lletres
+    if all(x in lletres for x in [1, 2]):  # tinc de tot
+        s_lletres = regenerable([0, 2], [0])  # 0: forçar nums, 2: forçar lletres
+    elif 1 in lletres:  # només nums
+        s_lletres = etern(0)
+    else:  # només lletres
+        s_lletres = etern(2)
+
+    g = [
+        lambda: gen.powsqr(106, 1, lletres=next(s_lletres)),  # només quadrades
+        lambda: gen.powsqr(106, 2, lletres=next(s_lletres)),  # qualsevol índex
+    ]
+    pvar = quantilvar(opcions["var"]["sense_index"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_racionalitza(doc, opcions):
+    enunciat = "Racionalitza les fraccions següents."
+    enunsols = "Racionalitzar."
+
+    tipus = var_quines(opcions, "tipus", [0, 1])
+    if len(tipus) > 1:
+        s_tipus = regenerable([0, 1])  # 0: f0 (completant), 1: f1 (conjugat)
+    else:
+        s_tipus = etern(tipus[0])
+
+    var0 = quantilvar(opcions["var"]["sense_index"])
+    p0 = P([1, 1, 1]).flex(0, var0)
+    s0 = alt_p_var(opcions, p0, [1, 2, 3])
+
+    var1 = quantilvar(opcions["var"]["sense_doble"])
+    p1 = P([1, 1, 1, 1]).flex(1, var1)
+    s1 = alt_p_var(opcions, p1, [11, 13, 12, 14])
+
+    def f0():  # completant l'arrel
+        if 0 in tipus:
+            next(s1)  # faig córrer els percentatges de l'altre
+            return gen.powsqr(108, next(s0))
+        return f1()
+
+    def f1():  # fent el conjugat
+        if 1 in tipus:
+            next(s0)  # faig córrer els percentatges de l'altre
+            return gen.powsqr(108, next(s1))
+        return f0()
+
+    def f2():  # a sorts
+        return f1() if next(s_tipus) else f0()
+
+    g = [
+        f0,  # completant l'arrel
+        f1,  # fent el conjugat
+        f2,  # a sorts
+        ]
+
+    p = P([[1, {"max": 3}], [1, {"max": 3}], 1])
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=3,
+                          scale=scale_per("fraccions"),
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_sumairesta(doc, opcions):
+    enunciat = "Simplifica tant com puguis les sumes i restes següents."
+    enunsols = "Sumes i restes d'arrels."
+
+    g = [
+        lambda: gen.powsqr(107, 1, 3),   # sense coeficient, un radical
+        lambda: gen.powsqr(107, 11, 3),  # sense coeficient, pot dos radicals
+        lambda: gen.powsqr(107, 2, 3),   # amb coeficient, un radical
+        lambda: gen.powsqr(107, 12, 3),  # amb coeficient, pot dos radicals
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_coeficients"])
+    p = P([1, 1, 1, 1]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
 # ************************ PX ************************** #
 
 def px_algeb_factoritza(doc, opcions):
@@ -850,10 +1222,6 @@ def px_ops_teoremaresidu(doc, opcions):
 
 
 # ----------------------------------------------------------------------------------------- #
-def tema_apartat_exemple(doc, opcions):
-    return exercici_no_trobat(doc, opcions)
-
-
 def exercici_no_trobat(doc, opcions):
     needspace(doc, 8)
     question(doc, "42")
@@ -949,14 +1317,16 @@ def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", 
 
 # **************************** Complementàries ****************************** #
 def quantes(opcions):
+    q_alt = opcions.get("q_alt", "def")
+
     if opcions["quantes"] != "tria":
         i = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"].index(opcions["quantes"])
-        return qtats.quantitats_de(opcions["exnom"])[i]
+        return qtats.quantitats_de(opcions["exnom"], alt=q_alt)[i]
     else:
         q = opcions["qtriada"]
         try:
             q = int(q)
-            q = max(1, min(qtats.quantitats_de(opcions["exnom"])[-1], q))
+            q = max(1, min(qtats.quantitats_de(opcions["exnom"])[-1], q))  # (no limito a q_alt pq formulari tampoc)
         except:
             print("Has fet alguna cosa rara amb la quantitat triada...")
             q = 1
@@ -1028,6 +1398,10 @@ class P:
 def get_var(opcions, key, default=None):
     """Agafa la variable demanada de la secció de variables de l'exercici (o retorna default si no la troba)."""
     return opcions.get("var", {}).get(key, default)
+
+
+def var_quines(opcions, key, default):
+    return [x for x in default if x in get_var(opcions, key, default)]
 
 
 def g_list(n, g, p, amb_index=False):
@@ -1115,6 +1489,16 @@ def alt_var(opcions, pvar):
     return with_default((True for _ in range(round(pvar*quantes(opcions)/100))), False)
 
 
+def alt_p_var(opcions, p, valors):
+    """Generador (inf): retorna el valor que toqui en funció de la zona (i.e. alt_var no binari)."""
+    ns = p_ns(quantes(opcions), p)
+    for n, v in zip(ns, valors):
+        for _ in range(n):
+            yield v
+    while True:
+        yield valors[-1]
+
+
 def regenerable(llista, inici=None):
     """Generador (inf): gasta aleatòriament els elements d'una llista, i quan la llista es gasta torna a començar.
        (...compte, que no fa deep copy!)
@@ -1198,6 +1582,10 @@ def cm(mm):
 
 
 def scale_per(tal):
+    """Coeficient d'augment (zoom) per diferents coses.
+
+       pot ser: fraccions, ...
+    """
     scales = {
         "fraccions": 1.3,
     }

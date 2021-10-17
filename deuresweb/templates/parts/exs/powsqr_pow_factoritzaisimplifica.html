@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_POW_FACTORITZAISIMPLIFICA
+ #    Simplificar una fracció feta de números enters multiplicats.
+ #}
+
+{% with title="Factoritzar i simplificar", name="POWSQR_POW_FACTORITZAISIMPLIFICA" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Sense exponents?", name="sense_exponents", triat=3 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
