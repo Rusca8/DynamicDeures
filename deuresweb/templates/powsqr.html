@@ -26,7 +26,7 @@
     {% include '/parts/togglepuntuacions.html' %}
     <hr>
     <!-- Tria SOLUCIONS -->
-    {% include '/parts/sensesolucions.html' %}
+    {% include '/parts/solucions.html' %}
 
 
 {% endblock %}
@@ -36,6 +36,7 @@
             exercicis = [
                 'powsqr_pow_mateixexponent',
                 'powsqr_pow_mateixabase',
+                'powsqr_pow_mateixafraccio',
                 'powsqr_pow_simplificafraccio',
                 'powsqr_pow_factoritzaisimplifica',
                 'powsqr_pow_factoritzadecimals',
@@ -46,8 +47,8 @@
     {% with apartat = "sqr",
             exercicis = [
                 'powsqr_sqr_indexcomu',
-                'powsqr_sqr_extreu',
                 'powsqr_sqr_introdueix',
+                'powsqr_sqr_extreu',
                 'powsqr_sqr_combina',
                 'powsqr_sqr_factoritzaiextreu',
                 'powsqr_sqr_sumairesta',

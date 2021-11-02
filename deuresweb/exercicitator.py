@@ -47,6 +47,7 @@ def constructor_de(nom):
         "POWSQR_POW_FACTORITZADECIMALS": powsqr_pow_factoritzadecimals,
         "POWSQR_POW_FACTORITZAISIMPLIFICA": powsqr_pow_factoritzaisimplifica,
         "POWSQR_POW_MATEIXABASE": powsqr_pow_mateixabase,
+        "POWSQR_POW_MATEIXAFRACCIO": powsqr_pow_mateixafraccio,
         "POWSQR_POW_MATEIXEXPONENT": powsqr_pow_mateixexponent,
         "POWSQR_POW_SIMPLIFICAFRACCIO": powsqr_pow_simplificafraccio,
         "POWSQR_SQR_COMBINA": powsqr_sqr_combina,
@@ -583,6 +584,33 @@ def powsqr_pow_mateixabase(doc, opcions):
                           cols=cols,
                           espai_apartat=7,
                           espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_pow_mateixafraccio(doc, opcions):
+    enunciat = "Expressa com a potència d'una sola fracció."
+    enunsols = "Mateixa base amb fraccions."
+
+    g = [
+        lambda: gen.powsqr(2, 10, 3, solucions=True),  # dretes multiplicant
+        lambda: gen.powsqr(2, 11, 3, solucions=True),  # dretes muldiv
+        lambda: gen.powsqr(2, 12, 3, solucions=True),  # una cap per vall
+        lambda: gen.powsqr(2, 13, 3, solucions=True),  # la meitat cap per vall
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_invertides"])
+    p = P([1, 1, 1, 1]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=scale_per("fraccions"),
+                          espai_apartat=7,
+                          espai_final=5,
+                          mates_solus=True,
                           )
     return [enunsols, tsols]
 
@@ -1305,7 +1333,7 @@ def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", 
     end(doc, 'multicols') if cols > 1 else None
     space(doc, cm(espai_final)) if espai_final else None
     end(doc, 'parts')
-    if sols:
+    if sols and ("solucions" in opcions and opcions["solucions"]):  # afegeixo solus a sota (o retorno pel final del doc
         if not es_spoiler or opcions["solulloc"] == "apart":
             if opcions["solulloc"] == "intercalat":
                 blocsolucions(doc, sols, mates=mates_solus, stretch=stretch_solus)

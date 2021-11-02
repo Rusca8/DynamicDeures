@@ -1066,7 +1066,7 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     return text
 
 
-def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
+def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
     """Retorna exrrcicis de potències i arrels
 
     :param tipus:
@@ -1074,10 +1074,12 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
     :param termes: quantitat de termes
     :param lletres: 0 = nums / 1 = nums i llet / 2 = llet
     :param fracnums: números per la fracció que fa de base a tipus 3
+    :param solucions: retornar la solució de l'exercici
     :return: text en LaTeX
     """
-
     text = "42^6"
+    solu = "42^7"
+
     if tipus == 1:  # potències, mateix exponent
         if nivell == 1:  # multiplicant
             text = ""
@@ -1163,7 +1165,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     else:
                         text += f"{base}" + "^{" + f"{exp}" + "}"
 
-        if nivell == 3:  # TODO organitzar aquest i els nivells inferiors
+        elif nivell == 3:  # TODO organitzar aquest i els nivells inferiors
             text = ""
             if not fracnums:
                 b1, b2 = random.sample([1, 2, 3, 4, 5, 6, 7], 2)
@@ -1198,7 +1200,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                 else:
                     text += f"\\left({base}\\right)" + "^{" + f"{exp}" + "}"
 
-        if nivell == 4:
+        elif nivell == 4:
             b1, b2 = random.sample([1, 2, 3, 5, 7], 2)
             b1, b2 = fracsimple(b1, b2)
             text = "\\left[" + powsqr(2, 3, fracnums=[b1, b2]) + "\\right]^{" + f"{random.randint(2, 5)}" + "}"
@@ -1216,6 +1218,52 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
                     exp = -exp
                 bloc = "\\left[" + bloc + "\\right]^{" + f"{exp}" + "}"
                 text += random.choice(["\\cdot", "\\div"]) + bloc
+
+        elif nivell in [10, 11, 12, 13]:  # fracccions (dretes multiplicant // dretes // una girada // meitat girades)
+            # precàlculs
+            if nivell in [10, 11]:
+                girada = [0 for _ in range(termes)]  # tot del dret
+            elif nivell == 12:
+                girada = [not x for x in range(termes)]  # una girada
+                random.shuffle(girada)
+            else:
+                girada = [x % 2 for x in range(termes)]  # la meitat de cada
+                random.shuffle(girada)
+
+            if nivell in [10, 11]:
+                num = random.randint(1, 7)  # permeto 1 a dalt si no pot estar a baix
+            else:
+                num = random.randint(2, 7)
+            den = random.choice([x for x in range(2, 8) if num % x])
+
+            # pre-solus
+            sol_exp = 0
+
+            # muntatge
+            text = []
+            for x in range(termes):
+                if nivell == 10 or not x:  # (nivell 10 no fa divis, però primera frac no pot dividir tampoc)
+                    divi = 0
+                else:
+                    divi = 0 if moneda() else 1  # 0: multi, 1: divi
+                e = random.randint(2, 9) * random.choice([-1, 1])
+                n, d = (den, num) if girada[x] else (num, den)
+                if x:  # a partir de la segona porten operació al davant
+                    op = [r"\cdot", r"\div"][divi]
+                else:
+                    op = ""
+                text.append(f"{op}" + r"\left(\frac{" + f"{n}" + "}{" + f"{d}" + r"}\right) ^{" + f"{e}" + "}")
+
+                if (divi and not girada[x]) or (girada[x] and not divi):
+                    sol_exp += -e
+                else:
+                    sol_exp += e
+
+            text = "".join(text)
+            if sol_exp < 0 and nivell not in [10, 11]:  # si eren invertibles em quedo la positiva
+                num, den = den, num
+                sol_exp *= -1
+            solu = r"\left(\frac{" + f"{num}" + "}{" + f"{den}" + r"}\right) ^{" + f"{sol_exp}" + "}"
 
     elif tipus == 3:  # potències, MCM
         if nivell == 1:  # multiplicant (exp amb signe)
@@ -1744,6 +1792,8 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[]):
 
             text = "\\frac{" + num + "}{" + den + "}"
 
+    if solucions:
+        return text, solu
     return text
 
 
@@ -4858,5 +4908,8 @@ for x in range(12):
     print(powsqr(2, 4), "\\\\ \\\\")
     print("\\\\")"""
 
-for x in range(0):
-    print(px(106, 6, par="k"))
+
+if __name__ == "__main__":
+    # aquesta secció la faig servir per fer debugging dels tipus d'exercici
+    for x in range(0):
+        print(px(106, 6, par="k"))

@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_POW_MATEIXAFRACCIO
+ #    Combinar potències que tenen la mateixa fracció (o la seva inversa) com a base
+ #}
+
+{% with title="Mateixa base amb fraccions", name="POWSQR_POW_MATEIXAFRACCIO" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar invertides?", name="sense_invertides", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
