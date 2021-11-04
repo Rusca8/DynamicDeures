@@ -44,6 +44,10 @@ def constructor_de(nom):
         "FRAC_SIMPLES_SUMAIRESTA": frac_simples_sumairesta,
 
         # ******** POWSQR ******** #
+        "POWSQR_BPOW_COMBINA": powsqr_bpow_combina,
+        "POWSQR_BPOW_SIGNEPARITAT": powsqr_bpow_signeparitat,
+        "POWSQR_BSQR_ARRELAPOTENCIA": powsqr_bsqr_arrelapotencia,
+        "POWSQR_BSQR_SIMPLIFICA": powsqr_bsqr_simplifica,
         "POWSQR_POW_FACTORITZADECIMALS": powsqr_pow_factoritzadecimals,
         "POWSQR_POW_FACTORITZAISIMPLIFICA": powsqr_pow_factoritzaisimplifica,
         "POWSQR_POW_MATEIXABASE": powsqr_pow_mateixabase,
@@ -514,6 +518,108 @@ def frac_simples_sumairesta(doc, opcions):
 
 
 # ********************** POWSQR ************************ #
+
+def powsqr_bpow_combina(doc, opcions):
+    enunciat = "Combina els exponents per deixar-ne un de sol."
+    enunsols = "Combinar exponents."
+
+    s0_base = regenerable([2, 3, 5, 7, 9, 11, 13])  # números primers per no generar confusió
+    s3_base = ampliable([x+2 for x in range(6)])    # a la tercera poso base qualsevol
+    s_signe = regenerable([1, 2], [1])  # forço negatiu el primer
+
+    s_termes = alt_p_var(opcions, P([2, 1]), [2, 3])
+
+    g = [  # f0: base primer, exponents positius / f1: base primer, exponents qualssevol / f2: base qualsevol
+        lambda: gen.powsqr_base(1, 1, termes=next(s_termes), seed=next(s0_base), solucions=True),
+        lambda: gen.powsqr_base(1, 2, termes=next(s_termes), seed=next(s0_base), fneg=next(s_signe), solucions=True),
+        lambda: gen.powsqr_base(1, 2, termes=next(s_termes), seed=next(s3_base), fneg=next(s_signe), solucions=True),
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_negatius"])
+    p = P([1, 1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_bpow_signeparitat(doc, opcions):
+    enunciat = "Treu el parèntesi de les potències següents (deixant el signe que correspongui)."
+    enunsols = "Simplificar signes."
+
+    s_parell = regenerable([0, 0, 1, 1], [0, 1])
+    s_base = ampliable([x+2 for x in range(6)])
+
+    g = [
+        lambda: gen.powsqr_base(2, 1, seed=next(s_base), parell=next(s_parell), solucions=True),  # exp positius
+        lambda: gen.powsqr_base(2, 2, seed=next(s_base), parell=next(s_parell), solucions=True),  # exp qualssevol
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_negatius"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_bsqr_arrelapotencia(doc, opcions):
+    enunciat = "Converteix en potències les arrels següents (i simplifica quan es pugui)."
+    enunsols = "Convertir arrels en potències."
+
+    g = [
+        lambda: gen.powsqr_base(102, 1, solucions=True),  # exp positius
+        lambda: gen.powsqr_base(102, 2, solucions=True),  # exp qualssevol
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_negatius"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("exp_frac"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_bsqr_simplifica(doc, opcions):
+    enunciat = "Simplifica les arrels següents."
+    enunsols = "Simplificar arrels."
+
+    s0 = regenerable([x for x in range(2, 15)], [2, 3, 5, 7])
+    s_termes = alt_p_var(opcions, P([[2, {"max": 20}], 1]), [2, 3])
+
+    tsols = crea_exercici(doc, opcions,
+                          lambda: gen.powsqr_base(101, termes=next(s_termes), seed=next(s0), solucions=True),
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("arrels"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
 
 def powsqr_pow_factoritzadecimals(doc, opcions):
     enunciat = "Factoritza i simplifica les següents fraccions amb decimals."
@@ -1518,7 +1624,12 @@ def alt_var(opcions, pvar):
 
 
 def alt_p_var(opcions, p, valors):
-    """Generador (inf): retorna el valor que toqui en funció de la zona (i.e. alt_var no binari)."""
+    """Generador (inf): retorna el valor que toqui en funció de la zona (i.e. alt_var no binari).
+
+    :param opcions: llista d'opcions de l'exercici (en treu la n total)
+    :param p: proporcions de les variants (objecte P)
+    :param valors: llista de valors a retornar (un per cada variant)
+    """
     ns = p_ns(quantes(opcions), p)
     for n, v in zip(ns, valors):
         for _ in range(n):
@@ -1598,6 +1709,8 @@ def espai_per(tal):
 
 def stretch_per(tal):
     stretches = {
+        "arrels": 1.3,
+        "exp_frac": 1.2,
         "polis": 1.2,
         "fracs": 1.3,
         "fraccions": 1.3,

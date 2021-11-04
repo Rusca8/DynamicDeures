@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici POWSQR_BPOW_SIGNEPARITAT
+ #    Escollir quin signe queda després de treure el parèntesi
+ #}
+
+{% with title="Simplificar el signe", name="POWSQR_BPOW_SIGNEPARITAT", triat=1 %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar exponent positiu?", name="sense_negatius", triat=3 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

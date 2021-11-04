@@ -1,7 +1,7 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
 <div class="alert alert-info alert-sm py-1 mb-2" role="alert">
-    <small><b>Nou:</b> Quantitats exactes (botó #) i triar puntuacions.</small>
+    <small><b>Nou:</b> Quantitats exactes (botó #) i triar puntuacions. Exercicis de conceptes bàsics. Mateixa base amb fraccions.</small>
 </div>
 {% endblock %}
 
@@ -18,7 +18,7 @@
     {% endwith %}
 
     <!-- Tria APARTATS -->
-    {% with apartats = ["pow", "sqr"] %}
+    {% with apartats = ["bpow", "pow", "bsqr", "sqr"] %}
         {% include '/parts/triaapartats.html' %}
     {% endwith %}
 
@@ -32,6 +32,14 @@
 {% endblock %}
 {% block extres %}
 
+    {% with apartat = "bpow",
+            exercicis = [
+                'powsqr_bpow_combina',
+                'powsqr_bpow_signeparitat'
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
+
     {% with apartat = "pow",
             exercicis = [
                 'powsqr_pow_mateixexponent',
@@ -40,6 +48,15 @@
                 'powsqr_pow_simplificafraccio',
                 'powsqr_pow_factoritzaisimplifica',
                 'powsqr_pow_factoritzadecimals',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
+
+
+    {% with apartat = "bsqr",
+            exercicis = [
+                'powsqr_bsqr_simplifica',
+                'powsqr_bsqr_arrelapotencia'
                 ] %}
         {% include '/parts/apartat.html' %}
     {% endwith %}

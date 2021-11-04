@@ -1066,8 +1066,118 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
     return text
 
 
+def powsqr_base(tipus, nivell=1, termes=2, seed=None, parell=2, fneg=0, solucions=False):
+    """Retorna exercicis de base de potències i arrels
+
+    :param tipus: tipus d'exercici
+    :param nivell: dificultat (subtipus d'exercici)
+    :param termes: quants termes (o quina quantitat d'exponents niats o el que sigui)
+    :param seed: número forçat des de fora (per evitar repeticions)
+    :param parell: (l'exponent) 0 imparell, 1 parell, 2 rand
+    :param fneg: (forçar exp negatiu) 0 no forçar, 1 negatiu, 2 positiu
+    :param solucions: retornar també la solució
+    """
+    text = "base^{42}"
+    solu = "solu^{42}"
+    primers = [2, 3, 5, 7, 11, 13, 17]
+
+    # BASE POTÈNCIES (BPOW)
+    if tipus == 1:  # combinar exponents (sense exp negatius // amb exp negatius)
+        termes = max(termes, 2)  # per si de cas...
+        base = seed if seed else random.choice(primers)
+        exp_sol = 1
+        if nivell > 1 and (fneg == 1 or (not fneg and moneda())):  # toca algun negatiu
+            signes_exps = [x % 2 for x in range(termes)]  # +,-,+,-,+,-,+,-,+...
+            if not random.randint(0, 2):  # de tant en tant faig extra negatiu (per practicar menys per menys)
+                signes_exps[0] = 1
+            random.shuffle(signes_exps)
+        else:
+            signes_exps = [0 for _ in range(termes)]
+        print(fneg, signes_exps)
+        for i, e in enumerate(range(termes)):
+            exp = random.randint(2, 5)
+            if signes_exps[i]:
+                exp = -exp
+            if not i:
+                text = f"{base}^" + "{" + f"{exp}" + "}"  # el primer sense parèntesi
+            else:
+                text = f"({text})^" + "{" + f"{exp}" + "}"
+            exp_sol *= exp
+        text = squarebracketer(text)
+        solu = f"{base}^" + "{" + f"{exp_sol}" + "}"
+
+    elif tipus == 2:  # signe segons paritat: (-3)^4 = 3^4 (exponent positiu // exponent qualsevol)
+        exp = random.randint(2, random.choice([10, 10, 100]))
+        exp = (exp // 2) * 2  # el faig parell
+        if not parell or (parell == 2 and moneda()):  # si toca el faig imparell
+            exp += 1
+        base = seed if seed else random.randint(1, random.randint(10, 20))
+
+        if nivell == 1:  # exponent positiu
+            s_exp = ""
+        else:  # exponent qualsevol
+            s_exp = random.choice(["-", ""])
+        text = f"(-{base})^" + "{" + f"{s_exp}{exp}" + "}"
+        s = "-" if exp % 2 else ""
+        solu = s + f"{base}^" + "{" + f"{s_exp}{exp}" + "}"
+
+    # BASE ARRELS (BSQR)
+    elif tipus == 101:  # simplificar arrels
+        base = seed if seed else random.choice(primers)
+        index, exp = random.sample([1, 2, 3, 4, 5, 6, 7], 2)
+        if exp > index:
+            index, exp = exp, index
+        for k in random.sample([2, 2, 3, 3, 4, 5, 10], termes-1):
+            index, exp = index * k, exp * k
+        text = tex_sqrt(base, index, exp)
+        index, exp = fracsimple(index, exp)
+        solu = tex_sqrt(base, index, exp)
+
+    elif tipus == 102:  # convertir arrel en potència (sense exp negatius / amb negatius)
+        base = random.choice(primers)
+        index = seed if seed else random.randint(2, 20)
+        exp = random.randint(1, max(15, index-1))
+        if index == exp:
+            index += 1
+        if nivell == 2 and moneda():
+            exp = -exp
+        text = tex_sqrt(base, index, exp)
+        exp, index = fracsimple(exp, index)  # simplifico la fracció per la solu
+        solu = f"{base}^" + "{" + tex_frac(exp, index) + "}"
+
+    if solucions:
+        return text, solu
+    return text
+
+
+def tex_sqrt(base, index=2, exp=1):
+    """munta una arrel en latex (pot tenir un exponent a l'interior, però no posa parèntesi a la base)"""
+    if index < 1:
+        return "ERR: índex inesperat, amics"
+    if index == 2:
+        index = ""
+    else:
+        index = f"[{index}]"
+    if exp == 0:
+        return "1"
+    elif exp == 1:
+        exp = ""
+    else:
+        exp = "^{" + f"{exp}" + "}"
+    if index == 1:
+        return f"{base}{exp}"
+    return rf"\sqrt{index}" + "{" + f"{base}{exp}" + "}"
+
+
+def tex_frac(n, d):
+    """munta una fracció en latex donat num i den (retorna num si den==1)"""
+    if d == 1:
+        return f"{n}"
+    return r"\frac{" + f"{n}" + "}{" + f"{d}" + "}"
+
+
 def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
-    """Retorna exrrcicis de potències i arrels
+    """Retorna exercicis de potències i arrels
 
     :param tipus:
     :param nivell:

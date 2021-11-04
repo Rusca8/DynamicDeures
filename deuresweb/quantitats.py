@@ -35,6 +35,10 @@ def quantitats_de(nom, alt="def"):
         "FRAC_SIMPLES_SUMAIRESTA": [0, 3, 6, 12, 18, 37, 74],
 
         # ******** POWSQR ******** #
+        "POWSQR_BPOW_COMBINA": [0, 4, 8, 16, 28, 68, 140],
+        "POWSQR_BPOW_SIGNEPARITAT": [0, 4, 8, 16, 28, 68, 140],
+        "POWSQR_BSQR_ARRELAPOTENCIA": [0, 4, 8, 16, 28, 68, 140],
+        "POWSQR_BSQR_SIMPLIFICA": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_POW_FACTORITZADECIMALS": [0, 2, 3, 6, 17, 35, 71],
         "POWSQR_POW_FACTORITZAISIMPLIFICA": [0, 2, 3, 6, 17, 35, 71],
         "POWSQR_POW_MATEIXABASE": {"def": [0, 3, 6, 12, 21, 51, 105],

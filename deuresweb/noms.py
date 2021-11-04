@@ -21,7 +21,9 @@ def nom_apartat(tema, apartat, btn=False):
             "combis": ["Operacions combinades", "Op. Combinades"],
         },
         "powsqr": {
+            "bpow": ["Base (Potències)", "Base (P) ✨"],
             "pow": ["Potències", "Potències"],
+            "bsqr": ["Base (Arrels)", "Base (A) ✨"],
             "sqr": ["Arrels", "Arrels"],
         },
         "px": {
