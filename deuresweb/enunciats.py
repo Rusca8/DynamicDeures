@@ -971,7 +971,10 @@ def factorcomu():
                             f" barreja{tdes[g][p]} amb" + random.choice([" carquinyolis de colors",
                                                                          " suc de cactus",
                                                                          " pèls de ximpanzé"]),
-                            f" posa{tdes[g][p]} en forma de sopa de lletres",
+                            f" posa{tdes[g][p]} en forma" + random.choice([" de sopa de lletres",
+                                                                           " de bec d'ornitorrinc"
+                                                                           " de pingüí enfadat",
+                                                                          ]),
                             f" banya{tdes[g][p]} en" + random.choice([" grumolls de colacao",
                                                                       " suor de cocodril",
                                                                       " llàgrimes de cuc de terra"])])

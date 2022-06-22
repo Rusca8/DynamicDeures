@@ -1193,6 +1193,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
     if tipus == 1:  # potències, mateix exponent
         if nivell == 1:  # multiplicant
             text = ""
+            solu = 1  # la base (l'exp serà constant, l'afegeixo després)
             exp = random.randint(2, 9)
             if random.randint(1, 4) == 4:
                 exp = -exp
@@ -1206,13 +1207,25 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
                 elif random.randint(1, 15) == 1:
                     text += f"{random.randint(2, random.choice([9, 9637]))}" + "^0"
                 else:
-                    base = f"{random.randint(2, 6)}"
-                    if random.randint(1, 4) == 4:
+                    base = random.randint(2, 6)
+                    if not random.randint(0, 3):
+                        solu *= -base
                         base = f"(-{base})"
+                    else:
+                        solu *= base
                     text += f"{base}" + "^{" + f"{exp}" + "}"
+            # muntatge solució
+            signe_solu = "-" if solu < 0 and exp % 2 else ""
+            if exp == 0:
+                solu = 1
+                exp = ""
+            elif abs(solu) == 1 or exp == 1:
+                exp = ""
+            solu = f"{signe_solu}{abs(solu)}^" + "{" + f"{exp}" + "}"
 
         elif nivell == 2:  # multiplicant i dividint
             text = ""
+            solu = 1  # la base (l'exp serà constant, l'afegeixo després)
             exp = random.randint(2, 9)
             if random.randint(1, 4) == 4:
                 exp = -exp
@@ -1220,48 +1233,70 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
                 exp = random.randint(300, 1458)  # mutació exp enorme
             bloc = ""
             multigastada = False  # asseguro 1 div mínim
+            a = 1  # per deixar content l'IDE, que li fa por accedir abans de declarar juajaj
             for x in range(termes):
-                if x % 3 == 0:  # primera
-                    a = random.randint(2, 5)
+                if x % 3 == 0:  # enceto el bloc de tres números (deixo pendent el primer número per triar-lo divisible)
+                    a = random.randint(2, 5)  # número que haurà de ser divisible
                     if x != 0:
                         text += "\\cdot "
+                    solu *= a
                 else:
-                    b = random.randint(2, 9)
-                    if moneda() and not multigastada:
+                    b = random.randint(2, 9)  # altres números del bloc
+                    if moneda() and not multigastada:  # sortejo multi o divi (només entro si puc multi)
                         if random.randint(1, 10) == 1:  # mutació 1^27482
                             bloc += "\\cdot 1^{" + f"{random.randint(1, random.choice([9, 14958]))}" + "}"
                         elif random.randint(1, 10) == 1:
                             bloc += f"\\cdot {random.randint(2, random.choice([9, 9637]))}" + "^0"
                         else:
                             if random.randint(1, 4) == 1:
+                                solu *= -b
                                 b = f"(-{b})"
+                            else:
+                                solu *= b
                             bloc += f"\\cdot {b}^" + "{" + f"{exp}" + "}"
                         multigastada = True
-                    else:
+                    else:  # divisió
                         a *= b
                         if random.randint(1, 4) == 1:
+                            solu *= -1
                             b = f"(-{b})"
                         bloc += f"\\div {b}^" + "{" + f"{exp}" + "}"
-                if x % 3 == 2 or x == (termes - 1):  # última
+                if x % 3 == 2 or x == (termes - 1):  # tanco el bloc
                     text += f"{a}^" + "{" + f"{exp}" + "}" + bloc
                     bloc = ""
                     multigastada = False
+            # muntatge solució
+            signe_solu = "-" if solu < 0 and exp % 2 else ""
+            if exp == 0:
+                solu = 1
+                exp = ""
+            elif abs(solu) == 1 or exp == 1:
+                exp = ""
+            solu = f"{signe_solu}{abs(solu)}^" + "{" + f"{exp}" + "}"
 
     elif tipus == 2:  # potències, mateixa base
         if nivell == 1 or nivell == 2:  # multiplicant // mul i div
             text = ""
             base = random.randint(2, 14)
+            solu_base = base
+            solu = 0  # exp (la base és ctt)
+            solu_op = 1  # signe de l'exponent fruit de l'operació (1 multi, -1 divi)
+
             if random.randint(1, 4) == 1:
+                solu_base = -base
                 base = f"(-{base})"
             if random.randint(1, 20) == 1:
                 base = random.randint(32, 265)  # mutació base enorme
+                solu_base = base
 
             for x in range(termes):
                 if x > 0:
                     if nivell == 1 or moneda():
                         text += r"\cdot "
+                        solu_op = 1
                     else:
                         text += r"\div "
+                        solu_op = -1
                 if random.randint(1, 15) == 1:  # mutació 1^27482
                     text += "1^{" + f"{random.randint(1, random.choice([9, 14958]))}" + "}"
                 elif random.randint(1, 15) == 1:
@@ -1270,10 +1305,19 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
                     exp = random.randint(1, 10)
                     if random.randint(1, 4) == 1:
                         exp = -exp
+                    solu += solu_op*exp
                     if exp == 1:
                         text += f"{base}"
                     else:
                         text += f"{base}" + "^{" + f"{exp}" + "}"
+            # muntatge solució
+            signe_solu = "-" if solu_base < 0 and solu % 2 else ""
+            if solu == 0:
+                solu_base = 1
+                solu = ""
+            elif abs(solu_base) == 1 or solu == 1:
+                solu = ""
+            solu = f"{signe_solu}{abs(solu_base)}^" + "{" + f"{solu}" + "}"
 
         elif nivell == 3:  # TODO organitzar aquest i els nivells inferiors
             text = ""
@@ -3117,6 +3161,7 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
             if not dtext:
                 dtext = "0"
             text = etext + "=" + dtext
+            print(text, "||", a, b, c, d, e, f, g, h)
 
         elif nivell == 9:  # (Ax+B)/E + (Cx+D)/F + Gx + H/J = 0;  [J = EF] [simplificat tot quan es pot]
             """AIXÒ NO HA FUNCIONAT BÉ. CREC QUE NO VAL LA PENA RESULTAT ENTER"""

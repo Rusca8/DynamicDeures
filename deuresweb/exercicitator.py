@@ -9,6 +9,7 @@ import re
 import generator as gen
 import enunciats as en
 import cryptolator as crypt
+from classes import P
 
 from pylatex import NoEscape
 from rpylatex import (begin, end, part, space, lines, br, needspace, bloctitle, question, choice,
@@ -662,7 +663,7 @@ def powsqr_pow_factoritzaisimplifica(doc, opcions):  # TODO optimitzar el genera
 
 
 def powsqr_pow_mateixabase(doc, opcions):
-    enunciat = "Expressa com una sola potència (mateixa base)."
+    enunciat = "Expressa com una sola potència."
     enunsols = "Potències, mateixa base."
 
     termes = var_quines(opcions, "termes", [2, 3, 4, 5])
@@ -676,8 +677,8 @@ def powsqr_pow_mateixabase(doc, opcions):
     s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
 
     g = [
-        lambda: gen.powsqr(2, 1, termes=next(s_termes)),  # només multis
-        lambda: gen.powsqr(2, 2, termes=next(s_termes)),  # multis i divis
+        lambda: gen.powsqr(2, 1, termes=next(s_termes), solucions=True),  # només multis
+        lambda: gen.powsqr(2, 2, termes=next(s_termes), solucions=True),  # multis i divis
         ]
 
     pvar = quantilvar(opcions["var"]["sense_divisions"])
@@ -690,6 +691,8 @@ def powsqr_pow_mateixabase(doc, opcions):
                           cols=cols,
                           espai_apartat=7,
                           espai_final=5,
+                          mates_solus=True,
+                          es_spoiler=True,
                           )
     return [enunsols, tsols]
 
@@ -722,7 +725,7 @@ def powsqr_pow_mateixafraccio(doc, opcions):
 
 
 def powsqr_pow_mateixexponent(doc, opcions):
-    enunciat = "Expressa com una sola potència (mateix exponent)."
+    enunciat = "Expressa com una sola potència."
     enunsols = "Potències, mateix exponent."
 
     termes = var_quines(opcions, "termes", [2, 3, 4, 5])
@@ -736,8 +739,8 @@ def powsqr_pow_mateixexponent(doc, opcions):
     s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
 
     g = [
-        lambda: gen.powsqr(1, 1, termes=next(s_termes)),  # només multis
-        lambda: gen.powsqr(1, 2, termes=next(s_termes)),  # multis i divis
+        lambda: gen.powsqr(1, 1, termes=next(s_termes), solucions=True),  # només multis
+        lambda: gen.powsqr(1, 2, termes=next(s_termes), solucions=True),  # multis i divis
     ]
 
     pvar = quantilvar(opcions["var"]["sense_divisions"])
@@ -750,6 +753,8 @@ def powsqr_pow_mateixexponent(doc, opcions):
                           cols=cols,
                           espai_apartat=7,
                           espai_final=5,
+                          mates_solus=True,
+                          es_spoiler=True,
                           )
     return [enunsols, tsols]
 
@@ -1474,59 +1479,6 @@ def quantilvar(var):
     except:
         v = 2
     return v*100//4
-
-
-class P:
-    """Llista de quins percentatges ha d'ocupar cada variant de l'exercici (cada g).
-    Té la següent forma: [[%1, {opcions1}], [%2, {opcions2}], [%3, {opcions3}], ...]
-
-    Opcions:
-        "max": quantitat d'apartats màxima que puc posar (independentment del percentatge)
-    """
-    def __init__(self, pesos, en_percentatge=False):
-        """Construeix la llista de percentatges a partir dels pesos.
-
-        :param pesos: pesos relatius de cada variant (p.ex. [1, 2, 2] == del 2n doble que del 1r, del 3r com del 2n)
-        :param en_percentatge: True = he passat els percentatges ja fets en lloc dels pesos
-        """
-        self.p = []
-        # els passo a la interna assegurant que hi ha màxim
-        for q in pesos:
-            try:
-                self.p.append([q[0], q[1]])  # assegura llista [a, b]
-                self.p[-1][1]["max"] = self.p[-1][1].get("max", 100000)  # és prou pq LaTeX limita a unes 700 (a-zz)
-            except TypeError:
-                self.p.append([q, {"max": 100000}])
-        if not en_percentatge:
-            # faig els pesos acumulats
-            acc = 0
-            for q in self.p:
-                q[0] += acc
-                acc = q[0]
-            # converteixo en percentatges
-            total = self.p[-1][0]
-            self.p = [[round(q[0]*100/total, 3), q[1]] for q in self.p]  # divisió entera no conserva prou precisió
-
-    def flex(self, nvar, pvar):  # TODO optimitzar amb map()
-        """Estira i arronsa els percentatges de manera que l'índex escollit tingui el percentatge escollit
-
-        :param nvar: índex escollit
-        :param pvar: percentatge que ha de tenir l'índex escollit
-        """
-        print("vas canviar els paràmetres d'ordre, gamarús") if pvar < 10 else None
-        # retallo per la frontera
-        pre = self.p[:nvar + 1]
-        post = self.p[nvar + 1:]
-        frontera = pre[-1][0]
-        # deformo cada tros
-        pre = [[round(q[0]*pvar / frontera, 2), q[1]] for q in pre]  # sense round pot sortir tipus [1, 3, 3, 4, 6]
-        post = [[pvar + round((q[0]-frontera)*(100-pvar) / (post[-1][0]-frontera), 2), q[1]] for q in post]
-        # muntatge
-        self.p = pre + post
-        return self
-
-    def get(self):
-        return self.p
 
 
 def get_var(opcions, key, default=None):
