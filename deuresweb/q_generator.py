@@ -3,6 +3,7 @@ import random
 
 from generator import fracsimple
 import q_enunciats as en
+from q_classes import Morg, Node
 
 
 def moneda():
@@ -1241,3 +1242,41 @@ def finorg(tipus, nivell=1, descn=[], estil="general", ffila=[], solucions=False
 
 
 # elemstats()
+
+if __name__ == "__main__":  # debug proves
+    print(r"\setchemfig{atom sep=2em}")
+    for x in range(5):
+        molec = Morg([Node() for n in range(random.randint(4, 8))])
+        linkprev = 0
+        for i, node in enumerate(molec.nodes):
+            espais = node.n - linkprev - node.link
+            puc_llarg = True
+            while espais > 0:
+                if not random.randint(0, 2):
+                    if not random.randint(0, 3) and puc_llarg:
+                        node.new_rad(random.choice(["Et", "Et", "Prop"]))
+                    else:
+                        node.new_rad(random.choice(["Cl", "Br", "I", "F", "Met", "Met"]))
+                    puc_llarg = False
+                    espais -= 1
+                elif not random.randint(0, 6) and i < len(molec.nodes)-1:
+                    if espais > 1 and moneda():
+                        node.link = min(node.link+2, 3)
+                        espais -= 2
+                    else:
+                        node.link = min(node.link+1, 3)
+                        espais -= 1
+                else:
+                    espais -= 1
+            linkprev = node.link
+        print(r"\chemfig{"+f"{molec}"+r"}\\")
+        print(r"\vspace{.5cm}")
+
+    molec = Morg([Node(rads=[Morg(["O"], prelink=2), "O"]), "C", "C", Node("C", rads=[Morg(["O"], prelink=2)]), "C", "C",
+                  Node(rads=[Morg(["C", "C"]), Morg(["C", "C", "C", "C", "C"])]),
+                  "C", Node(rads=[Morg(["O"], prelink=2), "O"])])
+    print(r"\chemfig{" + f"{molec}" + r"}\\")
+    print(r"\vspace{.5cm}")
+
+    molec = Morg(["Amid", "C", "C", "Cet", "N", ["=", "Cl", "Cl"], "C", "Cet", "C", "N=", "C", "~", "C", "Ald"])
+    print(r"\chemfig{" + f"{molec}" + r"}\\")

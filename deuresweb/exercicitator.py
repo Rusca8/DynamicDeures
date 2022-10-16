@@ -45,22 +45,24 @@ def constructor_de(nom):
         "FRAC_SIMPLES_SUMAIRESTA": frac_simples_sumairesta,
 
         # ******** POWSQR ******** #
-        "POWSQR_BPOW_COMBINA": powsqr_bpow_combina,
-        "POWSQR_BPOW_SIGNEPARITAT": powsqr_bpow_signeparitat,
-        "POWSQR_BSQR_ARRELAPOTENCIA": powsqr_bsqr_arrelapotencia,
-        "POWSQR_BSQR_SIMPLIFICA": powsqr_bsqr_simplifica,
         "POWSQR_POW_FACTORITZADECIMALS": powsqr_pow_factoritzadecimals,
         "POWSQR_POW_FACTORITZAISIMPLIFICA": powsqr_pow_factoritzaisimplifica,
         "POWSQR_POW_MATEIXABASE": powsqr_pow_mateixabase,
         "POWSQR_POW_MATEIXAFRACCIO": powsqr_pow_mateixafraccio,
         "POWSQR_POW_MATEIXEXPONENT": powsqr_pow_mateixexponent,
+        "POWSQR_POW_NIADES": powsqr_pow_niades,
+        "POWSQR_POW_SIGNEPARITAT": powsqr_pow_signeparitat,
         "POWSQR_POW_SIMPLIFICAFRACCIO": powsqr_pow_simplificafraccio,
-        "POWSQR_SQR_COMBINA": powsqr_sqr_combina,
+        "POWSQR_SQR_ARRELAPOTENCIA": powsqr_sqr_arrelapotencia,
         "POWSQR_SQR_EXTREU": powsqr_sqr_extreu,
         "POWSQR_SQR_FACTORITZAIEXTREU": powsqr_sqr_factoritzaiextreu,
         "POWSQR_SQR_INDEXCOMU": powsqr_sqr_indexcomu,
+        "POWSQR_SQR_INDEXCOMUMULTI": powsqr_sqr_indexcomumulti,
         "POWSQR_SQR_INTRODUEIX": powsqr_sqr_introdueix,
+        "POWSQR_SQR_NIADES": powsqr_sqr_niades,
+        "POWSQR_SQR_POTENCIAAARREL": powsqr_sqr_potenciaaarrel,
         "POWSQR_SQR_RACIONALITZA": powsqr_sqr_racionalitza,
+        "POWSQR_SQR_SIMPLIFICA": powsqr_sqr_simplifica,
         "POWSQR_SQR_SUMAIRESTA": powsqr_sqr_sumairesta,
 
         # ********** PX ********** #
@@ -520,7 +522,7 @@ def frac_simples_sumairesta(doc, opcions):
 
 # ********************** POWSQR ************************ #
 
-def powsqr_bpow_combina(doc, opcions):
+def powsqr_pow_niades(doc, opcions):
     enunciat = "Combina els exponents per deixar-ne un de sol."
     enunsols = "Combinar exponents."
 
@@ -551,7 +553,7 @@ def powsqr_bpow_combina(doc, opcions):
     return [enunsols, tsols]
 
 
-def powsqr_bpow_signeparitat(doc, opcions):
+def powsqr_pow_signeparitat(doc, opcions):
     enunciat = "Treu el parèntesi de les potències següents (deixant el signe que correspongui)."
     enunsols = "Simplificar signes."
 
@@ -578,9 +580,9 @@ def powsqr_bpow_signeparitat(doc, opcions):
     return [enunsols, tsols]
 
 
-def powsqr_bsqr_arrelapotencia(doc, opcions):
-    enunciat = "Converteix en potències les arrels següents (i simplifica quan es pugui)."
-    enunsols = "Convertir arrels en potències."
+def powsqr_sqr_arrelapotencia(doc, opcions):
+    enunciat = "Escriu les arrels següents en forma de potència (i simplifica quan es pugui)."
+    enunsols = "D'arrel a potència."
 
     g = [
         lambda: gen.powsqr_base(102, 1, solucions=True),  # exp positius
@@ -603,7 +605,32 @@ def powsqr_bsqr_arrelapotencia(doc, opcions):
     return [enunsols, tsols]
 
 
-def powsqr_bsqr_simplifica(doc, opcions):
+def powsqr_sqr_potenciaaarrel(doc, opcions):
+    enunciat = "Escriu en forma d'arrel les següents potències (i simplifica quan es pugui)."
+    enunsols = "De potència a arrel."
+
+    g = [
+        lambda: gen.powsqr_base(103, 1, solucions=True),  # exp positius
+        lambda: gen.powsqr_base(103, 2, solucions=True),  # exp qualssevol
+    ]
+
+    pvar = quantilvar(opcions["var"]["sense_negatius"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=4,
+                          espai_apartat=7,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("arrels"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_simplifica(doc, opcions):
     enunciat = "Simplifica les arrels següents."
     enunsols = "Simplificar arrels."
 
@@ -785,7 +812,7 @@ def powsqr_pow_simplificafraccio(doc, opcions):
     return [enunsols, tsols]
 
 
-def powsqr_sqr_combina(doc, opcions):
+def powsqr_sqr_niades(doc, opcions):
     enunciat = "Expressa com una sola arrel."
     enunsols = "Combinar radicals."
 
@@ -862,9 +889,9 @@ def powsqr_sqr_factoritzaiextreu(doc, opcions):
     return [enunsols, tsols]
 
 
-def powsqr_sqr_indexcomu(doc, opcions):
+def powsqr_sqr_indexcomumulti(doc, opcions):
     enunciat = "Expressa com una sola arrel."
-    enunsols = "Arrels, índex comú."
+    enunsols = "Arrels, multiplicar per índex comú."
 
     termes = var_quines(opcions, "termes", [2, 3, 4])
     if 4 in termes and not all(x in termes for x in [2, 3]):  # (hi ha amples no diluits)
@@ -879,6 +906,39 @@ def powsqr_sqr_indexcomu(doc, opcions):
     g = [
         lambda: gen.powsqr(103, 1, termes=next(s_termes)),  # Sense exponents
         lambda: gen.powsqr(103, 2, termes=next(s_termes)),  # amb exponents
+        ]
+
+    pvar = quantilvar(opcions["var"]["sense_exponents"])
+    p = P([1, 1]).flex(0, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=cols,
+                          espai_apartat=7,
+                          espai_final=5,
+                          )
+    return [enunsols, tsols]
+
+
+def powsqr_sqr_indexcomu(doc, opcions):
+    enunciat = "Converteix a índex comú els grups d'arrels següents."
+    enunsols = "Arrels, índex comú."
+
+    termes = var_quines(opcions, "termes", [2, 3, 4])
+    if 4 in termes and not all(x in termes for x in [2, 3]):  # (hi ha amples no diluits)
+        cols = 2
+    else:
+        cols = 3
+
+    opcions["q_alt"] = "mc2" if cols == 2 else None  # demano quantitats per només 2 columnes
+
+    s_termes = alt_p_var(opcions, P([1 for _ in termes]), termes)  # reparteixo qtats de termes a parts iguals
+
+    g = [
+        lambda: gen.powsqr(100, 1, termes=next(s_termes)),  # Sense exponents
+        lambda: gen.powsqr(100, 2, termes=next(s_termes)),  # amb exponents
         ]
 
     pvar = quantilvar(opcions["var"]["sense_exponents"])
@@ -1370,7 +1430,7 @@ def exercici_no_trobat(doc, opcions):
 
 # ******************************* Esquelets ********************************* #
 def crea_exercici(doc, opcions, g, p=None, enunciat="EM FALTA L'ENUNCIAT, NEN", cols=1, scale=1,
-                  espai_min=8, espai_apartat=4, espai_final=0, mates=True,
+                  espai_min=10, espai_apartat=4, espai_final=0, mates=True,
                   mates_solus=False, stretch_solus=None, es_spoiler=False):
     """Munta un exercici LaTeX (exercici sense varietat interna) a partir de les seves dades.
 

@@ -827,6 +827,63 @@ def px_invent():
         intercoma = ""
     return text[0].capitalize() + intercoma + ", ".join(text[1:-1]) + " i " + text[-1] + "."
 
+
+def factorcomu():
+    text = "No ha funcionat la cosa em temo"
+    var1 = random.choice([1, 1, 2, 2, 2])
+    if var1 == 1:  # vull menjar
+        t1 = random.choice(["Amb la gana que tinc podria menjar-me",
+                            "Voldria menjar-me",
+                            "Voldria poder menjar",
+                            "Tinc un gran desig de crospir-me"])
+        t2, g, p = random.choice([[" el cel blau", 1, 0],
+                                  [" el paraigües de la veïna", 1, 0],
+                                  random.choice([[" les potes de la millor taula de l'ikea", 0, 1],
+                                                 [" el moble de sota el microones", 1, 0]]),
+                                  [" un escarabat d'aquells egipcis", 1, 0],
+                                  [" els nebots de la gent del poble", 1, 1]])
+        t3 = random.choice([" cadascun dels dies" + random.choice([" de la meva vida",
+                                                                   " del mes de juliol",
+                                                                   " de la setmana"]),
+                            f" barreja{tdes[g][p]} amb" + random.choice([" carquinyolis de colors",
+                                                                         " suc de cactus",
+                                                                         " pèls de ximpanzé"]),
+                            f" posa{tdes[g][p]} en forma" + random.choice([" de sopa de lletres",
+                                                                           " de bec d'ornitorrinc"
+                                                                           " de pingüí enfadat",
+                                                                          ]),
+                            f" banya{tdes[g][p]} en" + random.choice([" grumolls de colacao",
+                                                                      " suor de cocodril",
+                                                                      " llàgrimes de cuc de terra"])])
+        text = t1 + t2 + t3
+    elif var1 == 2:  #
+        t1 = random.choice(["El secret més ben guardat d'amèrica és que",
+                            "Els meus amics no saben que",
+                            "Tots sabem que d'amagat",
+                            "Per molt que dissimuli es nota bastant que",
+                            "És ben sabut per tots que"])
+        t2 = random.choice([" el president",
+                            " vostè",
+                            random.choice([" la teva germana", " el teu germà"]),
+                            ])
+        t3 = random.choice([" menja mocs de granota",
+                            " s'alimenta d'ulls de sargantana",
+                            " baixa al riu a xuclar llimacs",
+                            " llepa la bústia del veí de dalt",
+                            " parla amb les mosques de casa",
+                            " se'n va a viure sota la pica",
+                            " posa pinya a la pizza",
+                            " barreja nocilla i nutella",
+                            " entona cants gregorians"])
+        t4 = random.choice([" cada cop que en té la oportunitat",
+                            random.choice([" quan hi ha lluna plena", " els dies de lluna plena"]),
+                            " un dia sí i altre també",
+                            random.choice([" quan no mira ningú", " quan estem tots despistats"]),
+                            " perquè li agrada que no vegis"])
+        text = t1 + t2 + t3 + t4
+    return text
+
+
 # *************************** Successions *************************** #
 
 def success(tipus, nivell, variant, d, a1, n, an):
@@ -951,64 +1008,153 @@ def success(tipus, nivell, variant, d, a1, n, an):
     return text
 
 
-def factorcomu():
-    text = "No ha funcionat la cosa em temo"
-    var1 = random.choice([1, 1, 2, 2, 2])
-    if var1 == 1:  # vull menjar
-        t1 = random.choice(["Amb la gana que tinc podria menjar-me",
-                            "Voldria menjar-me",
-                            "Voldria poder menjar",
-                            "Tinc un gran desig de crospir-me"])
-        t2, g, p = random.choice([[" el cel blau", 1, 0],
-                                  [" el paraigües de la veïna", 1, 0],
-                                  random.choice([[" les potes de la millor taula de l'ikea", 0, 1],
-                                                 [" el moble de sota el microones", 1, 0]]),
-                                  [" un escarabat d'aquells egipcis", 1, 0],
-                                  [" els nebots de la gent del poble", 1, 1]])
-        t3 = random.choice([" cadascun dels dies" + random.choice([" de la meva vida",
-                                                                   " del mes de juliol",
-                                                                   " de la setmana"]),
-                            f" barreja{tdes[g][p]} amb" + random.choice([" carquinyolis de colors",
-                                                                         " suc de cactus",
-                                                                         " pèls de ximpanzé"]),
-                            f" posa{tdes[g][p]} en forma" + random.choice([" de sopa de lletres",
-                                                                           " de bec d'ornitorrinc"
-                                                                           " de pingüí enfadat",
-                                                                          ]),
-                            f" banya{tdes[g][p]} en" + random.choice([" grumolls de colacao",
-                                                                      " suor de cocodril",
-                                                                      " llàgrimes de cuc de terra"])])
-        text = t1 + t2 + t3
-    elif var1 == 2:  #
-        t1 = random.choice(["El secret més ben guardat d'amèrica és que",
-                            "Els meus amics no saben que",
-                            "Tots sabem que d'amagat",
-                            "Per molt que dissimuli es nota bastant que",
-                            "És ben sabut per tots que"])
-        t2 = random.choice([" el president",
-                            " vostè",
-                            random.choice([" la teva germana", " el teu germà"]),
+# *************************** Derivades ***************************** #
+
+def dx_receptes(nivell, variant=None, a=None, b=None, solucions=False):
+    text = ""
+    solu = ""
+    if a is None:
+        a = random.randint(-20, 20)
+    if b is None and nivell in [1,
+                                3, 13, 23,
+                                4, 14,
+                                5, 6,
+                                ]:
+        b = random.choice([x for x in range(-20, 21) if x != a])
+
+    if nivell == 1:  # passa pel punt (A, B)  ::  f(A)=B
+        if variant is None:
+            variant = random.randint(0, 1)
+
+        if variant == 0:
+            text = random.choice([f"Passa pel punt ({a}, {b}).",
+                                  f"Passa per ({a}, {b}).",
+                                  f"El punt ({a}, {b}) {random.choice(['és de', 'pertany a'])}"
+                                  + f" la {random.choice(['corba', 'funció'])}.",
+                                  f"La seva gràfica passa per ({a}, {b})",
+                                  ])
+        else:
+            text = random.choice([f"La imatge de {a} és {b}.",
+                                  f"La imatge del punt {a} és {b}."
+                                  ])
+        solu = f"$f({a})={b}$"
+    elif nivell in [2, 12, 22]:  # té un màxim/mínim quan x=A  ::  f'(A)=0  || p.inflex x=A  || inflex horitz x=A
+        if nivell == 2:
+            if variant is None:
+                variant = random.choice([0, 1, 2, 3])
+            mami = ["màxim", "mínim", "extrem relatiu", "punt crític"][variant]
+        elif nivell == 12:
+            mami = "punt d'inflexió"
+        else:
+            mami = "punt d'inflexió horitzontal"
+
+        t1 = random.choice([f"Té un {mami}",
+                            f"Hi ha un {mami}",
                             ])
-        t3 = random.choice([" menja mocs de granota",
-                            " s'alimenta d'ulls de sargantana",
-                            " baixa al riu a xuclar llimacs",
-                            " llepa la bústia del veí de dalt",
-                            " parla amb les mosques de casa",
-                            " se'n va a viure sota la pica",
-                            " posa pinya a la pizza",
-                            " barreja nocilla i nutella",
-                            " entona cants gregorians"])
-        t4 = random.choice([" cada cop que en té la oportunitat",
-                            random.choice([" quan hi ha lluna plena", " els dies de lluna plena"]),
-                            " un dia sí i altre també",
-                            random.choice([" quan no mira ningú", " quan estem tots despistats"]),
-                            " perquè li agrada que no vegis"])
-        text = t1 + t2 + t3 + t4
+
+        t2 = random.choice([f" al punt {a} de les abscisses",
+                            f" quan la x val {a}",
+                            f" quan x={a}",
+                            f" al punt x={a}",
+                            f" al punt d'abscissa {a}",
+                            ])
+
+        text = t1 + t2 + "."
+        if nivell == 2:
+            solu = f"$f'({a})=0$"
+        elif nivell == 12:
+            solu = f"$f''({a})=0$"
+        else:
+            solu = f"$f''({a})=0$, $f'({a})=0$"
+
+    elif nivell in [3, 13, 23]:  # té un màx/min al punt (A, B)  ::  f(A)=B (+) f'(A)=B  || p.inflex || p.inflex horitz
+        if variant is None:
+            variant = random.choice([0, 100])
+            if nivell == 3:
+                variant += random.choice([0, 1, 2, 3])
+        if nivell == 3:
+            mami = ["màxim", "mínim", "extrem relatiu", "punt crític"][variant % 100]
+        elif nivell == 13:
+            mami = "punt d'inflexió"
+        else:
+            mami = "punt d'inflexió horitzontal"
+
+        if variant // 100:
+            t1 = random.choice([f"Té un {mami}",
+                                f"Hi ha un {mami}",
+                                ])
+
+            t2 = random.choice([f" al punt ({a}, {b})",
+                                f" a ({a}, {b})",
+                                ])
+            text = t1 + t2 + "."
+        else:
+            text = random.choice([f"El punt ({a}, {b}) és un {mami}.",
+                                  f"El ({a}, {b}) és un {mami}.",
+                                  ])
+
+        if nivell == 3:
+            solu = f"$f({a})={b}$, $f'({a})=0$"
+        elif nivell == 13:
+            solu = f"$f({a})={b}$, $f''({a})=0$"
+        else:
+            solu = f"$f({a})={b}$, $f''({a})=0$, $f'({a})=0$"
+
+    elif nivell in [4, 14]:  # x=A té pendent B  ||  el pendent de la recta tangent en A és B
+        if variant is None:
+            variant = random.choice([0, 1])
+
+        if nivell == 4:
+            if variant == 0:
+                text = random.choice([f"Té pendent {b} al punt x={a}.",
+                                      f"El pendent del punt x={a} és {b}.",
+                                      f"El pendent és {b} quan la x val {a}.",
+                                      f"El pendent és {b} quan x={a}.",
+                                      ])
+            else:
+                text = random.choice([f"Al punt {a} d'abscisses té pendent {b}.",
+                                      f"Quan x={a} té pendent {b}.",
+                                      f"Quan la x és {a} el pendent és {b}.",
+                                      ])
+        else:
+            text = random.choice([f"La recta tangent al punt x={a} té pendent {b}.",
+                                  f"El pendent de la recta tangent al punt x={a} és {b}.",
+                                  ])
+
+        solu = f"$f'({a})={b}$"
+
+    elif nivell == 5:  # donada recta paral·lela  f'(A)=B
+        recta = f"$y={b}x" + random.choice(['+', '-']) + f"{random.randint(1, 15)}$"
+
+        text = random.choice([f"La recta {recta} és paral·lela a la funció quan x={a}.",
+                              f"Al punt x={a}, la funció és paral·lela a la recta {recta}.",
+                              f"Té el mateix pendent que la recta {recta} al punt {a} de les abscisses.",
+                              f"Quan x={a}, la funció i la recta {recta} són paral·leles.",
+                              ])
+
+        solu = f"$f'({a})={b}$"
+    elif nivell == 6:  # donada recta tangent f'(A)=B (+) f(A)=Y
+        c = random.randint(1, 10) * random.choice([1, -1])
+        s = "" if c < 0 else "+"
+        recta = f"$y={b}x{s}{c}$"
+
+        text = random.choice([f"La recta {recta} és tangent en x={a}.",
+                              f"La recta tangent a la funció quan x={a} és {recta}",
+                              f"La recta {recta} i la funció són tangents quan x={a}",
+                              f"Al punt {a} de les abscisses, la funció és tangent a la recta {recta}.",
+                              ])
+
+        solu = f"$f'({a})={b}$, $f({a})={b*a+c}$"
+    elif nivell == 7:  # donat angle amb OX (!)
+        ...
+    else:
+        print(f"nivell {nivell} no disponible")
+
+    if solucions:
+        return text, solu
     return text
 
-
 # ****************************** General **************************** #
-
 
 def sp(num):  # hauràs d'afegir un d'allò per incontable, pero bueno
     if num == 1:
@@ -1030,3 +1176,9 @@ def ordinal(num):
 
 def moneda():
     return bool(random.getrandbits(1))
+
+
+if __name__ == "__main__":
+    for x in [1, 1, 2, 2, 12, 22, 3, 3, 13, 23, 4, 4, 14, 5, 5, 6, 6]:
+        for _ in range(2):
+            print(dx_receptes(x), r"\\")

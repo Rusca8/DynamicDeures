@@ -91,6 +91,18 @@
             setTimeout(function() {pop_hide(quin);}, 3000);
         }
 
+        function pop_info(quin, shown){
+            console.log("was: " + shown);
+            if (shown) {
+                console.log("hiding");
+                setTimeout(function() {pop_hide(quin);}, 100);
+            }else{
+                console.log("showing " + quin);
+                $("#" + quin).popover("show");
+                MathJax.typeset();  // render dynamically created eqns (mathjax won't passively check)
+            }
+        }
+
         // ...i això l'amaga (ho crido després de cert temps)
         function pop_hide(quin){
             console.log("Amagant popover: " + quin);

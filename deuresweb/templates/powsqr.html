@@ -18,7 +18,7 @@
     {% endwith %}
 
     <!-- Tria APARTATS -->
-    {% with apartats = ["bpow", "pow", "bsqr", "sqr"] %}
+    {% with apartats = ["pow", "sqr"] %}
         {% include '/parts/triaapartats.html' %}
     {% endwith %}
 
@@ -32,16 +32,10 @@
 {% endblock %}
 {% block extres %}
 
-    {% with apartat = "bpow",
-            exercicis = [
-                'powsqr_bpow_combina',
-                'powsqr_bpow_signeparitat'
-                ] %}
-        {% include '/parts/apartat.html' %}
-    {% endwith %}
-
     {% with apartat = "pow",
             exercicis = [
+                'powsqr_pow_niades',
+                'powsqr_pow_signeparitat',
                 'powsqr_pow_mateixexponent',
                 'powsqr_pow_mateixabase',
                 'powsqr_pow_mateixafraccio',
@@ -52,21 +46,16 @@
         {% include '/parts/apartat.html' %}
     {% endwith %}
 
-
-    {% with apartat = "bsqr",
-            exercicis = [
-                'powsqr_bsqr_simplifica',
-                'powsqr_bsqr_arrelapotencia'
-                ] %}
-        {% include '/parts/apartat.html' %}
-    {% endwith %}
-
     {% with apartat = "sqr",
             exercicis = [
+                'powsqr_sqr_simplifica',
+                'powsqr_sqr_arrelapotencia',
+                'powsqr_sqr_potenciaaarrel',
                 'powsqr_sqr_indexcomu',
+                'powsqr_sqr_indexcomumulti',
                 'powsqr_sqr_introdueix',
                 'powsqr_sqr_extreu',
-                'powsqr_sqr_combina',
+                'powsqr_sqr_niades',
                 'powsqr_sqr_factoritzaiextreu',
                 'powsqr_sqr_sumairesta',
                 'powsqr_sqr_racionalitza',

@@ -1145,6 +1145,18 @@ def powsqr_base(tipus, nivell=1, termes=2, seed=None, parell=2, fneg=0, solucion
         exp, index = fracsimple(exp, index)  # simplifico la fracció per la solu
         solu = f"{base}^" + "{" + tex_frac(exp, index) + "}"
 
+    elif tipus == 103:  # convertir potència en arrel
+        base = random.choice(primers)
+        index = seed if seed else random.randint(2, 20)
+        exp = random.randint(1, max(15, index - 1))
+        if index == exp:
+            index += 1
+        if nivell == 2 and moneda():
+            exp = -exp
+        text = f"{base}^" + "{" + tex_frac(exp, index) + "}"
+        exp, index = fracsimple(exp, index)  # simplifico la fracció per la solu
+        solu = tex_sqrt(base, index, exp)
+
     if solucions:
         return text, solu
     return text
@@ -1617,7 +1629,7 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
         ...
     elif tipus == 102:  # arrels, mateixa base (té sentit?)
         ...
-    elif tipus == 103:  # arrels, índex comú
+    elif tipus in [100, 103]:  # arrels, índex comú
         if nivell == 1:  # multiplicant, sense exponent
             text = ""
             for x in range(termes):
@@ -1626,7 +1638,10 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
                 if ind == 2:
                     ind = ""
                 if x > 0:
-                    text += "\\cdot "
+                    if tipus == 100:
+                        text += ", "
+                    else:
+                        text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}" + "}"
         if nivell == 2:  # multiplicant, amb exponent
             text = ""
@@ -1639,7 +1654,10 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
                     ind = ""
                 e = random.choice(opcions)
                 if x > 0:
-                    text += "\\cdot "
+                    if tipus == 100:
+                        text += ",\\ "
+                    else:
+                        text += "\\cdot "
                 text += "\\sqrt[" + f"{ind}" + "]{" + f"{b}^" + "{" + f"{e}" + "}" + "}"
     elif tipus == 104:  # arrels, combinar radicals
         text = f"{random.randint(2, 9)}"

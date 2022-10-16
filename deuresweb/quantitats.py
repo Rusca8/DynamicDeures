@@ -35,10 +35,6 @@ def quantitats_de(nom, alt="def"):
         "FRAC_SIMPLES_SUMAIRESTA": [0, 3, 6, 12, 18, 37, 74],
 
         # ******** POWSQR ******** #
-        "POWSQR_BPOW_COMBINA": [0, 4, 8, 16, 28, 68, 140],
-        "POWSQR_BPOW_SIGNEPARITAT": [0, 4, 8, 16, 28, 68, 140],
-        "POWSQR_BSQR_ARRELAPOTENCIA": [0, 4, 8, 16, 28, 68, 140],
-        "POWSQR_BSQR_SIMPLIFICA": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_POW_FACTORITZADECIMALS": [0, 2, 3, 6, 17, 35, 71],
         "POWSQR_POW_FACTORITZAISIMPLIFICA": [0, 2, 3, 6, 17, 35, 71],
         "POWSQR_POW_MATEIXABASE": {"def": [0, 3, 6, 12, 21, 51, 105],
@@ -48,15 +44,20 @@ def quantitats_de(nom, alt="def"):
         "POWSQR_POW_MATEIXEXPONENT": {"def": [0, 3, 6, 12, 21, 51, 105],
                                       "mc2":  [0, 4, 6, 8, 14, 32, 70],
                                       }.get(alt, default),
+        "POWSQR_POW_NIADES": [0, 4, 8, 16, 28, 68, 140],
+        "POWSQR_POW_SIGNEPARITAT": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_POW_SIMPLIFICAFRACCIO": [0, 3, 6, 9, 18, 42, 87],
-        "POWSQR_SQR_COMBINA": [0, 4, 8, 12, 24, 59, 124],
+        "POWSQR_SQR_ARRELAPOTENCIA": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_SQR_EXTREU": [0, 4, 8, 12, 32, 66, 132],
         "POWSQR_SQR_FACTORITZAIEXTREU": [0, 3, 6, 9, 21, 51, 105],
         "POWSQR_SQR_INDEXCOMU": {"def": [0, 3, 6, 12, 21, 51, 105],
                                  "mc2":  [0, 2, 4, 6, 14, 32, 70],
                                  }.get(alt, default),
         "POWSQR_SQR_INTRODUEIX": [0, 4, 8, 12, 32, 66, 132],
+        "POWSQR_SQR_NIADES": [0, 4, 8, 12, 24, 59, 124],
+        "POWSQR_SQR_POTENCIAAARREL": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_SQR_RACIONALITZA": [0, 3, 6, 12, 18, 39, 86],
+        "POWSQR_SQR_SIMPLIFICA": [0, 4, 8, 16, 28, 68, 140],
         "POWSQR_SQR_SUMAIRESTA": [0, 2, 4, 8, 16, 34, 69],
 
         # ********** PX ********** #

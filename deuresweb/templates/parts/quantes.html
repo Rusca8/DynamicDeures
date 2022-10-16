@@ -5,6 +5,7 @@
 {# name és el nom de la variable (i.e. qexercici) #}
 {# triat és el botó que vull seleccionar #}
 {# TODO faltarà masculí vs femení a les paraules de quantes #}
+{# info és una descripció de l'exercici / un exemple en LaTeX #}
 
 {% set text = ["no", "poques", "normal", "moltes", "mitja", "plana", "doble"] %}
 
@@ -14,9 +15,21 @@
 {% set tema = ns.tema|default("tema", true) %}
 {% set apartat = apartat|default("apartat", true) %}
 {% set triat = triat|default(2, true) %}
+
+{% set info = info|default("", true) %}
+
 <input type="hidden" name="temes[{{tema}}][{{apartat}}][{{name}}][exnum]" value="{{ns.exnum}}" />
 <div class="form-group mt-1 mb-0 ml-2">
-    <label><b>{{title|default("Exercici 42")}}</b></label> {{hola}}
+    <label><b>{{title|default("Exercici 42")}}</b>
+        {% if info %}
+            <script>
+                {{tema}}_{{apartat}}_{{name}}_info_shown = false;
+            </script>
+            <span id="{{tema}}-{{apartat}}-{{name}}-info" class="in-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="{{info}}"
+                  onclick="pop_info('{{tema}}-{{apartat}}-{{name}}-info', {{tema}}_{{apartat}}_{{name}}_info_shown);
+                           {{tema}}_{{apartat}}_{{name}}_info_shown = !{{tema}}_{{apartat}}_{{name}}_info_shown;">?</span>
+        {% endif %}
+    </label> {{hola}}
     <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons"
          onchange="if(document.getElementById('{{tema}}-{{apartat}}-{{name}}-qtria').checked){
                         $('#tria-collapse-{{name}}').collapse('show')

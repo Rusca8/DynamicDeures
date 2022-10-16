@@ -83,6 +83,21 @@ body {
     border-left-color: rgb(245, 241, 211);
 }
 
+/* INTERROGANT AJUDA */
+.in-circle {
+  margin-left: 2px;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  color: white;
+  background: #cccccc;
+  border-radius: 50%;
+  /*border: 1px solid grey;*/
+  line-height: 15px;
+  text-align: center;
+  font-size: 13px;
+}
+
 /* SWITCHES */
 label.custom-control-label::after {
     border-radius: 5px;
