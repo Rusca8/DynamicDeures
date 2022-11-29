@@ -17,9 +17,11 @@ def punts_de(nom):
         "EQ_PRIMER_OPERAIRESOL": 2,
         "EQ_PRIMER_SIMPLESENTERA": 1,
         "EQ_PRIMER_SIMPLESNODIVIDIR": 1,
+        "EQ_SEGON_BIQUADRADES": 4,
         "EQ_SEGON_COMPLETES": 3,
         "EQ_SEGON_INCOMPLETES": 2,
         "EQ_SEGON_OPERAIRESOL": 3,
+        "EQ_SEGON_TRIQUADRADES": 4,
         "EQ_SISTEMES3_LINEALS": 5,
         "EQ_SISTEMES_LINEALS": 4,
         "EQ_SISTEMES_LINEALSGRAFIC": 4,
@@ -33,22 +35,25 @@ def punts_de(nom):
         "FRAC_SIMPLES_SUMAIRESTA": 1,
 
         # ******** POWSQR ******** #
-        "POWSQR_BPOW_COMBINA": 1,
-        "POWSQR_BPOW_SIGNEPARITAT": 1,
-        "POWSQR_BSQR_ARRELAPOTENCIA": 1,
-        "POWSQR_BSQR_SIMPLIFICA": 1,
         "POWSQR_POW_FACTORITZADECIMALS": 4,
         "POWSQR_POW_FACTORITZAISIMPLIFICA": 3,
         "POWSQR_POW_MATEIXABASE": 1,
         "POWSQR_POW_MATEIXAFRACCIO": 2,
         "POWSQR_POW_MATEIXEXPONENT": 1,
+        "POWSQR_POW_NIADES": 1,
+        "POWSQR_POW_SIGNEPARITAT": 1,
         "POWSQR_POW_SIMPLIFICAFRACCIO": 2,
+        "POWSQR_SQR_ARRELAPOTENCIA": 1,
         "POWSQR_SQR_COMBINA": 2,
         "POWSQR_SQR_EXTREU": 2,
         "POWSQR_SQR_FACTORITZAIEXTREU": 3,
         "POWSQR_SQR_INDEXCOMU": 2,
+        "POWSQR_SQR_INDEXCOMUMULTI": 2,
         "POWSQR_SQR_INTRODUEIX": 1,
+        "POWSQR_SQR_NIADES": 1,
+        "POWSQR_SQR_POTENCIAAARREL": 1,
         "POWSQR_SQR_RACIONALITZA": 4,
+        "POWSQR_SQR_SIMPLIFICA": 1,
         "POWSQR_SQR_SUMAIRESTA": 3,
 
         # ********** PX ********** #
@@ -69,4 +74,6 @@ def punts_de(nom):
         "PX_OPS_SUMA": 2,
         "PX_OPS_TEOREMARESIDU": 2,
     }
+    if nom not in exercicis:
+        print(f"Falten les puntuacions per a {nom}")
     return 42 if nom not in exercicis else exercicis[nom]

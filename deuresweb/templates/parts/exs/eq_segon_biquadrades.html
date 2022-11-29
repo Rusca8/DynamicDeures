@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SEGON_BIQUADRADES
+ #    Equacions biquadrades (canvi de variable)
+ #}
+
+{% with title="Biquadrades ✨", name="EQ_SEGON_BIQUADRADES", info="$x^4-13x^2+36=0$" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar quatre arrels?", name="totexist", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Forçar ordenat?", name="ordenat", triat=2 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

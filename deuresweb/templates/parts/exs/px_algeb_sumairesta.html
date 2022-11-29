@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici PX_ALGEB_SUMAIRESTA
+ #    Factoritza un polinomi donat.
+ #}
+
+{% with title="Sumar i restar", name="PX_ALGEB_SUMAIRESTA" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar restes?", name="sense_restes" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

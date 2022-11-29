@@ -29,9 +29,11 @@ def constructor_de(nom):
         "EQ_PRIMER_OPERAIRESOL": eq_primer_operairesol,
         "EQ_PRIMER_SIMPLESENTERA": eq_primer_simplesentera,
         "EQ_PRIMER_SIMPLESNODIVIDIR": eq_primer_simplesnodividir,
+        "EQ_SEGON_BIQUADRADES": eq_segon_biquadrades,
         "EQ_SEGON_COMPLETES": eq_segon_completes,
         "EQ_SEGON_INCOMPLETES": eq_segon_incompletes,
         "EQ_SEGON_OPERAIRESOL": eq_segon_operairesol,
+        "EQ_SEGON_TRIQUADRADES": eq_segon_triquadrades,
         "EQ_SISTEMES3_LINEALS": eq_sistemes3_lineals,
         "EQ_SISTEMES_LINEALS": eq_sistemes_lineals,
         "EQ_SISTEMES_LINEALSGRAFIC": eq_sistemes_linealsgrafic,
@@ -68,6 +70,7 @@ def constructor_de(nom):
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": px_algeb_factoritza,
         "PX_ALGEB_SIMPLIFICA": px_algeb_simplifica,
+        "PX_ALGEB_SUMAIRESTA": px_algeb_sumairesta,
         "PX_BASE_AVALUA": px_base_avalua,
         "PX_BASE_DESXIFRA": px_base_desxifra,
         "PX_BASE_FACTORCOMU": px_base_factorcomu,
@@ -197,6 +200,54 @@ def eq_primer_simplesnodividir(doc, opcions):
     return [enunsols, tsols]
 
 
+def eq_segon_biquadrades(doc, opcions):
+    pkgs(doc, ['amssymb'])  # \nexists
+    enunciat = "Resol les següents equacions biquadrades."
+    enunsols = "Biquadrades."
+
+    var1 = quantilvar(opcions["var"]["totexist"])
+    s_exist = alt_var(opcions, var1)
+
+    var2 = quantilvar(opcions["var"]["ordenat"])
+    s_ordenat = alt_var(opcions, var2)
+
+    def s_4x():
+        a = 1
+        while True:
+            seeds = [[1, x ** 2, a] for x in range(1, 9)] + [[2, x ** 2, a] for x in range(2, 5)]
+            random.shuffle(seeds)
+            for seed in seeds:
+                yield seed
+            a += 1
+
+    def s_2x():
+        a = 1
+        while True:
+            seeds = [[x ** 2, -y, a] for x in range(1, 6) for y in range(1, 10-x)]
+            random.shuffle(seeds)
+            for seed in seeds:
+                yield seed
+            a += 1
+
+    s_2x = s_2x()
+    s_4x = s_4x()
+
+    def g():
+        exist = next(s_exist)
+        ordenat = next(s_ordenat)
+        seed = next(s_4x) if exist or moneda() else next(s_2x)
+        return gen.eq(110, 1 if exist else 2, seed=seed, ordenat=ordenat, solucions=True)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=14,
+                          espai_final=8,
+                          )
+    return [enunsols, tsols]
+
+
 def eq_segon_completes(doc, opcions):
     enunciat = "Resol les següents equacions de segon grau."
     enunsols = "Segon grau, completes."
@@ -268,6 +319,39 @@ def eq_segon_operairesol(doc, opcions):
                           cols=2,
                           espai_apartat=14,
                           espai_final=4,
+                          )
+    return [enunsols, tsols]
+
+
+def eq_segon_triquadrades(doc, opcions):
+    enunciat = "Resol les següents equacions triquadrades."
+    enunsols = "Triquadrades."
+
+    var1 = quantilvar(opcions["var"]["ordenat"])
+    s_ordenat = alt_var(opcions, var1)
+
+    def s_2x():
+        a = 1
+        while True:
+            seeds = [[x, y, a] for x in range(-4, 5) for y in range(x, 5) if x*y and abs(x**3 * y**3) < 100]
+            random.shuffle(seeds)
+            for seed in seeds:
+                yield seed
+            a += 1
+
+    s_2x = s_2x()
+
+    def g():
+        ordenat = next(s_ordenat)
+        seed = next(s_2x)
+        return gen.eq(111, 1, seed=seed, ordenat=ordenat, solucions=True)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          enunciat=enunciat,
+                          cols=3,
+                          espai_apartat=14,
+                          espai_final=8,
                           )
     return [enunsols, tsols]
 
@@ -1102,6 +1186,27 @@ def px_algeb_simplifica(doc, opcions):
     return [enunsols, tsols]
 
 
+def px_algeb_sumairesta(doc, opcions):
+    enunciat = "Realitza les següents operacions i simplifica el resultat en la mesura que es pugui."
+    enunsols = "Sumes i restes de fraccions algebraiques."
+    g = [
+        lambda: gen.op_algeb(1, 10, solucions=True),  # només sumes
+        lambda: gen.op_algeb(1, 11, solucions=True),  # sumes i/o restes
+        ]
+    pvar = quantilvar(opcions["var"]["sense_restes"])
+    p = P([1, 1]).flex(0, pvar)
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=scale_per("fraccions"),
+                          espai_apartat=10,
+                          mates_solus=True,
+                          )
+    return [enunsols, tsols]
+
+
 def px_base_avalua(doc, opcions):
     enunciat = "Avalua en el punt demanat."
     enunsols = "Avaluar polinomis."
@@ -1743,3 +1848,6 @@ def scale_per(tal):
         "fraccions": 1.3,
     }
     return scales.get(tal, 1)  # (torna "1" si no el troba)
+
+def moneda():
+    return bool(random.getrandbits(1))

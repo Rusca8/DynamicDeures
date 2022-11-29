@@ -3,6 +3,7 @@
  #    Factoritza un polinomi donat.
  #}
 
-{% with title="Simplificar algebraiques", name="PX_ALGEB_SIMPLIFICA" %}
+{% with title="Simplificar", name="PX_ALGEB_SIMPLIFICA",
+        info="$\\frac{x^{3}+2x^{2}-8x}{x^{4}-12x^{2}+16x} \\Rightarrow \\frac{x(x+4)(x-2)}{x(x+4)(x-2)^2} \\Rightarrow \\frac{1}{x-2}$" %}
   {% include '/parts/quantes.html' %}
 {% endwith %}

@@ -4,6 +4,7 @@ from copy import deepcopy
 
 import enunciats as en
 import cryptolator as crypt
+from classes import Px, npx, Mx, Fr, Mul
 
 
 def moneda():
@@ -2569,6 +2570,66 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
 genera_ex_px = px  # alias perquè sovint matxaco el nom de px amb altres coses perquè sóc un xungo suposo
 
 
+def op_algeb(tipus, nivell=1, solucions=True, r=False):
+    text = r"\frac{42x+42}{42x}"
+    solu = r"\frac{42x}{42}"
+    if tipus == 1:  # suma
+        if nivell == 8:
+            ...
+        if nivell in [10, 11]:
+            """ 
+                Gx + C    Hx + D       Ex + F
+                ------- + ------- + ------------
+                 x + A     x + B    x2+(A+B)x+AB
+            """
+            # coef control
+            g = random.randint(-3, 3)
+            h = random.choice([h for h in range(-3, 4) if h != -g])  # evito g+h=0 (que mataria la solució)
+            k = random.choice([k for k in range(-10, 10) if -20 < k*(g+h) < 20]
+                              or [11])
+            control = k*(g+h)
+            a = random.randint(-5, 5)
+            b = random.choice([b for b in range(-10, 10) if -10 < g*(a-b) + control < 10 and b != a]
+                              or [11])
+            control = g*(a-b) + control
+            d = random.choice([d for d in range(-10, 10) if -10 < control - d < 10]
+                              or [11])
+            e = random.choice([e for e in range(-10, 10) if ((0 if g else 1) <= abs(control - (d + e)) < 10)]
+                              or [11])
+            # forced coefs
+            c = control - (d + e)
+            f = a*k*(g+h) - c*b - a*d
+            fr1 = Fr(npx([c, g]), npx([a, 1]))
+            fr2 = Fr(npx([d, h]), npx([b, 1]))
+            fr3 = Fr(npx([f, e]), npx([a*b, a+b, 1]))
+            text = [fr1, fr2, fr3]
+            if nivell == 11:
+                for fr in text:
+                    if fr.num.termes[0].coef < 0:
+                        fr.signe = -1
+                        fr.num *= -1
+            random.shuffle(text)
+            fkey = 'r' if r else ''
+            text = "".join(f"{t:{fkey}{'s' if i else ''}}" for i, t in enumerate(text))
+            if k == b:
+                solu = f"{g+h}"
+            else:
+                if g+h == 1 and k:
+                    solu = f"{Fr(npx([k, 1]), npx([b, 1])):{fkey}}"
+                else:
+                    solu = f"{Fr(Mul([g+h, npx([k, 1])]), npx([b, 1])):{fkey}}"
+    elif tipus == 2:  # resta
+        ...
+    elif tipus == 3:  # multi
+        ...
+    elif tipus == 4:  # divi
+        ...
+
+    if solucions:
+        return text, solu
+    return text
+
+
 def frufinable(nmax=5):
     """Retorna un factor aleatori rufinable
 
@@ -2832,13 +2893,15 @@ def eq_base(tipus, nivell=1, solucions=False, fid=0):
     return text
 
 
-def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
+def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42, seed=None, ordenat=True):
     """
     :param tipus: 1, 2... lineals / 101, 102... quadràtiques / 201, 202... irracionals
     :param nivell: (subtipus)
     :param solucions: incloure solucions (els que en tenen)
     :param totexist: evitar arrels negatives
     :param x: solució escollida des de fora (per evitar massa repetits)
+    :param seed: llavor de l'aleatori si ve de fora (biq.)
+    :param ordenat: polinomi ordenat (per biquadrades)
     :return:
     """
     solus = "NOT DEF"
@@ -3614,6 +3677,48 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
         elif text[-1] == "=":
             text += "0"
 
+    elif tipus == 110:  # biquadrades
+        a = 1
+        if nivell in [1, 2, 3, 4]:  # quatre solucions / dues solucions // quatre amb rand a / dos amb rand a
+            t1, t2 = 42, 42
+            # càlculs
+            if seed is None:
+                if nivell in [1, 3]:
+                    t1, t2 = random.sample([x ** 2 for x in range(1, 5)], 2)
+                elif nivell in [2, 4]:
+                    t2, t2 = random.sample([x ** 2 for x in range(1, 5)] + [x for x in range(1, 10)], 2)
+                if nivell in [3, 4]:
+                    a = random.randint(1, 3)*random.choice([-1, 1])
+            else:
+                if len(seed) == 3:
+                    a = seed[-1]
+                    seed = seed[:-1]
+                if nivell == 1 and any(t < 0 for t in [t1, t2]):
+                    print("Ei, la llavor no quadra amb el nivell")
+                t1, t2 = seed
+
+            # muntatge
+            fkey = "" if ordenat else "d"
+            text = f"{npx([-t1, 0, 1]) * npx([-t2, 0, 1]) * a:{fkey}}=0"
+
+    elif tipus == 111:  # triquadrades
+        if nivell == 1:
+            a = 1
+        else:
+            a = random.choice([1, 2, 3]) * random.choice([-1, 1])
+        if seed:
+            if len(seed) == 3:
+                a = seed[-1]
+                x1, x2 = seed[:-1]
+            else:
+                x1, x2 = seed
+        else:
+            x1, x2 = random.sample([[x, y] for x in range(-4, 5) for y in range(x, 5)
+                                    if x*y and abs(x**3 * y**3) < 100], 2)
+        # muntatge
+        fkey = "" if ordenat else "d"
+        text = f"{npx([-x1 ** 3, 0, 0, 1]) * npx([-x2 ** 3, 0, 0, 1]) * a:{fkey}}=0"
+
     elif tipus == 201:  # irracionals TODO acabar i fer més variants d'enunciat
         if nivell in [1, 2]:  # √(Ax+B) = x+C
             """
@@ -3658,6 +3763,11 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42):
                 solus = f"{x1}"
             else:
                 solus = f"{x1},~{x2}"  # el ~ fa l'espai intrencable
+        elif tipus == 110:
+            solus = ",~".join(fr"$\pm ${isqrt(t)}" for t in [t1, t2] if t > 0)
+            print(solus)
+        elif tipus == 111:
+            solus = ",~".join(f"{x}" for x in [x1, x2])
         elif tipus == 201:
             s = []
             for x in [x1, x2]:
@@ -5084,5 +5194,7 @@ for x in range(12):
 
 if __name__ == "__main__":
     # aquesta secció la faig servir per fer debugging dels tipus d'exercici
-    for x in range(0):
-        print(px(106, 6, par="k"))
+    print("running generator...")
+    for x in range(50):
+        print(eq(110, x // 13+1, solucions=True))
+        # print(op_algeb(1, 10, solucions=True))

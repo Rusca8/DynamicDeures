@@ -1,0 +1,12 @@
+{#
+ # Formulari d'opcions per l'exercici EQ_SEGON_TRIQUADRADES
+ #    Equacions biquadrades (canvi de variable)
+ #}
+
+{% with title="Triquadrades ✨", name="EQ_SEGON_TRIQUADRADES", info="$x^6-35x^3+216=0$" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Forçar ordenat?", name="ordenat", triat=2 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
