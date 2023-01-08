@@ -1,0 +1,28 @@
+{#
+ # Formulari d'opcions per l'exercici PX_IDNOT_OMPLEBUITS
+ #    Endevinar identitats notables a partir de la forma desenvolupada.
+ #}
+
+{% with title="Omplir els buits", name="PX_IDNOT_OMPLEBUITS", info="$(x+\\_\\_\\_\\_)^2=x^{2}+\\_\\_\\_\\_+49$" %}
+    {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with name="tipus", labels=["(a+b)²", "(a-b)²"] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Quants forats vols?", name="buits", labels=[2, 3], altnames=[2, 3] %}
+        {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Una sola variable?", name="una_variable" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Forçar ordenat?", name="ordenat", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="...què vol dir ordenat?", name="ordre", labels=["a²+2ab+b²", "a²+b²+2ab"], subordina=true %}
+        {% include 'parts/triauna.html' %}
+    {% endwith %}

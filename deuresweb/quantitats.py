@@ -76,6 +76,7 @@ def quantitats_de(nom, alt="def"):
         "PX_BASE_PARTSMONOMI": [0, 2, 4, 8, 24, 52, 108],
         "PX_IDNOT_ENDEVINAIDENTITAT": [0, 2, 4, 8, 20, 44, 88],
         "PX_IDNOT_IDENTITAT": [0, 2, 4, 8, 20, 44, 88],
+        "PX_IDNOT_OMPLEBUITS": [0, 2, 4, 8, 20, 44, 88],
         "PX_MOPS_DIVIDEIX": [0, 2, 4, 6, 22, 46, 96],
         "PX_MOPS_MULTIPLICA": [0, 2, 4, 6, 22, 46, 96],
         "PX_MOPS_SUMAIRESTA": [0, 2, 4, 6, 14, 28, 58],

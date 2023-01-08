@@ -1970,15 +1970,16 @@ def powsqr(tipus, nivell=1, termes=2, lletres=0, fracnums=[], solucions=False):
     return text
 
 
-def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False, solucions=False):
+def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False, buits=3, solucions=False):
     """genera exercicis d'identitats notables
 
-    :param tipus: 1 calcular, 2 endevinar
+    :param tipus: 1 calcular, 2 endevinar, 3 omple els buits
     :param nivell: 1 (x+B) / 2 (Ax+B) / 3 (x^n+B) / 4 (Axy+B) / 5 (Ax+By) / 6 (Axy^n+Byz^m)
     :param idnums: llista de tipus possibles (o tipus demanat) ::  1 (a+b)^2 / 2 (a-b)^2 / 3 (a+b)(a-b)
     :param fcoefb: forçar coeficient b (número que tindrà el coeficient si el vull triar)
     :param ordenat: False permet desordre als tipus 2
     :param ordre2: Considera que "ordenat" vol dir a^2+b^2+2ab
+    :param buits: quants buits deixem per omplir (pel tipus 3)
     :param solucions: retornar també les solucions
     """
     if not idnums:  # si no venia res, poso [1, 2, 3]
@@ -2031,11 +2032,13 @@ def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False
                 ea = [1 for _ in range(len(va))]
                 vb = [random.choice(varops)]
                 eb = [0]
+
             elif nivell == 5:
                 va, vb = random.sample(varops, 2)
                 va = [va]
                 vb = [vb]
                 ea, eb = [[1], [1]]
+
             elif nivell == 6:
                 va, vb = [random.sample(varops, 2) for _ in range(2)]
                 ea, eb = [[1, random.randint(1, 3)] for _ in range(2)]
@@ -2080,6 +2083,75 @@ def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False
         elif tipus == 2:
             text = desenv
             solu = base
+
+    if tipus == 3:  # omplir els buits
+        # 1 (x+B) / 2 (Ax+B) / 3 (x^n+B) / 4 (Axy+B) / 5 (Ax+By) / 6 (Axy^n+Byz^m)
+        """ (a * lit_a ± b * lit_b)^2    ->  (Aa^c ± Bb^d)^2
+        
+            requisitos para evitar ambigüedad:
+               B ≠ ±A
+               lit_b ≠ lit_a^(c/d)
+               A ≠ ±2B
+               B ≠ ±2A 
+               
+        """
+        variables = random.choice([["x", "y", "z"], ["a", "b", "c", "d"]])
+        random.shuffle(variables)
+
+        # coeficient a
+        if nivell in [1, 3]:
+            a = 1
+        elif nivell == 2:
+            a = random.randint(2, 10)
+        else:
+            a = random.randint(1, 10)
+
+        # part literal a
+        if nivell in [1, 2, 5]:
+            lita = {"x" if nivell == 1 else variables[0]: 1}
+        elif nivell == 3:
+            lita = {variables[0]: random.randint(2, 5)}
+        elif nivell == 4:
+            lita = {variables[0]: 1, variables[1]: 1}
+        else:
+            lita = {variables[0]: 1, variables[1]: random.randint(1, 4)}
+
+        # coeficient b
+        b = random.choice([b for b in range(1, 10) if b != a and b != 2*a and a != 2*b])
+
+        # part literal b
+        if nivell <= 4:
+            litb = {}
+        elif nivell == 5:
+            litb = {variables[1]: 1}
+        else:
+            litb = {variables[1]: 1, variables[2]: random.randint(1, 4)}
+
+        # muntatge
+        tria_esquerra = [random.choice([0, 1])]
+        tria_dreta = random.sample([x for x in [0, 1, 2] if x != 2 * tria_esquerra], buits-1)  # evito amagar m i m^2
+
+        mxa = Mx(a, lita)
+        mxb = Mx(b, litb)
+        if idnum == 2:
+            mxb = -mxb
+
+        poli = Px([mxa, mxb])
+        desenv = Px([mxa ** 2, 2 * mxa * mxb, mxb ** 2])
+        if not ordenat:
+            random.shuffle(desenv.termes)
+        elif ordre2:
+            desenv.termes[1], desenv.termes[2] = desenv.termes[2], desenv.termes[1]
+        solu = f"({poli})^2={desenv}"
+
+        for i in tria_esquerra:
+            print(poli)
+            poli.termes[i].amagat = True
+        for i in tria_dreta:
+            desenv.termes[i].amagat = True
+
+        text = f"({poli})^2={desenv}"
+
     if solucions:
         return text, solu
     else:
@@ -5400,4 +5472,4 @@ if __name__ == "__main__":
     # aquesta secció la faig servir per fer debugging dels tipus d'exercici
     print("running generator...")
     for x in range(10):
-        print(op_monomis(3, 3, r=True, solucions=True))
+        print(idnotable(3, 1, buits=2, solucions=True))

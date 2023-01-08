@@ -265,6 +265,7 @@ class Mx:
     coef: int
     lit: dict = field(default_factory=lambda: {"x": 0})  # part literal
     ordenat: bool = True
+    amagat: bool = False  # per facilitar exercicis que amaguen trossos (inclou signe, si no el vols fes abs())
 
     def __post_init__(self):
         if isinstance(self.lit, int):  # si no està especificat, serà 'x'
@@ -281,6 +282,10 @@ class Mx:
             s: incloure signe
             r: raw (non-latex)
         """
+        if self.amagat:
+            s = "+" if 's' in fkey and not es_negatiu(self, False) else "-" if es_negatiu(self, False) else ""
+            return f"{s}" + r"\_" * 4
+
         if self.coef == 0:
             return "0"
 
@@ -437,6 +442,12 @@ class Mx:
             else:
                 return NotImplemented
 
+    def __pow__(self, power, modulo=None):
+        if power == 2:
+            return self.__mul__(self)
+        else:
+            raise NotImplementedError
+
     def new_sort_index(self):
         try:
             self.sort_index = [list(self.lit.keys()), [-e for e in self.lit.values()], -self.coef]
@@ -559,6 +570,12 @@ class Px:
             return -self
         else:
             return self.__mul__(other)
+
+    def __pow__(self, power, modulo=None):
+        if power == 2:
+            return self.__mul__(self)
+        else:
+            raise NotImplementedError
 
     def sorted(self):
         return Px(sorted(self.termes))

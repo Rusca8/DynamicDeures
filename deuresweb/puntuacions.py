@@ -67,6 +67,7 @@ def punts_de(nom):
         "PX_BASE_PARTSMONOMI": 1,
         "PX_IDNOT_ENDEVINAIDENTITAT": 3,
         "PX_IDNOT_IDENTITAT": 2,
+        "PX_IDNOT_OMPLEBUITS": 3,
         "PX_MOPS_DIVIDEIX": 1,
         "PX_MOPS_MULTIPLICA": 1,
         "PX_MOPS_SUMAIRESTA": 1,

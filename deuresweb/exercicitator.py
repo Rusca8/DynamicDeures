@@ -78,6 +78,7 @@ def constructor_de(nom):
         "PX_BASE_PARTSMONOMI": px_base_partsmonomi,
         "PX_IDNOT_ENDEVINAIDENTITAT": px_idnot_endevinaidentitat,
         "PX_IDNOT_IDENTITAT": px_idnot_identitat,
+        "PX_IDNOT_OMPLEBUITS":  px_idnot_omplebuits,
         "PX_MOPS_DIVIDEIX": px_mops_divideix,
         "PX_MOPS_MULTIPLICA": px_mops_multiplica,
         "PX_MOPS_SUMAIRESTA": px_mops_sumairesta,
@@ -1389,6 +1390,56 @@ def px_idnot_identitat(doc, opcions):
         ]
     pvar = quantilvar(opcions["var"]["una_variable"])
     p = P([1, 1, 1, 1]).flex(1, pvar)
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=4,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("polis"),
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def px_idnot_omplebuits(doc, opcions):
+    enunciat = "Omple els buits de les identitats notables següents."
+    enunsols = "Omplir buits d'identitats notables."
+
+    tipus = [x for x in [1, 2] if x in get_var(opcions, "tipus", [1, 2])]  # 1: (a+b), 2: (a-b)
+    inici = [x for x in [1, 2] if x in tipus]
+    if len(inici) > 1:
+        inici = random.sample(inici, 1)  # si tinc 1 i 2, me'n quedo només un per començar
+
+    ng1 = regenerable([2, 3], 2)  # per anar alternant aleatori pels nivells 2 i 3 a la g[1]
+    ng2 = regenerable([4, 5])  # per anar alternant aleatori pels nivells 4 i 5 a la g[2]
+    idnum = regenerable(tipus, inici)  # començo per 1 o 2
+    s0 = ampliable([x for x in range(3, 11)])  # llavor per (x±b). Evito b=a i b=2a perquè el generador ho demana
+
+    pvar2 = quantilvar(opcions["var"]["ordenat"])
+    s_ord = alt_var(opcions, pvar2)
+    o2 = opcions["var"]["ordre"] == "2"
+
+    buits = var_quines(opcions, "buits", [2, 3])
+    s_buits = alt_p_var(opcions, P([1 for _ in buits]), buits)  # reparteixo qtats de termes a parts iguals
+
+    def f0():
+        t = next(idnum)  # trio quin tipus toca
+        return gen.idnotable(3, 1, idnums=t, fcoefb=next(s0), ordenat=next(s_ord), ordre2=o2,
+                             buits=next(s_buits), solucions=True)
+
+    g = [  # g[0]: (x+B)   //   g[1]: (Ax+B) i (x^n+B)   //   g[2]: multivar (Axy+B) i (Ax+By)
+        f0,
+        lambda: gen.idnotable(3, next(ng1), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2,
+                              buits=next(s_buits), solucions=True),
+        lambda: gen.idnotable(3, next(ng2), idnums=next(idnum), ordenat=next(s_ord), ordre2=o2,
+                              buits=next(s_buits), solucions=True),
+        ]
+
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([1, 3, 3]).flex(1, pvar)
 
     tsols = crea_exercici(doc, opcions,
                           g,
