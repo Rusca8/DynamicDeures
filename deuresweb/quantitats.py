@@ -66,8 +66,9 @@ def quantitats_de(nom, alt="def"):
         "POWSQR_SQR_SUMAIRESTA": [0, 2, 4, 8, 16, 34, 69],
 
         # ********** PX ********** #
-        "PX_ALGEB_FACTORITZA": [0, 2, 4, 6, 12, 20, 46],
-        "PX_ALGEB_SIMPLIFICA": [0, 1, 2, 4, 5, 10, 51],
+        "PX_ALGEB_FACTORITZA": [0, 2, 4, 6, 12, 28, 58],
+        "PX_ALGEB_SIMPLIFICA": [0, 1, 2, 4, 5, 24, 50],
+        "PX_ALGEB_SUMAIRESTA": [0, 1, 2, 4, 5, 24, 50],
         "PX_BASE_AVALUA": [0, 1, 3, 5, 6, 12, 26],
         "PX_BASE_DESXIFRA": [0, 1, 2, 3, 4, 7, 14],
         "PX_BASE_FACTORCOMU": [0, 2, 4, 6, 12, 26, 54],
@@ -75,6 +76,9 @@ def quantitats_de(nom, alt="def"):
         "PX_BASE_PARTSMONOMI": [0, 2, 4, 8, 24, 52, 108],
         "PX_IDNOT_ENDEVINAIDENTITAT": [0, 2, 4, 8, 20, 44, 88],
         "PX_IDNOT_IDENTITAT": [0, 2, 4, 8, 20, 44, 88],
+        "PX_MOPS_DIVIDEIX": [0, 2, 4, 6, 22, 46, 96],
+        "PX_MOPS_MULTIPLICA": [0, 2, 4, 6, 22, 46, 96],
+        "PX_MOPS_SUMAIRESTA": [0, 2, 4, 6, 14, 28, 58],
         "PX_OPS_DIVIDEIX": [0, 2, 3, 4, 5, 12, 24],
         "PX_OPS_DIVIDEIXRUFFINI": [0, 2, 3, 4, 5, 12, 24],
         "PX_OPS_MULTIPLICA": [0, 2, 3, 4, 5, 12, 24],

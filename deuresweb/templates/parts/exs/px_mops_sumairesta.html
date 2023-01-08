@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici PX_MOPS_SUMAIRESTA
+ #    Sumes i restes de monomis.
+ #}
+
+{% with title="Sumar i restar", name="PX_MOPS_SUMAIRESTA" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Una sola variable?", name="una_variable" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Ordenar les variables?", name="ordenat", triat=3 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

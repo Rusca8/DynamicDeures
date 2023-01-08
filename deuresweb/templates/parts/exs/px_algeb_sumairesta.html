@@ -1,12 +1,17 @@
 {#
  # Formulari d'opcions per l'exercici PX_ALGEB_SUMAIRESTA
- #    Factoritza un polinomi donat.
+ #    Suma i resta de fraccions algebraiques.
  #}
 
-{% with title="Sumar i restar", name="PX_ALGEB_SUMAIRESTA" %}
+{% with title="Sumar i restar", name="PX_ALGEB_SUMAIRESTA",
+        info="$\\frac{2x-7}{x^{2}-7x+10}+\\frac{1}{x-2}-\\frac{1}{x-5}$" %}
   {% include '/parts/quantes.html' %}
 {% endwith %}
 
-    {% with title="Evitar restes?", name="sense_restes" %}
+    {% with title="Evitar restes?", name="sense_restes", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Denominador factoritzat?", name="factoritzat" %}
         {% include '/parts/quantesvariant.html' %}
     {% endwith %}

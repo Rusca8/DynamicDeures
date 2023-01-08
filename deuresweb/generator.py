@@ -4,7 +4,7 @@ from copy import deepcopy
 
 import enunciats as en
 import cryptolator as crypt
-from classes import Px, npx, Mx, Fr, Mul
+from classes import Px, npx, Mx, Fr, Mul, Div
 
 
 def moneda():
@@ -2086,13 +2086,114 @@ def idnotable(tipus, nivell=1, idnums=None, fcoefb=0, ordenat=True, ordre2=False
         return text
 
 
-def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
+def op_monomis(tipus, nivell=1, termes=None, noneg=False, ordenat=False, r=False, solucions=False):
+    """Genera operacions amb monomis (suma, resta, multi i divi)
+
+    :param tipus: tipus d'exercici
+    :param nivell: subtipus
+    :param termes: quantitat de termes de la operació
+    :param noneg: evitar negatius
+    :param ordenat: forçar que la part literal estigui ordenada (alfabètica)
+    :param r: retornar "raw" i.e. llegible (en lloc de LaTeX) ~ per debugging
+    :param solucions: retornar solucions => (generat, solució) en lloc de (generat)
+    """
+    text = "42x^2y^3"
+    solu = "42x^2"
+
+    if tipus == 1:  # sumes i restes
+        termes = termes or random.choice([4, 5])
+        # trio quants grups vull (quants termes quedaran a la resposta)
+        grups = termes // 2
+        if termes % 2 and moneda():
+            grups += 1
+        # preparo l'estructura de l'enunciat (llista de números: el número indica quin grup hi posaré)
+        model = list(range(grups))
+        model += [random.choice(model) for _ in range(termes-grups)]
+
+        if nivell == 1:  # una variable
+            literals = [{"x": n} for n in random.sample(list(range(1, 8)), grups)]
+
+        elif nivell == 2:  # multimonomis
+            variables = random.sample(random.choice([["x", "y", "z"], ["a", "b", "c", "d"]]), 3)
+            if random.randint(0, 4) or termes == 5:  # seran dues o tres
+                variables = random.sample(variables, 2)
+            literals = [{v: random.randint(1, 6) for v in variables} for _ in range(grups)]
+
+        # muntatge (comú nivells [1, 2])
+        poli = Px()
+        for i, m in enumerate(model):
+            coef = random.randint(1, 10)
+            coef *= 1 if noneg else random.choice([-1, 1])
+            poli.append(Mx(coef, literals[m], ordenat=ordenat))
+        r = "r" if r else ""
+        text = f"{poli:{r}d}"
+        solu = f"{poli.simplificat():{r}}"
+
+    elif tipus == 2:  # multis
+        termes = termes or 3
+        multi = Mul()
+        if nivell == 1:  # una variable
+            for _ in range(termes):
+                coef = random.randint(1, 8) * (1 if noneg else random.choice([1, -1]))
+                exp = random.randint(1, random.choice([3, 5]))
+                multi.append(Mx(coef, exp))
+
+        elif nivell in [2, 3]:  # una variable amb resultat dues // dues variables amb resultat tres
+            variables = random.sample(random.choice([["x", "y", "z"], ["a", "b", "c", "d"]]), nivell)
+            incloure = [v for v in variables]
+            for _ in range(termes):
+                coef = random.randint(1, random.choice([4, 8])) * (1 if noneg else random.choice([1, 1, -1]))
+                mvars = random.sample(variables, nivell-1)  # cada monomi deixa una d'elles fora
+                if incloure and all(v not in incloure for v in mvars):  # si no ha entrat res nou (i queden fora)
+                    mvars[0] = incloure[0]
+                incloure = [v for v in incloure if v not in mvars]
+                literal = {var: random.randint(1, random.choice([1, 2, 5])) for var in mvars}
+                multi.append(Mx(coef, literal))
+
+        # muntatge (comú nivell [2, 3])
+        r = "r" if r else ""
+        text = f"{multi:{r}·d}"
+        solu = f"{multi.simplificat():{r}}"
+
+    elif tipus == 3:  # divis
+        m1, m2 = None, None
+
+        if nivell == 1:  # una variable
+            m1, m2 = [Mx(random.randint(1, 10), {"x": random.randint(1, 5)}) for _ in range(2)]
+
+        elif nivell in [2, 3]:  # multimonomis
+            variables = random.sample(random.choice([["x", "y", "z"], ["a", "b", "c", "d"]]), nivell)
+            random.shuffle(variables)
+            m1 = Mx(random.randint(1, 10), {v: random.randint(1, random.choice([1, 2, 5])) for v in variables[:-1]})
+            m2 = Mx(random.randint(1, 10), {v: random.randint(1, random.choice([1, 2, 5])) for v in variables})
+
+        # càlcul comú (negatius)
+        if not noneg:  # si accepto negatius
+            if moneda():  # toca algun negatiu
+                if moneda():
+                    m1.coef *= -1
+                else:
+                    m2.coef *= -1
+
+        # muntatge (comú nivell = [1, 2, 3])
+        r = "r" if r else ""
+        divi = Div([m1*m2, m1])
+        text = f"{divi:{r}}"
+        solu = f"{m2:{r}}"
+
+    if solucions:
+        return text, solu
+    return text
+
+
+def px(tipus, nivell=1, termes=None, noneg=False, nar=None, solucions=False, par="k"):
     """genera polinomis i operacions amb polinomis
 
     :param tipus: operació / tipus d'exercici
     :param nivell: subtipus d'exercici
     :param termes: quants termes té cada polinomi (a les ops) / quants polinomis (al de factoritzar)
     :param noneg: evita doble negatiu restant
+    :param nar: narratives que vull fer servir (e.g. paràmetre i condicions)
     :param solucions: incloure solució a l'exercici
     :param par: lletra que faré servir com a paràmetre (e.g. als exercicis de paràmetre tq residu)
     """
@@ -2288,28 +2389,48 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
             text = f"({dendx})\\div ({dx})"
 
     elif tipus == 6:  # tª residu / avaluar
-        # grau
-        termes = random.randint(3, 4)
-        gp = termes + random.choice([0, 1, 2])
+        if nivell == 1:  # una incògnita (tª res / avaluar)
+            # grau
+            termes = random.randint(3, 4)
+            gp = termes + random.choice([0, 1, 2])
 
-        # punt x
-        if gp < 5:
-            x = random.randint(1, 3)
-        elif gp < 2:
-            x = random.randint(1, 5)
-        else:  # 5+
-            x = random.randint(1, 2)
-        x *= random.choice([1, 1, -1])
+            # punt x
+            if gp < 5:
+                x = random.randint(1, 3)
+            elif gp < 2:
+                x = random.randint(1, 5)
+            else:  # 5+
+                x = random.randint(1, 2)
+            x *= random.choice([1, 1, -1])
 
-        # polinomis
-        px, rufipx = polinomi(gp, termes, True, cmax=5, obliga=[0], suavitzat=True, rufinat=True)
-        dx = f"x{amb_signe(-x)}"
+            # polinomis
+            px, rufipx = polinomi(gp, termes, True, cmax=5, obliga=[0], suavitzat=True, rufinat=True)
+            dx = f"x{amb_signe(-x)}"
 
-        # solució
-        solu = poli_aval(rufipx, x)
+            # solució
+            solu = poli_aval(rufipx, x)
 
-        # muntatge
-        text = en.px_residu(nivell, px, dx, x)
+            # muntatge
+            text = en.px_residu(nivell, px, dx, x)
+
+        elif nivell == 2:  # dues incògnites (avaluar)
+            termes = random.randint(3, 4)
+            graus_xy = [{"x": 2, "y": 1}, {"x": 1, "y": 2}, {"x": 1, "y": 1}]
+            graus_una = [{"x": 1}, {"y": 1}, {"x": 0}]
+
+            # tria de graus
+            graus = []
+            graus.append(graus_xy.pop(random.randint(0, len(graus_xy)-1)))
+            graus.append(graus_una.pop(random.randint(0, len(graus_una)-1)))
+            graus.extend(random.sample(graus_xy + graus_una, termes-2))
+            poli = Px([Mx(random.randint(1, 10) * random.choice([-1, 1]), lit) for lit in graus])
+
+            # trio el punt
+            punt = {v: random.randint(-2, 2) for v in poli.variables}
+
+            text = en.px_multiaval(poli, punt)
+            solu = poli.avalua(punt)
+
 
     elif tipus == 7:  # factoritzar TODO factors no simplificables de grau 2
         if not termes:
@@ -2420,7 +2541,12 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
             solu = ("\\frac{" + num + "}{" + den + "}")
 
     elif tipus == 106:  # paràmetre(s) tal que residu
-        if nivell in [1, 2, 3, 4, 5, 6]:  # k tal que divi exacta
+        residu = 0
+        if 11 <= nivell <= 16:  # k tal que residu donat (anàlegs a 1-6, però divi no exacta)
+            residu = random.randint(-10, 10)
+            nivell -= 10
+
+        if 1 <= nivell <= 6:  # k tal que divi exacta
             # (Ax^2+Bx+C)*(x-D): un coef k / un coef ka / multi coefs / amb una suma (k+a)
             # coefs pre-multi
             a = random.randint(1, 2) * random.choice([-1, 1])
@@ -2436,7 +2562,9 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                     if a*d < 0:
                         b = -b
             # construeixo el polinomi (multiplicant)
-            rufipx = poli_op(3, [a, b, c], [1, -d])
+            rufipx = poli_op(3, [a, b, c], [1, -d])  # Q*D
+            if residu:
+                rufipx = poli_op(1, rufipx, [residu])    # +R
 
             if nivell == 1:  # subs pel num sencer
                 i = random.randint(0, len(rufipx)-1)
@@ -2555,12 +2683,14 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
                 if not ca * d**(len(rufipx)-1-i) + d**(len(rufipx)-1-j):  # indefinit (perdo les k)
                     k = r"${\rm I\!R}$"
 
-            elif nivell == 10:  # TODO subs multivar (comparant amb residu ...de fet això amb rufini no es pot, no?)
-                ...
+            # muntatge comú
             px = polinomitza(rufipx)
             dx = polinomitza([1, -d])
 
-            text = squarebracketer(f"({px})\div ({dx})")
+            divi = squarebracketer(f"({px})\div ({dx})")
+            px = squarebracketer(f"({px})")
+            dx = f"({dx})"
+            text = en.px_parametreresidu(divi, px, dx, d, residu, nar=nar)
             solu = f"{k}"
 
     if solucions:
@@ -2570,17 +2700,88 @@ def px(tipus, nivell=1, termes=[], noneg=False, solucions=False, par="k"):
 genera_ex_px = px  # alias perquè sovint matxaco el nom de px amb altres coses perquè sóc un xungo suposo
 
 
-def op_algeb(tipus, nivell=1, solucions=True, r=False):
+def op_algeb(tipus, nivell=1, r=False, totsuma=False, fact=False, solucions=True):
+    """Genera exercicis
+
+    :param tipus: format general de l'exercici
+    :param nivell: format específic de l'exercici (i.e. ~dificultat)
+    :param r: retorna raw (escrit llegible en lloc de LaTeX)
+    :param totsuma: evitar les restes de fraccions
+    :param fact: denominadors factoritzats (i.e. sense distributiva)
+    :param solucions: incloure les solucions
+    :return: enunciat // enunciat, solució
+    """
     text = r"\frac{42x+42}{42x}"
     solu = r"\frac{42x}{42}"
     if tipus == 1:  # suma
-        if nivell == 8:
-            ...
-        if nivell in [10, 11]:
-            """ 
-                Gx + C    Hx + D       Ex + F
-                ------- + ------- + ------------
-                 x + A     x + B    x2+(A+B)x+AB
+        if nivell in [8, 9]:  # F = 0  ||  F qualsevol
+            """
+                  C         D        Ex + (F)                (C+D+E)(x+A)      (C+D+E)
+               ------- + ------- + ------------ = ?     -> ---------------- = ----------
+                x + A     x + B    x2+(A+B)x+AB               (x+A)(x+B)        x + B
+                
+                Restriccions necessàries:
+                  C+D+E ≠ 0              <- evito que la resposta sigui 0 (no podria simplificar)
+                  F = AC + AE - BC       <- forço que sigui simplificable (igualo estil fraccions simples)
+            """
+            # càlculs (separat per nivell)
+            if nivell == 8:
+                """
+                F = 0
+                
+                Restriccions extra:
+                  C divisor de AE    <- forço números enters
+                  B = A + AE/C       <- (F = AC + AE - BC | F = 0)
+                """
+                f = 0
+                a, e = (random.randint(1, 5) * random.choice([-1, 1]) for _ in range(2))
+                c = random.choice(divisors(a*e, tots=True))  # divisor de AE
+                d = random.choice([d for d in range(-10, 11) if d and c+d+e])  # C+D+E≠0
+                b = a + a*e//c
+
+            else:
+                """
+                F ≠ 0   -> A(C+E) ≠ BC
+                """
+                a = random.randint(-10, 10)
+                c = random.choice([c for c in range(-10, 11) if c])
+                e = random.randint(-5, 5)
+                b = random.choice([b for b in range(-10, 10) if b and a != b and a*(c+e) != b*c])  # a(c+e)≠bc |  a ≠ b
+                d = random.choice([d for d in range(-10, 10) if d and c+d+e])  # c+d+e≠0
+                f = a*(c+e) - b*c
+
+            # muntatge (comú nivells [8, 9])
+            fr1 = Fr(npx([c]), npx([a, 1]))
+            fr2 = Fr(npx([d]), npx([b, 1]))
+            if fact:  # denominador factoritzat
+                fr3 = Fr(npx([f, e]), Mul([npx([a, 1]), npx([b, 1])]))
+            else:
+                fr3 = Fr(npx([f, e]), npx([a*b, a+b, 1]))
+
+            fracs = [fr1, fr2, fr3]
+            random.shuffle(fracs)
+
+            if not totsuma:  # si permeto negatius
+                for fr in fracs:
+                    if fr.num.termes[0].coef < 0:
+                        fr.signe = -1
+                        fr.num *= -1
+
+            fkey = 'r' if r else ''
+            if solucions:
+                solu = f"{Fr(c+d+e, npx([b, 1])):{fkey}}"
+            text = "".join(f"{t:{fkey}{'s' if i else ''}}" for i, t in enumerate(fracs))
+
+        if nivell == 10:
+            """
+                Gx + C    Hx + D       Ex + F               (G+H)[(x+A)(x+K)]     (G+H)(x+K)     [si K=B]
+                ------- + ------- + ------------ = ?     -> ----------------- = -------------       =      G+H
+                 x + A     x + B    x2+(A+B)x+AB               (x+A)(x+B)           (x+B)
+                 
+                 Restriccions necessàries:
+                   G+H ≠ 0                  <- evito que la resposta sigui 0 (no podria simplificar)
+                   C = G(A+K-B)+KH-D-E      <----|
+                   F = AK(G+H)-CB-AD        <----|-- forço que sigui simplificable (igualo estil fraccions simples)
             """
             # coef control
             g = random.randint(-3, 3)
@@ -2601,9 +2802,12 @@ def op_algeb(tipus, nivell=1, solucions=True, r=False):
             f = a*k*(g+h) - c*b - a*d
             fr1 = Fr(npx([c, g]), npx([a, 1]))
             fr2 = Fr(npx([d, h]), npx([b, 1]))
-            fr3 = Fr(npx([f, e]), npx([a*b, a+b, 1]))
+            if fact:  # denominador factoritzat
+                fr3 = Fr(npx([f, e]), Mul([npx([a, 1]), npx([b, 1])]))
+            else:
+                fr3 = Fr(npx([f, e]), npx([a*b, a+b, 1]))
             text = [fr1, fr2, fr3]
-            if nivell == 11:
+            if not totsuma:
                 for fr in text:
                     if fr.num.termes[0].coef < 0:
                         fr.signe = -1
@@ -5195,6 +5399,5 @@ for x in range(12):
 if __name__ == "__main__":
     # aquesta secció la faig servir per fer debugging dels tipus d'exercici
     print("running generator...")
-    for x in range(50):
-        print(eq(110, x // 13+1, solucions=True))
-        # print(op_algeb(1, 10, solucions=True))
+    for x in range(10):
+        print(op_monomis(3, 3, r=True, solucions=True))

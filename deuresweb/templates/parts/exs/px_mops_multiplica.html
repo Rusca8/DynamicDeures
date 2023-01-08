@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici PX_MOPS_MULTIPLICA
+ #    Multiplicacions de monomis.
+ #}
+
+{% with title="Multiplicar", name="PX_MOPS_MULTIPLICA" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Una sola variable?", name="una_variable" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Evitar negatius?", name="positiu", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

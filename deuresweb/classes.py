@@ -206,7 +206,7 @@ class Fr:
         else:
             if isinstance(power, int):
                 a = self.simple()
-                return replace(a, num=a.num**2, den=a.den**2, signe=(a.signe if power % 2 else 1))
+                return replace(a, num=a.num**power, den=a.den**power, signe=(a.signe if power % 2 else 1))
             else:
                 return NotImplemented
 
@@ -227,8 +227,8 @@ class Fr:
             d = mcd(num, den)
             return Fr(num//d, den//d, signe)
         except Exception as ex:
-            print(f"{ex}: has simplificat una fracció estranya.")
-            return Fr(42, 42)
+            print(f"{ex}: has simplificat una fracció estranya (no he simplificat).")
+            return replace(self)
 
     def simplifica(self):
         simple = self.simple()
@@ -249,7 +249,7 @@ class Fr:
                 self.sort_index = sum(t.coef for t in self.num.termes)
             # altres ex
             else:
-                print(f"{ex}: Sort index impossible (Fr)")
+                # print(f"{ex}: Sort index impossible (Fr)")
                 self.sort_index = 0
 
 
@@ -264,6 +264,7 @@ class Mx:
     sort_index: List = field(init=False, repr=False)
     coef: int
     lit: dict = field(default_factory=lambda: {"x": 0})  # part literal
+    ordenat: bool = True
 
     def __post_init__(self):
         if isinstance(self.lit, int):  # si no està especificat, serà 'x'
@@ -313,6 +314,8 @@ class Mx:
             else:
                 c = self.coef
         dot = "·" if 'r' in fkey and c and punt and any(e for e in self.lit.values()) else ""
+        if not self.ordenat:
+            random.shuffle(lit)
         return f"{s}{c}{dot}" + "".join(lit)
 
     def __abs__(self):
@@ -450,13 +453,14 @@ class Px:
          Px([Mx(...), Mx(...), Mx(...)])
          npx([coefs estil numpy]) == Px([coefs estil numpy], np=True)
     """
-    termes: List = field(default_factory=[])
+    termes: List = field(default_factory=lambda: [])
     np: bool = False  # coefs donats estil numpy: [1, 2, 3, 4, 5, 6] grau ascendent >
     np_var: str = "x"  # variable que hi posaré quan converteixi el polinomi de np
 
     def __post_init__(self):
         if self.np:
             self.termes = [Mx(coef, {self.np_var: exp}) for exp, coef in enumerate(self.termes) if coef != 0]
+            self.termes = self.termes or [Mx(0)]   # per coherència, el polinomi 0 tindrà un monomi 0 a dins
             self.sort()
         else:
             for i, x in enumerate(self.termes):  # converteixo per si de cas he passat algun num sol
@@ -477,6 +481,7 @@ class Px:
         ordre = list(range(len(self.termes)))
         if "d" in fkey:
             random.shuffle(ordre)
+
         text = []
         for i, t in enumerate(ordre):
             t = self.termes[t]
@@ -486,7 +491,7 @@ class Px:
                 text.append(f"{t:{r}s}")
             else:
                 text.append(f"{t:{r}}")
-        return "".join(text)
+        return "".join(text) or "0"
 
     def __iter__(self):
         return iter(self.termes)
@@ -505,7 +510,7 @@ class Px:
             other = Px([other])
         # Px + Px
         if other.__class__ is self.__class__:
-            return Px(self.termes + other.termes).simplifica()
+            return Px(self.termes + other.termes).simplificat()
 
     def __radd__(self, other):
         if other == 0:
@@ -520,7 +525,7 @@ class Px:
             other = Px([other])
         # Px - Px
         if other.__class__ is self.__class__:
-            return Px(self.termes + (-other).termes).simplifica()
+            return Px(self.termes + (-other).termes).simplificat()
 
     def __rsub__(self, other):
         if other == 0:
@@ -543,7 +548,7 @@ class Px:
                 other = Px([other])
             # Px * Px
             if self.__class__ == other.__class__:
-                return Px([x*y for x in self.termes for y in other.termes]).simplifica()
+                return Px([x*y for x in self.termes for y in other.termes]).simplificat()
 
     def __rmul__(self, other):
         if other == 0:
@@ -561,7 +566,10 @@ class Px:
     def sort(self):
         self.termes = self.sorted().termes
 
-    def simplifica(self):
+    def simplificat(self):
+        for mx in self.termes:
+            mx.lit = {v: exp for v, exp in mx.lit.items() if exp}
+
         termes = []
         for mx in self.termes:
             for i, t in enumerate(termes):
@@ -572,6 +580,47 @@ class Px:
                 termes.append(replace(mx))
         return Px([t for t in termes if t.coef]).sorted()
 
+    def simplifica(self):
+        self.termes = self.simplificat().termes
+
+    def append(self, monomi):
+        if isinstance(monomi, Mx):
+            self.termes.append(monomi)
+        else:
+            self.termes.append(Mx(monomi))
+
+    @property
+    def variables(self):
+        vs = set()
+        for t in self.termes:
+            for v, grau in t.lit.items():
+                if grau != 0:
+                    vs.add(v)
+        return sorted(vs)
+
+    def avalua(self, punt):
+        # si entra només un número, el faig llista per gestionar-lo després
+        if isinstance(punt, int) or isinstance(punt, float):
+            punt = [punt]
+
+        # si entra llista de valors, els assigno a les variables que tinc (alfabèticament)
+        if isinstance(punt, list):
+            punt = {v: n for v, n in zip(self.variables, punt)}  # és el meu primer zip oficial, crec :)
+
+        # avaluem
+        px = Px()
+        for t in self.termes:
+            coef = t.coef
+            lit = {}
+            for v, exp in t.lit.items():
+                if v in punt:
+                    coef *= punt[v] ** exp
+                else:
+                    lit[v] = exp
+            px.append(Mx(coef, lit or {"x": 0}))
+
+        return px.simplificat()
+
 
 def npx(termes, var="x"):
     return Px(termes, np=True, np_var=var)
@@ -580,7 +629,7 @@ def npx(termes, var="x"):
 @dataclass()
 class Mul:
     """Multiplicació (indicada, pendent de fer) de dues coses"""
-    factors: List = field(default_factory=[])
+    factors: List = field(default_factory=lambda: [])
 
     def __format__(self, fkey):
         if "r" in fkey:
@@ -588,21 +637,96 @@ class Mul:
         else:
             cdot = r"\cdot "
 
+        totsdots = "·" in fkey
+
+        ordre = list(range(len(self.factors)))
+        if "d" in fkey:
+            random.shuffle(ordre)
+
         text = []
-        for i, f in enumerate(self.factors):
+        for i, f in enumerate(ordre):
+            f = self.factors[f]
             try:
                 tf = f"{f:{fkey}}"
             except Exception:
                 tf = f"{f}"
             if i:
                 if es_bloc(f) or es_negatiu(f):
-                    text.append(f"({tf})")
+                    if totsdots:
+                        text.append(cdot + f"({tf})")
+                    else:
+                        text.append(f"({tf})")
                 else:
                     text.append(cdot + tf)
             else:
-                text.append(tf)
+                if es_bloc(f):
+                    text.append(f"({tf})")
+                else:
+                    text.append(tf)
 
         return "".join(text)
+
+    def __abs__(self):
+        print("Abs de multi?")
+        return 42
+
+    def append(self, factor):
+        self.factors.append(factor)
+
+    def simplificat(self):
+        resultat = 1
+        for factor in self.factors:
+            resultat *= factor
+        return resultat
+
+
+@dataclass()
+class Div:
+    """Divisió (indicada, pendent de fer) de dues coses"""
+    divisors: List = field(default_factory=lambda: [])
+
+    def __format__(self, fkey):
+        if "r" in fkey:
+            div = " / "
+        else:
+            div = r"\div "
+
+        ordre = list(range(len(self.divisors)))
+        if "d" in fkey:
+            random.shuffle(ordre)
+
+        text = []
+        for i, f in enumerate(ordre):
+            f = self.divisors[f]
+            try:
+                tf = f"{f:{fkey}}"
+            except Exception:
+                tf = f"{f}"
+            if i:
+                if es_bloc(f) or es_negatiu(f):
+                    text.append(div + f"({tf})")
+                else:
+                    text.append(div + tf)
+            else:
+                if es_bloc(f):
+                    text.append(f"({tf})")
+                else:
+                    text.append(tf)
+
+        return "".join(text)
+
+    def __abs__(self):
+        print("Abs de divi?")
+        return 42
+
+    def append(self, divisor):
+        self.divisors.append(divisor)
+
+    def simplificat(self):
+        resultat = 1
+        for divisor in self.divisors:
+            resultat /= divisor
+        return resultat
 
 
 # //////////////////////////// AUXILIARS ////////////////////////////// #
@@ -634,6 +758,8 @@ def signe_de(cosa, collapse=True):
     elif isinstance(cosa, Px):
         if len(cosa.termes) == 1:
             return copysign(1, cosa.termes[0].coef)
+        else:
+            return 1  # considero el polinomi "positiu" per defecte (per compatibilitat)
     else:
         try:
             return int(copysign(1, cosa))

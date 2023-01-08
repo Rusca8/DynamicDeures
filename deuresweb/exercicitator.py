@@ -78,6 +78,9 @@ def constructor_de(nom):
         "PX_BASE_PARTSMONOMI": px_base_partsmonomi,
         "PX_IDNOT_ENDEVINAIDENTITAT": px_idnot_endevinaidentitat,
         "PX_IDNOT_IDENTITAT": px_idnot_identitat,
+        "PX_MOPS_DIVIDEIX": px_mops_divideix,
+        "PX_MOPS_MULTIPLICA": px_mops_multiplica,
+        "PX_MOPS_SUMAIRESTA": px_mops_sumairesta,
         "PX_OPS_DIVIDEIX": px_ops_divideix,
         "PX_OPS_DIVIDEIXRUFFINI": px_ops_divideixruffini,
         "PX_OPS_MULTIPLICA": px_ops_multiplica,
@@ -1189,12 +1192,24 @@ def px_algeb_simplifica(doc, opcions):
 def px_algeb_sumairesta(doc, opcions):
     enunciat = "Realitza les següents operacions i simplifica el resultat en la mesura que es pugui."
     enunsols = "Sumes i restes de fraccions algebraiques."
-    g = [
-        lambda: gen.op_algeb(1, 10, solucions=True),  # només sumes
-        lambda: gen.op_algeb(1, 11, solucions=True),  # sumes i/o restes
-        ]
+
     pvar = quantilvar(opcions["var"]["sense_restes"])
-    p = P([1, 1]).flex(0, pvar)
+    s_rest = alt_var(opcions, pvar)
+
+    pvar2 = quantilvar(opcions["var"]["factoritzat"])
+    s_fact = alt_var(opcions, pvar2)
+
+    p = P([1, 1, 2])
+
+    g = [
+        # 3 termes, 2 factors, numeradors [A, B, Ex]
+        lambda: gen.op_algeb(1, 8, totsuma=next(s_rest), fact=next(s_fact), solucions=True),
+        # 3 termes, 2 factors, numeradors [A, B, Ex + F]
+        lambda: gen.op_algeb(1, 9, totsuma=next(s_rest), fact=next(s_fact), solucions=True),
+        # 3 termes, 2 factors, numeradors [Ax+B, Cx+D, Ex+F]
+        lambda: gen.op_algeb(1, 10, totsuma=next(s_rest), fact=next(s_fact), solucions=True),
+        ]
+
     tsols = crea_exercici(doc, opcions,
                           g,
                           p,
@@ -1203,15 +1218,25 @@ def px_algeb_sumairesta(doc, opcions):
                           scale=scale_per("fraccions"),
                           espai_apartat=10,
                           mates_solus=True,
+                          stretch_solus=stretch_per("algebs"),
                           )
     return [enunsols, tsols]
 
 
 def px_base_avalua(doc, opcions):
-    enunciat = "Avalua en el punt demanat."
+    enunciat = "Avalua els següents polinomis en el punt demanat."
     enunsols = "Avaluar polinomis."
+
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([1, 1]).flex(0, pvar)
+
+    g = [lambda: gen.px(6, 1, solucions=True),
+         lambda: gen.px(6, 2, solucions=True),
+         ]
+
     tsols = crea_exercici(doc, opcions,
-                          lambda: gen.px(6, 1, solucions=True),
+                          g,
+                          p,
                           enunciat=enunciat,
                           espai_apartat=10,
                           mates=False,
@@ -1378,6 +1403,87 @@ def px_idnot_identitat(doc, opcions):
     return [enunsols, tsols]
 
 
+def px_mops_divideix(doc, opcions):
+    enunciat = "Fes les següents divisions de monomis."
+    enunsols = "Divisions de monomis."
+
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([2, 3, 3]).flex(0, pvar)
+
+    pvar2 = quantilvar(opcions["var"]["positiu"])
+    s_pos = alt_var(opcions, pvar2)
+
+    g = [
+        lambda: gen.op_monomis(3, 1, noneg=next(s_pos), solucions=True),
+        lambda: gen.op_monomis(3, 2, noneg=next(s_pos), solucions=True),
+        lambda: gen.op_monomis(3, 3, noneg=next(s_pos), solucions=True),
+        ]
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def px_mops_multiplica(doc, opcions):
+    enunciat = "Fes les següents multiplicacions de monomis."
+    enunsols = "Multiplicacions de monomis."
+
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([2, 3, 3]).flex(0, pvar)
+
+    pvar2 = quantilvar(opcions["var"]["positiu"])
+    s_pos = alt_var(opcions, pvar2)
+
+    g = [
+        lambda: gen.op_monomis(2, 1, noneg=next(s_pos), solucions=True),
+        lambda: gen.op_monomis(2, 2, noneg=next(s_pos), solucions=True),
+        lambda: gen.op_monomis(2, 3, noneg=next(s_pos), solucions=True),
+        ]
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
+def px_mops_sumairesta(doc, opcions):
+    enunciat = "Fes les següents sumes i restes de monomis."
+    enunsols = "Sumes i restes de monomis."
+
+    pvar = quantilvar(opcions["var"]["una_variable"])
+    p = P([1, 1]).flex(0, pvar)
+
+    pvar2 = quantilvar(opcions["var"]["ordenat"])
+    s_ord = alt_var(opcions, pvar2)
+
+    g = [
+        lambda: gen.op_monomis(1, 1, ordenat=next(s_ord), solucions=True),
+        lambda: gen.op_monomis(1, 2, ordenat=next(s_ord), solucions=True),
+        ]
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          espai_apartat=10,
+                          mates_solus=True,
+                          es_spoiler=True,
+                          )
+    return [enunsols, tsols]
+
+
 def px_ops_divideix(doc, opcions):
     enunciat = "Fes les següents divisions de polinomis."
     enunsols = "Divisions de polinomis."
@@ -1444,28 +1550,44 @@ def px_ops_multiplica(doc, opcions):
 
 
 def px_ops_parametreresidu(doc, opcions):
-    enunciat = "Calcula en cada cas el valor del paràmetre que fa que la divisió sigui exacta."
+    enunciat = "Fes servir la informació donada per calcular en cada cas el valor del paràmetre:"
     enunsols = "Paràmetre sabent residu."
 
     # filtro només lletres normals, per si algú canvia l'html amb inspect o què sé jo
     parametres = [re.sub("[^a-yzA-YZ]+", "", c) for c in get_var(opcions, "parametres", ["k", "m", "a"])
                   if len(c) == 1] or ["k"]
 
-    g = [
-        lambda: gen.px(106, 1, par=random.choice(parametres), solucions=True),  # k = coef sencer
-        lambda: gen.px(106, 2, par=random.choice(parametres), solucions=True),  # k = factor d'un coef
-        lambda: gen.px(106, 3, par=random.choice(parametres), solucions=True),  # k = factor de més d'un coef
-        lambda: gen.px(106, 4, par=random.choice(parametres), solucions=True),  # k = sumand d'un coef
-        lambda: gen.px(106, 5, par=random.choice(parametres), solucions=True),  # k = sumand de més d'un coef
-        lambda: gen.px(106, 6, par=random.choice(parametres), solucions=True),  # k = factors i sumands barrejats
-        ]
+    narratives = [n for n in get_var(opcions, "narratives", ["divi", "img"])] or ["divi", "img"]
+
     p = P([1, 1, 1, 1, 1, 1])
+
+    pvar = quantilvar(opcions["var"]["residu_zero"])
+    s_res = alt_var(opcions, pvar)
+
+    s_par = regenerable(parametres)
+    s_nar = regenerable(narratives * 2, narratives)
+
+    g = [
+        # k = coeficient sencer
+        lambda: gen.px(106, 1 if next(s_res) else 11, par=next(s_par), nar=next(s_nar), solucions=True),
+        # k = factor d'un coeficient
+        lambda: gen.px(106, 2 if next(s_res) else 12, par=next(s_par), nar=next(s_nar), solucions=True),
+        # k = factor de més d'un coeficient
+        lambda: gen.px(106, 3 if next(s_res) else 13, par=next(s_par), nar=next(s_nar), solucions=True),
+        # k = sumand d'un coeficient
+        lambda: gen.px(106, 4 if next(s_res) else 14, par=next(s_par), nar=next(s_nar), solucions=True),
+        # k = sumand de més d'un coeficient
+        lambda: gen.px(106, 5 if next(s_res) else 15, par=next(s_par), nar=next(s_nar), solucions=True),
+        # k = factors i sumands barrejats
+        lambda: gen.px(106, 6 if next(s_res) else 16, par=next(s_par), nar=next(s_nar), solucions=True),
+        ]
 
     tsols = crea_exercici(doc, opcions,
                           g,
                           p,
                           enunciat=enunciat,
                           espai_apartat=10,
+                          mates=False,
                           )
     return [enunsols, tsols]
 
@@ -1831,6 +1953,7 @@ def stretch_per(tal):
         "polis": 1.2,
         "fracs": 1.3,
         "fraccions": 1.3,
+        "algebs": 1.4,
     }
     return 1 if tal not in stretches else stretches[tal]
 

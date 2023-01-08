@@ -1,0 +1,16 @@
+{#
+ # Formulari d'opcions per l'exercici PX_MOPS_DIVIDEIX
+ #    Divisions de monomis.
+ #}
+
+{% with title="Dividir", name="PX_MOPS_DIVIDEIX" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Una sola variable?", name="una_variable" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Evitar negatius?", name="positiu", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

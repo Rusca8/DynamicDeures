@@ -59,6 +59,7 @@ def punts_de(nom):
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": 4,
         "PX_ALGEB_SIMPLIFICA": 5,
+        "PX_ALGEB_SUMAIRESTA": 7,
         "PX_BASE_AVALUA": 1,
         "PX_BASE_DESXIFRA": 5,
         "PX_BASE_FACTORCOMU": 2,
@@ -66,6 +67,9 @@ def punts_de(nom):
         "PX_BASE_PARTSMONOMI": 1,
         "PX_IDNOT_ENDEVINAIDENTITAT": 3,
         "PX_IDNOT_IDENTITAT": 2,
+        "PX_MOPS_DIVIDEIX": 1,
+        "PX_MOPS_MULTIPLICA": 1,
+        "PX_MOPS_SUMAIRESTA": 1,
         "PX_OPS_DIVIDEIX": 4,
         "PX_OPS_DIVIDEIXRUFFINI": 3,
         "PX_OPS_MULTIPLICA": 3,

@@ -3,10 +3,19 @@
  #    Calcular un paràmetre sabent el residu d'una divisió.
  #}
 
-{% with title="Paràmetre sabent residu", name="PX_OPS_PARAMETRERESIDU" %}
+{% with title="Troba el paràmetre", name="PX_OPS_PARAMETRERESIDU" %}
     {% include '/parts/quantes.html' %}
 {% endwith %}
 
-        {% with title="Quines lletres fem servir?", labels=["k", "m", "a"], name="parametres", altnames=["k", "m", "a"] %}
-          {% include '/parts/triaquines.html' %}
-        {% endwith %}
+    {% with title="Com donem la informació?", labels=["residu d'una divisió", "valor del polinomi"], name="narratives",
+            altnames=["divi", "img"] %}
+      {% include '/parts/triaquines.html' %}
+    {% endwith %}
+
+    {% with title="Divisió exacta / X és arrel?", name="residu_zero", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Quines lletres fem servir?", labels=["k", "m", "a"], name="parametres", altnames=["k", "m", "a"] %}
+      {% include '/parts/triaquines.html' %}
+    {% endwith %}

@@ -763,8 +763,8 @@ def triacoses(esquelet, x=1):
 def px_residu(nivell, px, dx, x):
     if nivell == 1:
         if random.randint(0, 3):
-            text1 = random.choice([f"Avalua el polinomi $P(x)={px}$", f"Troba el valor numèric del polinomi $P(x)={px}$",
-                                   f"Calcula el resultat d'avaluar el polinomi $P(x)={px}$"])
+            text1 = random.choice([f"Avalua el polinomi $P(x)={px}$", f"Troba el valor numèric de $P(x)={px}$",
+                                   f"Calcula el resultat d'avaluar $P(x)={px}$"])
             text2 = random.choice([f" quan $x={x}$.", f" si sabem que la $x$ val ${x}$.", f" per a $x={x}$.",
                                    f" quan la $x$ és ${x}$"])
         else:
@@ -783,8 +783,70 @@ def px_residu(nivell, px, dx, x):
         if not text1:
             text2 = text2[1:].capitalize()
         return text1 + text2
+
     else:
         return "No hi ha tants nivells a px_residu"
+
+
+def px_multiaval(px, punt):
+    """Retorna un enunciat d'avaluar polinomis multivariable.
+
+    :param px: polinomi multivariable
+    :param punt: diccionari {variable: valor}
+    """
+    vs = ", ".join(px.variables)
+    p = ", ".join(f"{v}" for v in punt.values())
+    text1 = random.choice([f"Calcula el valor de $P({vs})={px}$",
+                           f"Troba el valor $P({vs})={px}$",
+                           f"Avalua $P({vs})={px}$"
+                          ])
+    text2 = random.choice([random.choice([" quan ", " per a "]) + joini([f"${v}={n}$" for v, n in punt.items()]) + ".",
+                           f" en el punt $({p})$."
+                           ])
+    return text1 + text2
+
+
+def px_parametreresidu(divi, px, dx, d, residu, nar=None):
+    """Genera un enunciat pels apartats de paràmetre segons residu.
+              P(x)/D(x) = P(x)/(x-d)   ->   P(d) = R
+    """
+    if nar is None:
+        nar = random.choice(["divi", "img"])
+
+    if nar == "img":
+        if residu:
+            return random.choice([f"$P(x)={px}$ i sabem que $P({d})={residu}$.",
+                                  f"Sabem que $P({d})={residu}$ per al polinomi $P(x)={px}$.",
+                                  f"El valor de $P(x)={px}$ quan $x={d}$ és ${residu}$.",
+                                  f"Per al polinomi $P(x)={px}$, $P({d})={residu}$."
+                                  ])
+        else:
+            return random.choice([f"$x={d}$ és una arrel de P(x)=${px}$.",
+                                  f"P(x)=${px}$ té per arrel $x={d}$.",
+                                  f"Una de les arrels de P(x)=${px}$ és {d}.",
+                                  f"$P(x)={px}$ i sabem que $P({d})=0$.",
+                                  f"Sabem que $P({d})=0$ per al polinomi $P(x)={px}$.",
+                                  f"El valor de $P(x)={px}$ quan $x={d}$ és $0$.",
+                                  ])
+    elif nar == "divi":
+        if residu:
+            return random.choice([f"El residu de dividir ${px}$ entre ${dx}$ és ${residu}$.",
+                                  f"La divisió ${divi}$ té per residu ${residu}$.",
+                                  f"El residu de ${divi}$ és ${residu}$.",
+                                  f"El residu de la divisió ${divi}$ és ${residu}$.",
+                                  f"Si dividim ${px}$ entre ${dx}$ el residu és ${residu}$."
+                                  ])
+        else:
+            return random.choice([f"La divisió ${divi}$ és exacta.",
+                                  f"El polinomi ${dx}$ és divisor de ${px}$.",
+                                  # f"${dx}$ és un factor de ${px}$.",
+                                  # f"Un dels factors de ${px}$ és ${dx}$.",
+                                  f"La divisió ${divi}$ no té residu.",
+                                  f"Si dividim ${px}$ entre ${dx}$ " + random.choice(["el residu és $0$.",
+                                                                                      "no hi ha residu.",
+                                                                                      "no obtindrem residu.",
+                                                                                      ]),
+                                  ])
 
 
 def px_invent():
@@ -1172,6 +1234,13 @@ def ordinal(num):
         return f"{num}t"
     else:
         return f"{num}è"
+
+
+def joini(llista):
+    if len(llista) < 3:
+        return " i ".join(llista)
+    else:
+        return ", ".join(llista[:-1]) + " i " + llista[-1]
 
 
 def moneda():

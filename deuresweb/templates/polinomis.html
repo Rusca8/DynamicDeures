@@ -1,7 +1,7 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
 <div class="alert alert-info alert-sm py-1 mb-2" role="alert">
-    <small><b>Nou:</b> Quantitats exactes (botó #), triar puntuacions dels exercicis, posar solucions al final, i triar la frase amagada!</small>
+    <small><b>Nou:</b> Operacions amb monomis.</small>
 </div>
 {% endblock %}
 
@@ -18,7 +18,7 @@
     {% endwith %}
 
     <!-- Tria APARTATS -->
-    {% with apartats = ["base", "idnot", "ops", "algeb"] %}
+    {% with apartats = ["base", "idnot", "mops", "ops", "algeb"] %}
         {% include '/parts/triaapartats.html' %}
     {% endwith %}
 
@@ -46,6 +46,15 @@
             exercicis = [
                 'px_idnot_identitat',
                 'px_idnot_endevinaidentitat',
+                ] %}
+        {% include '/parts/apartat.html' %}
+    {% endwith %}
+
+    {% with apartat = "mops",
+            exercicis = [
+                'px_mops_sumairesta',
+                'px_mops_multiplica',
+                'px_mops_divideix',
                 ] %}
         {% include '/parts/apartat.html' %}
     {% endwith %}

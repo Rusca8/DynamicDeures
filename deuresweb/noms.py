@@ -23,13 +23,14 @@ def nom_apartat(tema, apartat, btn=False):
         "powsqr": {
             "bpow": ["Base (Potències)", "Base (P) ✨"],
             "pow": ["Potències", "Potències"],
-            "bsqr": ["Base (Arrels)", "Base (A) ✨"],
+            "bsqr": ["Base (Arrels)", "Base (A)"],
             "sqr": ["Arrels", "Arrels"],
         },
         "px": {
             "algeb": ["Factoritzar i fraccions algebraiques", "Algebraiques"],
             "base": ["Base", "Base"],
             "idnot": ["Identitats notables", "Id. Notables"],
+            "mops": ["Operacions amb monomis", "Operar monomis ✨"],
             "ops": ["Operacions amb polinomis", "Operar polinomis"],
         },
     }
