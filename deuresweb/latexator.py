@@ -1665,10 +1665,10 @@ def crea_fitxa(opcions, solucions=False):
         begin(doc, "questions")
         for tema in opcions["temes"]:
             if len(opcions["temes"]) > 1:  # si hi ha més d'un tema, poso títols dels temes TODO hr potser
-                needspace(doc, 12)
+                needspace(doc, 16)
                 bloctitle(doc, temallarg(tema).upper())
             for apartat in opcions["temes"][tema]:
-                needspace(doc, 12)
+                needspace(doc, 14)
                 bloctitle(doc, nom_apartat(tema, apartat))
                 for exercici in opcions["temes"][tema][apartat]:
                     g = mexs.constructor_de(exercici)
