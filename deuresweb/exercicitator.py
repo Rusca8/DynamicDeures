@@ -1690,7 +1690,7 @@ def px_ops_teoremaresidu(doc, opcions):
     enunciat = "Calcula el residu."
     enunsols = "Calcular residus."
     tsols = crea_exercici(doc, opcions,
-                          lambda: gen.px(6, 2, solucions=True),
+                          lambda: gen.px(6, 1, nar=2, solucions=True),
                           enunciat=enunciat,
                           espai_apartat=10,
                           mates=False,

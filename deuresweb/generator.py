@@ -2461,7 +2461,8 @@ def px(tipus, nivell=1, termes=None, noneg=False, nar=None, solucions=False, par
             text = f"({dendx})\\div ({dx})"
 
     elif tipus == 6:  # tª residu / avaluar
-        if nivell == 1:  # una incògnita (tª res / avaluar)
+        if nivell == 1:  # una incògnita (nar1 = avaluar / nar2 = tª res)
+            nar = nar or 1
             # grau
             termes = random.randint(3, 4)
             gp = termes + random.choice([0, 1, 2])
@@ -2483,7 +2484,7 @@ def px(tipus, nivell=1, termes=None, noneg=False, nar=None, solucions=False, par
             solu = poli_aval(rufipx, x)
 
             # muntatge
-            text = en.px_residu(nivell, px, dx, x)
+            text = en.px_residu(nar, px, dx, x)
 
         elif nivell == 2:  # dues incògnites (avaluar)
             termes = random.randint(3, 4)
