@@ -68,6 +68,7 @@ def constructor_de(nom):
         "POWSQR_SQR_SUMAIRESTA": powsqr_sqr_sumairesta,
 
         # ********** PX ********** #
+        "PX_ALGEB_MULTIPLICAIDIVIDEIX": px_algeb_multiplicaidivideix,
         "PX_ALGEB_FACTORITZA": px_algeb_factoritza,
         "PX_ALGEB_SIMPLIFICA": px_algeb_simplifica,
         "PX_ALGEB_SUMAIRESTA": px_algeb_sumairesta,
@@ -1172,6 +1173,39 @@ def px_algeb_factoritza(doc, opcions):
                           espai_apartat=10,
                           espai_final=10,
                           mates_solus=True,
+                          )
+    return [enunsols, tsols]
+
+
+def px_algeb_multiplicaidivideix(doc, opcions):
+    enunciat = "Realitza les següents operacions i simplifica el resultat en la mesura que es pugui."
+    enunsols = "Multiplicacions i divisions de fraccions algebraiques."
+
+    pvar = quantilvar(opcions["var"]["sense_divisions"])
+    s_divis = alt_var(opcions, pvar)
+
+    pvar2 = quantilvar(opcions["var"]["factoritzat"])
+    s_fact = alt_var(opcions, pvar2)
+
+    s_tipus = regenerable([2, 3], [2, 3])
+
+    p = P([1, 1, 1])
+
+    g = [
+        lambda: gen.op_algeb(2 if next(s_divis) else next(s_tipus), 1, fact=next(s_fact), solucions=True),
+        lambda: gen.op_algeb(2 if next(s_divis) else next(s_tipus), 2, fact=next(s_fact), solucions=True),
+        lambda: gen.op_algeb(2 if next(s_divis) else next(s_tipus), 3, fact=next(s_fact), solucions=True),
+        ]
+
+    tsols = crea_exercici(doc, opcions,
+                          g,
+                          p,
+                          enunciat=enunciat,
+                          cols=2,
+                          scale=scale_per("fraccions"),
+                          espai_apartat=10,
+                          mates_solus=True,
+                          stretch_solus=stretch_per("algebs"),
                           )
     return [enunsols, tsols]
 

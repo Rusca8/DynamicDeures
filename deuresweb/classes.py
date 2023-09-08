@@ -1,6 +1,7 @@
 """
 Definicions de les diferents classes que faré servir (ara que he vist que són útils) :)
 """
+from typing import Any
 from dataclasses import dataclass, field, astuple, replace
 from typing import List
 from math import copysign
@@ -64,8 +65,8 @@ class P:
 class Fr:
     """Fracció (num, den)"""
     sort_index: float = field(init=False, repr=False)
-    num: int
-    den: int
+    num: int | Any
+    den: int | Any
     signe: int = field(default=1)  # signe global (±1)
 
     def __post_init__(self):  # per si ha entrat un signe que no tocava (i per copiar signes)
@@ -676,7 +677,7 @@ class Mul:
                 else:
                     text.append(cdot + tf)
             else:
-                if es_bloc(f):
+                if es_bloc(f) and len(ordre) > 1:
                     text.append(f"({tf})")
                 else:
                     text.append(tf)
@@ -684,8 +685,11 @@ class Mul:
         return "".join(text)
 
     def __abs__(self):
-        print("Abs de multi?")
-        return 42
+        # TODO cal ?
+        return self
+
+    def __iter__(self):
+        return iter(self.factors)
 
     def append(self, factor):
         self.factors.append(factor)

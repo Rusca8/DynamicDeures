@@ -2770,10 +2770,11 @@ def px(tipus, nivell=1, termes=None, noneg=False, nar=None, solucions=False, par
         return text, solu
     return text
 
+
 genera_ex_px = px  # alias perquè sovint matxaco el nom de px amb altres coses perquè sóc un xungo suposo
 
 
-def op_algeb(tipus, nivell=1, r=False, totsuma=False, fact=False, solucions=True):
+def op_algeb(tipus, nivell=1, r=False, totsuma=False, fact=True, solucions=True):
     """Genera exercicis
 
     :param tipus: format general de l'exercici
@@ -2786,7 +2787,7 @@ def op_algeb(tipus, nivell=1, r=False, totsuma=False, fact=False, solucions=True
     """
     text = r"\frac{42x+42}{42x}"
     solu = r"\frac{42x}{42}"
-    if tipus == 1:  # suma
+    if tipus == 1:  # suma i resta
         if nivell in [8, 9]:  # F = 0  ||  F qualsevol
             """
                   C         D        Ex + (F)                (C+D+E)(x+A)      (C+D+E)
@@ -2895,12 +2896,90 @@ def op_algeb(tipus, nivell=1, r=False, totsuma=False, fact=False, solucions=True
                     solu = f"{Fr(npx([k, 1]), npx([b, 1])):{fkey}}"
                 else:
                     solu = f"{Fr(Mul([g+h, npx([k, 1])]), npx([b, 1])):{fkey}}"
-    elif tipus == 2:  # resta
-        ...
-    elif tipus == 3:  # multi
-        ...
-    elif tipus == 4:  # divi
-        ...
+
+    elif tipus in [2, 3]:  # multi i divi
+        f1 = Fr(Mul(), Mul())
+        f2 = Fr(Mul(), Mul())
+
+        if nivell in [1, 2, 3]:
+            abcd = {let: 42 for let in ["a", "b", "c", "d"]}
+            """
+            AB     C
+           ---- x ---
+            AD     B
+            
+            Requisits:
+             · La fracció individual no pot ser A/A ni B/B ni C/D
+                · Puc barrejar lliurement en horitzontal un cop es compleix el requisit
+            
+            Nivell 1: A=0
+            Nivell 2: id notable
+            Nivell 3: rufinables
+            """
+            # precàlcul ordre (0=A, 1=B, 2=C|D)
+            num_sola = random.choice([0, 1, 2])
+            den_sola = random.choice([x for x in [0, 1, 2] if x != num_sola])
+
+            # càlcul
+            if nivell in [1, 3]:
+                opcions = [x for x in range(-10, 11) if x]
+                random.shuffle(opcions)
+                if nivell == 1:
+                    abcd["a"] = npx([0, 1])
+                else:
+                    abcd["a"] = npx([opcions.pop(), 1])
+                abcd["b"], abcd["c"], abcd["d"] = (npx([opcions.pop(), 1]) for _ in range(3))
+
+            elif nivell == 2:
+                opcions = list(range(11))
+                random.shuffle(opcions)
+                if moneda():
+                    idnots = [x for x in range(3) if x != num_sola]
+                else:
+                    idnots = [x if x != 2 else 3 for x in range(3) if x != den_sola]
+
+                n = opcions.pop()
+                m12 = [npx([n, 1]), npx([-n, 1])]
+                m34 = [npx([n, 1]) for n in random.sample([x for x in opcions if abs(x) != abs(n)], 2)]
+                for i in range(4):
+                    if i in idnots:
+                        abcd[['a', 'b', 'c', 'd'][i]] = m12.pop()
+                    else:
+                        abcd[['a', 'b', 'c', 'd'][i]] = m34.pop()
+
+            # muntatge
+            abc = [abcd["a"], abcd["b"], abcd["c"]]
+            abd = [abcd["a"], abcd["b"], abcd["d"]]
+            for i in range(3):
+                # num
+                if i == num_sola:
+                    f2.num.append(abc[i])
+                else:
+                    f1.num.append(abc[i])
+                # den
+                if i == den_sola:
+                    f2.den.append(abd[i])
+                else:
+                    f1.den.append(abd[i])
+
+            if not fact:
+                f1.num = f1.num.simplificat()
+                f1.den = f1.den.simplificat()
+
+            if moneda():
+                f1.num, f2.num = f2.num, f1.num
+
+            if moneda():
+                f1, f2 = f2, f1
+
+            if tipus == 3:  # divi
+                op = r"\div "
+                f2 = f2.inversa()
+            else:
+                op = r"\cdot "
+
+            text = fr"{f1}{op}{f2}"
+            solu = f"{Fr(abcd['c'], abcd['d'])}"
 
     if solucions:
         return text, solu
@@ -5473,4 +5552,4 @@ if __name__ == "__main__":
     # aquesta secció la faig servir per fer debugging dels tipus d'exercici
     print("running generator...")
     for x in range(10):
-        print(idnotable(3, 1, buits=2, solucions=True))
+        print(op_algeb(3, 1, solucions=True, fact=False))

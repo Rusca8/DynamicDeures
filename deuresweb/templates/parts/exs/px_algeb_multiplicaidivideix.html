@@ -1,0 +1,17 @@
+{#
+ # Formulari d'opcions per l'exercici PX_ALGEB_MULTIPLICAIDIVIDEIX
+ #    Multiplicació i divisió de fraccions algebraiques.
+ #}
+
+{% with title="Multiplicar i dividir", name="PX_ALGEB_MULTIPLICAIDIVIDEIX",
+        info="$\\frac{x+5}{x-9}\\cdot \\frac{x^{2}-9x}{x^{2}-10x} \\rightarrow \\frac{x+5}{x-10}$" %}
+  {% include '/parts/quantes.html' %}
+{% endwith %}
+
+    {% with title="Evitar divisions?", name="sense_divisions", triat=1 %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}
+
+    {% with title="Factoritzats?", name="factoritzat" %}
+        {% include '/parts/quantesvariant.html' %}
+    {% endwith %}

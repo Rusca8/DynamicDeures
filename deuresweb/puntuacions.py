@@ -58,6 +58,7 @@ def punts_de(nom):
 
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": 4,
+        "PX_ALGEB_MULTIPLICAIDIVIDEIX": 4,
         "PX_ALGEB_SIMPLIFICA": 5,
         "PX_ALGEB_SUMAIRESTA": 7,
         "PX_BASE_AVALUA": 1,

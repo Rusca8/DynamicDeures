@@ -3217,7 +3217,9 @@ def headfoot(doc, opcions, tema="no", assig="Matemàtiques"):
         r"\firstpageheader{}{\hrulefill \\ \bfseries\LARGE Fitxa " + tema + r"\\ \vspace*{1mm} \large " + assig
         + f"{curs} " r"\scriptsize \\ \hrulefill \\  "
         + r"\small\mdseries Fitxa generada automàticament amb Dynamic Deures (http://bit.ly/DynamicDeures)}{}"))
-    doc.preamble.append(NoEscape(r"\runningheader{Mates de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
+    assig_mini = "Mates" if assig == "Matemàtiques" else assig
+    doc.preamble.append(NoEscape(r"\runningheader{" + assig_mini
+                                 + " de %s}{Fitxa %s}{Dynamic Deures}" % (opcions["curs"], tema)))
     doc.preamble.append(NoEscape(r"\footer{Total: \numpoints\ punts}{Pàgina \thepage /\numpages}{David Ruscalleda}"))
 
     return

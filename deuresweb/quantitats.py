@@ -67,8 +67,9 @@ def quantitats_de(nom, alt="def"):
 
         # ********** PX ********** #
         "PX_ALGEB_FACTORITZA": [0, 2, 4, 6, 12, 28, 58],
+        "PX_ALGEB_MULTIPLICAIDIVIDEIX": [0, 2, 4, 6, 12, 24, 50],
         "PX_ALGEB_SIMPLIFICA": [0, 1, 2, 4, 5, 24, 50],
-        "PX_ALGEB_SUMAIRESTA": [0, 1, 2, 4, 5, 24, 50],
+        "PX_ALGEB_SUMAIRESTA": [0, 1, 2, 4, 12, 24, 50],
         "PX_BASE_AVALUA": [0, 1, 3, 5, 6, 12, 26],
         "PX_BASE_DESXIFRA": [0, 1, 2, 3, 4, 7, 14],
         "PX_BASE_FACTORCOMU": [0, 2, 4, 6, 12, 26, 54],
