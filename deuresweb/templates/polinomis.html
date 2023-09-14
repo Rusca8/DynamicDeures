@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% set temafitxa = "px" %}
-{% block titolfitxa %}Fitxa de {{ nom_tema(temafitxa, prep=true) }}{% endblock %}
+{% block titolfitxa %}Fitxa {{ nom_tema(temafitxa, prep=true) }}{% endblock %}
 
 {% block principals %}
     <input type="hidden" name="temafitxa" value="{{temafitxa}}" />  <!-- Tema de la fitxa (pel títol i tal) -->
