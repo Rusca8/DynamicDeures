@@ -231,7 +231,7 @@ def mixcomb(num, inception=1, op=0, previ=0, doblesigne=True, out=0, ops=[1, 2, 
             text = "{(" + f"{mixcomb(n, inception, 0, 5, doblesigne, out, ops, hide=[5, 4])}" + ")}^2"
 
     if inception == out:
-        return squarebracketer(text)
+        return squarebracketer(text) + "="
     else:
         return text
 
