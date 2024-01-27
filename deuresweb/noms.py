@@ -46,6 +46,7 @@ def nom_tema(tema, prep=False, pdf=False):
 
     """
     temes = {
+        "apilades": ["Operacions amb Més Xifres", "d'Operacions amb Més Xifres", "operacionsmx"],
         "eq": ["Equacions", "d'Equacions", "equacions"],
         "frac": ["Fraccions", "de Fraccions", "fraccions"],
         "powsqr": ["Potències i Arrels", "de Potències i Arrels", "potenciesiarrels"],

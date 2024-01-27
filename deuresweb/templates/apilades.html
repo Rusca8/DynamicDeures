@@ -1,9 +1,11 @@
 {% extends "formulari.html" %}
 {% block alertatop %}
-<!--<div class="alert alert-info alert-sm py-1" role="alert"><small>Va tot, però falta ajustar les quantitats a la mida.</small></div>-->
+<div class="alert alert-info alert-sm py-1" role="alert"><small><b>Nou:</b> Divisions amb i sense decimals.</small></div>
 {% endblock %}
+{% set temafitxa = "apilades" %}
 {% block principals %}
 <h4 id="titolTema">Fitxa d'Operacions amb Més Xifres...</h4>
+{% set ns.tema = "apilades" %}  <!-- Tema dels exercicis (podria canviar a mitja fitxa) -->
 <div class="form-group">
     <label for="formGroupExampleInput">En quin curs estàs pensant?</label><br>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -43,8 +45,8 @@
         <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opMulti" aria-expanded="true" aria-controls="opMulti">
           <input type="checkbox" name="multiplicacions" autocomplete="off" id="multis" value="Multiplicacions" checked> Multiplicacions
         </label>
-        <label class="btn btn-sm btn-outline-secondary disabled" data-toggle="collapse" href="#opDivi" aria-expanded="false" aria-controls="opDivi">
-          <input type="checkbox" name="divisions" autocomplete="off" id="divis" value="Divisions" disabled> Divisions
+        <label class="btn btn-sm btn-outline-secondary active" data-toggle="collapse" href="#opDivi" aria-expanded="true" aria-controls="opDivi">
+          <input type="checkbox" name="divisions" autocomplete="off" id="divis" value="Divisions" checked> Divisions ✨
         </label>
     </div>
 </div>
@@ -448,7 +450,7 @@
             <label for="formGroupMultisQuantes"><b>Sense Decimals</b></label>
             <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
-                <input type="radio" name="qmultis" id="qr0" value="no" autocomplete="off"> no
+                <input type="radio" name="qmultis" id="qm0" value="no" autocomplete="off"> no
               </label>
               <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
                 <input type="radio" name="qmultis" id="qm1" value="poques" autocomplete="off"> poques
@@ -600,6 +602,182 @@
                         </label>
                         <label class="btn btn-sm btn-outline-info py-0 btn-mini">
                               <input type="checkbox" name="mdecibaix2" autocomplete="off" id="mdecibaix2" value="mdecibaix2"> 2
+                        </label>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+
+<div class="collapse show mb-1" id="opDivi">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Divisions apilades</h5>
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDivisQuantes"><b>Sense Decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qdivis" id="qd2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qdivis" id="qd6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qdivis" id="qd9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigitsDivis"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6, 5, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="ddalt{{n}}" autocomplete="off" id="ddalt{{n}}" value="ddalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(5, 2, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="ddalt{{n}}" autocomplete="off" id="ddalt{{n}}" value="ddalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="ddalt{{n}}" autocomplete="off" id="ddalt2" value="ddalt2"> 2
+                            </label>
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="div" autocomplete="off" id="div" value="per" disabled> <b>÷</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="dbaix4" autocomplete="off" id="dbaix4" value="dbaix4"> 4
+                        </label>
+                        {% for n in range(3, 2, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="dbaix{{n}}" autocomplete="off" id="dbaix{{n}}" value="dbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(2, 0, -1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="dbaix{{n}}" autocomplete="off" id="dbaix{{n}}" value="dbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <div class="form-group mb-0 ml-2">
+            <label for="formGroupDivisDecimalsQuantes"><b>Amb decimals</b></label>
+            <div class="btn-group btn-group-toggle ml-2" data-toggle="buttons">
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd0" value="no" autocomplete="off"> no
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd1" value="poques" autocomplete="off"> poques
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini active">
+                <input type="radio" name="qddivis" id="qdd2" value="normal" autocomplete="off" checked> normal
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd3" value="moltes" autocomplete="off"> moltes
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd4" value="mitja" autocomplete="off"> mitja
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd5" value="plana" autocomplete="off"> plana
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini">
+                <input type="radio" name="qddivis" id="qdd6" value="doble" autocomplete="off"> doble
+              </label>
+              <label class="btn btn-outline-secondary btn-sm py-0 btn-mini disabled">
+                <input type="radio" name="qddivis" id="qpd9" value="tria" autocomplete="off" disabled> tria
+              </label>
+            </div>
+        </div>
+
+        <div class="form-group mb-1 ml-4">
+            <div class="container-fluid pl-0">
+              <div class="row no-gutters">
+                <div class="col-sm-auto">
+                    <label for="formGroupDigiDeciDivis"><i>Quants dígits?</i></label>
+                </div>
+                <div class="col">
+                    <div class="btn-group-toggle ml-3" data-toggle="buttons">
+                        {% for n in range(6,4,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="dddalt{{n}}" autocomplete="off" id="dddalt{{n}}" value="dddalt{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(4,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="dddalt{{n}}" autocomplete="off" id="dddalt{{n}}" value="dddalt{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini disabled">
+                              <input type="checkbox" name="ddecidalt0" autocomplete="off" id="ddecidalt0" value="ddecidalt0" disabled> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="ddecidalt1" autocomplete="off" id="ddecidalt1" value="ddecidalt1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="ddecidalt2" autocomplete="off" id="ddecidalt2" value="ddecidalt2" checked> 2
+                        </label>
+                        <br>
+                        <label class="btn btn-sm btn-outline-dark py-0 btn-mini disabled" style="border-color:#aaa;color:#aaa;">
+                              <input type="checkbox" name="divd" autocomplete="off" id="divd" value="divd" disabled> <b>÷</b>
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="ddbaix4" autocomplete="off" id="ddbaix4" value="ddbaix4"> 4
+                        </label>
+                        {% for n in range(3,1,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="ddbaix{{n}}" autocomplete="off" id="ddbaix{{n}}" value="ddbaix{{n}}"> {{n}}
+                            </label>
+                        {% endfor %}
+                        {% for n in range(1,0,-1) %}
+                            <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="ddbaix{{n}}" autocomplete="off" id="ddbaix{{n}}" value="ddbaix{{n}}" checked> {{n}}
+                            </label>
+                        {% endfor %}
+                        .
+                        <label class="btn btn-sm btn-outline-info py-0 ml-1 btn-mini active">
+                              <input type="checkbox" name="ddecibaix0" autocomplete="off" id="ddecibaix0" value="ddecibaix0" checked> 0
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini active">
+                              <input type="checkbox" name="ddecibaix1" autocomplete="off" id="ddecibaix1" value="ddecibaix1" checked> 1
+                        </label>
+                        <label class="btn btn-sm btn-outline-info py-0 btn-mini">
+                              <input type="checkbox" name="ddecibaix2" autocomplete="off" id="ddecibaix2" value="ddecibaix2"> 2
                         </label>
                     </div>
                 </div>

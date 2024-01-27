@@ -1061,9 +1061,26 @@ def apilades(tipus, nivell=1, digits=[2, 1], decimals=[0, 0]):
             # TODO ajustar per quan algun dels números no té decimals
 
         text = (r"\begin{array}{c}\phantom{\times" + na + "}" + f"{a}" + r"\\ \underline{\times\phantom{" + nb + "}"
-                                                                                                                 f"{b}" + r"}\\ \end{array}")
+                f"{b}" + r"}\\ \end{array}")
     else:  # divis
         text = "42/42"
+        if nivell == 1:
+            a = random.randint(max(2, pow(10, digits[0] - 1)), pow(10, digits[0]) - 1)
+            b = random.randint(max(2, pow(10, digits[1] - 1)), pow(10, digits[1]) - 1)
+            text = (r"\begin{array}{c|l}\multicolumn{1}{c}{" + f"{a}" + r"} & \multicolumn{1}{|c}{" + f"{b}"
+                    + r"\phantom{" + "9"*(digits[0]-digits[1]) + "}"
+                    + r"}\\\cline{2-2}\end{array}")
+        else:
+            text = "4.2 / 4.2"
+            a = random.randint(max(2, pow(10, digits[0] - 1)), pow(10, digits[0]) - 1)
+            b = random.randint(max(2, pow(10, digits[1] - 1)), pow(10, digits[1]) - 1)
+            da = random.randint(max(2, pow(10, decimals[0] - 1)), pow(10, decimals[0]) - 1) if decimals[0] else ""
+            db = random.randint(max(2, pow(10, decimals[1] - 1)), pow(10, decimals[1]) - 1) if decimals[1] else ""
+            numa = f"{a}.{da}" if da else f"{a}"
+            numb = f"{b}.{db}" if db else f"{b}"
+            text = (r"\begin{array}{c|l}\multicolumn{1}{c}{" + f"{numa}" + r"} & \multicolumn{1}{|c}{" + f"{numb}"
+                    + r"\phantom{" + "9" * (digits[0] + decimals[0] - digits[1] - decimals[1]) + "}"
+                    + r"}\\\cline{2-2}\end{array}")
     return text
 
 
@@ -5552,4 +5569,4 @@ if __name__ == "__main__":
     # aquesta secció la faig servir per fer debugging dels tipus d'exercici
     print("running generator...")
     for x in range(10):
-        print(op_algeb(3, 1, solucions=True, fact=False))
+        print(apilades(4, 1, [4, 1]))

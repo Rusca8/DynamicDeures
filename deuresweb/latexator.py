@@ -568,16 +568,63 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
         qdmultis = 0
     print(f"42*42 {qmultis} 4.2*4.2 {qdmultis}")
 
-    divis = False
-    """
-    if "divis" in opcions:
-        sistemes3 = True
-        qsist3 = quantesson(opcions["qsist3"], "sistemes3")
+    if "divisions" in opcions:
+        divis = True
+        qdivis = quantesson(opcions["qdivis"], "v_divis")
+        qddivis = quantesson(opcions["qddivis"], "v_ddivis")
+
+        # sense decimals
+        ddalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"ddalt{n}" in opcions:
+                ddalt.append(n)
+        if not ddalt:
+            ddalt = [5, 4, 3, 2]  # si no hay arqueólogos me lo invento
+
+        dbaix = []
+        for n in range(4, 0, -1):  # l'últim no el fa
+            if f"dbaix{n}" in opcions:
+                dbaix.append(n)
+        if not dbaix:
+            dbaix = [2, 1]
+
+        # amb decimals
+        dddalt = []
+        for n in range(6, 1, -1):  # l'últim no el fa
+            if f"dddalt{n}" in opcions:
+                dddalt.append(n)
+        if not dddalt:
+            dddalt = [4, 3, 2]
+
+        ddecidalt = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"ddecidalt{n}" in opcions:
+                ddecidalt.append(n)
+        if not ddecidalt:
+            ddecidalt = [1, 2]
+
+        ddbaix = []
+        for n in range(4, 0, -1):  # l'últim no el fa
+            if f"ddbaix{n}" in opcions:
+                ddbaix.append(n)
+        if not ddbaix:
+            ddbaix = [1]
+
+        ddecibaix = []
+        for n in range(0, 3):  # l'últim no el fa
+            if f"ddecibaix{n}" in opcions:
+                ddecibaix.append(n)
+        if not ddecibaix:
+            ddecibaix = [1]
+
+        print(ddecidalt, ddecibaix)
+
     else:
-        sistemes3 = False
-        qsist3 = 0
-    print(f"Ax+By+Cz=D ... etc que em fa mandra copiar {qsist}")
-    """
+        divis = False
+        qdivis = 0
+        qddivis = 0
+    print(f"42/42 {qdivis} 4.2/4.2 {qddivis}")
+
     scale = 1.3  # per si me l'oblido
 
     # PyLaTeX code
@@ -597,7 +644,7 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
 
     # preguntes
     if sumes or restes or multis or divis:  # aquí van totes les grans
-        if any([qsumes, qdsumes, qrestes, qdrestes, qmultis, qdmultis]):  # aquí van totes les petites
+        if any([qsumes, qdsumes, qrestes, qdrestes, qmultis, qdmultis, qdivis, qddivis]):  # aquí van totes les petites
             begin(doc, 'questions')
 
             if sumes:
@@ -721,6 +768,48 @@ def apilades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - - -
                     c = random.choice(mdecidalt)
                     d = random.choice(mdecibaix)
                     doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(3, 2, [a, b], [c, d]))))
+                    space(doc, "2.1cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "2.1cm")
+
+            if divis:
+                needspace(doc, 12)
+                bloctitle(doc, "Divisions")
+
+            if qdivis:
+                n = qdivis
+                needspace(doc, 8)
+                question(doc, f"{n}")
+                doc.append("Resol les següents divisions (sense decimals).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    a = random.choice(ddalt)
+                    b = random.choice(dbaix)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(4, 1, [a, b]))))
+                    space(doc, "1.6cm")
+                end(doc, "multicols")
+                end(doc, 'parts')
+                space(doc, "1.6cm")
+
+            if qddivis:
+                n = qddivis
+                needspace(doc, 8)
+                question(doc, f"{2 * n}")
+                doc.append("Resol les següents divisions (amb decimals).")
+                begin(doc, 'parts')
+                begin(doc, "multicols", "3")
+                scale = 1.3
+                for x in range(0, n):
+                    part(doc)
+                    a = random.choice(dddalt)
+                    b = random.choice(ddbaix)
+                    c = random.choice(ddecidalt)
+                    d = random.choice(ddecibaix)
+                    doc.append(NoEscape(r'\scalebox{%s}{$%s$}' % (scale, gen.apilades(4, 2, [a, b], [c, d]))))
                     space(doc, "2.1cm")
                 end(doc, "multicols")
                 end(doc, 'parts')
@@ -3078,6 +3167,10 @@ def quantes_son(n, op):
         quantitats = [0, 3, 6, 9, 12, 28, 60]
     elif op == "v_dmultis":
         quantitats = [0, 3, 6, 9, 12, 24, 50]
+    elif op == "v_divis":
+        quantitats = [0, 3, 6, 9, 12, 28, 58]
+    elif op == "v_ddivis":
+        quantitats = [0, 3, 6, 9, 12, 24, 48]
     # potències i arrels
     elif op in ["p_mexp", "p_mbase", "arrels"]:
         quantitats = [0, 3, 6, 12, 21, 48, 101]

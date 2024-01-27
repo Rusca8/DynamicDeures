@@ -95,14 +95,17 @@ def combinades():
 @app.route("/apilades/", methods=["GET", "POST"])
 def apilades():
     if request.method == "POST":
-        try:
+        if app.debug:
+            print("debug mode ON ...")
             g.apilades(request.form, solucions=False)
-        except:
-            print("Error Apilades")
-            tele.error("api")
-            return redirect("/latex_error/apilades")
-
-        tele.feedback("api", request.form)
+        else:
+            try:
+                g.apilades(request.form, solucions=False)
+            except:
+                print("Error Apilades")
+                tele.error("api")
+                return redirect("/latex_error/apilades")
+            tele.feedback("api", request.form)
         return redirect("/pdf/apilades")
     else:
         return render_template("apilades.html")
