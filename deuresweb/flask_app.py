@@ -1,6 +1,6 @@
 
 from flask import Flask
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, abort
 
 import os
 
@@ -24,6 +24,16 @@ def ctx():
                 nom_tema=nom_tema,
                 os=os,  # per saber si els fitxers existeixen des de jinja: os.path.exists('path')
                 )
+
+
+ip_blacklist = ['93.152.230.136']
+
+
+@app.before_request
+def hard_ban():
+    ip = request.environ.get('REMOTE_ADDR')
+    if ip in ip_blacklist:
+        abort(403)
 
 
 @app.route('/')

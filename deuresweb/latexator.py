@@ -365,9 +365,9 @@ def combinades(opcions, solucions=False):  # - - - - - - - - - - - - - - - - - -
                     part(doc)
                     solcombis.append(random.randint(-10, 20))
                     if x < n // 3:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 2, doblesigne=False, ops=ops)))
+                        doc.append(NoEscape(r'$%s=$' % gen.mixcomb(solcombis[-1], 2, doblesigne=False, ops=ops)))
                     else:
-                        doc.append(NoEscape(r'$%s$' % gen.mixcomb(solcombis[-1], 2, doblesigne=True, ops=ops)))
+                        doc.append(NoEscape(r'$%s=$' % gen.mixcomb(solcombis[-1], 2, doblesigne=True, ops=ops)))
                     space(doc, "1cm")
                 end(doc, "multicols")
                 space(doc, "0.5cm")
