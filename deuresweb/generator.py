@@ -4051,8 +4051,9 @@ def eq(tipus, nivell=1, solucions=False, totexist=False, x=-42, seed=None, orden
             text = text[1:]
         elif text[0] == "=":
             text = "0" + text
-        elif text[-1] == "=":
+        if text[-1] == "=":
             text += "0"
+        text = text.replace("++", "+")
 
     elif tipus == 110:  # biquadrades
         a = 1

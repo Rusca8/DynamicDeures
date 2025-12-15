@@ -381,4 +381,4 @@ def notfound(patillada):
 
 
 if __name__ == "__main__":  # això la fa córrer en local
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
